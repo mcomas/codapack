@@ -1,0 +1,193 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package coda.gui.menu;
+
+import coda.CoDaStats;
+import coda.DataFrame;
+import coda.ext.jama.Matrix;
+import coda.ext.jama.SingularValueDecomposition;
+import coda.gui.CoDaPackMain;
+import coda.gui.output.OutputILRPartition;
+import coda.gui.output.OutputPlotHeader;
+import coda.gui.output.OutputTableTwoEntries;
+import coda.gui.utils.BinaryPartitionSelect;
+import coda.plot.Biplot2dDisplay;
+import coda.plot.Biplot3dDisplay;
+import coda.plot.RealPlot2dDisplay.RealPlot2dBuilder;
+import coda.plot.RealPlot3dDisplay.RealPlot3dBuilder;
+import coda.plot.window.Biplot2dWindow;
+import coda.plot.window.Biplot3dWindow;
+import coda.plot.window.CoDaPlotWindow;
+import coda.plot.window.RealPlot2dWindow;
+import coda.plot.window.RealPlot3dWindow;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
+/**
+ *
+ * @author mcomas
+ */
+public class ILRPlotMenuNew extends AbstractMenuDialogWithILR{
+    public static final long serialVersionUID = 1L;
+    JCheckBox coordinates;
+    public ILRPlotMenuNew(final CoDaPackMain mainApp){
+        super(mainApp, "ILR Plot Menu", true);
+
+        JButton defaultPart = new JButton("Default Partition");
+        JButton manuallyPart = new JButton("Define Manually");
+        optionsPanel.add(defaultPart);
+        defaultPart.addActionListener(new java.awt.event.ActionListener() {
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
+            }
+        });
+        optionsPanel.add(manuallyPart);
+        manuallyPart.addActionListener(new java.awt.event.ActionListener() {
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                initiatePartitionMenu();
+            }
+        });
+        
+        coordinates = new JCheckBox("Add coordinates", false);
+        optionsPanel.add(coordinates);
+        
+        base.setEnabled(true);
+        
+    }
+    public void initiatePartitionMenu(){
+        BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData() );
+        binaryMenu.setVisible(true);
+    }
+    @Override
+    public void acceptButtonActionPerformed() {
+            String selectedNames[] = ds.getSelectedData();
+        
+        if(selectedNames.length > 2){
+            int m = selectedNames.length;
+            String plotNames[] = new String[m];
+            
+            for(int i=0;i<m;i++){
+                plotNames[i] = "clr."+ selectedNames[i];
+                
+            }
+            DataFrame df = mainApplication.getActiveDataFrame();
+            boolean[] selection = getValidComposition(df, selectedNames);
+            int [] mapping = df.getMapingToData(selectedNames, selection);
+            double[][] data = df.getNumericalData(selectedNames, mapping);
+            //double[][] data = CoDaStats.centerData(df.getNumericalData(selectedNames, mapping));
+            //double[][] data = df.getNumericalData(selectedNames, mapping);
+            double basis[][] = new double[m][m];
+            double vdata[][] = null;
+            for(int i=0;i<m;i++)
+                for(int j=0;j<m;j++)
+                    basis[i][j] = i == j ? Math.E : 1;
+            if(part.isSelected()){
+                int partition[][] = getPartition();
+                data = CoDaStats.transformRawILR(data, partition);
+                vdata = new Matrix(CoDaStats.transformRawILR(basis, partition)).transpose().getArray();
+            }else{
+                double bas[][] = getBasis();
+                data = CoDaStats.transformRawILR(data, bas);
+                vdata = new Matrix(CoDaStats.transformRawILR(basis, bas)).transpose().getArray();
+            }
+            
+            
+            //data = CoDaStats.transformRawCLR(data);
+
+            //Matrix Z = (new Matrix(data)).transpose();
+            //SingularValueDecomposition svd =
+            //    new SingularValueDecomposition(Z);
+
+            //int rank = svd.rank();
+            //String pcnames[] = new String[rank];
+            //String pcheaders[] = new String[m+1];
+//            double pcomp[][] = new double[rank][m+1];
+//
+//            Matrix V = svd.getV().getMatrix(0, m-1, 0, rank-1);
+//
+//            Matrix UD = new Matrix(data).transpose().times(V.inverse().transpose());
+//            double cpExp[] = coda.BasicStats.cumulativeProportionExplained(svd.getSingularValues());
+//
+//            pcheaders[m] = "Cum.Prop.Exp.";
+//            for(int j=0;j<m;j++){
+//                pcheaders[j] = plotNames[j];
+//            }
+//            for(int i=0;i<rank;i++){
+//                pcnames[i] = "PC" + (i+1);
+//                pcomp[i][m] = cpExp[i];
+//                for(int j=0;j<m;j++)
+//                    pcomp[i][j] = svd.getV().get(j,i);
+//            }
+
+            if(coordinates.isSelected()){
+                String unames[] = new String[m-1];
+                for(int i=0;i<m-1;i++)
+                    unames[i] = "ilr." + (i+1);
+                df.addData(unames, coda.Utils.recoverData(data,selection));
+                mainApplication.updateDataFrame(df);
+            }
+            CoDaPackMain.outputPanel.addOutput(
+                    new OutputPlotHeader("Biplot generated", selectedNames));
+            
+            //CoDaPackMain.outputPanel.addOutput(
+            //        new OutputTableTwoEntries("Principal Components", pcheaders, pcnames, pcomp));
+
+            int dim = m > 3 ? 3 : 2;
+            String[] names = new String[dim];
+            for(int i=0;i<dim;i++)
+                names[i] = "g" + Integer.toString(i);
+
+            String groupedBy = ds.getSelectedGroup();
+
+            //double GH[][][] = CoDaStats.biplot(svd, dim, 0);
+            CoDaPlotWindow biplotWindow;
+            if(m > 3){
+                
+                Biplot3dDisplay.Biplot3dBuilder builder =
+                        new Biplot3dDisplay.Biplot3dBuilder(plotNames, data, vdata).mapping(mapping);
+
+                if(groupedBy != null){
+                    builder.groups(coda.Utils.reduceData(
+                            df.getDefinedGroup(groupedBy),
+                            selection), coda.Utils.getCategories(
+                            df.getCategoricalData(groupedBy),selection));
+                }
+                Biplot3dDisplay dp = builder.build();
+                dp.decomp = false;
+                biplotWindow =
+                        new RealPlot3dWindow(df, dp, "Biplot3d");
+                
+                double view[][] = {
+                       {1, 0, 0},
+                       {0, 1, 0},
+                       {0, 0, 1}};
+                //((Biplot3dWindow)biplotWindow).setCoordinate(view);                
+                
+            }else{
+
+                Biplot2dDisplay.Biplot2dBuilder builder =
+                        new Biplot2dDisplay.Biplot2dBuilder(plotNames, data, vdata).mapping(mapping);
+                if(groupedBy != null){
+                    builder.groups(coda.Utils.reduceData(
+                            df.getDefinedGroup(groupedBy),
+                            selection), coda.Utils.getCategories(
+                            df.getCategoricalData(groupedBy),selection));
+                }
+
+                biplotWindow =
+                        new RealPlot2dWindow(df, builder.build(), "Biplot");
+                               
+            }
+            biplotWindow.setVisible(true);
+            setVisible(false);
+        }else{
+            JOptionPane.showMessageDialog(this, "<html>Select at least <b>three</b> variables</html>");
+        }
+    }
+
+}
