@@ -44,8 +44,10 @@ public class AmalgamationDataMenu extends AbstractMenuDialog{
             //double[][] vdata = coda.Utils.reduceData(data, selection);
 
             String[] new_name = new String[1];
-            new_name[0] = "Amalg";
-
+            new_name[0] = "amalg";
+            for(String v : selectedNames){
+                new_name[0] += '_' + v;
+            }
             //double[][] pData = CoDaStats.amalgamateData(vdata,combination);
             //dataFrame.addData(new_name, coda.Utils.recoverData(pData,selection));
             double[][] pData = CoDaStats.amalgamateData(data,combination);

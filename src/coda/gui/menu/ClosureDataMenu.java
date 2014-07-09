@@ -41,7 +41,7 @@ public class ClosureDataMenu extends AbstractMenuDialog{
                 return;
             }
             String[] new_names = new String[selectedNames.length];
-            for(int i=0;i<selectedNames.length;i++) new_names[i] = "clo(" + selectedNames[i] + ")";
+            for(int i=0;i<selectedNames.length;i++) new_names[i] = "clo_" + selectedNames[i];
 
             // = CoDaPack.center(df.getNumericalDataZeroFree(sel_names));
             double[][] pdata = CoDaStats.closure(vdata,closure);

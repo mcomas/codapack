@@ -192,6 +192,8 @@ public final class CoDaPackMain extends JFrame{
 
        private JMenu menuHelp;
        private final String ITEM_HELP = "Help";
+            private JMenuItem itemForceUpdate;
+            private final String ITEM_FORCE_UPDATE = "Force update";
             private JMenuItem itemAbout;
             private final String ITEM_ABOUT = "About";
 
@@ -210,11 +212,11 @@ public final class CoDaPackMain extends JFrame{
     public CoDaPackMain() {
         screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         this.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(CoDaPackMain.RESOURCE_PATH + "logo.png"));
+                .getImage(CoDaPackMain.RESOURCE_PATH + "logoL.png"));
         if(this.getIconImage() == null){
             CoDaPackMain.RESOURCE_PATH = "";
             this.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(CoDaPackMain.RESOURCE_PATH + "logo.png"));
+                .getImage(CoDaPackMain.RESOURCE_PATH + "logoL.png"));
         }
         
         /*
@@ -307,6 +309,7 @@ public final class CoDaPackMain extends JFrame{
             itemAdditiveLogisticNormal = new JMenuItem();
 
         menuHelp = new JMenu();
+            itemForceUpdate = new JMenuItem();
             itemAbout = new JMenuItem();
         
 
@@ -426,6 +429,7 @@ public final class CoDaPackMain extends JFrame{
         */
 
         menuHelp.setText(ITEM_HELP);
+        addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
         addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
         jMenuBar.add(menuHelp);
         
@@ -650,6 +654,8 @@ public final class CoDaPackMain extends JFrame{
             new PrincipalComponentMenu(this).setVisible(true);
         }else if(title.equals(ITEM_ALN_DISTRIBUTION)){
             new NormalSampleMenu(this);
+        }else if(title.equals(ITEM_FORCE_UPDATE)){
+            this.forceUpdate();
         }else if(title.equals(ITEM_ABOUT)){
             new CoDaPackAbout(this).setVisible(true);
         }
@@ -709,6 +715,18 @@ public final class CoDaPackMain extends JFrame{
          * CoDaPack main class is created and shown
          */
         new CoDaPackMain().setVisible(true);
+    }
+    public void forceUpdate(){
+        String previous  = CoDaPackConf.CoDaVersion;
+        try {
+            
+            CoDaPackConf.CoDaVersion = "2 00 0";
+            CoDaPackConf.saveConfiguration();
+            Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");
+        } catch (IOException ex) {
+            Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.exit(0);
     }
     public static class UpdateConnection implements Runnable{
 
