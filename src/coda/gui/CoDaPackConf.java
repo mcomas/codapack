@@ -18,6 +18,13 @@ import java.util.logging.Logger;
 /**
  * Versioning history
  * 
+ * 2 01 15
+ * 
+ * 
+ * 2 01 14
+ * - Decimal point configuration available through File->Configuration menu
+ * - MAC version: Save to R menu (problem solved)
+ * 
  * 2 01 13
  * - Sorry, the update 2 01 12 was not correctly integrated in CoDaPack. This update correctly integrates the previous one
  * 
