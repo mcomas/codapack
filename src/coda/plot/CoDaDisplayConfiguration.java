@@ -30,25 +30,14 @@ public class CoDaDisplayConfiguration {
     static private Random random = new Random(100);
     private CoDaDisplayConfiguration(){}
     static{        
-        color.put("background", Color.WHITE);
-        color.put("area", Color.WHITE);
-        
-        color.put("label", Color.black);
+        setDefaultColor();
+        setDefaultSize();
+        //default_color.put("area", new Color(0, 0, 255, 20));
+    }
+    public static void setDefaultSize(){
         size.put("label", 16f);
-        color.put("vector_label", Color.black);
         size.put("vector_label", 12f);
-        color.put("vector_axis", Color.red);
         size.put("vector_axis", 1f);
-        color.put("data0", new Color(70, 70, 200));//Color.BLUE);
-        color.put("data1", Color.RED);
-        color.put("data2", Color.GREEN);
-        color.put("data3", Color.LIGHT_GRAY);
-        color.put("data4", Color.GRAY);
-        color.put("data5", Color.MAGENTA);
-        color.put("data6", Color.YELLOW);
-        color.put("data7", Color.CYAN);
-        color.put("data8", Color.ORANGE);
-        color.put("data9", Color.PINK);
         size.put("data0", 3f);//Color.BLUE);
         size.put("data1", 3f);
         size.put("data2", 3f);
@@ -60,28 +49,16 @@ public class CoDaDisplayConfiguration {
         size.put("data8", 3f);
         size.put("data9", 3f);
         size.put("data", 3f);
-        color.put("axisX", Color.BLACK);
         size.put("axisX", 1f);
-        color.put("axisY", Color.BLACK);
         size.put("axisY", 1f);
-        color.put("axisZ", Color.BLACK);
         size.put("axisZ", 1f);
-        color.put("axis", Color.BLACK);
         size.put("axis", 1f);
-        color.put("grid", Color.gray);
         size.put("grid", 0.5f);
-        color.put("Prin.Comp.1", Color.RED);
         size.put("Prin.Comp.1", 0.75f);
-        color.put("Prin.Comp.2", Color.ORANGE);
         size.put("Prin.Comp.2", 0.75f);
-        color.put("Prin.Comp.3", Color.YELLOW);
         size.put("Prin.Comp.3", 1f);
-        
-
-
-        //default_color.put("area", new Color(0, 0, 255, 20));
     }
-    public static void setDefault(){
+    public static void setDefaultColor(){
         color = new HashMap<String, Color>();
 
         color.put("background", Color.WHITE);
@@ -123,6 +100,9 @@ public class CoDaDisplayConfiguration {
     }
     public static Set<String> getColorKeySet(){
         return color.keySet();
+    }
+    public static Set<String> getSizeKeySet(){
+        return size.keySet();
     }
     public static void setColor(String e, int ngroup, Color c){
         String code = e.concat(Integer.toString(ngroup));
@@ -223,7 +203,8 @@ public class CoDaDisplayConfiguration {
                 color.put(name, new Color(r,g,b,a));
             }
         } catch (FileNotFoundException ex) {
-            setDefault();
+            setDefaultColor();
+            setDefaultSize();
         } catch (IOException ex) {
 
         }catch (JSONException ex) {

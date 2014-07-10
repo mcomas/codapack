@@ -1,14 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * OutputWindow.java
- *
- * Created on 22/09/2010, 12:32:54
- */
-
 package coda.gui;
 
 import coda.gui.output.OutputElement;
@@ -22,11 +11,12 @@ import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.undo.UndoManager;
+
 /**
  *
  * @author mcomas
  */
-public final class OutputPanel extends JPanel{// implements HyperlinkListener{
+public final class OutputPanel extends JPanel{
     public final long serialVersionUID = 1L;
 
     private String windowText = "";
@@ -39,13 +29,13 @@ public final class OutputPanel extends JPanel{// implements HyperlinkListener{
     private static JEditorPane jEditorPane1;
     private static JScrollPane jScrollPane1;
     private ArrayList<OutputElement> output = new ArrayList<OutputElement>();
-    /** Creates new form OutputWindow */
+
     public OutputPanel() {
         setLayout(new BorderLayout());
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
-        //jEditorPane1.setEditable(false);
+        
         setPreferredSize(new java.awt.Dimension(500, 350));
         setVisible(true);
 
@@ -59,35 +49,6 @@ public final class OutputPanel extends JPanel{// implements HyperlinkListener{
 
         jEditorPane1.setEditorKit(hed);
         jEditorPane1.setDocument(doc);
-        
-
-        /*doc.addUndoableEditListener(
-        new UndoableEditListener() {
-          public void undoableEditHappened(UndoableEditEvent e) {
-            undoManager.addEdit(e.getEdit());
-          }
-        });
-        jEditorPane1.addKeyListener(new KeyListener(){
-
-            public void keyTyped(KeyEvent arg0) {
-
-            }
-
-            public void keyPressed(KeyEvent arg0) {
-
-            }
-
-            public void keyReleased(KeyEvent arg0) {
-
-                if(arg0.getKeyCode() == KeyEvent.VK_Z && arg0.isControlDown()){
-                    try {
-                      undoManager.undo();
-                    } catch (CannotRedoException cre) {
-                    }
-                }
-            }
-
-        });*/
 
     }
     public void setHTMLStyle(StyleSheet styleSheet){
@@ -115,7 +76,6 @@ public final class OutputPanel extends JPanel{// implements HyperlinkListener{
             + "background-color:#FFFFFF;}");
         styleSheet.addRule(
                 "body{"
-          //+ "font-family: Helvetica, Arial, Verdana; "
           + "font-family: Monospace; "
           + "font-size:small;"
           + "color:#000000;"
@@ -125,12 +85,13 @@ public final class OutputPanel extends JPanel{// implements HyperlinkListener{
     }
 
     public void addWelcome(String CoDaVersion){
-        //jEditorPane1.addHyperlinkListener(this);
         windowText = "<b>CoDaPack</b> - Version " + CoDaVersion
-                + "<br>This software is being developed by the <a href='http://ima.udg.edu/Recerca/EIO/inici_eng.html'>EAD</a> group (Grup d'Estad&iacute;stica i An&agrave;lisi de Dades).<br><br>";
+                + "<br>CoDaPack is being developed by the "
+                + "Research Group of Statistics and Data Analysis.<br />"
+                + "Visit us at http://ima.udg.edu/Recerca/EIO/inici_eng.html<br><br>";
         jEditorPane1.setText(windowText);
         repaint();
-    }    
+    }
     public void addOutput(OutputElement oe){
         output.add(oe);
         String text = jEditorPane1.getText();

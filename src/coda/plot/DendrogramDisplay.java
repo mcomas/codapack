@@ -402,7 +402,8 @@ public class DendrogramDisplay extends CoDa2dDisplay{
         int separation = 40;
         double coordX;
         Point2D o = null;
-        Font font = new Font("Monospace", Font.PLAIN, 11);
+        Font font = new Font("Monospace", Font.PLAIN, 
+                CoDaDisplayConfiguration.getSize("label").intValue());
         g2.setFont(font);
         FontMetrics metric = g2.getFontMetrics();
         double xt = 2 * v_x[0] * (displayWidth/displayHeight) / (names.length-1.0);

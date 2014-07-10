@@ -271,7 +271,8 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
         g2.fill(border);
     }
     public void drawLabels(Graphics2D g2){
-        Font font = new Font("Monospace", Font.PLAIN, 15);
+        Font font = new Font("Monospace", Font.PLAIN, 
+                CoDaDisplayConfiguration.getSize("label").intValue());
         g2.setFont(font);
         FontMetrics metric = g2.getFontMetrics();
         g2.setColor(CoDaDisplayConfiguration.getColor("label"));
