@@ -93,7 +93,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
             private JCheckBoxMenuItem itemShowObsName;
     DataFrame dataframe;
     public CoDaPlotWindow(DataFrame dataframe, final AbstractCoDaDisplay plotDisplay, String title) {
-
+        
         this.dataframe = dataframe;
         jMenuBar = new JMenuBar();
         menuFile = new JMenu();

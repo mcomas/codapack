@@ -105,6 +105,7 @@ public class ILRPlotMenu extends AbstractMenuDialogWithILR{
                         df, builder.build(),
                         "ILR Plot");                                
             }
+            plotWindow.setLocationRelativeTo(mainApplication);
             plotWindow.setVisible(true);
             setVisible(false);
         }else{

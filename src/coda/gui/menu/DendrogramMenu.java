@@ -93,6 +93,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
             DendrogramWindow plotWindow = new DendrogramWindow(
                     null, builder.build(),
                     "Dendrogram plot");
+            plotWindow.setLocationRelativeTo(mainApplication);
             plotWindow.setVisible(true);
 
             

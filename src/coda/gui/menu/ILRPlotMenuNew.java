@@ -183,6 +183,7 @@ public class ILRPlotMenuNew extends AbstractMenuDialogWithILR{
                         new RealPlot2dWindow(df, builder.build(), "Biplot");
                                
             }
+            biplotWindow.setLocationRelativeTo(mainApplication);
             biplotWindow.setVisible(true);
             setVisible(false);
         }else{

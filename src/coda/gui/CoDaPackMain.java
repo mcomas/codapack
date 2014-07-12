@@ -61,8 +61,9 @@ public final class CoDaPackMain extends JFrame{
     
     
     public static String RESOURCE_PATH = "resources/";
-    // User computer parameters
-    private Dimension screenDimension;    
+
+    private Dimension screenDimension;
+    
     //Panel showing the non-column outputs and the data contained in the dataFrame
     public static JTabbedPane outputs;
     public static OutputPanel outputPanel;
@@ -87,20 +88,20 @@ public final class CoDaPackMain extends JFrame{
             private final String ITEM_OPEN = "Open Workspace...";
             private JMenuItem itemSave;
             private final String ITEM_SAVE = "Save Workspace...";
-            private JMenuItem itemSaveAs;            
-            private final String ITEM_SAVEAS = "Save Workspace As...";
-            private JMenuItem itemCloseWS;
-            private final String ITEM_CLOSEWS = "Close Workspace";
             private JMenuItem itemNewDF;
             private final String ITEM_NEWDF = "New DataFrame";
-            private JMenuItem itemImport;
-            private final String ITEM_IMPORT = "Import XLS Table...";
-            private JMenuItem itemImportCSV;
-            private final String ITEM_IMPORT_CSV = "Import Text Table...";
-            private JMenuItem itemExport;
-            private final String ITEM_EXPORT_XLS = "Export Table to XLS...";
-            private JMenuItem itemExportR;
-            private final String ITEM_EXPORT_R = "Export Data to R...";
+            private JMenu menuImport;
+            private final String ITEM_IMPORT = "Import";
+                private JMenuItem itemImportXLS;
+                private final String ITEM_IMPORT_XLS = "Import XLS Data...";
+                private JMenuItem itemImportCSV;
+                private final String ITEM_IMPORT_CSV = "Import Text Data...";
+            private JMenu menuExport;
+            private final String ITEM_EXPORT = "Export";
+                private JMenuItem itemExportXLS;
+                private final String ITEM_EXPORT_XLS = "Export Data to XLS...";
+                private JMenuItem itemExportR;
+                private final String ITEM_EXPORT_R = "Export Data to RData...";
             private JMenuItem itemdelDataFrame;
             private final String ITEM_DEL_DATAFRAME = "Delete Table";
             private JMenuItem itemConfiguration;
@@ -176,20 +177,6 @@ public final class CoDaPackMain extends JFrame{
             private JMenuItem confidenceRegionPlot;
             private final String ITEM_CONF_REG_PLOT = "Center Confidence Region";
 
-       private JMenu menuDistributions;
-       private final String ITEM_DISTRIBUTIONS = "Distributions";
-            private JMenu sampleGenerators;
-            private final String SAMPLE_GENERATORS = "Random sample generators";
-            private JMenuItem itemAdditiveLogisticNormal;
-            private final String ITEM_ALN_DISTRIBUTION = "Additive Logistic Normal";
-
-       /*private JMenu menuDistributions;
-       private final String ITEM_DIST = "Distributions";
-            private JMenu menuRand;
-            private final String ITEM_RAND = "Gaussian generators";
-                private JMenuItem itemNormSample;
-                private final String ITEM_NORM_SAMPLE = "Using sample";*/
-
        private JMenu menuHelp;
        private final String ITEM_HELP = "Help";
             private JMenuItem itemForceUpdate;
@@ -199,14 +186,14 @@ public final class CoDaPackMain extends JFrame{
 
        public static CoDaPackConf config = new CoDaPackConf();
     private JFileChooser chooseFile = new JFileChooser();
+    
     // Mac users expect the menu bar to be at the top of the screen, not in the
     // window, so enable that setting. (This is ignored on non-Mac systems).
+    // Setting should be set in an static context
     static{
         System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-                "CoDaPack");
-        System.setProperty("com.apple.mrj.application.growbox.intrudes",
-                "false");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "CoDaPack");
+        System.setProperty("com.apple.mrj.application.growbox.intrudes", "false");
     }
     /** Creates new form CoDaPack */
     public CoDaPackMain() {
@@ -218,7 +205,6 @@ public final class CoDaPackMain extends JFrame{
             this.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(CoDaPackMain.RESOURCE_PATH + "logoL.png"));
         }
-        
         /*
          *  Menu creation:
          *  Three important objects are created: 
@@ -233,7 +219,6 @@ public final class CoDaPackMain extends JFrame{
 
     }
     private void addJMenuItem(JMenu menu, JMenuItem item, String title){
-        //item.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
         menu.add(item);
         item.setText(title);
         item.addActionListener(new java.awt.event.ActionListener() {
@@ -245,24 +230,22 @@ public final class CoDaPackMain extends JFrame{
     }
     private void initComponents() {
         ITEM_APPLICATION_NAME = "CoDaPack v" + CoDaPackConf.getVersion();
-        //outputs = new JTabbedPane();
         outputPanel = new OutputPanel();
-        //outputs.add(outputPanel, "default");
         tablePanel = new TablePanel();
+        
         //Panel with the active variable
         dataList = new DataList();
-
         jMenuBar = new JMenuBar();
             menuFile = new JMenu();
                 itemOpen = new JMenuItem();
                 itemSave = new JMenuItem();
-                itemSaveAs = new JMenuItem();
-                itemCloseWS = new JMenuItem();
                 itemNewDF = new JMenuItem();
-                itemImportCSV = new JMenuItem();
-                itemImport = new JMenuItem();
-                itemExport = new JMenuItem();
-                itemExportR = new JMenuItem();
+                menuImport = new JMenu();
+                    itemImportCSV = new JMenuItem();
+                    itemImportXLS = new JMenuItem();
+                menuExport = new JMenu();
+                    itemExportXLS = new JMenuItem();
+                    itemExportR = new JMenuItem();
                 itemdelDataFrame = new JMenuItem();
                 itemConfiguration = new JMenuItem();
                 itemQuit = new JMenuItem();
@@ -287,9 +270,7 @@ public final class CoDaPackMain extends JFrame{
             itemCompStatsSummary = new JMenuItem();
             itemClasStatsSummary = new JMenuItem();
             itemNormalityTest = new JMenuItem();
-            itemAtipicalityIndex = new JMenuItem();
-            
-            
+            itemAtipicalityIndex = new JMenuItem();                        
 
         menuGraphs = new JMenu();
             itemTernaryPlot = new JMenuItem();
@@ -304,29 +285,19 @@ public final class CoDaPackMain extends JFrame{
             predictiveRegionPlot = new JMenuItem();
             confidenceRegionPlot = new JMenuItem();
 
-       menuDistributions = new JMenu();
-            sampleGenerators = new JMenu();
-            itemAdditiveLogisticNormal = new JMenuItem();
-
         menuHelp = new JMenu();
             itemForceUpdate = new JMenuItem();
-            itemAbout = new JMenuItem();
-        
-
+            itemAbout = new JMenuItem();        
 
         setTitle(ITEM_APPLICATION_NAME);
         setPreferredSize(new Dimension(1000,700));
         setLocation((screenDimension.width-1000)/2,
                 (screenDimension.height-700)/2);
 
-
         dataList.setSize(new Dimension(150, 700));
         dataFrameSelector = new JComboBox();
         dataFrameSelector.setPrototypeDisplayValue("XXXXXXXXXXXXXX");
-        //dataFrameSelector.setMaximumSize(new Dimension(10,20));
         dataFrameSelector.addItemListener(dataFrameListener);
-
-
 
         JPanel westPanel = new JPanel();
         westPanel.setLayout(new BorderLayout());
@@ -334,18 +305,13 @@ public final class CoDaPackMain extends JFrame{
         dfSelect.add(new JLabel("Data Frames"));
         dfSelect.add(dataFrameSelector);
         westPanel.add(dfSelect, BorderLayout.NORTH);
-        //westPanel.add(dataFrameSelector, BorderLayout.NORTH);
         westPanel.add(dataList, BorderLayout.CENTER);
-        //getContentPane().add(westPanel, BorderLayout.WEST);
 
-        //jSplitPane = new JSplitPane(
-        //        JSplitPane.VERTICAL_SPLIT, outputs, tablePanel);
         jSplitPane = new JSplitPane(
                 JSplitPane.VERTICAL_SPLIT, outputPanel, tablePanel);
         jSplitPane.setDividerSize(7);
         jSplitPane.setOneTouchExpandable(true);
         jSplitPane.setDividerLocation(350);
-        //getContentPane().add(jSplitPane, BorderLayout.CENTER);
 
         JSplitPane main =
                 new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westPanel, jSplitPane);
@@ -355,25 +321,26 @@ public final class CoDaPackMain extends JFrame{
         menuFile.setText(ITEM_FILE);
         addJMenuItem(menuFile, itemOpen, ITEM_OPEN);
         addJMenuItem(menuFile, itemSave, ITEM_SAVE);
-        //addJMenuItem(menuFile, itemSaveAs, ITEM_SAVEAS);
-        itemSaveAs.setEnabled(false);
-        //addJMenuItem(menuFile, itemCloseWS, ITEM_CLOSEWS);
-        itemCloseWS.setEnabled(false);
-        menuFile.addSeparator();
-        //addJMenuItem(menuFile, itemNewDF, ITEM_NEWDF);
-        itemNewDF.setEnabled(false);
-        addJMenuItem(menuFile, itemImportCSV, ITEM_IMPORT_CSV);
-        addJMenuItem(menuFile, itemImport, ITEM_IMPORT);
-        addJMenuItem(menuFile, itemExport, ITEM_EXPORT_XLS);
-        addJMenuItem(menuFile, itemExportR, ITEM_EXPORT_R);
-        //itemExport.setEnabled(false);
+
+        menuFile.addSeparator();        
         addJMenuItem(menuFile, itemdelDataFrame, ITEM_DEL_DATAFRAME);
-       // menuFile.addSeparator();
+        
+        menuFile.addSeparator();
+        menuImport.setText(ITEM_IMPORT);
+        menuFile.add(menuImport);
+        addJMenuItem(menuImport, itemImportCSV, ITEM_IMPORT_CSV);
+        addJMenuItem(menuImport, itemImportXLS, ITEM_IMPORT_XLS);
+        
+        menuExport.setText(ITEM_EXPORT);
+        menuFile.add(menuExport);
+        addJMenuItem(menuExport, itemExportXLS, ITEM_EXPORT_XLS);
+        addJMenuItem(menuExport, itemExportR, ITEM_EXPORT_R);
+        
+        menuFile.addSeparator();
         addJMenuItem(menuFile, itemConfiguration, ITEM_CONF);
         menuFile.addSeparator();
         addJMenuItem(menuFile, itemQuit, ITEM_QUIT);
         jMenuBar.add(menuFile);
-
 
         menuData.setText(ITEM_DATA);
         menuTransforms.setText(ITEM_TRANS);
@@ -394,7 +361,6 @@ public final class CoDaPackMain extends JFrame{
         addJMenuItem(menuData, itemAddVariables, ITEM_ADD_VAR);
         addJMenuItem(menuData, itemDeleteVariables, ITEM_DEL_VAR);
         jMenuBar.add(menuData);
-
 
         menuStatistics.setText(ITEM_STATS);
         addJMenuItem(menuStatistics, itemCompStatsSummary, ITEM_COMP_STATS_SUMMARY);        
@@ -418,15 +384,7 @@ public final class CoDaPackMain extends JFrame{
         addJMenuItem(menuGraphs, itemBiPlot, ITEM_BIPLOT);
         addJMenuItem(menuGraphs, itemIlrBiPlot, ITEM_ILR_BIPLOT);
         addJMenuItem(menuGraphs, itemDendrogramPlot, ITEM_DENDROGRAM_PLOT);
-        jMenuBar.add(menuGraphs);
-
-        /*
-        menuDistributions.setText(ITEM_DISTRIBUTIONS);
-        sampleGenerators.setText(SAMPLE_GENERATORS);
-        menuDistributions.add(sampleGenerators);
-        addJMenuItem(sampleGenerators, itemAdditiveLogisticNormal, ITEM_ALN_DISTRIBUTION);
-        jMenuBar.add(menuDistributions);
-        */
+        jMenuBar.add(menuGraphs);       
 
         menuHelp.setText(ITEM_HELP);
         addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
@@ -484,9 +442,6 @@ public final class CoDaPackMain extends JFrame{
         }
     }
     public void updateDataFrame(DataFrame df){
-        //int pos = activeDataFrame;
-        //dataFrame.remove(activeDataFrame);
-        //dataFrame.add(df);
         dataList.setData(df);
         tablePanel.setDataFrame(df);
     }
@@ -500,7 +455,7 @@ public final class CoDaPackMain extends JFrame{
     void itemActionPerformed(ActionEvent ev){
         JMenuItem jMenuItem = (JMenuItem)ev.getSource();
         String title = jMenuItem.getText();
-        if(title.equals(ITEM_IMPORT)){
+        if(title.equals(ITEM_IMPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Excel files", "xls"));
@@ -559,16 +514,6 @@ public final class CoDaPackMain extends JFrame{
                 try {
                     WorkspaceIO.saveWorkspace(
                             filename.endsWith(".cdp") ? filename : filename + ".cdp", this);
-                    /*
-                    try {
-                        PrintWriter printer = new PrintWriter(
-                                chooseFile.getSelectedFile().getPath()+ ".csv");
-                        outputPanel.writeTXT(printer);
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(CoDaPackMain.class.getName())
-                                .log(Level.SEVERE, null, ex);
-                    }
-                     * */
                 } catch (JSONException ex) {
                     Logger.getLogger(CoDaPackMain.class.getName())
                             .log(Level.SEVERE, null, ex);
@@ -577,7 +522,7 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(ITEM_DEL_DATAFRAME)){
             removeDataFrame(dataFrame.get(activeDataFrame));
         }else if(title.equals(ITEM_QUIT)){
-            int response = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm",
+            int response = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Confirm",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION){
                 dispose();
@@ -652,8 +597,6 @@ public final class CoDaPackMain extends JFrame{
             new Categoric2NumericMenu(this).setVisible(true);
         }else if(title.equals(ITEM_PC_PLOT)){
             new PrincipalComponentMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_ALN_DISTRIBUTION)){
-            new NormalSampleMenu(this);
         }else if(title.equals(ITEM_FORCE_UPDATE)){
             this.forceUpdate();
         }else if(title.equals(ITEM_ABOUT)){
@@ -669,8 +612,7 @@ public final class CoDaPackMain extends JFrame{
                 tablePanel.setDataFrame(dataFrame.get(activeDataFrame));
             }
         }
-    }
-    
+    }    
     /**
     * @param args the command line arguments
     */
@@ -680,7 +622,6 @@ public final class CoDaPackMain extends JFrame{
          */
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            //UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(CoDaPackMain.class.getName())
                     .log(Level.SEVERE, null, ex);

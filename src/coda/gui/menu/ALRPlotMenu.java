@@ -73,6 +73,7 @@ public class ALRPlotMenu extends AbstractMenuDialog{
                         df, builder.build(),
                         "ALR Plot 3d");
             }
+            plotWindow.setLocationRelativeTo(mainApplication);
             plotWindow.setVisible(true);
             
             CoDaPackMain.outputPanel.addOutput(

@@ -17,10 +17,15 @@ import java.util.logging.Logger;
 
 /**
  * Versioning history
+ * 
+ * 2 01 16
+ * - Text in figures and other objects can be resized from menu File-> Configuration at tab Sizes.
+ * - Exportation to R has been modified. Now, CoDaPack generates a RData file instead of a source code.
+ * 
  * 2 01 15
  * - Amalgamation variable name is indicative of amalgamated parts
  * - Closured variables are renamed to be R  compatible
- * - Help->Force Update menu is added to allow a clean reinstallation
+ * - Help->Force Update menu is added to allow a clean re-installation
  * 
  * 2 01 13
  * - Sorry, the update 2 01 12 was not correctly integrated in CoDaPack. This update correctly integrates the previous one
@@ -33,7 +38,7 @@ import java.util.logging.Logger;
  * 
  * 2 01 10
  * - Amalgamation problems solved
- * - Export tables to R dataframes as source code
+ * - Export tables to R data-frames as source code
  * - Text file importation
  * - CRITICAL: CLR variances in Variation Array corrected
  * 
@@ -48,13 +53,13 @@ import java.util.logging.Logger;
  * - Dendrogram: Counting from 1 in the ilr generated variables
  *
  * 2 01 7
- * - Preditive region estimation
+ * - Predictive region estimation
  * - Confidence region for the mean
  * - Empty Ternary Plot Simplistic Editor
  * - Biplot: covariance biplot as default biplot representation
  *
  * 2 01 6
- * - Correlation matrix calculation in Clasical Statistics
+ * - Correlation matrix calculation in Classical Statistics
  * - Biplot: representation of UV decomposition
  * - Biplot: coordinates output
  *

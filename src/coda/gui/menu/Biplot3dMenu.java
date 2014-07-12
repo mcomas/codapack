@@ -137,6 +137,7 @@ public class Biplot3dMenu extends AbstractMenuDialog{
                         new Biplot2dWindow(df, builder.build(), "Biplot", svd);
                                
             }
+            biplotWindow.setLocationRelativeTo(mainApplication);
             biplotWindow.setVisible(true);
             setVisible(false);
         }else{

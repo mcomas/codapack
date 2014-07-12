@@ -87,7 +87,7 @@ public final class OutputPanel extends JPanel{
     public void addWelcome(String CoDaVersion){
         windowText = "<b>CoDaPack</b> - Version " + CoDaVersion
                 + "<br>CoDaPack is being developed by the "
-                + "Research Group of Statistics and Data Analysis.<br />"
+                + "Research Group of Statistics and Data Analysis<br />from the University of Girona<br />"
                 + "Visit us at http://ima.udg.edu/Recerca/EIO/inici_eng.html<br><br>";
         jEditorPane1.setText(windowText);
         repaint();

@@ -1,0 +1,10 @@
+build.xml
+build
+codapack.conf
+.RData
+nbproject
+manifest.mf
+CoDaPack.jar
+CoDaPackUpdater.jar
+*.RData
+*.xls
