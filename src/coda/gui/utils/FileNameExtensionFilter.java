@@ -155,6 +155,7 @@ public final class FileNameExtensionFilter extends FileFilter {
      *
      * @return a string representation of this {@code FileNameExtensionFilter}
      */
+    @Override
     public String toString() {
         // [M.Sabin edit] Java is so awesome that the Linux version
         // uses toString() instead of getDescription() in the list

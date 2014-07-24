@@ -48,7 +48,5 @@ public class renjinExample {
         DoubleArrayVector v = a.getElementAsSEXP(0);
         System.out.println( Arrays.toString( v.toDoubleArray()) );
         
-
-        
     }
 }

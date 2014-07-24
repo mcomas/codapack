@@ -28,11 +28,11 @@ import org.renjin.sexp.StringArrayVector;
  *
  * @author mcomas
  */
-public class ExportMenu extends AbstractMenuDialog{
+public class ExportRDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     JTextField dfname;
     JLabel text1 = new JLabel("Dataframe names:");
-    public ExportMenu(final CoDaPackMain mainApp){
+    public ExportRDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Export Menu", false, false, true);
         dfname = new JTextField("data", 14);
         optionsPanel.add(text1);

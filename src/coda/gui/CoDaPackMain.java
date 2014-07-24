@@ -461,7 +461,7 @@ public final class CoDaPackMain extends JFrame{
                     new FileNameExtensionFilter("Excel files", "xls"));
             if(chooseFile.showOpenDialog(jSplitPane) ==
                     JFileChooser.APPROVE_OPTION){
-                ImportMenu importMenu = new ImportMenu(this, true, chooseFile);
+                ImportXLSMenu importMenu = new ImportXLSMenu(this, true, chooseFile);
                 importMenu.setVisible(true);
                 DataFrame df = importMenu.getDataFrame();
                 if( df != null) addDataFrame(df);
@@ -471,13 +471,26 @@ public final class CoDaPackMain extends JFrame{
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Text file", "txt"));
+            chooseFile.setFileFilter(
+                    new FileNameExtensionFilter("CSV file", "csv"));
+            
             if(chooseFile.showOpenDialog(jSplitPane) ==
                     JFileChooser.APPROVE_OPTION){
-                String path = chooseFile.getSelectedFile().getAbsolutePath();
-                String fname = chooseFile.getSelectedFile().getName();
-                DataFrame df = ImportData.importText(path);
-                df.name = fname;
+                ImportXLSMenu importMenu = new ImportXLSMenu(this, true, chooseFile);
+                importMenu.setVisible(true);
+                DataFrame df = importMenu.getDataFrame();
                 if( df != null) addDataFrame(df);
+                importMenu.dispose();
+//            chooseFile.resetChoosableFileFilters();
+//            chooseFile.setFileFilter(
+//                    new FileNameExtensionFilter("Text file", "txt"));
+//            if(chooseFile.showOpenDialog(jSplitPane) ==
+//                    JFileChooser.APPROVE_OPTION){
+//                String path = chooseFile.getSelectedFile().getAbsolutePath();
+//                String fname = chooseFile.getSelectedFile().getName();
+//                DataFrame df = ImportData.importText(path);
+//                df.name = fname;
+//                if( df != null) addDataFrame(df);
             }
         }else if(title.equals(ITEM_EXPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
@@ -495,7 +508,7 @@ public final class CoDaPackMain extends JFrame{
                 }
             }
         }else if(title.equals(ITEM_EXPORT_R)){
-            new ExportMenu(this).setVisible(true);
+            new ExportRDataMenu(this).setVisible(true);
         }else if(title.equals(ITEM_OPEN)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
@@ -520,7 +533,11 @@ public final class CoDaPackMain extends JFrame{
                 }
             }
         }else if(title.equals(ITEM_DEL_DATAFRAME)){
-            removeDataFrame(dataFrame.get(activeDataFrame));
+            if( dataFrame.size() > 0 ){
+                removeDataFrame(dataFrame.get(activeDataFrame));
+            }else{
+                JOptionPane.showMessageDialog(this, "No table available");
+            }
         }else if(title.equals(ITEM_QUIT)){
             int response = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Confirm",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -655,7 +672,9 @@ public final class CoDaPackMain extends JFrame{
         /*
          * CoDaPack main class is created and shown
          */
-        new CoDaPackMain().setVisible(true);
+        CoDaPackMain main = new CoDaPackMain();
+        
+        main.setVisible(true);
     }
     public void forceUpdate(){
         String previous  = CoDaPackConf.CoDaVersion;
