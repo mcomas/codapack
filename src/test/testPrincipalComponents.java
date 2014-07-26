@@ -20,11 +20,11 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  * @author mcomas
  */
 public class testPrincipalComponents {
-    public static void main(String args[]) throws FileNotFoundException, IOException, InvalidFormatException {
+    public static void main(String args[]) throws FileNotFoundException, IOException, InvalidFormatException, DataFrame.DataFrameException {
         //DataFrame df = ImportData.importXLS("/Users/marc/CoDa.xls", true);
         DataFrame df = ImportData.importXLS("G:/Recerca/EIO_RECERCA/New CoDaPack/Halimba.xls", true);
 
-        while(df.size() > 3) df.deleteData(df.getName(df.size()-1));
+        while(df.size() > 3) df.remove(df.get(df.size()-1).getName());
 
         CoDaPackMain main = new CoDaPackMain();
 

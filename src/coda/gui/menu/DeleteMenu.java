@@ -10,6 +10,8 @@ import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import java.awt.BorderLayout;
 import java.awt.Point;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -45,7 +47,11 @@ public class DeleteMenu extends JDialog{
                 String selected[] = ds.getSelectedData();
                 int n = selected.length;
                 for(int i=0;i<n;i++){
-                    df.deleteData(selected[i]);
+                    try {
+                        df.remove(selected[i]);
+                    } catch (DataFrame.DataFrameException ex) {
+                        Logger.getLogger(DeleteMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 mainApp.updateDataFrame(df);
                 setVisible(false);

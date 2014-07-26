@@ -8,7 +8,8 @@ package coda.io;
 import au.com.bytecode.opencsv.CSVReader;
 import coda.DataFrame;
 import coda.Variable;
-import coda.ZeroData;
+import coda.Zero;
+import coda.Zero;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -149,7 +150,7 @@ public class ImportData{
                     cell = row.getCell(ncol);
                     try{
                         cellValue = evaluator.evaluate(cell);
-                        if( var.isFactor() ){
+                        if( var.isText() ){
                             if(cellValue.getCellType() == Cell.CELL_TYPE_STRING){
                                 var.add(cellValue.getStringValue().trim());
                             }else if(cellValue.getCellType() == Cell.CELL_TYPE_NUMERIC){
@@ -161,12 +162,12 @@ public class ImportData{
                                 if( str.compareTo(notAvailable) == 0){
                                     var.add(Double.NaN);
                                 }else if( str.startsWith(notDetected)){
-                                    var.add(new ZeroData(
+                                    var.add(new Zero(
                                             Double.parseDouble(
                                             str.substring(1,str.length()).replace(",", "."))));
                                     //var.add(Double.MIN_VALUE);
                                 }else{
-                                    var.categorize();
+                                    var.toText();
                                     var.add(str);
                                 }
                             }else if(cellValue.getCellType() == Cell.CELL_TYPE_NUMERIC){
@@ -255,7 +256,7 @@ public class ImportData{
                     stringnumber = nextLine[part];
                     Variable var = variables.get(part-istart);
                     //var.add(nextLine[part]);
-                    if( var.isFactor() ){
+                    if( var.isText() ){
                          var.add(stringnumber.trim());
                     }else{
                         
@@ -271,11 +272,11 @@ public class ImportData{
                             if( str.compareTo(NON_AVAILABLE) == 0){
                                 var.add( Double.NaN);
                             }else if( str.startsWith(NON_DETECTED)){
-                                var.add(new ZeroData(
+                                var.add(new Zero(
                                         Double.parseDouble(
                                         str.substring(1,str.length()).replace(",", "."))));
                             }else{
-                                var.categorize();
+                                var.toText();
                                 //variables.remove(part);
                                 //variables.add(part, var);
                                 //var.categorize();

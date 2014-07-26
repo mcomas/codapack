@@ -45,7 +45,7 @@ public class Numeric2CategoricMenu extends JDialog{
                 String selected[] = ds.getSelectedData();
                 int n = selected.length;
                 for(int i=0;i<n;i++){
-                    df.get(selected[i]).categorize();
+                    df.get(selected[i]).toText();
                 }
                 mainApp.updateDataFrame(df);
                 setVisible(false);

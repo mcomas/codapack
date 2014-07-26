@@ -6,7 +6,6 @@
 package coda.plot;
 
 import coda.CoDaStats;
-import coda.Composition;
 import coda.ext.triangle.Triangle2D;
 import coda.ext.triangle.Vertex2D;
 import java.awt.BasicStroke;

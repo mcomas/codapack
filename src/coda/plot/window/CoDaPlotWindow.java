@@ -206,8 +206,8 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         SelectVariableMenu svm = new SelectVariableMenu(this, dataframe);
         svm.setVisible(true);
         Variable var = dataframe.get(svm.selectedVariable);
-        
-        display.setObservationNames(dataframe.get(svm.selectedVariable).getCategoricalData());
+        svm.dispose();
+        display.setObservationNames(var.getTextData());
         display.repaint();
     }
     private void sliderZoomMouseReleased(java.awt.event.MouseEvent evt) {

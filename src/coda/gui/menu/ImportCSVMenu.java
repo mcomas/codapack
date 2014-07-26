@@ -231,22 +231,13 @@ public class ImportCSVMenu extends JDialog {
 
         if(((CoDaPackMain)getParent()).
                 isDataFrameNameAvailable(nameDataFrame)){
-            if(fileName.endsWith(".xls") || fileName.endsWith(".xlsx")){
-                try {
-                    dataFrame = ImportData.importXLS(absolutePath.getText(),
-                            jCheckBox1.isSelected(),
-                            naData.getText(),
-                            ndData.getText(),
-                            Integer.parseInt(startRow.getText())-1);
+
+              
+                    dataFrame = ImportData.importText( fileName  );
+                            
                     dataFrame.name = dfname.getText();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(ImportXLSMenu.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(ImportXLSMenu.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvalidFormatException ex) {
-                    Logger.getLogger(ImportXLSMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+               
+
             setVisible(false);
         }else{
             JOptionPane.showMessageDialog(this, "Data Frame Name is already in use", "Name already in use", JOptionPane.WARNING_MESSAGE);

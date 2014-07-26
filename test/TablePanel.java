@@ -2,7 +2,9 @@ package  coda.gui;
 
 import coda.io.ExcelAdapter;
 import coda.DataFrame;
-import coda.ZeroData;
+import coda.Element;
+import coda.Numeric;
+import coda.Zero;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -76,7 +78,7 @@ public final class TablePanel extends JPanel{
                 Object value, boolean isSelected, boolean hasFocus, 
                 int row, int column){
             
-            String name = dataFrame.getName(column);
+            String name = dataFrame.get(column).getName();
             if( dataFrame.get(name).isNumeric()){
                 this.setHorizontalAlignment(RIGHT);
                 this.setFont(new Font ("Monospace", Font.PLAIN, 12));
@@ -107,13 +109,13 @@ public final class TablePanel extends JPanel{
     }
     
     public int getRowCount() {
-        return dataFrame.getRowCount();
+        return dataFrame.getMaxVariableLength();
     }
 
     @Override
     public String getColumnName(int i){
         //AbstractTableModel.class.getColumnName(i);
-        return dataFrame.getName(i);
+        return dataFrame.get(i).getName();
     }
     
     public int getColumnCount() {
@@ -122,19 +124,19 @@ public final class TablePanel extends JPanel{
     }
     
     public Object getValueAt(int arg0, int arg1) {
-        String name = dataFrame.getName(arg1);
+        String name = dataFrame.get(arg1).getName();
         if( arg0 < dataFrame.get(name).size()){
-            if( dataFrame.get(name).isFactor() ){
-                return dataFrame.getData(name)[arg0];
+            if( dataFrame.get(name).isText() ){
+                return (String)dataFrame.get(name).get(arg0).getValue();
             }else{
-                if(dataFrame.getData(name)[arg0] instanceof ZeroData){
-                    ZeroData zero = (ZeroData)dataFrame.getData(name)[arg0];
-                    return "<[" + CoDaPackConf.getDecimalTableFormat().format(zero.getDetectionLevel()) + "]";
+                if(dataFrame.get(name).get(arg0) instanceof Zero){
+                    Zero zero = (Zero)dataFrame.get(name).get(arg0);
+                    return "<[" + CoDaPackConf.getDecimalTableFormat().format(zero.detection) + "]";
                 }
-                double value = (Double)dataFrame.getData(name)[arg0];
-                if(Double.isNaN(value))
+                Numeric value = (Numeric)dataFrame.get(name).get(arg0);
+                if(Double.isNaN(value.getValue()))
                     return "NA";
-                return CoDaPackConf.getDecimalTableFormat().format(value);
+                return CoDaPackConf.getDecimalTableFormat().format(value.getValue());
             }
         }else{
             return "";

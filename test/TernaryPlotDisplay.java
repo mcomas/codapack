@@ -6,7 +6,6 @@
 package coda.sim;
 
 import coda.CoDaStats;
-import coda.Composition;
 import coda.ext.triangle.Triangle2D;
 import coda.ext.triangle.Vertex2D;
 
@@ -70,21 +69,6 @@ public class TernaryPlotDisplay extends CoDa2dDisplay{
         public TernaryPlotBuilder(String names[], double data[][]){
             this.names = names;
             this.data = data;
-            mapping = new int[data.length];
-            groups = new int[data.length];
-            for(int i=0; i<data.length;i++){
-                mapping[i] = i;
-                groups[i] = 0;
-            }
-        }
-        public TernaryPlotBuilder(String names[], Composition data[]){
-            this.names = names;
-            this.data = new double[3][data.length];
-            for(int i=0,m=data.length;i<m;i++){
-                this.data[0][i] = data[i].get(0);
-                this.data[1][i] = data[i].get(1);
-                this.data[2][i] = data[i].get(2);
-            }
             mapping = new int[data.length];
             groups = new int[data.length];
             for(int i=0; i<data.length;i++){

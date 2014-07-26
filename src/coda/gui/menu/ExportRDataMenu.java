@@ -76,13 +76,13 @@ public class ExportRDataMenu extends AbstractMenuDialog{
                     if(var.isNumeric()){
                         dataframe.add(var.getName(), new DoubleArrayVector(var.getNumericalData()));
                     }
-                    if(var.isFactor()){
-                        dataframe.add(var.getName(), new StringArrayVector(var.getCategoricalData()));
+                    if(var.isText()){
+                        dataframe.add(var.getName(), new StringArrayVector(var.getTextData()));
                     }
                 }
                 dataframe.setAttribute("class", new StringArrayVector("data.frame"));
-                double [] ind = new double[df.getRowCount()];
-                for (int i=0;i < df.getRowCount();++i) ind[i] = i + 1;
+                double [] ind = new double[df.getMaxVariableLength()];
+                for (int i=0;i < df.getMaxVariableLength();++i) ind[i] = i + 1;
               
                 dataframe.setAttribute("row.names", new DoubleArrayVector(ind));
 

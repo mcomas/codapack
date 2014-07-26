@@ -6,9 +6,9 @@ import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import coda.gui.CoDaPackMain.UpdateConnection;
 import coda.gui.menu.*;
+import coda.gui.table.TablePanel;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.ExportData;
-import coda.io.ImportData;
 import coda.io.WorkspaceIO;
 import coda.plot2.TernaryPlot2dDisplay;
 import coda.plot2.objects.Ternary2dGridObject;
@@ -476,21 +476,11 @@ public final class CoDaPackMain extends JFrame{
             
             if(chooseFile.showOpenDialog(jSplitPane) ==
                     JFileChooser.APPROVE_OPTION){
-                ImportXLSMenu importMenu = new ImportXLSMenu(this, true, chooseFile);
+                ImportCSVMenu importMenu = new ImportCSVMenu(this, true, chooseFile);
                 importMenu.setVisible(true);
                 DataFrame df = importMenu.getDataFrame();
                 if( df != null) addDataFrame(df);
                 importMenu.dispose();
-//            chooseFile.resetChoosableFileFilters();
-//            chooseFile.setFileFilter(
-//                    new FileNameExtensionFilter("Text file", "txt"));
-//            if(chooseFile.showOpenDialog(jSplitPane) ==
-//                    JFileChooser.APPROVE_OPTION){
-//                String path = chooseFile.getSelectedFile().getAbsolutePath();
-//                String fname = chooseFile.getSelectedFile().getName();
-//                DataFrame df = ImportData.importText(path);
-//                df.name = fname;
-//                if( df != null) addDataFrame(df);
             }
         }else if(title.equals(ITEM_EXPORT_XLS)){
             chooseFile.resetChoosableFileFilters();

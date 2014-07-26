@@ -8,3 +8,5 @@ CoDaPack.jar
 CoDaPackUpdater.jar
 *.RData
 *.xls
+dist
+lib

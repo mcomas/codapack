@@ -5,7 +5,6 @@
 
 package coda.sim;
 
-import coda.Composition;
 import coda.sim.TernaryPlotDisplay.TernaryPlotBuilder;
 
 /**
@@ -19,7 +18,7 @@ public class testALNormal {
     public static void main(String args[]) {
         CoDaRandom random = new CoDaRandom();
 
-        Composition[] data = new Composition[SIZE];
+        double[][] data = new double[SIZE][];
 
         double[] mean = {0,0};
         double[][] var = {{1,0},{0,1}};
@@ -29,7 +28,7 @@ public class testALNormal {
         int windows = 6;
         for(int w=0;w<windows;w++){
             for(int i=0; i< SIZE;i++)
-                data[i] = random.nextGaussianALRCoDa(mean, var);
+                data[i] = random.nextGaussianALR(mean, var);
 
             String[] names = new String[COMPONENTS];
             for(int i=0; i<COMPONENTS;i++)

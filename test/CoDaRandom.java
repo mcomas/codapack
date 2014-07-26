@@ -6,7 +6,6 @@
 package coda.sim;
 
 import coda.CoDaStats;
-import coda.Composition;
 import coda.ext.jama.CholeskyDecomposition;
 import coda.ext.jama.Matrix;
 import java.util.Arrays;
@@ -55,32 +54,18 @@ public class CoDaRandom {
 
 
     }*/
-    public Composition nextGaussianBasis(double[] mean, double[][] cov){
-        double basis[] = normalRandomVariable(mean, cov);
-        for(int i=0;i<basis.length;i++)
-            basis[i] = Math.exp(basis[i]);
-        return new Composition(basis);
-    }
-    public Composition nextGaussianILRCoDa(double[] mean, double[][] var, double[][] basis){
-        double ilr[] = normalRandomVariable(mean, var);
-        return new Composition(CoDaStats.transformILRRaw(ilr, basis));
-    }
+
+
     public static double[] nextGaussianILR(double[] mean, double[][] var, double[][] basis){
         double ilr[] = normalRandomVariable(mean, var);
         return CoDaStats.transformILRRaw(ilr, basis);
     }
-    public Composition nextGaussianCLRCoDa(double[] mean, double[][] var){
-        double clr[] = normalRandomVariable(mean, var);
-        return new Composition(CoDaStats.transformCLRRaw(clr));
-    }
+
     public static double[] nextGaussianCLR(double[] mean, double[][] var){
         double clr[] = normalRandomVariable(mean, var);
         return CoDaStats.transformCLRRaw(clr);
     }
-    public Composition nextGaussianALRCoDa(double[] mean, double[][] var){
-        double alr[] = normalRandomVariable(mean, var);
-        return new Composition(CoDaStats.transformALRRaw(alr));
-    }
+
     public static double[] nextGaussianALR(double[] mean, double[][] var){
         double alr[] = normalRandomVariable(mean, var);
         return CoDaStats.transformALRRaw(alr);
@@ -118,7 +103,7 @@ public class CoDaRandom {
         gamma += epsilon(k-n);
         return gamma;
     }
-    public Composition nextDirichlet(double alpha[]){
+    public double[] nextDirichlet(double alpha[]){
         double[] dirichlet = new double[alpha.length];
         double total = 0;
         for(int i=0;i<alpha.length;i++){
@@ -127,22 +112,22 @@ public class CoDaRandom {
         }
         for(int i=0;i<alpha.length;i++)
             dirichlet[i] /= total;
-        return new Composition(dirichlet);
+        return dirichlet;
     }
-    public Composition nextSimplexUniform(double lower[], double upper[]){
+    public double[] nextSimplexUniform(double lower[], double upper[]){
         int size = lower.length;
         double result[] = new double[size];
         for(int i=0; i<size;i++)
             result[i] = Math.exp(lower[i] + generator.nextDouble() *(upper[i] - lower[i]));
 
-        return new Composition(result);
+        return result;
     }
-    public Composition nextSimplex3Uniform(){
+    public double[] nextSimplex3Uniform(){
         double result[] = nextTriangleUniform();
         for(int i=0; i<3;i++)
             result[i] = Math.exp(result[i]);
 
-        return new Composition(result);
+        return result;
     }
     public double[] nextTriangleUniform(double a[], double b[], double c[]){
 
@@ -165,7 +150,7 @@ public class CoDaRandom {
 
         return result;
     }
-    public Composition nextUniform(int size){
+    public double[] nextUniform(int size){
         double vector[] = new double[size+1];
         double result[] = new double[size];
         vector[0] = 0;
@@ -176,7 +161,6 @@ public class CoDaRandom {
         Arrays.sort(vector);
 
         for(int i=0; i<size;i++) result[i] = vector[i+1] - vector[i];
-        vector = null;
-        return new Composition(result);
+        return result;
     }
 }
