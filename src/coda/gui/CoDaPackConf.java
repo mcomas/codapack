@@ -23,9 +23,11 @@ import java.util.logging.Logger;
  * - Exportation to R has been modified. Now, CoDaPack generates a RData file instead of a source code.
  * 
  * 2 01 15
- * - Amalgamation variable name is indicative of amalgamated parts
- * - Closured variables are renamed to be R  compatible
- * - Help->Force Update menu is added to allow a clean re-installation
+ * 
+ * 
+ * 2 01 14
+ * - Decimal point configuration available through File->Configuration menu
+ * - MAC version: Save to R menu (problem solved)
  * 
  * 2 01 13
  * - Sorry, the update 2 01 12 was not correctly integrated in CoDaPack. This update correctly integrates the previous one

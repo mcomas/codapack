@@ -18,9 +18,9 @@ import javax.swing.undo.UndoManager;
  */
 public final class OutputPanel extends JPanel{
     public final long serialVersionUID = 1L;
-
+    
     private String windowText = "";
-    private int num = 1;
+
     private HTMLEditorKit hed = new HTMLEditorKit();
     protected UndoManager undoManager = new UndoManager();
 
@@ -28,14 +28,17 @@ public final class OutputPanel extends JPanel{
 
     private static JEditorPane jEditorPane1;
     private static JScrollPane jScrollPane1;
-    private ArrayList<OutputElement> output = new ArrayList<OutputElement>();
+
+    // De moment no cal
+    //private ArrayList<OutputElement> output = new ArrayList<OutputElement>();
 
     public OutputPanel() {
         setLayout(new BorderLayout());
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
-        
+
+        //jEditorPane1.setEditable(false); //<- No sé què és millor?
         setPreferredSize(new java.awt.Dimension(500, 350));
         setVisible(true);
 
@@ -49,7 +52,6 @@ public final class OutputPanel extends JPanel{
 
         jEditorPane1.setEditorKit(hed);
         jEditorPane1.setDocument(doc);
-
     }
     public void setHTMLStyle(StyleSheet styleSheet){
         styleSheet.addRule("td,th {"
@@ -63,7 +65,7 @@ public final class OutputPanel extends JPanel{
             + "color:#ffffff;}");
         styleSheet.addRule(".alt{"
             + "color:#000000;"
-            + "background-color:#FFFADA;}");//#A2C1D7;}");
+            + "background-color:#FFFADA;}"); //#A2C1D7;}");
         styleSheet.addRule("td.h2{"
             + "background-color:#CC0000;}");
         styleSheet.addRule("td.h1{"
@@ -86,17 +88,18 @@ public final class OutputPanel extends JPanel{
 
     public void addWelcome(String CoDaVersion){
         windowText = "<b>CoDaPack</b> - Version " + CoDaVersion
-                + "<br>CoDaPack is being developed by the "
-                + "Research Group of Statistics and Data Analysis<br />from the University of Girona<br />"
-                + "Visit us at http://ima.udg.edu/Recerca/EIO/inici_eng.html<br><br>";
+                + "<br>This software is being developed by the "
+                + "<a href='http://ima.udg.edu/Recerca/EIO/"
+                + "inici_eng.html'>EAD</a> group (Grup d'Estad&iacute;stica "
+                + "i An&agrave;lisi de Dades).<br><br>";
         jEditorPane1.setText(windowText);
         repaint();
     }
     public void addOutput(OutputElement oe){
-        output.add(oe);
+        //De moment no cal
+        //output.add(oe); 
         String text = jEditorPane1.getText();
-        windowText = text.substring(39, text.length()-15);        
-        //windowText = oe.printHTML(windowText + "<br>");
+        windowText = text.substring(39, text.length()-15); 
         windowText = oe.printHTML(windowText)+ "<br>";
         jEditorPane1.setText(windowText);
         repaint();
@@ -105,7 +108,8 @@ public final class OutputPanel extends JPanel{
         String text = jEditorPane1.getText();
         windowText = text.substring(39, text.length()-15);
         for(OutputElement oe : outputs){
-            output.add(oe);
+            // De moment no cal
+            //output.add(oe); 
             windowText = oe.printHTML(windowText)+ "<br>";
         }
         final int old = jScrollPane1.getVerticalScrollBarPolicy();
@@ -116,51 +120,6 @@ public final class OutputPanel extends JPanel{
                 jScrollPane1.setVerticalScrollBarPolicy(old);
             }
         });
-        /*System.out.println("Setting text");
-        jEditorPane1.setText(windowText);
-        System.out.println("Setted text");*/
         repaint();
     }
-    /*
-    private void insertHTML(JEditorPane editor, String html, int location)
-                                 throws IOException, BadLocationException {
-        //assumes editor is already set to "text/html" type
-        HTMLEditorKit kit = (HTMLEditorKit) editor.getEditorKit();
-        Document document = editor.getDocument();
-        StringReader reader = new StringReader(html);
-        kit.read(reader, document, location);
-    }
-    public void writeTXT(Writer writer){
-
-        Iterator it = output.iterator();
-        try {
-            while(it.hasNext())
-                ((OutputElement)it.next()).printText(writer);
-            writer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(OutputPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void write(String input){
-        windowText += input + "<br>";
-        jEditorPane1.setText(windowText);
-        updateUI();
-    }
-    public void newCommand(){
-        windowText += "[" + num + "]";
-        num++;
-    }    
-    public void hyperlinkUpdate(HyperlinkEvent he) {
-        //System.out.println(he.getURL());
-        if (he.getEventType() == HyperlinkEvent.EventType.ACTIVATED){
-            try {
-                Desktop.getDesktop().browse(he.getURL().toURI());
-            } catch (URISyntaxException ex) {
-
-            } catch(IOException ioe) {
-            }
-        }
-    }*/
 }
-

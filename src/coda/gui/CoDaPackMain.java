@@ -195,34 +195,19 @@ public final class CoDaPackMain extends JFrame{
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "CoDaPack");
         System.setProperty("com.apple.mrj.application.growbox.intrudes", "false");
     }
-    /** Creates new form CoDaPack */
     public CoDaPackMain() {
         screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(CoDaPackMain.RESOURCE_PATH + "logoL.png"));
-        if(this.getIconImage() == null){
-            CoDaPackMain.RESOURCE_PATH = "";
-            this.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(CoDaPackMain.RESOURCE_PATH + "logoL.png"));
-        }
-        /*
-         *  Menu creation:
-         *  Three important objects are created: 
-         *  - OutputPanel
-         *  - TablePanel
-         *  - DataList
-         * 
-         *  The names of menus are also important
-         */
+        // Es carrega el logo del CoDaPack
+        this.setIconImage(
+                Toolkit.getDefaultToolkit().getImage(
+                CoDaPackMain.RESOURCE_PATH + "logoL.png"));
         initComponents();
         outputPanel.addWelcome(CoDaPackConf.getVersion());
-
     }
     private void addJMenuItem(JMenu menu, JMenuItem item, String title){
         menu.add(item);
         item.setText(title);
-        item.addActionListener(new java.awt.event.ActionListener() {
-            
+        item.addActionListener(new java.awt.event.ActionListener() {            
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemActionPerformed(evt);
             }

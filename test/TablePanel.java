@@ -18,25 +18,20 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 
-
-
 public final class TablePanel extends JPanel{
   public static final long serialVersionUID = 1L;
   final int maxfil= 2003, maxcol= 1000;
   int nColumnas= 2;
-  //CoDaPackMain mainApp;
-  //DataTableModel dataTable;
+  
   JTable table;
   JScrollPane scrollPane1 = new JScrollPane();
   DataFrame dataFrame;
 
   public TablePanel(){
     setLayout(new BorderLayout());
-    //setPreferredSize(new java.awt.Dimension(500, 350));
     table = new JTable(250,1000);
 
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    //table.setCellSelectionEnabled(true);
     table.setColumnSelectionAllowed(true);
     table.setRowSelectionAllowed(false);
     table.getTableHeader().setReorderingAllowed(false);
