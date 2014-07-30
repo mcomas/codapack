@@ -122,8 +122,8 @@ public class TernaryPlot2dDisplay extends coda.plot.CoDa2dDisplay{
         drawAxis(g2);
     }
     public void drawAxis(Graphics2D g2){
-        g2.setColor( CoDaDisplayConfiguration.getColor("axis") );
-        g2.setStroke(new BasicStroke(CoDaDisplayConfiguration.getSize("axis"),
+        g2.setColor( config.getColor("axis") );
+        g2.setStroke(new BasicStroke(config.getSize("axis"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
 
@@ -136,7 +136,7 @@ public class TernaryPlot2dDisplay extends coda.plot.CoDa2dDisplay{
         g2.draw(PlotUtils.drawLine(o3, o1));
     }    
     public void drawAreas(Graphics2D g2){
-        g2.setPaint( CoDaDisplayConfiguration.getColor("area"));
+        g2.setPaint( config.getColor("area"));
         Point2D o1 = null, o2 = null, o3 = null;
         o1 = defaultTransform.transform(new Point2D.Double(V[0][0], V[0][1]), o1);
         o2 = defaultTransform.transform(new Point2D.Double(V[1][0], V[1][1]), o2);

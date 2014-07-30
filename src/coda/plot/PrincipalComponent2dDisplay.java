@@ -169,8 +169,8 @@ public final class PrincipalComponent2dDisplay extends TernaryPlot2dDisplay{
         drawPrincipalComponents(g2);
     }
     public void drawPrincipalComponents(Graphics2D g2){
-        g2.setColor( CoDaDisplayConfiguration.getColor("Prin.Comp.",1) );
-        g2.setStroke(new BasicStroke(CoDaDisplayConfiguration.getSize("Prin.Comp.",1) ,
+        g2.setColor( config.getColor("Prin.Comp.",1) );
+        g2.setStroke(new BasicStroke(config.getSize("Prin.Comp.",1) ,
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
 
@@ -198,8 +198,8 @@ public final class PrincipalComponent2dDisplay extends TernaryPlot2dDisplay{
         //g2.draw(principalComponent);
         
         //principalComponent = new Path2D.Double();
-        g2.setColor( CoDaDisplayConfiguration.getColor("Prin.Comp.",2) );
-        g2.setStroke(new BasicStroke(CoDaDisplayConfiguration.getSize("Prin.Comp.",2) ,
+        g2.setColor( config.getColor("Prin.Comp.",2) );
+        g2.setStroke(new BasicStroke(config.getSize("Prin.Comp.",2) ,
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
         //o = defaultTransform.transform(new Point2D.Double(pospc1axis[0][0],pospc1axis[0][1]), o);

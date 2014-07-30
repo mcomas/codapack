@@ -21,9 +21,10 @@ public class FilledTriangleDown implements CoDaShape{
     Color contour;
     double size;
     public FilledTriangleDown(){
-        this.interior = CoDaDisplayConfiguration.getColor("data0");
+        CoDaDisplayConfiguration config = new CoDaDisplayConfiguration();
+        this.interior = config.getColor("data0");
         this.contour = Color.BLACK;
-        this.size = CoDaDisplayConfiguration.getSize("data");
+        this.size = config.getSize("data");
     }
     public FilledTriangleDown(Color interior, Color contour, double size){
         this.interior = interior;

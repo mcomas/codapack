@@ -47,11 +47,13 @@ public class PlotConfigurationMenu extends JDialog{
     CoDaPlotWindow window;
     int actualColorItem;
     int actualSizeItem;
+    CoDaDisplayConfiguration config;
     
-    public PlotConfigurationMenu(final CoDaPlotWindow window){
+    public PlotConfigurationMenu(final CoDaPlotWindow window, final CoDaDisplayConfiguration config){        
         super(window, "Configuration menu");
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(window);
         this.window = window;
+        this.config = config;
         
         setResizable(false);
         getContentPane().setLayout(new BorderLayout());
@@ -66,12 +68,12 @@ public class PlotConfigurationMenu extends JDialog{
         colorPanel.setLayout(new BoxLayout(colorPanel, BoxLayout.PAGE_AXIS));
         tabbedPane.addTab("Sizes", sizePanel);  
         
-        Set<String> colorItems = CoDaDisplayConfiguration.getColorKeySet();
+        Set<String> colorItems = config.color.keySet();
         int N_color = colorItems.size();
         itemColorName = colorItems.toArray(new String[N_color]);
         Arrays.sort(itemColorName, String.CASE_INSENSITIVE_ORDER);
         
-        Set<String> sizeItems = CoDaDisplayConfiguration.getSizeKeySet();
+        Set<String> sizeItems = config.size.keySet();
         int N_size = sizeItems.size();
         itemSizeName = sizeItems.toArray(new String[N_size]);
         Arrays.sort(itemSizeName, String.CASE_INSENSITIVE_ORDER);
@@ -79,11 +81,11 @@ public class PlotConfigurationMenu extends JDialog{
         color = new Color[N_color];
         size = new float[N_size];
         
-        for(int i=0;i<N_size;i++){
-            color[i] = CoDaDisplayConfiguration.getColor(itemColorName[i]);
+        for(int i=0;i<N_color;i++){
+            color[i] = config.getColor(itemColorName[i]);
         }
         for(int i=0;i<N_size;i++){
-            size[i] = CoDaDisplayConfiguration.getSize(itemSizeName[i]);
+            size[i] = config.getSize(itemSizeName[i]);
         }
         /*
          * Color panel
@@ -162,10 +164,10 @@ public class PlotConfigurationMenu extends JDialog{
         apply.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae) {
                 for(int i=0;i<color.length;i++){
-                    CoDaDisplayConfiguration.setColor(itemColorName[i],color[i]);
+                    config.setColor(itemColorName[i],color[i]);
                 }
                 for(int i=0;i<size.length;i++){
-                    CoDaDisplayConfiguration.setSize(itemSizeName[i],size[i]);
+                    config.setSize(itemSizeName[i],size[i]);
                 }
                 window.repaint();
             }
@@ -175,7 +177,7 @@ public class PlotConfigurationMenu extends JDialog{
         JButton saveDefault = new JButton("Save as default");
         saveDefault.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae) {
-                CoDaDisplayConfiguration.saveConfiguration();
+                config.saveConfiguration();
             }
         });
         south.add(saveDefault);
@@ -183,19 +185,19 @@ public class PlotConfigurationMenu extends JDialog{
         JButton gDefault = new JButton("Default");
         gDefault.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae) {
-                CoDaDisplayConfiguration.loadConfiguration();
+                config.loadConfiguration();
                 
-                Set<String> colorItems = CoDaDisplayConfiguration.getColorKeySet();
+                Set<String> colorItems = config.color.keySet();
                 int N_color = colorItems.size();
                 for(int i=0;i<N_color;i++){
-                    color[i] = CoDaDisplayConfiguration.getColor(itemColorName[i]);
+                    color[i] = config.getColor(itemColorName[i]);
                 }
                 selectedColor.setBackground(color[actualColorItem]);
                 
-                Set<String> sizeItems = CoDaDisplayConfiguration.getSizeKeySet();
+                Set<String> sizeItems = config.size.keySet();
                 int N_size = sizeItems.size();
                 for(int i=0;i<N_size;i++){
-                    size[i] = CoDaDisplayConfiguration.getSize(itemSizeName[i]);
+                    size[i] = config.getSize(itemSizeName[i]);
                 }
                 selectedSize.setText(Float.toString(size[actualSizeItem]));
             }

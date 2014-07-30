@@ -19,6 +19,7 @@ import coda.gui.CoDaPackMain;
 import coda.gui.menu.SelectVariableMenu;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.plot.AbstractCoDaDisplay;
+import coda.plot.CoDaDisplayConfiguration;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -104,7 +105,6 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         itemConf.setText(ITEM_CONF);
         itemQuit = new JMenuItem();
         itemQuit.setText(ITEM_QUIT);
-
         menuData = new JMenu();
         menuData.setText(ITEM_DATA);
         itemObsName = new JMenuItem();
@@ -219,7 +219,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         display.repaint();
     }
     public void initiateConfigurationMenu(){
-        PlotConfigurationMenu menu = new PlotConfigurationMenu(this);
+        PlotConfigurationMenu menu = new PlotConfigurationMenu(this, display.config);
         menu.setVisible(true);
     }
     public void saveImage(){

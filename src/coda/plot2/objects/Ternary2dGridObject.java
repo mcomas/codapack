@@ -42,8 +42,9 @@ public class Ternary2dGridObject implements Ternary2dObject{
     private Color color;
     double center[] = {1,1,1};
     boolean isVisible = false;
- 
+    CoDaDisplayConfiguration config;
     public Ternary2dGridObject(CoDa2dDisplay display, double definedGrid[]){
+        config = new CoDaDisplayConfiguration();
         this.display = display;
         this.definedGrid = definedGrid;
         
@@ -76,8 +77,8 @@ public class Ternary2dGridObject implements Ternary2dObject{
     }
     public void plotObject(Graphics2D g2) {
         if(isVisible){
-            g2.setColor( CoDaDisplayConfiguration.getColor("grid") );
-            g2.setStroke(new BasicStroke( CoDaDisplayConfiguration.getSize("grid"),
+            g2.setColor( config.getColor("grid") );
+            g2.setStroke(new BasicStroke( config.getSize("grid"),
                        BasicStroke.JOIN_MITER,
                        BasicStroke.CAP_ROUND));
             Point2D o1 = null, o2 = null, o3 = null;
@@ -170,9 +171,9 @@ public class Ternary2dGridObject implements Ternary2dObject{
     public void setParameters(JFrame f){
         final JDialog jd = new JDialog(f,  true);
         final ColorPanel selectedColor = new ColorPanel(
-                CoDaDisplayConfiguration.getColor("grid"));
+                config.getColor("grid"));
         final JTextField jSize = new JTextField(Float.toString(
-                CoDaDisplayConfiguration.getSize("grid")));
+                config.getSize("grid")));
         jd.setSize(300,300);
         JPanel propertyPanel = new JPanel();
         propertyPanel.add(new JLabel("Color:"));
@@ -187,8 +188,8 @@ public class Ternary2dGridObject implements Ternary2dObject{
         
         jb.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-                CoDaDisplayConfiguration.setColor("grid", selectedColor.getBackground());
-                CoDaDisplayConfiguration.setSize("grid", Float.parseFloat(jSize.getText()));
+                config.setColor("grid", selectedColor.getBackground());
+                config.setSize("grid", Float.parseFloat(jSize.getText()));
  
                 display.repaint();
                 jd.dispose();

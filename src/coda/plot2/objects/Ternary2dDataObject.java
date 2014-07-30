@@ -48,8 +48,9 @@ public final class Ternary2dDataObject implements Ternary2dObject{
     float size = 1;
     private CoDaShape shape;
     ShapePanel selectedShape;
-    
+    CoDaDisplayConfiguration config;
     public void commonIni(CoDa2dDisplay display, double dataset[][]){
+        config = new CoDaDisplayConfiguration();
         this.display = display;
         this.dataset = dataset;
         this.shape = new FilledCircle();
@@ -87,7 +88,7 @@ public final class Ternary2dDataObject implements Ternary2dObject{
         g2.setStroke(new BasicStroke(1f ,
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
-        float s = CoDaDisplayConfiguration.getSize("data");
+        float s = config.getSize("data");
         Point2D o = null;
         for(int i=0;i<data.length;i++){            
             o = display.getGeometry().transform(new Point2D.Double(data[i][0], data[i][1]), o);

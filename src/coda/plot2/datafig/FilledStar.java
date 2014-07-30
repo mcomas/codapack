@@ -21,9 +21,10 @@ public class FilledStar implements CoDaShape{
     double size;
     int vertexCount;
     public FilledStar(int vertexCount){
-        this.interior = CoDaDisplayConfiguration.getColor("data0");
+        CoDaDisplayConfiguration config = new CoDaDisplayConfiguration();
+        this.interior = config.getColor("data0");
         this.contour = Color.BLACK;
-        this.size = CoDaDisplayConfiguration.getSize("data");
+        this.size = config.getSize("data");
 
         this.vertexCount = vertexCount;
     }

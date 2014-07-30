@@ -94,7 +94,7 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
 
                     double transData[][] = new Matrix(xdata).transpose().getArray();
                     Ternary2dObject dataObject = new Ternary2dDataObject(display, transData);
-                    dataObject.setColor(coda.plot.CoDaDisplayConfiguration.getColor("data",gr));
+                    dataObject.setColor(new coda.plot.CoDaDisplayConfiguration().getColor("data",gr));
                     display.addCoDaObject(dataObject);
 
                     for(int i=0;i<confidence.length;i++){

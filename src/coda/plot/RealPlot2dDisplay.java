@@ -88,7 +88,7 @@ public class RealPlot2dDisplay extends CoDa2dDisplay{
         this.mapping = builder.mapping;
 
         //iconLabel = new TeXIcon[names.length];
-        int s = CoDaDisplayConfiguration.getSize("label").intValue();
+        int s = config.getSize("label").intValue();
         textLabel = names;
 
         /*if(withIconLabel){
@@ -157,8 +157,8 @@ public class RealPlot2dDisplay extends CoDa2dDisplay{
         
     }
     public void drawAxis(Graphics2D g2){
-        g2.setColor( CoDaDisplayConfiguration.getColor("axisX") );
-        g2.setStroke(new BasicStroke(CoDaDisplayConfiguration.getSize("axisX"),
+        g2.setColor( config.getColor("axisX") );
+        g2.setStroke(new BasicStroke(config.getSize("axisX"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
 
@@ -167,8 +167,8 @@ public class RealPlot2dDisplay extends CoDa2dDisplay{
         o2 = defaultTransform.transform(new Point2D.Double(V[1][0],2*origin[1]-V[1][1]), o2);
         g2.draw( PlotUtils.drawLine(o1,  o2) );
         //g2.drawString(, TOP_ALIGNMENT, TOP_ALIGNMENT);
-        g2.setColor( CoDaDisplayConfiguration.getColor("axisY") );
-        g2.setStroke(new BasicStroke(CoDaDisplayConfiguration.getSize("axisY"),
+        g2.setColor( config.getColor("axisY") );
+        g2.setStroke(new BasicStroke(config.getSize("axisY"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
 
@@ -181,10 +181,10 @@ public class RealPlot2dDisplay extends CoDa2dDisplay{
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
    
-        float s = CoDaDisplayConfiguration.getSize("data");
+        float s = config.getSize("data");
         Point2D o = null;
         for(int i=0;i<Z.length;i++){
-            g2.setColor( CoDaDisplayConfiguration.getColor("data", groups[i]) );
+            g2.setColor( config.getColor("data", groups[i]) );
             o = defaultTransform.transform(new Point2D.Double(Z[i][0],Z[i][1]), o);
             g2.fill(PlotUtils.drawPoint(o, s));
             g2.setColor( Color.black );
@@ -201,7 +201,7 @@ public class RealPlot2dDisplay extends CoDa2dDisplay{
         Point2D o = null;
         Font font = new Font("Monospace", Font.PLAIN, 15);
         g2.setFont(font);
-        g2.setColor(CoDaDisplayConfiguration.getColor("label"));
+        g2.setColor(config.getColor("label"));
         FontMetrics metric = g2.getFontMetrics();
         o = defaultTransform.transform(new Point2D.Double(V[0][0],V[0][1]), o);
         g2.drawString(textLabel[0],
