@@ -5,9 +5,11 @@ import coda.DataFrame;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import coda.gui.CoDaPackMain.UpdateConnection;
+import coda.gui.CoDaPackMenu.CoDaPackMenuListener;
 import coda.gui.menu.*;
 import coda.gui.table.TablePanel;
 import coda.gui.utils.FileNameExtensionFilter;
+import coda.io.CoDaPackImporter;
 import coda.io.ExportData;
 import coda.io.WorkspaceIO;
 import coda.plot2.TernaryPlot2dDisplay;
@@ -81,108 +83,8 @@ public final class CoDaPackMain extends JFrame{
     
     private String ITEM_APPLICATION_NAME;
     // Menu
-    private JMenuBar jMenuBar;
-        private JMenu menuFile;
-        private final String ITEM_FILE = "File";
-            private JMenuItem itemOpen;
-            private final String ITEM_OPEN = "Open Workspace...";
-            private JMenuItem itemSave;
-            private final String ITEM_SAVE = "Save Workspace...";
-            private JMenuItem itemNewDF;
-            private final String ITEM_NEWDF = "New DataFrame";
-            private JMenu menuImport;
-            private final String ITEM_IMPORT = "Import";
-                private JMenuItem itemImportXLS;
-                private final String ITEM_IMPORT_XLS = "Import XLS Data...";
-                private JMenuItem itemImportCSV;
-                private final String ITEM_IMPORT_CSV = "Import Text Data...";
-            private JMenu menuExport;
-            private final String ITEM_EXPORT = "Export";
-                private JMenuItem itemExportXLS;
-                private final String ITEM_EXPORT_XLS = "Export Data to XLS...";
-                private JMenuItem itemExportR;
-                private final String ITEM_EXPORT_R = "Export Data to RData...";
-            private JMenuItem itemdelDataFrame;
-            private final String ITEM_DEL_DATAFRAME = "Delete Table";
-            private JMenuItem itemConfiguration;
-            private final String ITEM_CONF = "Configuration";
-            private JMenuItem itemQuit;
-            private final String ITEM_QUIT = "Quit CoDaPack";
+    private CoDaPackMenu jMenuBar;
 
-        private JMenu menuData;
-        private final String ITEM_DATA = "Data";
-            private JMenu menuTransforms;
-            private final String ITEM_TRANS = "Transformations";
-                private JMenuItem itemTransformALR;
-                private final String ITEM_RAW_ALR = "ALR";
-                private JMenuItem itemTransformCLR;
-                private final String ITEM_RAW_CLR = "CLR";
-                private JMenuItem itemTransformILR;
-                private final String ITEM_RAW_ILR = "ILR";
-            private JMenuItem itemCenter;
-            private final String ITEM_CENTER = "Centering";
-            private JMenuItem itemClosure;
-            private final String ITEM_CLOSURE = "Subcomposition/Closure";
-            private JMenuItem itemAmalgamation;
-            private final String ITEM_AMALGAM = "Amalgamation";
-            private JMenuItem itemPerturbate;
-            private final String ITEM_PERTURBATE = "Perturbation";
-            private JMenuItem itemPower;
-            private final String ITEM_POWER = "Power transformation";
-            private JMenuItem itemZeros;
-            private final String ITEM_ZEROS = "Rounded zero replacement";
-            private JMenuItem itemCategorizeVariables;
-            private final String ITEM_CAT_VAR = "Numeric to categorical";
-            private JMenuItem itemNumerizeVariables;
-            private final String ITEM_NUM_VAR = "Categorical to Numeric";
-            private JMenuItem itemAddVariables;
-            private final String ITEM_ADD_VAR = "Add Numeric Variables";
-            private JMenuItem itemDeleteVariables;
-            private final String ITEM_DEL_VAR = "Delete variables";
-
-        private JMenu menuStatistics;
-        private final String ITEM_STATS = "Statistics";
-            private JMenuItem itemCompStatsSummary;
-            private final String ITEM_COMP_STATS_SUMMARY = "Compositional statistics summary";
-            private JMenuItem itemClasStatsSummary;
-            private final String ITEM_CLAS_STATS_SUMMARY = "Classical statistics summary";
-            private JMenuItem itemNormalityTest;
-            private final String ITEM_NORM_TEST = "Additive Logistic Normality Tests";
-            private JMenuItem itemAtipicalityIndex;
-            private final String ITEM_ATIP_INDEX = "Atipicality index";
-            
-
-        private JMenu menuGraphs;
-        private final String ITEM_GRAPHS = "Graphs";
-            private JMenuItem itemTernaryPlot;
-            private final String ITEM_TERNARY_PLOT = "Ternary plot";
-            private JMenuItem itemEmptyTernaryPlot;
-            private final String ITEM_EMPTY_TERNARY_PLOT = "Ternary plot [Empty]";
-            private JMenuItem itemIlrBiPlot;
-            private final String ITEM_ILR_BIPLOT = "ILR/CLR plot";
-            private JMenuItem itemBiPlot;
-            private final String ITEM_BIPLOT = "CLR biplot";
-            private JMenuItem itemDendrogramPlot;
-            private final String ITEM_DENDROGRAM_PLOT = "Balance dendrogram";
-            private JMenuItem itemALRPlot;
-            private final String ITEM_ALR_PLOT = "ALR plot";
-            private JMenuItem itemCLRPlot;
-            private final String ITEM_CLR_PLOT = "CLR plot";
-            private JMenuItem itemILRPlot;
-            private final String ITEM_ILR_PLOT = "ILR plot";
-            private JMenuItem principalComponentPlot;
-            private final String ITEM_PC_PLOT = "Ternary Principal Components";
-            private JMenuItem predictiveRegionPlot;
-            private final String ITEM_PRED_REG_PLOT = "Predictive Region";
-            private JMenuItem confidenceRegionPlot;
-            private final String ITEM_CONF_REG_PLOT = "Center Confidence Region";
-
-       private JMenu menuHelp;
-       private final String ITEM_HELP = "Help";
-            private JMenuItem itemForceUpdate;
-            private final String ITEM_FORCE_UPDATE = "Force update";
-            private JMenuItem itemAbout;
-            private final String ITEM_ABOUT = "About";
 
        public static CoDaPackConf config = new CoDaPackConf();
     private JFileChooser chooseFile = new JFileChooser();
@@ -204,15 +106,6 @@ public final class CoDaPackMain extends JFrame{
         initComponents();
         outputPanel.addWelcome(CoDaPackConf.getVersion());
     }
-    private void addJMenuItem(JMenu menu, JMenuItem item, String title){
-        menu.add(item);
-        item.setText(title);
-        item.addActionListener(new java.awt.event.ActionListener() {            
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemActionPerformed(evt);
-            }
-        });
-    }
     private void initComponents() {
         ITEM_APPLICATION_NAME = "CoDaPack v" + CoDaPackConf.getVersion();
         outputPanel = new OutputPanel();
@@ -220,59 +113,13 @@ public final class CoDaPackMain extends JFrame{
         
         //Panel with the active variable
         dataList = new DataList();
-        jMenuBar = new JMenuBar();
-            menuFile = new JMenu();
-                itemOpen = new JMenuItem();
-                itemSave = new JMenuItem();
-                itemNewDF = new JMenuItem();
-                menuImport = new JMenu();
-                    itemImportCSV = new JMenuItem();
-                    itemImportXLS = new JMenuItem();
-                menuExport = new JMenu();
-                    itemExportXLS = new JMenuItem();
-                    itemExportR = new JMenuItem();
-                itemdelDataFrame = new JMenuItem();
-                itemConfiguration = new JMenuItem();
-                itemQuit = new JMenuItem();
-
-        menuData = new JMenu();
-            menuTransforms = new JMenu();
-                itemTransformALR = new JMenuItem();
-                itemTransformCLR = new JMenuItem();
-                itemTransformILR = new JMenuItem();
-            itemCenter = new JMenuItem();
-            itemClosure = new JMenuItem();
-            itemAmalgamation = new JMenuItem();
-            itemPerturbate = new JMenuItem();
-            itemPower = new JMenuItem();
-            itemZeros = new JMenuItem();
-            itemCategorizeVariables = new JMenuItem();
-            itemNumerizeVariables = new JMenuItem();
-            itemAddVariables = new JMenuItem();
-            itemDeleteVariables = new JMenuItem();
-
-        menuStatistics = new JMenu();
-            itemCompStatsSummary = new JMenuItem();
-            itemClasStatsSummary = new JMenuItem();
-            itemNormalityTest = new JMenuItem();
-            itemAtipicalityIndex = new JMenuItem();                        
-
-        menuGraphs = new JMenu();
-            itemTernaryPlot = new JMenuItem();
-            itemEmptyTernaryPlot = new JMenuItem();
-            itemBiPlot = new JMenuItem();
-            itemIlrBiPlot = new JMenuItem();
-            itemDendrogramPlot = new JMenuItem();
-            itemALRPlot = new JMenuItem();
-            itemCLRPlot = new JMenuItem();
-            itemILRPlot = new JMenuItem();
-            principalComponentPlot = new JMenuItem();
-            predictiveRegionPlot = new JMenuItem();
-            confidenceRegionPlot = new JMenuItem();
-
-        menuHelp = new JMenu();
-            itemForceUpdate = new JMenuItem();
-            itemAbout = new JMenuItem();        
+        jMenuBar = new CoDaPackMenu();
+        jMenuBar.addCoDaPackMenuListener(new CoDaPackMenuListener(){
+            @Override
+            public void menuItemClicked(String v) {
+                eventCoDaPack(v);
+            }
+        });
 
         setTitle(ITEM_APPLICATION_NAME);
         setPreferredSize(new Dimension(1000,700));
@@ -303,78 +150,7 @@ public final class CoDaPackMain extends JFrame{
         main.setDividerSize(7);    
         getContentPane().add(main, BorderLayout.CENTER);
 
-        menuFile.setText(ITEM_FILE);
-        addJMenuItem(menuFile, itemOpen, ITEM_OPEN);
-        addJMenuItem(menuFile, itemSave, ITEM_SAVE);
 
-        menuFile.addSeparator();        
-        addJMenuItem(menuFile, itemdelDataFrame, ITEM_DEL_DATAFRAME);
-        
-        menuFile.addSeparator();
-        menuImport.setText(ITEM_IMPORT);
-        menuFile.add(menuImport);
-        addJMenuItem(menuImport, itemImportCSV, ITEM_IMPORT_CSV);
-        addJMenuItem(menuImport, itemImportXLS, ITEM_IMPORT_XLS);
-        
-        menuExport.setText(ITEM_EXPORT);
-        menuFile.add(menuExport);
-        addJMenuItem(menuExport, itemExportXLS, ITEM_EXPORT_XLS);
-        addJMenuItem(menuExport, itemExportR, ITEM_EXPORT_R);
-        
-        menuFile.addSeparator();
-        addJMenuItem(menuFile, itemConfiguration, ITEM_CONF);
-        menuFile.addSeparator();
-        addJMenuItem(menuFile, itemQuit, ITEM_QUIT);
-        jMenuBar.add(menuFile);
-
-        menuData.setText(ITEM_DATA);
-        menuTransforms.setText(ITEM_TRANS);
-        menuData.add(menuTransforms);
-        addJMenuItem(menuTransforms, itemTransformALR, ITEM_RAW_ALR);
-        addJMenuItem(menuTransforms, itemTransformCLR, ITEM_RAW_CLR);
-        addJMenuItem(menuTransforms, itemTransformILR, ITEM_RAW_ILR);
-        addJMenuItem(menuData, itemCenter, ITEM_CENTER);
-        addJMenuItem(menuData, itemClosure, ITEM_CLOSURE);
-        addJMenuItem(menuData, itemAmalgamation, ITEM_AMALGAM);
-        addJMenuItem(menuData, itemPerturbate, ITEM_PERTURBATE);
-        addJMenuItem(menuData, itemPower, ITEM_POWER);
-        addJMenuItem(menuData, itemZeros, ITEM_ZEROS);
-        menuData.addSeparator();
-        addJMenuItem(menuData, itemCategorizeVariables, ITEM_CAT_VAR);
-        addJMenuItem(menuData, itemNumerizeVariables, ITEM_NUM_VAR);
-        menuData.addSeparator();
-        addJMenuItem(menuData, itemAddVariables, ITEM_ADD_VAR);
-        addJMenuItem(menuData, itemDeleteVariables, ITEM_DEL_VAR);
-        jMenuBar.add(menuData);
-
-        menuStatistics.setText(ITEM_STATS);
-        addJMenuItem(menuStatistics, itemCompStatsSummary, ITEM_COMP_STATS_SUMMARY);        
-        addJMenuItem(menuStatistics, itemClasStatsSummary, ITEM_CLAS_STATS_SUMMARY);        
-        jMenuBar.add(menuStatistics);
-        menuStatistics.addSeparator();
-        addJMenuItem(menuStatistics, itemNormalityTest, ITEM_NORM_TEST);
-        addJMenuItem(menuStatistics, itemAtipicalityIndex, ITEM_ATIP_INDEX);
-
-        menuGraphs.setText(ITEM_GRAPHS);
-        addJMenuItem(menuGraphs, itemTernaryPlot, ITEM_TERNARY_PLOT);
-        addJMenuItem(menuGraphs, itemEmptyTernaryPlot, ITEM_EMPTY_TERNARY_PLOT);
-        addJMenuItem(menuGraphs, principalComponentPlot, ITEM_PC_PLOT);
-        addJMenuItem(menuGraphs, predictiveRegionPlot, ITEM_PRED_REG_PLOT);
-        addJMenuItem(menuGraphs, confidenceRegionPlot, ITEM_CONF_REG_PLOT);        
-        menuGraphs.addSeparator();
-        addJMenuItem(menuGraphs, itemALRPlot, ITEM_ALR_PLOT);
-        addJMenuItem(menuGraphs, itemCLRPlot, ITEM_CLR_PLOT);
-        addJMenuItem(menuGraphs, itemILRPlot, ITEM_ILR_PLOT);
-        menuGraphs.addSeparator();
-        addJMenuItem(menuGraphs, itemBiPlot, ITEM_BIPLOT);
-        addJMenuItem(menuGraphs, itemIlrBiPlot, ITEM_ILR_BIPLOT);
-        addJMenuItem(menuGraphs, itemDendrogramPlot, ITEM_DENDROGRAM_PLOT);
-        jMenuBar.add(menuGraphs);       
-
-        menuHelp.setText(ITEM_HELP);
-        addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
-        addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
-        jMenuBar.add(menuHelp);
         
         setJMenuBar(jMenuBar);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -382,7 +158,7 @@ public final class CoDaPackMain extends JFrame{
         addWindowListener(new WindowAdapter(){
             @Override
             public void windowClosing(WindowEvent e){
-                itemQuit.doClick();
+                jMenuBar.itemQuit.doClick();
             }
         });        
         pack();
@@ -422,8 +198,8 @@ public final class CoDaPackMain extends JFrame{
             dataFrameSelector.setSelectedItem(df.name);
             dataFrameSelector.addItemListener(dataFrameListener);
         }else{
-            JOptionPane.showMessageDialog(null,"<html>Name <i>" +
-                    df.name + "</i> is not available.</html>");
+            JOptionPane.showMessageDialog(this,"<html>Dataframe <i>" +
+                    df.name + "</i> is already loaded.</html>");
         }
     }
     public void updateDataFrame(DataFrame df){
@@ -437,10 +213,9 @@ public final class CoDaPackMain extends JFrame{
         if(activeDataFrame == -1) return null;
         return dataFrame.get(activeDataFrame);
     }
-    void itemActionPerformed(ActionEvent ev){
-        JMenuItem jMenuItem = (JMenuItem)ev.getSource();
-        String title = jMenuItem.getText();
-        if(title.equals(ITEM_IMPORT_XLS)){
+    public void eventCoDaPack(String action){
+        String title = action;
+        if(title.equals(jMenuBar.ITEM_IMPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Excel files", "xls"));
@@ -452,7 +227,7 @@ public final class CoDaPackMain extends JFrame{
                 if( df != null) addDataFrame(df);
                 importMenu.dispose();
             }
-        }else if(title.equals(ITEM_IMPORT_CSV)){
+        }else if(title.equals(jMenuBar.ITEM_IMPORT_CSV)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Text file", "txt"));
@@ -467,7 +242,7 @@ public final class CoDaPackMain extends JFrame{
                 if( df != null) addDataFrame(df);
                 importMenu.dispose();
             }
-        }else if(title.equals(ITEM_EXPORT_XLS)){
+        }else if(title.equals(jMenuBar.ITEM_EXPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Excel files", "xls"));
@@ -482,18 +257,21 @@ public final class CoDaPackMain extends JFrame{
                     Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }else if(title.equals(ITEM_EXPORT_R)){
+        }else if(title.equals(jMenuBar.ITEM_EXPORT_R)){
             new ExportRDataMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_OPEN)){
-            chooseFile.resetChoosableFileFilters();
-            chooseFile.setFileFilter(
-                    new FileNameExtensionFilter("CoDaPack Workspace", "cdp"));
-            if(chooseFile.showOpenDialog(jSplitPane) ==
-                    JFileChooser.APPROVE_OPTION){
-                WorkspaceIO.openWorkspace(chooseFile.getSelectedFile()
-                        .getAbsolutePath(), this);
-            }
-        }else if(title.equals(ITEM_SAVE)){
+        }else if(title.equals(jMenuBar.ITEM_OPEN)){
+            CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
+            DataFrame df = imp.importDataFrame();
+            addDataFrame(df);
+            
+            jMenuBar.addRecentFile(imp.getParameters());
+        }else if("format:codapack".equals(action.split("¿")[0])){
+            CoDaPackImporter imp = new CoDaPackImporter().setParameters(action);
+            DataFrame df = imp.importDataFrame();
+            addDataFrame(df);
+            
+            jMenuBar.addRecentFile(imp.getParameters());
+        }else if(title.equals(jMenuBar.ITEM_SAVE)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("CoDaPack Workspace", "cdp"));
@@ -507,54 +285,54 @@ public final class CoDaPackMain extends JFrame{
                             .log(Level.SEVERE, null, ex);
                 }
             }
-        }else if(title.equals(ITEM_DEL_DATAFRAME)){
+        }else if(title.equals(jMenuBar.ITEM_DEL_DATAFRAME)){
             if( dataFrame.size() > 0 ){
                 removeDataFrame(dataFrame.get(activeDataFrame));
             }else{
                 JOptionPane.showMessageDialog(this, "No table available");
             }
-        }else if(title.equals(ITEM_QUIT)){
+        }else if(title.equals(jMenuBar.ITEM_QUIT)){
             int response = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Confirm",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION){
                 dispose();
                 System.exit(0);
             }
-        }else if(title.equals(ITEM_CONF)){
+        }else if(title.equals(jMenuBar.ITEM_CONF)){
             new ConfigurationMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_RAW_ALR)){
+        }else if(title.equals(jMenuBar.ITEM_RAW_ALR)){
             new TransformationALRMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_RAW_CLR)){
+        }else if(title.equals(jMenuBar.ITEM_RAW_CLR)){
             new TransformationCLRMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_RAW_ILR)){
+        }else if(title.equals(jMenuBar.ITEM_RAW_ILR)){
             new TransformationILRMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_CLAS_STATS_SUMMARY)){
+        }else if(title.equals(jMenuBar.ITEM_CLAS_STATS_SUMMARY)){
             new ClasStatsSummaryMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_COMP_STATS_SUMMARY)){
+        }else if(title.equals(jMenuBar.ITEM_COMP_STATS_SUMMARY)){
             new CompStatsSummaryMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_NORM_TEST)){
+        }else if(title.equals(jMenuBar.ITEM_NORM_TEST)){
             new NormalityTestMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_ATIP_INDEX)){
+        }else if(title.equals(jMenuBar.ITEM_ATIP_INDEX)){
             new AtipicalityIndexMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_CENTER)){
+        }else if(title.equals(jMenuBar.ITEM_CENTER)){
             new CenterDataMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_CLOSURE)){
+        }else if(title.equals(jMenuBar.ITEM_CLOSURE)){
             new ClosureDataMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_AMALGAM)){
+        }else if(title.equals(jMenuBar.ITEM_AMALGAM)){
             new AmalgamationDataMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_PERTURBATE)){
+        }else if(title.equals(jMenuBar.ITEM_PERTURBATE)){
             new PerturbateDataMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_POWER)){
+        }else if(title.equals(jMenuBar.ITEM_POWER)){
             new PowerDataMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_ZEROS)){
+        }else if(title.equals(jMenuBar.ITEM_ZEROS)){
             new ZeroReplacementMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_TERNARY_PLOT)){
+        }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
             new TernaryPlotMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_PRED_REG_PLOT)){
+        }else if(title.equals(jMenuBar.ITEM_PRED_REG_PLOT)){
             new PredictiveRegionMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_CONF_REG_PLOT)){
+        }else if(title.equals(jMenuBar.ITEM_CONF_REG_PLOT)){
             new ConfidenceRegionMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_EMPTY_TERNARY_PLOT)){
+        }else if(title.equals(jMenuBar.ITEM_EMPTY_TERNARY_PLOT)){
             String names[] = {"X", "Y", "Z"};
             TernaryPlot2dDisplay display = new TernaryPlot2dDisplay(names);
 
@@ -567,31 +345,31 @@ public final class CoDaPackMain extends JFrame{
             TernaryPlot2dWindow frame = new TernaryPlot2dWindow(this.getActiveDataFrame(), display, "Ternary Plot -- Testing version");
             frame.setCenter(center);
             frame.setVisible(true);
-        }else if(title.equals(ITEM_BIPLOT)){
+        }else if(title.equals(jMenuBar.ITEM_BIPLOT)){
             new Biplot3dMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_ILR_BIPLOT)){
+        }else if(title.equals(jMenuBar.ITEM_ILR_BIPLOT)){
             new ILRPlotMenuNew(this).setVisible(true);
-        }else if(title.equals(ITEM_DENDROGRAM_PLOT)){
+        }else if(title.equals(jMenuBar.ITEM_DENDROGRAM_PLOT)){
             new DendrogramMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_ALR_PLOT)){
+        }else if(title.equals(jMenuBar.ITEM_ALR_PLOT)){
             new ALRPlotMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_CLR_PLOT)){
+        }else if(title.equals(jMenuBar.ITEM_CLR_PLOT)){
             new CLRPlotMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_ILR_PLOT)){
+        }else if(title.equals(jMenuBar.ITEM_ILR_PLOT)){
             new ILRPlotMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_ADD_VAR)){
+        }else if(title.equals(jMenuBar.ITEM_ADD_VAR)){
             new AddMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_DEL_VAR)){
+        }else if(title.equals(jMenuBar.ITEM_DEL_VAR)){
             new DeleteMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_CAT_VAR)){
+        }else if(title.equals(jMenuBar.ITEM_CAT_VAR)){
             new Numeric2CategoricMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_NUM_VAR)){
+        }else if(title.equals(jMenuBar.ITEM_NUM_VAR)){
             new Categoric2NumericMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_PC_PLOT)){
+        }else if(title.equals(jMenuBar.ITEM_PC_PLOT)){
             new PrincipalComponentMenu(this).setVisible(true);
-        }else if(title.equals(ITEM_FORCE_UPDATE)){
+        }else if(title.equals(jMenuBar.ITEM_FORCE_UPDATE)){
             this.forceUpdate();
-        }else if(title.equals(ITEM_ABOUT)){
+        }else if(title.equals(jMenuBar.ITEM_ABOUT)){
             new CoDaPackAbout(this).setVisible(true);
         }
     }

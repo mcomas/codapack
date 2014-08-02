@@ -79,6 +79,8 @@ public class Variable extends ArrayList<Element>{
         }
         try{
             double vd = Double.parseDouble(v);
+            if(Double.isNaN(vd))
+                return new NonAvailable().variable(this);
             if(vd == 0)
                 return new Zero(0).variable(this);
             return new Numeric(vd).variable(this);

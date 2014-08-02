@@ -10,3 +10,4 @@ CoDaPackUpdater.jar
 *.xls
 dist
 lib
+*.log
