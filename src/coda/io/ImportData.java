@@ -7,6 +7,7 @@ package coda.io;
 
 import au.com.bytecode.opencsv.CSVReader;
 import coda.DataFrame;
+import coda.NonAvailable;
 import coda.Variable;
 import coda.Zero;
 import coda.Zero;
@@ -160,7 +161,7 @@ public class ImportData{
                             if(cellValue.getCellType() == Cell.CELL_TYPE_STRING){
                                 str = cellValue.getStringValue().trim();
                                 if( str.compareTo(notAvailable) == 0){
-                                    var.add(Double.NaN);
+                                    var.add( new NonAvailable() );
                                 }else if( str.startsWith(notDetected)){
                                     var.add(new Zero(
                                             Double.parseDouble(
@@ -202,10 +203,10 @@ public class ImportData{
     /**
      *
      */
-    public static char separator = ' ';
+    public static char separator = ';';
     /**
      *
-     */
+     * /
     public static char decimal = '.';
     /**
      *
@@ -270,7 +271,7 @@ public class ImportData{
                         if(f){
                             String str = stringnumber.trim();
                             if( str.compareTo(NON_AVAILABLE) == 0){
-                                var.add( Double.NaN);
+                                var.add( new NonAvailable() );
                             }else if( str.startsWith(NON_DETECTED)){
                                 var.add(new Zero(
                                         Double.parseDouble(
@@ -295,19 +296,6 @@ public class ImportData{
         DataFrame dataframe = new DataFrame();
         for(Variable vv:variables){
             dataframe.addData(vv.getName(), vv);
-            /*
-            if(vv instanceof NumericVar){
-            NumericVar v =(NumericVar)vv;
-               for(int i=0;i<v.size();i++){
-               System.out.println(v.getName() + " " + v.get(i).getClass() + " " + v.get(i).getValue());
-               }
-            }else{
-               FactorVar v =(FactorVar)vv;
-               for(int i=0;i<v.size();i++){
-                  System.out.println(v.getName() + " " + v.get(i).getClass() + " " + v.get(i).getFactor());
-               }
-            }
-             * */
         }
         return dataframe;
     }

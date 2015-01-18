@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import org.renjin.eval.Context;
 import org.renjin.primitives.io.serialization.RDataWriter;
+import org.renjin.sexp.IntArrayVector;
 import org.renjin.sexp.DoubleArrayVector;
 import org.renjin.sexp.ListVector;
 import org.renjin.sexp.PairList;
@@ -81,10 +82,10 @@ public class ExportRDataMenu extends AbstractMenuDialog{
                     }
                 }
                 dataframe.setAttribute("class", new StringArrayVector("data.frame"));
-                double [] ind = new double[df.getMaxVariableLength()];
+                int [] ind = new int[df.getMaxVariableLength()];
                 for (int i=0;i < df.getMaxVariableLength();++i) ind[i] = i + 1;
               
-                dataframe.setAttribute("row.names", new DoubleArrayVector(ind));
+                dataframe.setAttribute("row.names", new IntArrayVector(ind));
 
                 PairList.Builder list = new PairList.Builder();
                 list.add(dfname.getText(), dataframe.build());

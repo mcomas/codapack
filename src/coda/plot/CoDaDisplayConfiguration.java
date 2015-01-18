@@ -38,6 +38,7 @@ public final class CoDaDisplayConfiguration {
         size.put("data", 3f);
         size.put("axis", 1f);
         size.put("grid", 0.5f);
+        size.put("Prin.Comp.", 1.5f);
         
     }
     public void setDefaultColor(){
