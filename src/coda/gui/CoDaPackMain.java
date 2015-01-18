@@ -218,7 +218,7 @@ public final class CoDaPackMain extends JFrame{
         if(title.equals(jMenuBar.ITEM_IMPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
-                    new FileNameExtensionFilter("Excel files", "xls"));
+                    new FileNameExtensionFilter("Excel files", "xls", "xlsx"));
             if(chooseFile.showOpenDialog(jSplitPane) ==
                     JFileChooser.APPROVE_OPTION){
                 ImportXLSMenu importMenu = new ImportXLSMenu(this, true, chooseFile);
