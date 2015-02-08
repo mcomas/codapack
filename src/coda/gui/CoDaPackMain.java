@@ -261,15 +261,17 @@ public final class CoDaPackMain extends JFrame{
             new ExportRDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_OPEN)){
             CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
-            DataFrame df = imp.importDataFrame();
-            addDataFrame(df);
+            ArrayList<DataFrame> dfs = imp.importDataFrames();
+            for(DataFrame df: dfs)
+                addDataFrame(df);
             
             jMenuBar.addRecentFile(imp.getParameters());
         }else if("format:codapack".equals(action.split("¿")[0])){
             CoDaPackImporter imp = new CoDaPackImporter().setParameters(action);
-            DataFrame df = imp.importDataFrame();
-            addDataFrame(df);
-            
+            ArrayList<DataFrame> dfs = imp.importDataFrames();
+ 
+            for(DataFrame df: dfs)
+                addDataFrame(df);        
             jMenuBar.addRecentFile(imp.getParameters());
         }else if(title.equals(jMenuBar.ITEM_SAVE)){
             chooseFile.resetChoosableFileFilters();
