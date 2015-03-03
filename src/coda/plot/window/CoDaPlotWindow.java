@@ -87,11 +87,11 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
             private JMenuItem itemQuit;
             private final String ITEM_QUIT = "Quit Plot Window";
         protected JMenu menuData;
-        private final String ITEM_DATA = "Data";
+        protected final String ITEM_DATA = "Data";
             private final String ITEM_OBS_NAME = "Add observation names...";
-            private JMenuItem itemObsName;
+            protected JMenuItem itemObsName;
             private final String ITEM_SHOW_NAMES = "Show observation names";
-            private JCheckBoxMenuItem itemShowObsName;
+            protected JCheckBoxMenuItem itemShowObsName;
     DataFrame dataframe;
     public CoDaPlotWindow(DataFrame dataframe, final AbstractCoDaDisplay plotDisplay, String title) {
         

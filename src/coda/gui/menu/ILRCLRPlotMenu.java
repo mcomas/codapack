@@ -30,10 +30,10 @@ import javax.swing.JOptionPane;
  *
  * @author mcomas
  */
-public class ILRPlotMenuNew extends AbstractMenuDialogWithILR{
+public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
     JCheckBox coordinates;
-    public ILRPlotMenuNew(final CoDaPackMain mainApp){
+    public ILRCLRPlotMenu(final CoDaPackMain mainApp){
         super(mainApp, "ILR Plot Menu", true);
 
         JButton defaultPart = new JButton("Default Partition");
@@ -132,7 +132,7 @@ public class ILRPlotMenuNew extends AbstractMenuDialogWithILR{
                 mainApplication.updateDataFrame(df);
             }
             CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("Biplot generated", selectedNames));
+                    new OutputPlotHeader("ILR/CLR plot generated", selectedNames));
             
             //CoDaPackMain.outputPanel.addOutput(
             //        new OutputTableTwoEntries("Principal Components", pcheaders, pcnames, pcomp));
@@ -160,7 +160,7 @@ public class ILRPlotMenuNew extends AbstractMenuDialogWithILR{
                 Biplot3dDisplay dp = builder.build();
                 dp.decomp = false;
                 biplotWindow =
-                        new RealPlot3dWindow(df, dp, "Biplot3d");
+                        new RealPlot3dWindow(df, dp, "ILR/CLR plot");
                 
                 double view[][] = {
                        {1, 0, 0},
@@ -180,7 +180,7 @@ public class ILRPlotMenuNew extends AbstractMenuDialogWithILR{
                 }
 
                 biplotWindow =
-                        new RealPlot2dWindow(df, builder.build(), "Biplot");
+                        new RealPlot2dWindow(df, builder.build(), "ILR/CLR plot");
                                
             }
             biplotWindow.setLocationRelativeTo(mainApplication);

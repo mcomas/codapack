@@ -350,7 +350,7 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_BIPLOT)){
             new Biplot3dMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ILR_BIPLOT)){
-            new ILRPlotMenuNew(this).setVisible(true);
+            new ILRCLRPlotMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DENDROGRAM_PLOT)){
             new DendrogramMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ALR_PLOT)){
