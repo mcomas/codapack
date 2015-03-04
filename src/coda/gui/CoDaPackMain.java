@@ -343,6 +343,7 @@ public final class CoDaPackMain extends JFrame{
             double center[] = {1,1,1};
 
             TernaryPlot2dWindow frame = new TernaryPlot2dWindow(this.getActiveDataFrame(), display, "Ternary Plot -- Testing version");
+            frame.setLocationRelativeTo(this);
             frame.setCenter(center);
             frame.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_BIPLOT)){

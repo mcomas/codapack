@@ -158,7 +158,7 @@ public class RealPlot2dDisplay extends CoDa2dDisplay{
     }
     public void drawAxis(Graphics2D g2){
         g2.setColor( config.getColor("axisX") );
-        g2.setStroke(new BasicStroke(config.getSize("axisX"),
+        g2.setStroke(new BasicStroke(config.getSize("axis"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
 
@@ -168,7 +168,7 @@ public class RealPlot2dDisplay extends CoDa2dDisplay{
         g2.draw( PlotUtils.drawLine(o1,  o2) );
         //g2.drawString(, TOP_ALIGNMENT, TOP_ALIGNMENT);
         g2.setColor( config.getColor("axisY") );
-        g2.setStroke(new BasicStroke(config.getSize("axisY"),
+        g2.setStroke(new BasicStroke(config.getSize("axis"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
 
