@@ -86,7 +86,7 @@ public class CoDaPackConf {
 public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
 
 
-    public static String CoDaVersion = "2 01 15";
+    public static String CoDaVersion = "2 02 00";
     public static int CoDaUpdaterVersion = 4;
 
     public static int[] getVersionNum(){
@@ -103,14 +103,25 @@ public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
     }
     public static boolean updateNeeded(String v){
         int[] actVersion = getVersionNum();
-
+        int [] newVersion = new int[3];
+        
         String[] version = v.split(" ");
-        boolean b = false;
-        if(actVersion[0] < Integer.parseInt(version[0])) b = true;
-        else if (actVersion[1] < Integer.parseInt(version[1])) b = true;
-        else if (actVersion[2] < Integer.parseInt(version[2])) b = true;
-
-        return b;
+        newVersion[0] = Integer.parseInt(version[0]);
+        newVersion[1] = Integer.parseInt(version[1]);
+        newVersion[2] = Integer.parseInt(version[2]);
+        
+        // Same version
+        if(newVersion[0] == actVersion[0] & newVersion[1] == actVersion[1] &
+                newVersion[2] == actVersion[2]) return false;
+        
+        // New version
+        if(newVersion[0] == actVersion[0] & newVersion[1] == actVersion[1] &
+                newVersion[2] > actVersion[2]) return true;
+        if(newVersion[0] == actVersion[0] & newVersion[1] > actVersion[1]) return true;
+        if(newVersion[0] > actVersion[0]) return true;
+        
+        // Otherwise actual version is newer than published version
+        return false;
     }
     private final static DecimalFormatSymbols decimalFormatSymb = new DecimalFormatSymbols();
     static{

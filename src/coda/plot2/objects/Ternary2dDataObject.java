@@ -85,7 +85,7 @@ public final class Ternary2dDataObject implements Ternary2dObject{
         this.size = size;
     }
     public void plotObject(Graphics2D g2) {        
-        g2.setStroke(new BasicStroke(1f ,
+        g2.setStroke(new BasicStroke(0.5f ,
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
         float s = config.getSize("data");

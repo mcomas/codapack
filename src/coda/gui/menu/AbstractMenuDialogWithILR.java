@@ -17,8 +17,8 @@ import javax.swing.JTextArea;
  * @author mcomas
  */
 public abstract class AbstractMenuDialogWithILR extends AbstractMenuDialog{
-    private int [][] partitionILR = null;
-    private double [][] basisILR = null;
+    protected int [][] partitionILR = null;
+    protected double [][] basisILR = null;
     JTextArea areaPart = new JTextArea(5, 5);
     JRadioButton part;
     JRadioButton base;

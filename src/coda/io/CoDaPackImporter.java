@@ -45,6 +45,7 @@ public class CoDaPackImporter implements Importer{
             int dtype = var.getInt("t");
             JSONArray values = var.getJSONArray("a");
             if(dtype == Variable.VAR_NUMERIC){ // VAR_NUMERIC 2
+                variable.setType(Variable.VAR_NUMERIC);
                 for(int i=0;i<values.length();i++){
                     JSONObject object = values.getJSONObject(i);
                     if(object.has("l")){
@@ -53,12 +54,13 @@ public class CoDaPackImporter implements Importer{
                         variable.add(variable.setElementFromString(object.getString("v")));
                     }
                 }
-                variable.setType(Variable.VAR_NUMERIC);
+                
             }else{
+                variable.setType(Variable.VAR_TEXT);
                 for(int i=0;i<values.length();i++){
                     variable.add(variable.setElementFromString(values.getString(i)));
                 }
-                variable.setType(Variable.VAR_TEXT);
+                
             }
         } catch (JSONException ex) {
             Logger.getLogger(Variable.class.getName()).log(Level.SEVERE, null, ex);

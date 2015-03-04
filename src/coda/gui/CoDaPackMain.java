@@ -218,7 +218,7 @@ public final class CoDaPackMain extends JFrame{
         if(title.equals(jMenuBar.ITEM_IMPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
-                    new FileNameExtensionFilter("Excel files", "xls"));
+                    new FileNameExtensionFilter("Excel files", "xls", "xlsx"));
             if(chooseFile.showOpenDialog(jSplitPane) ==
                     JFileChooser.APPROVE_OPTION){
                 ImportXLSMenu importMenu = new ImportXLSMenu(this, true, chooseFile);
@@ -261,15 +261,17 @@ public final class CoDaPackMain extends JFrame{
             new ExportRDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_OPEN)){
             CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
-            DataFrame df = imp.importDataFrame();
-            addDataFrame(df);
+            ArrayList<DataFrame> dfs = imp.importDataFrames();
+            for(DataFrame df: dfs)
+                addDataFrame(df);
             
             jMenuBar.addRecentFile(imp.getParameters());
         }else if("format:codapack".equals(action.split("¿")[0])){
             CoDaPackImporter imp = new CoDaPackImporter().setParameters(action);
-            DataFrame df = imp.importDataFrame();
-            addDataFrame(df);
-            
+            ArrayList<DataFrame> dfs = imp.importDataFrames();
+ 
+            for(DataFrame df: dfs)
+                addDataFrame(df);        
             jMenuBar.addRecentFile(imp.getParameters());
         }else if(title.equals(jMenuBar.ITEM_SAVE)){
             chooseFile.resetChoosableFileFilters();
@@ -349,7 +351,7 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_BIPLOT)){
             new Biplot3dMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ILR_BIPLOT)){
-            new ILRPlotMenuNew(this).setVisible(true);
+            new ILRCLRPlotMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DENDROGRAM_PLOT)){
             new DendrogramMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ALR_PLOT)){

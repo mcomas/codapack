@@ -105,7 +105,7 @@ public abstract class AbstractCoDaDisplay extends JComponent{
                 g2.draw(PlotUtils.drawPoint(new Point2D.Double(15, 15 * el), 1.5*s));
             }
             if(li.form == li.LINE){
-                g2.setStroke(new BasicStroke(2*config.getSize("Prin.Comp.", 1) ,
+                g2.setStroke(new BasicStroke(2*config.getSize("Prin.Comp.") ,
                     BasicStroke.JOIN_MITER,
                     BasicStroke.CAP_ROUND));
                 g2.draw(PlotUtils.drawLine(new Point2D.Double(10, 15 * el), new Point2D.Double(20, 15 * el)));

@@ -32,7 +32,7 @@ public class CoDaPackMenu extends JMenuBar{
             public JMenuItem itemImportXLS;
             public final String ITEM_IMPORT_XLS = "Import XLS Data...";
             public JMenuItem itemImportCSV;
-            public final String ITEM_IMPORT_CSV = "Import Text Data...";
+            public final String ITEM_IMPORT_CSV = "Import CSV/Text Data...";
         public JMenu menuExport;
         public final String ITEM_EXPORT = "Export";
             public JMenuItem itemExportXLS;

@@ -1,13 +1,6 @@
-build.xml
-build
+lib/
+build/
+dist/
 codapack.conf
-.RData
-nbproject
 manifest.mf
-CoDaPack.jar
-CoDaPackUpdater.jar
-*.RData
-*.xls
-dist
-lib
-*.log
+nbproject/

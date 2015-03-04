@@ -74,7 +74,7 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
     public TernaryPlot2dWindow(DataFrame dataframe, TernaryPlot2dDisplay display, String title) {
         super(dataframe, display, title);
 
-
+        this.menuData.setVisible(false);
         menuEdit = new JMenu();
         menuEdit.setText(ITEM_EDIT);
         itemAddDataSet = new JMenuItem();

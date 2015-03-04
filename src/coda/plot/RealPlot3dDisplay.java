@@ -147,7 +147,8 @@ public class RealPlot3dDisplay extends CoDa3dDisplay{
         drawLabels(g2);
     }
     public void drawAxis(Graphics2D g2){
-        g2.setColor( config.getColor("axisX") );
+
+        g2.setColor( config.getColor("axis") );
         g2.setStroke(new BasicStroke(config.getSize("axis"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
@@ -157,7 +158,8 @@ public class RealPlot3dDisplay extends CoDa3dDisplay{
         o2 = defaultTransform.transform(new Point2D.Double(2*origin[0]-V[0][0],2*origin[1]-V[0][1]), o2);
         g2.draw(PlotUtils.drawLine(o1,  o2));
 
-        g2.setColor( config.getColor("axisY") );
+
+        g2.setColor( config.getColor("axis") );
         g2.setStroke(new BasicStroke(config.getSize("axis"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
@@ -166,7 +168,8 @@ public class RealPlot3dDisplay extends CoDa3dDisplay{
         o2 = defaultTransform.transform(new Point2D.Double(2*origin[0]-V[1][0],2*origin[1]-V[1][1]), o2);
         g2.draw(PlotUtils.drawLine(o1, o2));
 
-        g2.setColor( config.getColor("axisZ") );
+
+        g2.setColor( config.getColor("axis") );
         g2.setStroke(new BasicStroke(config.getSize("axis"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
