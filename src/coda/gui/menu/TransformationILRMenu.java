@@ -98,7 +98,8 @@ public class TransformationILRMenu extends AbstractMenuDialogWithILR{
                 //CoDaPack.transformRawILR(df.getNumericalDataZeroFree(sel_names), partition);
 
 
-                df.addData(new_names, CoDaStats.transformILRRaw(df.getNumericalData(sel_names), partition));
+                df.addData(new_names, CoDaStats.closure(
+                        CoDaStats.transformILRRaw(df.getNumericalData(sel_names), partition), 1));
                 mainApplication.updateDataFrame(df);
             }
             setVisible(false);
