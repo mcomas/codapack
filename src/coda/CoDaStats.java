@@ -40,6 +40,21 @@ public class CoDaStats{
         return x;
     }
 /**
+ * 
+     * @param x matrix 
+ */
+    public static double[] rowSum(double[][] x){
+        
+        int m = x.length;
+        int n = x[0].length;
+        double[] res = new double[n];
+        for(int j=0;j<n;j++){
+            res[j] = 0;
+            for(int i=0; i<m;i++) res[j] += x[i][j];
+        }
+        return res;
+    }
+/**
  *  @param x vector to be closured
  *  @param  w   weigth to be be closured to
  *
