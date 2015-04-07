@@ -4,6 +4,8 @@
  */
 package coda;
 
+import coda.gui.CoDaPackConf;
+
 /**
  *
  * @author marc
@@ -30,7 +32,7 @@ public class Numeric implements Element<Double>{
     }    
     @Override
     public String toString(){
-        return(String.format("%5.3g", v));
+        return(CoDaPackConf.getDecimalTableFormat().format(v));
     }
 
     @Override
