@@ -62,7 +62,7 @@ public class DeleteMenu extends JDialog{
     @Override
     public void setVisible(boolean v){
         if(df == null){
-            JOptionPane.showMessageDialog(null, "No data available");
+            JOptionPane.showMessageDialog(this, "No data available");
             this.dispose();
         }else{
             super.setVisible(v);

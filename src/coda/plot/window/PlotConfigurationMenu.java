@@ -210,7 +210,7 @@ public class PlotConfigurationMenu extends JDialog{
     private class ColorPanel extends JPanel implements MouseListener{
         public void mouseClicked(MouseEvent me) {
             Color initialBackground = selectedColor.getBackground();
-            Color colorSelected = JColorChooser.showDialog(null,
+            Color colorSelected = JColorChooser.showDialog(this,
                 "Choose a color", initialBackground);
             if (colorSelected != null) {
               color[actualColorItem] = colorSelected;

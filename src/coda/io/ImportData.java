@@ -14,13 +14,10 @@ import coda.Zero;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.formula.eval.NotImplementedException;
@@ -109,7 +106,7 @@ public class ImportData{
                     name = cell.getRichStringCellValue().getString().trim();
                 }
                 if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
-                    name = Double.valueOf(cell.getNumericCellValue()).toString();
+                    name = Double.toString(cell.getNumericCellValue());
                 }
                 if(name != null){
                     columns.add(cell.getColumnIndex());

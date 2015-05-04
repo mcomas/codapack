@@ -19,7 +19,6 @@ import coda.plot2.window.TernaryPlot2dWindow;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
@@ -39,9 +38,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -57,14 +53,14 @@ public final class CoDaPackMain extends JFrame{
     // CoDaPack version
     
     // dataFrame is the class containing the data
-    private ArrayList<DataFrame> dataFrame = new ArrayList<DataFrame>();
+    private final ArrayList<DataFrame> dataFrame = new ArrayList<DataFrame>();
     private int activeDataFrame = -1;
     
     
     
     public static String RESOURCE_PATH = "resources/";
 
-    private Dimension screenDimension;
+    private final Dimension screenDimension;
     
     //Panel showing the non-column outputs and the data contained in the dataFrame
     public static JTabbedPane outputs;
@@ -76,8 +72,7 @@ public final class CoDaPackMain extends JFrame{
     
     
     private JComboBox dataFrameSelector;
-    private DataFrameSelectorListener dataFrameListener =
-            new DataFrameSelectorListener();
+    private final DataFrameSelectorListener dataFrameListener = new DataFrameSelectorListener();
     
 
     
@@ -86,8 +81,8 @@ public final class CoDaPackMain extends JFrame{
     private CoDaPackMenu jMenuBar;
 
 
-       public static CoDaPackConf config = new CoDaPackConf();
-    private JFileChooser chooseFile = new JFileChooser();
+    public static CoDaPackConf config = new CoDaPackConf();
+    private final JFileChooser chooseFile = new JFileChooser();
     
     // Mac users expect the menu bar to be at the top of the screen, not in the
     // window, so enable that setting. (This is ignored on non-Mac systems).
@@ -124,7 +119,7 @@ public final class CoDaPackMain extends JFrame{
         setTitle(ITEM_APPLICATION_NAME);
         setPreferredSize(new Dimension(1000,700));
         setLocation((screenDimension.width-1000)/2,
-                (screenDimension.height-700)/2);
+                    (screenDimension.height-700)/2);
 
         dataList.setSize(new Dimension(150, 700));
         dataFrameSelector = new JComboBox();
@@ -139,18 +134,14 @@ public final class CoDaPackMain extends JFrame{
         westPanel.add(dfSelect, BorderLayout.NORTH);
         westPanel.add(dataList, BorderLayout.CENTER);
 
-        jSplitPane = new JSplitPane(
-                JSplitPane.VERTICAL_SPLIT, outputPanel, tablePanel);
+        jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, outputPanel, tablePanel);
         jSplitPane.setDividerSize(7);
         jSplitPane.setOneTouchExpandable(true);
         jSplitPane.setDividerLocation(350);
 
-        JSplitPane main =
-                new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westPanel, jSplitPane);
+        JSplitPane main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, westPanel, jSplitPane);
         main.setDividerSize(7);    
         getContentPane().add(main, BorderLayout.CENTER);
-
-
         
         setJMenuBar(jMenuBar);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -423,12 +414,14 @@ public final class CoDaPackMain extends JFrame{
          * CoDaPack connects to IMA server through a thread. Avoiding problems in IMA server
          */
                 
-        UpdateConnection uc = new UpdateConnection();
-        new Thread(uc).start();
+        
         /*
          * CoDaPack main class is created and shown
          */
         CoDaPackMain main = new CoDaPackMain();
+        
+        UpdateConnection uc = new UpdateConnection(main);
+        new Thread(uc).start();
         
         main.setVisible(true);
     }
@@ -445,7 +438,10 @@ public final class CoDaPackMain extends JFrame{
         System.exit(0);
     }
     public static class UpdateConnection implements Runnable{
-
+        CoDaPackMain main;
+        public UpdateConnection(CoDaPackMain main){
+            this.main = main;
+        }
         public void run() {
             boolean CoDaPackUpdaterUpdated = false;
             JSONObject data = null;
@@ -470,16 +466,16 @@ public final class CoDaPackMain extends JFrame{
                     }
                     // The updater needs to be updated
                     if(CoDaPackConf.CoDaUpdaterVersion < updaterVersion){
-                        int response = JOptionPane.showConfirmDialog(null, "CoDaPack Updater needs to be updated", "Update confirmation",
+                        int response = JOptionPane.showConfirmDialog(main, "CoDaPack Updater needs to be updated", "Update confirmation",
                             JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
                         if(response == JOptionPane.YES_OPTION){
                             //System.out.println("Updating CoDaPack updater");
                             url = new URL(CoDaPackConf.HTTP_ROOT + "codapack/CoDaPackUpdater.jar");
 
                             InputStream is = url.openStream();
-                            FileOutputStream fos = null;
+                            
                             File tempFile = new File("CoDaPackUpdater.jar_temp");
-                            fos = new FileOutputStream(tempFile);
+                            FileOutputStream fos = new FileOutputStream(tempFile);
                             int oneChar;
                             while ((oneChar=is.read()) != -1){
                                 fos.write(oneChar);
@@ -511,7 +507,7 @@ public final class CoDaPackMain extends JFrame{
                 try {
                     // Checking if CoDaPack is updated
                     if (CoDaPackConf.updateNeeded(data.getString("codapack-version"))) {
-                        int response = JOptionPane.showConfirmDialog(null, "There is a new version of CoDaPack available. Do you want to install it? If you say yes, CoDaPack is going to be closed automatically.", "Update confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+                        int response = JOptionPane.showConfirmDialog(main, "There is a new version of CoDaPack available. Do you want to install it? If you say yes, CoDaPack is going to be closed automatically.", "Update confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
                         if (response == JOptionPane.YES_OPTION) {
                             try {
                                 Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");

@@ -7,7 +7,6 @@ package coda.gui.menu;
 
 import coda.gui.utils.BoxDataSelector;
 import coda.DataFrame;
-import coda.gui.CoDaPackMain;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import javax.swing.JButton;
@@ -53,7 +52,7 @@ public class SelectVariableMenu extends JDialog{
     @Override
     public void setVisible(boolean v){
         if(df == null){
-            JOptionPane.showMessageDialog(null, "No data available");
+            JOptionPane.showMessageDialog(this, "No data available");
             this.dispose();
         }else{
             super.setVisible(v);

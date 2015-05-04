@@ -149,7 +149,7 @@ public class TernaryPlot2dDialogCoDaLines extends CoDaPackDialog{
 //        Color color = new Color(70, 70, 200);
 //        public void mouseClicked(MouseEvent me) {
 //            Color initialBackground = selectedColor.getBackground();
-//            Color colorSelected = JColorChooser.showDialog(null,
+//            Color colorSelected = JColorChooser.showDialog(this,
 //                "Choose a color", initialBackground);
 //            if (colorSelected != null) {
 //              color = colorSelected;
