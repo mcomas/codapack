@@ -19,6 +19,7 @@ import coda.gui.CoDaPackMain;
 import coda.gui.menu.SelectVariableMenu;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.plot.AbstractCoDaDisplay;
+import coda.plot.CoDaDisplayConfiguration;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -86,14 +87,14 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
             private JMenuItem itemQuit;
             private final String ITEM_QUIT = "Quit Plot Window";
         protected JMenu menuData;
-        private final String ITEM_DATA = "Data";
+        protected final String ITEM_DATA = "Data";
             private final String ITEM_OBS_NAME = "Add observation names...";
-            private JMenuItem itemObsName;
+            protected JMenuItem itemObsName;
             private final String ITEM_SHOW_NAMES = "Show observation names";
-            private JCheckBoxMenuItem itemShowObsName;
+            protected JCheckBoxMenuItem itemShowObsName;
     DataFrame dataframe;
     public CoDaPlotWindow(DataFrame dataframe, final AbstractCoDaDisplay plotDisplay, String title) {
-
+        
         this.dataframe = dataframe;
         jMenuBar = new JMenuBar();
         menuFile = new JMenu();
@@ -104,7 +105,6 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         itemConf.setText(ITEM_CONF);
         itemQuit = new JMenuItem();
         itemQuit.setText(ITEM_QUIT);
-
         menuData = new JMenu();
         menuData.setText(ITEM_DATA);
         itemObsName = new JMenuItem();
@@ -206,8 +206,8 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         SelectVariableMenu svm = new SelectVariableMenu(this, dataframe);
         svm.setVisible(true);
         Variable var = dataframe.get(svm.selectedVariable);
-        
-        display.setObservationNames(dataframe.get(svm.selectedVariable).getCategoricalData());
+        svm.dispose();
+        display.setObservationNames(var.getTextData());
         display.repaint();
     }
     private void sliderZoomMouseReleased(java.awt.event.MouseEvent evt) {
@@ -219,7 +219,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         display.repaint();
     }
     public void initiateConfigurationMenu(){
-        PlotConfigurationMenu menu = new PlotConfigurationMenu(this);
+        PlotConfigurationMenu menu = new PlotConfigurationMenu(this, display.config);
         menu.setVisible(true);
     }
     public void saveImage(){

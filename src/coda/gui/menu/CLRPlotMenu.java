@@ -77,6 +77,7 @@ public class CLRPlotMenu extends AbstractMenuDialog{
                 };
                 ((RealPlot3dWindow)plotWindow).setCoordinate(view);
             }
+            plotWindow.setLocationRelativeTo(mainApplication);
             plotWindow.setVisible(true);
 
             CoDaPackMain.outputPanel.addOutput(

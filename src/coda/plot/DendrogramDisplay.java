@@ -43,11 +43,11 @@ public class DendrogramDisplay extends CoDa2dDisplay{
     private double totalHeight;
     private Tree<DendroBracket> T = new Tree<DendroBracket>();
 
-    BasicStroke normal = new BasicStroke(CoDaDisplayConfiguration.getSize("axis"),
+    BasicStroke normal = new BasicStroke(config.getSize("axis"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND);
     float[] dash1 = { 2f };
-    BasicStroke dashed = new BasicStroke(CoDaDisplayConfiguration.getSize("axis"),
+    BasicStroke dashed = new BasicStroke(config.getSize("axis"),
         BasicStroke.JOIN_MITER, BasicStroke.CAP_ROUND,
         1.0f, dash1, 2f);
     public DendrogramDisplay(DendrogramBuilder builder){
@@ -66,7 +66,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
 
         //iconLabel = new TeXIcon[names.length];
         textLabel = names;
-        int s = CoDaDisplayConfiguration.getSize("label").intValue();
+        int s = config.getSize("label").intValue();
         /*for(int i =0;i<names.length;i++){
             try{
                 iconLabel[i] = new TeXFormula(names[i])
@@ -291,7 +291,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
         g2.fill(box);
         g2.setPaint( color ); //CoDaDisplayConfiguration.getColor("area")
         g2.fill(box);
-        g2.setColor( CoDaDisplayConfiguration.getColor("axis") );
+        g2.setColor( config.getColor("axis") );
         g2.draw(box);
     }
 
@@ -300,7 +300,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
         double param_size = 0.018;
         DendroBracket data = node.getData();
         float s = 1.5f;
-        g2.setColor( CoDaDisplayConfiguration.getColor("axis") );
+        g2.setColor( config.getColor("axis") );
         g2.setStroke(normal);
         Point2D top = null;
         top = defaultTransform.transform(data.top, top);
@@ -325,7 +325,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
         }else if(node.getNumberOfChildren() == 1){
             drawBracket(node.getChildren().get(0),g2);
             g2.setStroke(dashed);
-            g2.setColor( CoDaDisplayConfiguration.getColor("axis") );
+            g2.setColor( config.getColor("axis") );
             if(node.getChildren().get(0).data.top == data.left){
                 top = defaultTransform.transform(data.right, top);
                 bottom = defaultTransform.transform(new Point2D.Double(data.right.getX(), origin[1] - v_y[1] + moveUp * v_y[1]), bottom);
@@ -338,7 +338,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
             g2.setStroke(normal);
         }else{
             g2.setStroke(dashed);
-            g2.setColor( CoDaDisplayConfiguration.getColor("axis") );
+            g2.setColor( config.getColor("axis") );
             top = defaultTransform.transform(data.left, top);
             bottom = defaultTransform.transform(new Point2D.Double(data.left.getX(), origin[1] - v_y[1] + moveUp * v_y[1]), bottom);
             g2.draw(PlotUtils.drawLine(top,  bottom));
@@ -356,12 +356,12 @@ public class DendrogramDisplay extends CoDa2dDisplay{
 
             top = defaultTransform.transform( new Point2D.Double(mean, data.left.getY()+height), top );
             bottom = defaultTransform.transform(new Point2D.Double(mean, data.left.getY()), bottom);
-            g2.setColor(CoDaDisplayConfiguration.getColor("data", gr));
+            g2.setColor(config.getColor("data", gr));
             g2.draw(PlotUtils.drawLine(top,  bottom));
 
             double y = data.left.getY() - (2 * ngroups - 1)* param_size * v_y[1];//- param_size * v_y[1] * (ngroups-1);
             double position = y + (ngroups-gr-1) * 2 * param_size * v_y[1];
-            g2.setColor(CoDaDisplayConfiguration.getColor("axis"));
+            g2.setColor(config.getColor("axis"));
             l = defaultTransform.transform(
                     new Point2D.Double(
                     getRelative(data, data.fifth_percentile[gr]),
@@ -375,23 +375,23 @@ public class DendrogramDisplay extends CoDa2dDisplay{
                     position,
                     //data.left.getY(),
                     getRelative(data, data.fifth_percentile[gr]),
-                    CoDaDisplayConfiguration.getColor("axis"), param_size); //CoDaDisplayConfiguration.getColor("data" + gr)
+                    config.getColor("axis"), param_size); //CoDaDisplayConfiguration.getColor("data" + gr)
             drawLimit(g2,
                     position,
                     //data.left.getY(),
                     getRelative(data, data.ninetyfifth_percentile[gr]),
-                    CoDaDisplayConfiguration.getColor("axis"), param_size); //CoDaDisplayConfiguration.getColor("data" + gr)
+                    config.getColor("axis"), param_size); //CoDaDisplayConfiguration.getColor("data" + gr)
             drawBox(g2,
                     position,
                     //data.left.getY(),
                     getRelative(data, data.first_quartile[gr]),
                     getRelative(data, data.third_quartile[gr]),
-                    CoDaDisplayConfiguration.getColor("data", gr), param_size);
+                    config.getColor("data", gr), param_size);
             drawLimit(g2,
                     position,
                     //data.left.getY(),
                     getRelative(data, data.median[gr]),
-                    CoDaDisplayConfiguration.getColor("axis"), param_size);
+                    config.getColor("axis"), param_size);
         }
         
     }
@@ -402,11 +402,12 @@ public class DendrogramDisplay extends CoDa2dDisplay{
         int separation = 40;
         double coordX;
         Point2D o = null;
-        Font font = new Font("Monospace", Font.PLAIN, 11);
+        Font font = new Font("Monospace", Font.PLAIN, 
+                config.getSize("label").intValue());
         g2.setFont(font);
         FontMetrics metric = g2.getFontMetrics();
         double xt = 2 * v_x[0] * (displayWidth/displayHeight) / (names.length-1.0);
-        g2.setColor(CoDaDisplayConfiguration.getColor("label"));
+        g2.setColor(config.getColor("label"));
         List<Node<DendroBracket>> children = node.getChildren();
         if(nchildren == 0){
             int l = 0, r = 0;

@@ -60,7 +60,7 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
         super(builder);
         this.oriH = builder.dataComponent;
 
-        int s = CoDaDisplayConfiguration.getSize("label").intValue();
+        int s = config.getSize("label").intValue();
         textLabel = new String[2];
         textLabel[0] = "1st";
         textLabel[1] = "2nd";
@@ -70,7 +70,7 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
         iconLabel[1] = new TeXFormula("2nd").
                     createTeXIcon(TeXConstants.STYLE_DISPLAY, s);*/
 
-        s = CoDaDisplayConfiguration.getSize("vector_label").intValue();
+        s = config.getSize("vector_label").intValue();
         //iconVectorLabel = new TeXIcon[names.length];
         vectorLabel = new String[names.length];
         for(int i =0;i<names.length;i++){
@@ -186,10 +186,10 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
         }
         o1 = defaultTransform.transform(new Point2D.Double(origin[0],origin[1]), o1);
         for(short i =0;i<H.length;i++){
-            g2.setColor(CoDaDisplayConfiguration.getColor("vector_axis"));
+            g2.setColor(config.getColor("vector_axis"));
             o2 = defaultTransform.transform(new Point2D.Double(H[i][0],H[i][1]), o2);
             g2.draw(PlotUtils.drawLine(o1, o2));
-            g2.setColor(CoDaDisplayConfiguration.getColor("vector_label"));
+            g2.setColor(config.getColor("vector_label"));
             double x = metric.stringWidth(vectorLabel[i]);
             double y = metric.getHeight();
             double f = Math.sqrt(x*x + y*y);

@@ -31,7 +31,10 @@ public class TransformationILRMenu extends AbstractMenuDialogWithILR{
         defaultPart.addActionListener(new java.awt.event.ActionListener() {
             
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
+                if(ri.isSelected())
+                    setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
+                if(ir.isSelected())
+                    setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length+1));
             }
         });
         optionsPanel.add(manuallyPart);
@@ -95,7 +98,8 @@ public class TransformationILRMenu extends AbstractMenuDialogWithILR{
                 //CoDaPack.transformRawILR(df.getNumericalDataZeroFree(sel_names), partition);
 
 
-                df.addData(new_names, CoDaStats.transformILRRaw(df.getNumericalData(sel_names), partition));
+                df.addData(new_names, CoDaStats.closure(
+                        CoDaStats.transformILRRaw(df.getNumericalData(sel_names), partition), 1));
                 mainApplication.updateDataFrame(df);
             }
             setVisible(false);

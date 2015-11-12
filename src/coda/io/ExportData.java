@@ -7,7 +7,7 @@ package coda.io;
 
 import coda.DataFrame;
 import coda.Variable;
-import coda.ZeroData;
+import coda.Zero;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -51,13 +51,13 @@ public class ExportData {
             for(int j=0;j<vnames.size();j++){
                 Cell cell = row.createCell(col++);
                 if(r <= nrow[j] + 1){
-                    if(vars[j].isFactor()){
-                        cell.setCellValue((String)vars[j].get(i));
+                    if(vars[j].isText()){
+                        //cell.setCellValue((String)vars[j].get(i));
                     }else{
                         Object obj = vars[j].get(i);
-                        if( obj instanceof ZeroData){
-                            ZeroData d = (ZeroData)obj;
-                            cell.setCellValue("<" + Double.toString(d.getDetectionLevel()));
+                        if( obj instanceof Zero){
+                            Zero d = (Zero)obj;
+                            cell.setCellValue("<" + Double.toString(d.detection));
                         }else{
                             double d = (Double)obj;
                             if(Double.isNaN(d)){

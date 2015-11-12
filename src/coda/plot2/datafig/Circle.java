@@ -19,8 +19,9 @@ public class Circle implements CoDaShape{
     Color contour;
     double size;
     public Circle(){        
-        this.contour = CoDaDisplayConfiguration.getColor("data0");
-        this.size = CoDaDisplayConfiguration.getSize("data");
+        CoDaDisplayConfiguration config = new CoDaDisplayConfiguration();
+        this.contour = config.getColor("data0");
+        this.size = config.getSize("data");
     }
     public Circle(Color contour, double size){
         this.contour = contour;

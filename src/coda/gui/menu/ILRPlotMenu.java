@@ -53,63 +53,68 @@ public class ILRPlotMenu extends AbstractMenuDialogWithILR{
     @Override
     public void acceptButtonActionPerformed() {
         String selectedNames[] = ds.getSelectedData();
-
-        if(selectedNames.length == 3 || selectedNames.length == 4){
-            DataFrame df = mainApplication.getActiveDataFrame();
-            boolean[] selection = getValidComposition(df, selectedNames);
-            int [] mapping = df.getMapingToData(selectedNames, selection);
-            double[][] data = df.getNumericalData(selectedNames, mapping);
-
-            int partition[][] = getPartition();
-
-            data = CoDaStats.transformRawILR(data, partition);
-
-            int dimension = selectedNames.length == 4 ? 3 : 2;
-
-            String[] names = new String[dimension];
-                for(int i=0;i<dimension;i++) names[i] = "ilr." + Integer.toString(i+1);
-            String groupedBy = ds.getSelectedGroup();
-
-            CoDaPlotWindow plotWindow = null;
-
-            CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("ILR plot", selectedNames));
-
-            CoDaPackMain.outputPanel.addOutput(
-                        new OutputILRPartition(selectedNames, partition));
-            if(dimension == 3){
-                
-
-                RealPlot3dBuilder builder = new RealPlot3dBuilder(names,data).mapping(mapping);
-                
-                if(groupedBy != null){
-                    builder.groups(coda.Utils.reduceData(
-                            df.getDefinedGroup(groupedBy),
-                            selection), coda.Utils.getCategories(
-                            df.getCategoricalData(groupedBy),selection));
-                }
-                plotWindow = new RealPlot3dWindow(
-                        df, builder.build(),
-                        "ILR Plot 3d");
-            }
-            if(dimension == 2){
-
-                RealPlot2dBuilder builder = new RealPlot2dBuilder(names,data).mapping(mapping);
-                if(groupedBy != null){
-                    builder.groups(coda.Utils.reduceData(
-                            df.getDefinedGroup(groupedBy),
-                            selection), coda.Utils.getCategories(
-                            df.getCategoricalData(groupedBy),selection));
-                }
-                plotWindow = new RealPlot2dWindow(
-                        df, builder.build(),
-                        "ILR Plot");                                
-            }
-            plotWindow.setVisible(true);
-            setVisible(false);
-        }else{
+        
+        if( selectedNames.length != 4 && selectedNames.length != 3 ){
             JOptionPane.showMessageDialog(this, "<html>Select <b>three</b> or <b>four</b> variables</html>");
+            return;
+        }else if( areaPart.getText().trim().equals("") ){
+            JOptionPane.showMessageDialog(this, "<html>A partition should be defined</html>");
+            return;
         }
+        DataFrame df = mainApplication.getActiveDataFrame();
+        boolean[] selection = getValidComposition(df, selectedNames);
+        int [] mapping = df.getMapingToData(selectedNames, selection);
+        double[][] data = df.getNumericalData(selectedNames, mapping);
+        
+        int partition[][] = getPartition();
+        
+
+        data = CoDaStats.transformRawILR(data, partition);
+
+        int dimension = selectedNames.length == 4 ? 3 : 2;
+
+        String[] names = new String[dimension];
+            for(int i=0;i<dimension;i++) names[i] = "ilr." + Integer.toString(i+1);
+        String groupedBy = ds.getSelectedGroup();
+
+        CoDaPlotWindow plotWindow = null;
+
+        CoDaPackMain.outputPanel.addOutput(
+                new OutputPlotHeader("ILR plot", selectedNames));
+
+        CoDaPackMain.outputPanel.addOutput(
+                    new OutputILRPartition(selectedNames, partition));
+        if(dimension == 3){
+
+
+            RealPlot3dBuilder builder = new RealPlot3dBuilder(names,data).mapping(mapping);
+
+            if(groupedBy != null){
+                builder.groups(coda.Utils.reduceData(
+                        df.getDefinedGroup(groupedBy),
+                        selection), coda.Utils.getCategories(
+                        df.getCategoricalData(groupedBy),selection));
+            }
+            plotWindow = new RealPlot3dWindow(
+                    df, builder.build(),
+                    "ILR Plot 3d");
+        }
+        if(dimension == 2){
+
+            RealPlot2dBuilder builder = new RealPlot2dBuilder(names,data).mapping(mapping);
+            if(groupedBy != null){
+                builder.groups(coda.Utils.reduceData(
+                        df.getDefinedGroup(groupedBy),
+                        selection), coda.Utils.getCategories(
+                        df.getCategoricalData(groupedBy),selection));
+            }
+            plotWindow = new RealPlot2dWindow(
+                    df, builder.build(),
+                    "ILR Plot");                                
+        }
+        plotWindow.setLocationRelativeTo(mainApplication);
+        plotWindow.setVisible(true);
+        setVisible(false);
     }
 
 }

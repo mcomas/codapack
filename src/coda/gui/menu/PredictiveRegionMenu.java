@@ -84,6 +84,7 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
                 }
 
                 TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Predictive Region");
+                plot.setLocationRelativeTo(mainApplication);
                 plot.setCenter(CoDaStats.center(data));
                 plot.setVisible(true);
             }else{// selectedNames.length == 4
@@ -120,6 +121,7 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
                 }
                 TernaryPlot3dDisplay display = builder.build();
                 plot = new TernaryPlot3dWindow(display, "Ternary Plot 3d");
+                plot.setLocationRelativeTo(mainApplication);
                  * */
                 
             }

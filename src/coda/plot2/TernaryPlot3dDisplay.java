@@ -114,12 +114,12 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
                sameSide(p1, p2, c1, c2, a1, a2, b1, b2);
     }
     private void drawAxis(Graphics2D g2){
-        g2.setColor( CoDaDisplayConfiguration.getColor("axis") );
-        BasicStroke normal = new BasicStroke(CoDaDisplayConfiguration.getSize("axis"),
+        g2.setColor( config.getColor("axis") );
+        BasicStroke normal = new BasicStroke(config.getSize("axis"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND);
         float[] dash1 = { 2f };
-        BasicStroke dashed = new BasicStroke(CoDaDisplayConfiguration.getSize("axis"),
+        BasicStroke dashed = new BasicStroke(config.getSize("axis"),
             BasicStroke.JOIN_MITER, BasicStroke.CAP_ROUND,
             1.0f, dash1, 2f);
 

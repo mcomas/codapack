@@ -1,0 +1,6 @@
+lib/
+build/
+dist/
+codapack.conf
+manifest.mf
+nbproject/

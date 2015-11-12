@@ -7,18 +7,17 @@ package coda.io;
 
 import au.com.bytecode.opencsv.CSVReader;
 import coda.DataFrame;
+import coda.NonAvailable;
 import coda.Variable;
-import coda.ZeroData;
+import coda.Zero;
+import coda.Zero;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.formula.eval.NotImplementedException;
@@ -107,7 +106,7 @@ public class ImportData{
                     name = cell.getRichStringCellValue().getString().trim();
                 }
                 if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
-                    name = Double.valueOf(cell.getNumericCellValue()).toString();
+                    name = Double.toString(cell.getNumericCellValue());
                 }
                 if(name != null){
                     columns.add(cell.getColumnIndex());
@@ -149,7 +148,7 @@ public class ImportData{
                     cell = row.getCell(ncol);
                     try{
                         cellValue = evaluator.evaluate(cell);
-                        if( var.isFactor() ){
+                        if( var.isText() ){
                             if(cellValue.getCellType() == Cell.CELL_TYPE_STRING){
                                 var.add(cellValue.getStringValue().trim());
                             }else if(cellValue.getCellType() == Cell.CELL_TYPE_NUMERIC){
@@ -159,14 +158,14 @@ public class ImportData{
                             if(cellValue.getCellType() == Cell.CELL_TYPE_STRING){
                                 str = cellValue.getStringValue().trim();
                                 if( str.compareTo(notAvailable) == 0){
-                                    var.add(Double.NaN);
+                                    var.add( new NonAvailable() );
                                 }else if( str.startsWith(notDetected)){
-                                    var.add(new ZeroData(
+                                    var.add(new Zero(
                                             Double.parseDouble(
                                             str.substring(1,str.length()).replace(",", "."))));
                                     //var.add(Double.MIN_VALUE);
                                 }else{
-                                    var.categorize();
+                                    var.toText();
                                     var.add(str);
                                 }
                             }else if(cellValue.getCellType() == Cell.CELL_TYPE_NUMERIC){
@@ -201,10 +200,10 @@ public class ImportData{
     /**
      *
      */
-    public static char separator = ' ';
+    public static char separator = ';';
     /**
      *
-     */
+     * /
     public static char decimal = '.';
     /**
      *
@@ -255,7 +254,7 @@ public class ImportData{
                     stringnumber = nextLine[part];
                     Variable var = variables.get(part-istart);
                     //var.add(nextLine[part]);
-                    if( var.isFactor() ){
+                    if( var.isText() ){
                          var.add(stringnumber.trim());
                     }else{
                         
@@ -269,13 +268,13 @@ public class ImportData{
                         if(f){
                             String str = stringnumber.trim();
                             if( str.compareTo(NON_AVAILABLE) == 0){
-                                var.add( Double.NaN);
+                                var.add( new NonAvailable() );
                             }else if( str.startsWith(NON_DETECTED)){
-                                var.add(new ZeroData(
+                                var.add(new Zero(
                                         Double.parseDouble(
                                         str.substring(1,str.length()).replace(",", "."))));
                             }else{
-                                var.categorize();
+                                var.toText();
                                 //variables.remove(part);
                                 //variables.add(part, var);
                                 //var.categorize();
@@ -294,19 +293,6 @@ public class ImportData{
         DataFrame dataframe = new DataFrame();
         for(Variable vv:variables){
             dataframe.addData(vv.getName(), vv);
-            /*
-            if(vv instanceof NumericVar){
-            NumericVar v =(NumericVar)vv;
-               for(int i=0;i<v.size();i++){
-               System.out.println(v.getName() + " " + v.get(i).getClass() + " " + v.get(i).getValue());
-               }
-            }else{
-               FactorVar v =(FactorVar)vv;
-               for(int i=0;i<v.size();i++){
-                  System.out.println(v.getName() + " " + v.get(i).getClass() + " " + v.get(i).getFactor());
-               }
-            }
-             * */
         }
         return dataframe;
     }

@@ -94,7 +94,7 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
         // Initialization variables
         //iconLabel = new TeXIcon[names.length];
         textLabel = names;
-        int s = CoDaDisplayConfiguration.getSize("label").intValue();
+        int s = config.getSize("label").intValue();
         /*for(int i =0;i<names.length;i++){
             try{
                 iconLabel[i] = new TeXFormula(names[i])
@@ -175,13 +175,13 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
                sameSide(p1, p2, c1, c2, a1, a2, b1, b2);
     }
     private void drawAxis(Graphics2D g2){
-        g2.setColor( CoDaDisplayConfiguration.getColor("axis") );
-        BasicStroke normal = new BasicStroke(CoDaDisplayConfiguration.getSize("axis"),
+        g2.setColor( config.getColor("axis") );
+        BasicStroke normal = new BasicStroke(config.getSize("axis"),
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND);
         //float[] dash1 = { 2f, 0f, 2f };
         float dash1[] = { 2.0f };
-        BasicStroke dashed = new BasicStroke(CoDaDisplayConfiguration.getSize("axis"),
+        BasicStroke dashed = new BasicStroke(config.getSize("axis"),
             BasicStroke.JOIN_MITER, BasicStroke.CAP_ROUND,
             1.0f, dash1, 2f);
 
@@ -271,10 +271,10 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
                 BasicStroke.JOIN_MITER,
                 BasicStroke.CAP_ROUND));
 
-        float s = CoDaDisplayConfiguration.getSize("data");
+        float s = config.getSize("data");
         Point2D o = null;        
         for(int i=0;i<Z.length;i++){
-            g2.setColor( CoDaDisplayConfiguration.getColor("data", groups[i]) );
+            g2.setColor( config.getColor("data", groups[i]) );
             o = defaultTransform.transform(new Point2D.Double(Z[i][0],Z[i][1]), o);
             g2.fill(PlotUtils.drawPoint(o, s));
             g2.setColor( Color.black );
@@ -287,7 +287,7 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
         }
     }
     private void drawAreas(Graphics2D g2){
-        g2.setPaint( CoDaDisplayConfiguration.getColor("area"));
+        g2.setPaint( config.getColor("area"));
         Point2D o1 = null, o2 = null, o3 = null, o4 = null;
         o1 = defaultTransform.transform(new Point2D.Double(V[0][0], V[0][1]), o1);
         o2 = defaultTransform.transform(new Point2D.Double(V[1][0], V[1][1]), o2);
@@ -342,9 +342,10 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
         }
     }
     private void drawLabels(Graphics2D g2){
-        Font font = new Font("Monospace", Font.PLAIN, 15);
+        Font font = new Font("Monospace", Font.PLAIN, 
+                config.getSize("label").intValue());
         g2.setFont(font);
-        g2.setColor(CoDaDisplayConfiguration.getColor("label"));
+        g2.setColor(config.getColor("label"));
         FontMetrics metric = g2.getFontMetrics();
         Point2D o = null;
         int separation = 4;

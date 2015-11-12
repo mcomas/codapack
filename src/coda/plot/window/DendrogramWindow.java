@@ -16,6 +16,7 @@ public class DendrogramWindow extends CoDaPlotWindow{
     private DendrogramDisplay realPlot;
     public DendrogramWindow(DataFrame dataframe, DendrogramDisplay display, String title){
         super(dataframe, display, title);
+        this.menuData.setVisible(false);
         this.realPlot = display;
     }
 }

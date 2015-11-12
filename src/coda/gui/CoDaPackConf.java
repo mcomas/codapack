@@ -17,10 +17,17 @@ import java.util.logging.Logger;
 
 /**
  * Versioning history
+ * 
+ * 2 01 16
+ * - Text in figures and other objects can be resized from menu File-> Configuration at tab Sizes.
+ * - Exportation to R has been modified. Now, CoDaPack generates a RData file instead of a source code.
+ * 
  * 2 01 15
- * - Amalgamation variable name is indicative of amalgamated parts
- * - Closured variables are renamed to be R  compatible
- * - Help->Force Update menu is added to allow a clean reinstallation
+ * 
+ * 
+ * 2 01 14
+ * - Decimal point configuration available through File->Configuration menu
+ * - MAC version: Save to R menu (problem solved)
  * 
  * 2 01 13
  * - Sorry, the update 2 01 12 was not correctly integrated in CoDaPack. This update correctly integrates the previous one
@@ -33,7 +40,7 @@ import java.util.logging.Logger;
  * 
  * 2 01 10
  * - Amalgamation problems solved
- * - Export tables to R dataframes as source code
+ * - Export tables to R data-frames as source code
  * - Text file importation
  * - CRITICAL: CLR variances in Variation Array corrected
  * 
@@ -48,13 +55,13 @@ import java.util.logging.Logger;
  * - Dendrogram: Counting from 1 in the ilr generated variables
  *
  * 2 01 7
- * - Preditive region estimation
+ * - Predictive region estimation
  * - Confidence region for the mean
  * - Empty Ternary Plot Simplistic Editor
  * - Biplot: covariance biplot as default biplot representation
  *
  * 2 01 6
- * - Correlation matrix calculation in Clasical Statistics
+ * - Correlation matrix calculation in Classical Statistics
  * - Biplot: representation of UV decomposition
  * - Biplot: coordinates output
  *
@@ -79,7 +86,7 @@ public class CoDaPackConf {
 public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
 
 
-    public static String CoDaVersion = "2 01 10";
+    public static String CoDaVersion = "2 02 00";
     public static int CoDaUpdaterVersion = 4;
 
     public static int[] getVersionNum(){
@@ -96,14 +103,25 @@ public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
     }
     public static boolean updateNeeded(String v){
         int[] actVersion = getVersionNum();
-
+        int [] newVersion = new int[3];
+        
         String[] version = v.split(" ");
-        boolean b = false;
-        if(actVersion[0] < Integer.parseInt(version[0])) b = true;
-        else if (actVersion[1] < Integer.parseInt(version[1])) b = true;
-        else if (actVersion[2] < Integer.parseInt(version[2])) b = true;
-
-        return b;
+        newVersion[0] = Integer.parseInt(version[0]);
+        newVersion[1] = Integer.parseInt(version[1]);
+        newVersion[2] = Integer.parseInt(version[2]);
+        
+        // Same version
+        if(newVersion[0] == actVersion[0] & newVersion[1] == actVersion[1] &
+                newVersion[2] == actVersion[2]) return false;
+        
+        // New version
+        if(newVersion[0] == actVersion[0] & newVersion[1] == actVersion[1] &
+                newVersion[2] > actVersion[2]) return true;
+        if(newVersion[0] == actVersion[0] & newVersion[1] > actVersion[1]) return true;
+        if(newVersion[0] > actVersion[0]) return true;
+        
+        // Otherwise actual version is newer than published version
+        return false;
     }
     private final static DecimalFormatSymbols decimalFormatSymb = new DecimalFormatSymbols();
     static{

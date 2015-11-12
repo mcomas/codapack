@@ -55,7 +55,8 @@ public class TransformationCLRMenu extends AbstractMenuDialog{
             int m = sel_names.length;
             String[] new_names = new String[m];
             for(int i=0;i<m;i++) new_names[i] = "inv.clr." + (i+1);
-            df.addData(new_names, CoDaStats.transformCLRRaw(df.getNumericalData(sel_names)));
+            df.addData(new_names, CoDaStats.closure(
+                    CoDaStats.transformCLRRaw(df.getNumericalData(sel_names)), 1));
             mainApplication.updateDataFrame(df);
         }
         setVisible(false);

@@ -47,6 +47,7 @@ public class BinaryPartitionTable extends JTable implements MouseListener{
             getModel().setValueAt(BinaryPartitionSelect.Gr1, i, 0);
         }        
         this.addMouseListener(this);
+        this.getTableHeader().setReorderingAllowed(false);
     }
     public int getActualStep(){
         return actualStep;

@@ -25,12 +25,12 @@ public class testBinaryPartition {
         DataFrame df = ImportData.importXLS("G:/Recerca/EIO_RECERCA/New CoDaPack/CoData.xls", true);
 
         String[] names = new String[6];
-        names[0] = df.getName(0);
-        names[1] = df.getName(1);
-        names[2] = df.getName(2);
-        names[3] = df.getName(3);
-        names[4] = df.getName(4);
-        names[5] = df.getName(5);
+        names[0] = df.get(0).getName();
+        names[1] = df.get(1).getName();
+        names[2] = df.get(2).getName();
+        names[3] = df.get(3).getName();
+        names[4] = df.get(4).getName();
+        names[5] = df.get(5).getName();
 
         CoDaPackMain main = new CoDaPackMain();
 

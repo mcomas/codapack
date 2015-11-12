@@ -38,11 +38,12 @@ public abstract class AbstractCoDaDisplay extends JComponent{
     protected ArrayList<LegendItem> legendNames = new ArrayList<LegendItem>();
     protected String[] obsNames;
     protected boolean showAllZ = false;
+    public CoDaDisplayConfiguration config;
     public AbstractCoDaDisplay(){
         setOpaque(true);
         setDoubleBuffered(true);
         setFocusable(true);
-        CoDaDisplayConfiguration.loadConfiguration();
+        config = new CoDaDisplayConfiguration();
     }
     
     public abstract void scale(double k);
@@ -78,14 +79,14 @@ public abstract class AbstractCoDaDisplay extends JComponent{
         g2.setRenderingHint(RenderingHints.KEY_RENDERING,
                                         RenderingHints.VALUE_RENDER_QUALITY);
         
-        g2.setColor( CoDaDisplayConfiguration.getColor("background") );
+        g2.setColor( config.getColor("background") );
         g2.fill(new Rectangle2D.Double(0, 0, width, height));
         
     }
     private void drawLegend(Graphics2D g2){
         
         int el = 0;
-        float s = CoDaDisplayConfiguration.getSize("data");
+        float s = config.getSize("data");
 
         int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
         int fontSize = (int)Math.round(11.0 * screenRes / 72.0);
@@ -97,14 +98,14 @@ public abstract class AbstractCoDaDisplay extends JComponent{
         while(it.hasNext()){
             el++;
             LegendItem li = it.next();
-            g2.setColor( CoDaDisplayConfiguration.getColor(li.code) );
+            g2.setColor( config.getColor(li.code) );
             if(li.form == li.DOT){
                 g2.fill(PlotUtils.drawPoint(new Point2D.Double(15, 15 * el), 1.5*s));
                 g2.setColor( Color.black );
                 g2.draw(PlotUtils.drawPoint(new Point2D.Double(15, 15 * el), 1.5*s));
             }
             if(li.form == li.LINE){
-                g2.setStroke(new BasicStroke(2*CoDaDisplayConfiguration.getSize("Prin.Comp.", 1) ,
+                g2.setStroke(new BasicStroke(2*config.getSize("Prin.Comp.") ,
                     BasicStroke.JOIN_MITER,
                     BasicStroke.CAP_ROUND));
                 g2.draw(PlotUtils.drawLine(new Point2D.Double(10, 15 * el), new Point2D.Double(20, 15 * el)));

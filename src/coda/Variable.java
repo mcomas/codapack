@@ -4,6 +4,7 @@ import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -13,27 +14,18 @@ import java.util.logging.Logger;
  * 
  * @author mcomas
  */
-public class Variable extends ArrayList<Object>{
+public class Variable extends ArrayList<Element>{
     public static final long serialVersionUID = 1L;
 /**
- * Constant defining a variable as factor.
- * VAR_FACTOR = 1
+ * Constants defining variable type.
  */
-    public static final int VAR_FACTOR  = 1;
-/**
- * Constant defining a variable as numeric.
- * VAR_NUMERIC = 2
- */
+    public static final int VAR_TEXT  = 1;
     public static final int VAR_NUMERIC = 2;
-/**
- * Variable containing the name of a variable. The name of a variable
- * must be unique.
- */
-    private String name;
-/**
- * Variable type: factor or numeric.
- */
-    private int dtype;
+
+    protected String name; // Variable name
+    
+    private int dtype;   // Variable type (either text or numeric)
+    
     public Variable(){ }
 /**
  * Variable type is defined to numeric by default
@@ -41,7 +33,7 @@ public class Variable extends ArrayList<Object>{
  */
     public Variable(String n){
         name = n;
-        dtype = VAR_NUMERIC;
+        dtype = VAR_NUMERIC; // type is numeric by default
     }
 /**
  *
@@ -55,78 +47,67 @@ public class Variable extends ArrayList<Object>{
 /**
  * The variable is set to numeric type
  * @param n variable name
- * @param data array containing the varible values
+ * @param data array containing the variable values
  */
     public Variable(String n, double[] data){
         name = n;
         dtype = VAR_NUMERIC;
-        for(int i=0;i<data.length;i++) this.add(i , data[i]);
+        for(int i=0;i<data.length;i++){
+            if(data[i] == 0)
+                this.add(i, new Zero());
+            else
+                this.add(i , new Numeric(data[i]));
+        }
     }
 /**
  * The variable is set to factor type
  * @param n variable name
- * @param data array containing the varible values
+ * @param data array containing the variable values
  */
     public Variable(String n, String[] data){
         name = n;
-        dtype = VAR_FACTOR;
-        for(int i=0;i<data.length;i++) this.add(i , data[i]);
+        dtype = VAR_TEXT;
+        for(int i=0;i<data.length;i++) 
+            this.add(i , new Text(data[i]));
     }
-/**
- *
- * @param data
- */
-    
-    public void setData(double[] data){
-        dtype = VAR_NUMERIC;
-        for(int i=0;i<data.length;i++) this.add(i , data[i]);
-    }     
-/**
- *
- * @param data
- */
-    public void setData(String[] data){
-        dtype = VAR_FACTOR;
-        for(int i=0;i<data.length;i++) this.add(i , data[i]);
-    }
-/**
- *
- * @param data
- */
-    public void setData(Object[] data){
-        this.clear();
-        for(int i=0;i<data.length;i++) this.add(i , data[i]);
-    }
-/**
- *
- * @param data
- * @param t
- */
-    public void setData(Object[] data, int t){
-        this.clear();        
-        for(int i=0;i<data.length;i++) this.add(i , data[i]);
-        dtype = t;
-    }
-    @Override
-    public Object get(int index){
-        if(index < this.size()){
-            Object o = super.get(index);
-            if(!(o instanceof ZeroData))
-                return o;
-            ZeroData z = (ZeroData)o;
-            return z;
+     public Element setElementFromString(String v) {
+        if(this.isText()){
+            return new Text(v).variable(this);
         }
-        return null;
-    }
-    public double getValue(int index){
-        if(index < this.size()){
-            Object o = super.get(index);
-            if(!(o instanceof ZeroData))
-                return (Double)o;
-            ZeroData z = (ZeroData)o;
-            return z.getValue();
+        if("na".equals(v.toLowerCase())){
+            return new NonAvailable().variable(this);
         }
-        return Double.NaN;
+        try{
+            double vd = Double.parseDouble(v);
+            if(Double.isNaN(vd))
+                return new NonAvailable().variable(this);
+            if(vd == 0)
+                return new Zero(0).variable(this);
+            return new Numeric(vd).variable(this);
+        }catch(NumberFormatException e){
+            double dl = Zero.isZero(v);
+            if(dl >= 0)
+                return new Zero(dl).variable(this);
+            else
+                return new Text(v).variable(this);
+        }
+    }
+/**
+ *
+ * @param data
+ */
+//    public void setData(Object[] data){
+//        this.clear();
+//        for(int i=0;i<data.length;i++) this.add(i , data[i]);
+//    }
+    public void add(String data){
+        super.add(new Text(data));
+    }
+    public void add(double data){
+        if(data == 0)
+            add(new Zero());
+        else
+            add(new Numeric(data));
     }
 /**
  *
@@ -165,10 +146,7 @@ public class Variable extends ArrayList<Object>{
             int n = size();
             double[] data = new double[n];
             for(int i=0; i<n; i++){
-                if(get(i) instanceof ZeroData)
-                    data[i] = Double.MIN_VALUE;
-                else
-                    data[i] = (Double)get(i);
+                data[i] = ((Numeric)get(i)).getValue();
             }
             return data;
         }
@@ -178,39 +156,38 @@ public class Variable extends ArrayList<Object>{
  *
  * @return
  */
-    public String[] getCategoricalData(){
-        if( dtype == VAR_FACTOR ){
+    public String[] getTextData(){
+        if( dtype == VAR_TEXT ){
             int n = size();
             String[] data = new String[n];
-            for(int i=0; i<n; i++) data[i] = (String)get(i);
+            for(int i=0; i<n; i++) data[i] = ((Text)get(i)).getValue();
             return data;
         }else{
             int n = size();
             String[] data = new String[n];
-            for(int i=0; i<n; i++) data[i] = ((Double)this.getValue(i)).toString();
+            for(int i=0; i<n; i++){                
+                data[i] = ((Numeric)get(i)).getValue().toString();
+            }
             return data;
         }
     }
-    public int[] getCategoricalDataNumerized(){
-        if( dtype == VAR_FACTOR ){
+/**
+ * @return an integer array with a different integer for each different
+ * text contained inside the variable
+ */
+    public int[] getTextDataNumerized(){
+        if( dtype == VAR_TEXT ){
+            HashMap<String, Integer> hash = new HashMap<String, Integer>();
             int n = size();
             int[] data = new int[n];
-            for(int i=0; i<n; i++) data[i] = 0;
-            String actual;
-            int k = 1;
+            int k = 0;
             for(int i=0; i<n; i++){
-                actual = (String)get(i);
-                if(data[i] == 0){
-                    for(int j=i; j<n;j++){
-                        if(actual.equals((String)get(j))){
-                            data[j] = k;
-                        }
-                    }
-                    k++;
+                String actual = ((Text)get(i)).getValue();
+                if(!hash.containsKey(actual)){
+                    hash.put(actual, k++);
                 }
+                data[i] = hash.get(actual);
             }
-            for(int i=0; i<n; i++) data[i]--;
-            //for(int i=0; i<n; i++) data[i] = (String)get(i);
             return data;
         }
         return null;
@@ -218,23 +195,38 @@ public class Variable extends ArrayList<Object>{
 /**
  *
  */
-    public void categorize(){
-        String value;
-        setType(VAR_FACTOR);
+    public void toText(){
+        String value = null;
+        setType(VAR_TEXT);
         for(int i=0;i<this.size();i++){
-            value = ((Double)this.getValue(i)).toString();
-            this.set(i, value);
+            Element el = this.get(i);
+            if(el instanceof Numeric){
+                Numeric el_n = (Numeric)el;
+                value = (el_n.getValue()).toString();
+                this.set(i, new Text(value));
+            }else{
+                this.set(i, el);
+            }
         }        
     }
     /**
  *
  */
-    public void numerize(){
+    public void toNumeric(){
         double value;
         setType(VAR_NUMERIC);
         for(int i=0;i<this.size();i++){
-            value = Double.parseDouble((String)this.get(i));
-            this.set(i, value);
+            Element el = this.get(i);
+            if(el instanceof Text){
+                Text el_t = (Text)el;
+                value = Double.parseDouble(el_t.getValue());
+                if(value == 0)
+                    this.set(i, new Zero());
+                else
+                    this.set(i, new Numeric(value));
+            }else{
+                this.set(i, el);
+            }
         }
     }
 /**
@@ -249,8 +241,8 @@ public class Variable extends ArrayList<Object>{
  * 
  * @return
  */
-    public boolean isFactor(){
-        if(dtype == VAR_FACTOR ) return true;
+    public boolean isText(){
+        if(dtype == VAR_TEXT ) return true;
         return false;
     }
     public JSONObject toJSON(){
@@ -263,13 +255,13 @@ public class Variable extends ArrayList<Object>{
             if( dtype == VAR_NUMERIC ){               
                 for(int i=0;i<size();i++){
                     JSONObject obj = new JSONObject();
-                    Object o = get(i);
-                    if( o instanceof ZeroData){
-                        ZeroData zero = (ZeroData)o;
-                        obj.put("l", zero.getDetectionLevel());
-                    }else{
-                        Double value = (Double)o;
-                        obj.put("v", value.toString());
+                    Element el = get(i);
+                    if( el instanceof Zero){
+                        Zero zero = (Zero)el;
+                        obj.put("l", zero.detection);
+                    }else if( el instanceof Numeric){
+                        Numeric el_n = (Numeric)el;
+                        obj.put("v", el_n.getValue().toString());
                         /*
                         if(value.isNaN()){
                             obj.put("value", "NaN");
@@ -280,8 +272,12 @@ public class Variable extends ArrayList<Object>{
                     }
                     values.put(obj);
                 }
-            }else
-                for(int i=0;i<size();i++) values.put((String)get(i));
+            }else{
+                for(int i=0;i<size();i++){
+                    Text el = (Text)get(i);
+                    values.put(el.getValue());
+                }
+            }
             variable.put("a", values);
         } catch (JSONException ex) {
             Logger.getLogger(Variable.class.getName()).log(Level.SEVERE, null, ex);
@@ -298,14 +294,14 @@ public class Variable extends ArrayList<Object>{
                 for(int i=0;i<values.length();i++){
                     JSONObject object = values.getJSONObject(i);
                     if(object.has("l")){
-                        variable.add(i, new ZeroData(Double.parseDouble(object.getString("l"))));//Double.parseDouble(object.getString("value")));
+                        variable.add(i, new Zero(Double.parseDouble(object.getString("l"))));//Double.parseDouble(object.getString("value")));
                     }else{
-                        variable.add(i, Double.parseDouble(object.getString("v")));
+                        variable.add(i, new Numeric(Double.parseDouble(object.getString("v"))));
                     }
                 }
             }else{
                 for(int i=0;i<values.length();i++){
-                    variable.add(i, values.getString(i));
+                    variable.add(i, new Text(values.getString(i)));
                 }
             }
         } catch (JSONException ex) {

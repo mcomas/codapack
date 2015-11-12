@@ -45,7 +45,7 @@ public class Numeric2CategoricMenu extends JDialog{
                 String selected[] = ds.getSelectedData();
                 int n = selected.length;
                 for(int i=0;i<n;i++){
-                    df.get(selected[i]).categorize();
+                    df.get(selected[i]).toText();
                 }
                 mainApp.updateDataFrame(df);
                 setVisible(false);
@@ -56,7 +56,7 @@ public class Numeric2CategoricMenu extends JDialog{
     @Override
     public void setVisible(boolean v){
         if(df == null){
-            JOptionPane.showMessageDialog(null, "No data available");
+            JOptionPane.showMessageDialog(this, "No data available");
             this.dispose();
         }else{
             super.setVisible(v);

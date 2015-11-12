@@ -69,6 +69,7 @@ public class TernaryPlotMenu extends AbstractMenuDialog{
                 plot = new TernaryPlot3dWindow(df, display, "Ternary Plot 3d");
                 
             }
+            plot.setLocationRelativeTo(mainApplication);
             plot.setVisible(true);
             setVisible(false);
         }else{

@@ -37,10 +37,10 @@ public class testTernaryPlot3d {
             DataFrame df = ImportData.importXLS("/home/marc/software/codapack-dev/data/halimba.xls", true);
             //DataFrame df = ImportData.importXLS("G:/Recerca/EIO_RECERCA/New CoDaPack/CoData.xls", true);
             String[] names = new String[4];
-            names[0] = df.getName(0);
-            names[1] = df.getName(1);
-            names[2] = df.getName(2);
-            names[3] = df.getName(3);
+            names[0] = df.get(0).getName();
+            names[1] = df.get(1).getName();
+            names[2] = df.get(2).getName();
+            names[3] = df.get(3).getName();
             double[][] data = new double[4][];
             data[0] = df.getNumericalData(names[0]);
             data[1] = df.getNumericalData(names[1]);

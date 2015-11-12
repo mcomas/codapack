@@ -23,7 +23,7 @@ public class ColorPanel extends JPanel implements MouseListener{
          this.setBackground(initialBackground);
      }
      public void mouseClicked(MouseEvent me) {
-         Color colorSelected = JColorChooser.showDialog(null,
+         Color colorSelected = JColorChooser.showDialog(this,
              "Choose a color", this.getBackground());
          if (colorSelected != null) {
            this.setBackground(colorSelected);

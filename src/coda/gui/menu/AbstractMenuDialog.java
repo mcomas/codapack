@@ -81,7 +81,7 @@ public abstract class AbstractMenuDialog extends JDialog{
     @Override
     public void setVisible(boolean v){
         if(mainApplication.getActiveDataFrame() == null && !allowEmpty){
-            JOptionPane.showMessageDialog(null, "No data available");
+            JOptionPane.showMessageDialog(this, "No data available");
             this.dispose();
         }else{
             super.setVisible(v);
@@ -105,7 +105,7 @@ public abstract class AbstractMenuDialog extends JDialog{
 
         }
         int len = invalid.length();
-        if(len != 0)JOptionPane.showMessageDialog(null,
+        if(len != 0)JOptionPane.showMessageDialog(this,
                     "<html><p>Rows number <center><i>" + invalid.substring(0,len-2) +
                     "</i></center>are going to be ignored due to zero <br>"
                     + "data in some of its components.</p></html>");
@@ -128,7 +128,7 @@ public abstract class AbstractMenuDialog extends JDialog{
 
         }
         int len = invalid.length();
-        if(len != 0)JOptionPane.showMessageDialog(null,
+        if(len != 0)JOptionPane.showMessageDialog(this,
                     "<html><p>Rows number <center><i>" + invalid.substring(0,len-2) +
                     "</i></center>are going to be ignored due to<br>"
                     + "missing data in some of its components.</p></html>");
