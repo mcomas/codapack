@@ -2,6 +2,3 @@ lib/*
 !lib/README.txt
 build/
 dist/
-codapack.conf
-manifest.mf
-nbproject/
