@@ -1,0 +1,18 @@
+<project default="compile">
+  <path id="classpath">
+    <fileset dir="${basedir}/">
+      <include name="lib/*.jar" />
+    </fileset>
+  </path>
+  <target name="compile">
+      <mkdir dir="bin"/>
+      <javac srcdir="src" destdir="bin" classpathref="classpath" />
+  </target>
+  <target name="build-jar">
+    <jar destfile="CoDaPack.jar" basedir="bin">
+      <manifest>
+        <attribute name="Main-Class" value="coda.gui.CoDaPackMain"/>
+      </manifest>
+    </jar>
+  </target>
+</project>
