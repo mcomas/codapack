@@ -44,6 +44,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_OPEN = "Open Workspace...";
         public JMenuItem itemSave;
         public final String ITEM_SAVE = "Save Workspace...";
+        public JMenuItem itemRecent;
+        public final String ITEM_RECENT = "Open Recent";
         public JMenuItem itemNewDF;
         public final String ITEM_NEWDF = "New DataFrame";
         public JMenu menuImport;
@@ -193,6 +195,7 @@ public class CoDaPackMenu extends JMenuBar{
             menuFile = new JMenu();
                 itemOpen = new JMenuItem();
                 itemSave = new JMenuItem();
+                itemRecent = new JMenuItem();
                 itemNewDF = new JMenuItem();
                 menuImport = new JMenu();
                     itemImportCSV = new JMenuItem();
@@ -247,6 +250,7 @@ public class CoDaPackMenu extends JMenuBar{
         menuFile.setText(ITEM_FILE);
         addJMenuItem(menuFile, itemOpen, ITEM_OPEN);
         addJMenuItem(menuFile, itemSave, ITEM_SAVE);
+        addJMenuItem(menuFile, itemRecent, ITEM_RECENT);
 
         menuFile.addSeparator();        
         addJMenuItem(menuFile, itemdelDataFrame, ITEM_DEL_DATAFRAME);
