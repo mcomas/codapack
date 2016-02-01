@@ -168,8 +168,7 @@ public class CoDaPackMenu extends JMenuBar{
     public void saveLoadRecentFiles(){
         
     }
-    public void addRecentFile(final String rf){
-            System.out.println("Arriba a addRecentFile: "+rf);
+    /*public void addRecentFile(final String rf){
             if(rf != null){
                 String pars[] = rf.split("¿");
                 String path = pars[1];
@@ -194,7 +193,7 @@ public class CoDaPackMenu extends JMenuBar{
                recentFile.put(path, item);
             }
         
-    }    
+    }*/
     HashMap<String ,JMenuItem> recentFile;
     
     //Definició del LinkedHashMap que farà la gestió dels arxius recents
@@ -271,7 +270,6 @@ public class CoDaPackMenu extends JMenuBar{
             while ((linia=br.readLine())!=null) {
                 clau = new File(linia).getName();
                 newRecentFile.put(clau,linia);
-                System.out.println("Afegit a newRecentFile: clau="+clau+" path="+linia);
             }
         }
         catch (Exception e) {
