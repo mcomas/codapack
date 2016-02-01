@@ -24,8 +24,13 @@
 package coda.gui;
 
 import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Set;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -44,8 +49,10 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_OPEN = "Open Workspace...";
         public JMenuItem itemSave;
         public final String ITEM_SAVE = "Save Workspace...";
-        public JMenuItem itemRecent;
+        public JMenu menuRecent;
         public final String ITEM_RECENT = "Open Recent";
+            public JMenuItem itemClearRecent;
+            public final String ITEM_CLEAR_RECENT = "Clear Items";
         public JMenuItem itemNewDF;
         public final String ITEM_NEWDF = "New DataFrame";
         public JMenu menuImport;
@@ -162,6 +169,7 @@ public class CoDaPackMenu extends JMenuBar{
         
     }
     public void addRecentFile(final String rf){
+            System.out.println("Arriba a addRecentFile: "+rf);
             if(rf != null){
                 String pars[] = rf.split("¿");
                 String path = pars[1];
@@ -189,13 +197,139 @@ public class CoDaPackMenu extends JMenuBar{
     }    
     HashMap<String ,JMenuItem> recentFile;
     
+    //Definició del LinkedHashMap que farà la gestió dels arxius recents
+    LinkedHashMap<String, String> newRecentFile= new LinkedHashMap();
+    
+    //Afegeix o actualitza la llista d'arxius recents
+    public void saveRecentFile(String rf){ 
+        String pathFile;
+        //Si la te, li treiem l'inici al nom del path
+        if (rf.startsWith("format:codapack¿")) {
+            pathFile = rf.substring(16);
+        }
+        else pathFile = rf;
+        //Obtenim el nom del fitxer amb l'extensió, que utilitzarem com a clau
+        String fname = new File(pathFile).getName();
+        //Comprovem si el fitxer es troba al hashmap, si es troba l'eliminem
+        if (newRecentFile.containsKey(fname)){
+            newRecentFile.remove(fname);
+        }
+        //Inserim clau valor al final del hashmap
+        newRecentFile.put(fname,pathFile);
+        //Actualitzada la llista anem a actualitzar el menu i l'acció pertinent
+        loadRecentFiles();
+    }
+    
+    //S'encarrega d'escriure el submenú Recent Files i definir l'acció pertinent
+    public void loadRecentFiles() {
+        //Borra tots els items del menú Recent Files
+        menuRecent.removeAll();
+        //Comprovem que hi hagi entrada per posar a Recent Files
+        if (newRecentFile.size()>0) {
+            //Creem la colecció i l'iterador per a recorrer els valors del LinkedHashMap
+            Collection c=newRecentFile.values();
+            Iterator itr=c.iterator();
+            //Fem el recorregut pertinent
+            while(itr.hasNext()) {
+                //Creem i afegim el valor a Recent Files
+                JMenuItem item = new JMenuItem();
+                menuRecent.add(item);
+                String s=(String) itr.next();
+                //Tornem a posar el prefix al pathFile
+                String s1="format:codapack¿";
+                String rf=s1.concat(s);
+                //Obtenim el text del item
+                item.setText(s);
+                //Definim l'acció a realitzar al clicar l'item
+                item.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        JMenuItem jMenuItem = (JMenuItem)evt.getSource();
+                        String title = jMenuItem.getText();
+                        for(CoDaPackMenuListener e: listeners){
+                            e.menuItemClicked(rf);
+                        }
+                    }});
+            }
+        }
+        //Afegim un separador i l'item Clear Items a Recent Files
+        menuRecent.addSeparator();
+        addJMenuItem(menuRecent, itemClearRecent, ITEM_CLEAR_RECENT);
+    }
+    
+    //Aquest mètode emplena el LinkedHashMap des de l'arxiu recentFiles.txt cada vegada que s'inicia el programa
+    public void fillRecentFiles() {
+        File arx = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            arx = new File("recentFiles.txt");
+            fr = new FileReader(arx);
+            br = new BufferedReader(fr);
+            String clau;
+            String linia;
+            while ((linia=br.readLine())!=null) {
+                clau = new File(linia).getName();
+                newRecentFile.put(clau,linia);
+                System.out.println("Afegit a newRecentFile: clau="+clau+" path="+linia);
+            }
+        }
+        catch (Exception e) {
+           e.printStackTrace(); 
+        }
+        finally {
+            try {
+                if (null != fr) fr.close();
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+    
+    //Aquest mètode sobreescriu l'arxiu recentFiles.txt, quan es tanca el programa i cada vegada que es fa un Clear Items
+    public void copyRecentFiles() {
+        FileWriter fit = null;
+        PrintWriter pw = null;
+        try {
+            fit = new FileWriter("recentFiles.txt");
+            pw = new PrintWriter(fit);
+            String s;
+            Collection c=newRecentFile.values();
+            Iterator itr=c.iterator();
+            while(itr.hasNext()) {
+                s=(String) itr.next();
+                pw.println(s);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (null!= fit) fit.close();
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+    
+    //Neteja el menu Recent Files
+    public void removeRecentFiles() {
+        newRecentFile.clear();
+        copyRecentFiles();
+        loadRecentFiles();
+    }
+    
     public CoDaPackMenu(){
         this.recentFile = new HashMap<String ,JMenuItem>();
         
             menuFile = new JMenu();
                 itemOpen = new JMenuItem();
                 itemSave = new JMenuItem();
-                itemRecent = new JMenuItem();
+                menuRecent = new JMenu();
+                    itemClearRecent = new JMenuItem();
                 itemNewDF = new JMenuItem();
                 menuImport = new JMenu();
                     itemImportCSV = new JMenuItem();
@@ -250,8 +384,11 @@ public class CoDaPackMenu extends JMenuBar{
         menuFile.setText(ITEM_FILE);
         addJMenuItem(menuFile, itemOpen, ITEM_OPEN);
         addJMenuItem(menuFile, itemSave, ITEM_SAVE);
-        addJMenuItem(menuFile, itemRecent, ITEM_RECENT);
-
+        menuRecent.setText(ITEM_RECENT);
+        menuFile.add(menuRecent);
+        fillRecentFiles();
+        loadRecentFiles();
+        
         menuFile.addSeparator();        
         addJMenuItem(menuFile, itemdelDataFrame, ITEM_DEL_DATAFRAME);
         

@@ -274,15 +274,20 @@ public final class CoDaPackMain extends JFrame{
             ArrayList<DataFrame> dfs = imp.importDataFrames();
             for(DataFrame df: dfs)
                 addDataFrame(df);
-            
-            jMenuBar.addRecentFile(imp.getParameters());
+            jMenuBar.fillRecentFiles();
+            jMenuBar.saveRecentFile(imp.getParameters());
+            //jMenuBar.addRecentFile(imp.getParameters());
         }else if("format:codapack".equals(action.split("¿")[0])){
             CoDaPackImporter imp = new CoDaPackImporter().setParameters(action);
             ArrayList<DataFrame> dfs = imp.importDataFrames();
- 
+            
             for(DataFrame df: dfs)
-                addDataFrame(df);        
-            jMenuBar.addRecentFile(imp.getParameters());
+                addDataFrame(df);
+            jMenuBar.fillRecentFiles();
+            jMenuBar.saveRecentFile(imp.getParameters());
+            //jMenuBar.addRecentFile(imp.getParameters());
+        }else if(title.equals(jMenuBar.ITEM_CLEAR_RECENT)){
+            jMenuBar.removeRecentFiles();
         }else if(title.equals(jMenuBar.ITEM_SAVE)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
@@ -304,6 +309,7 @@ public final class CoDaPackMain extends JFrame{
                 JOptionPane.showMessageDialog(this, "No table available");
             }
         }else if(title.equals(jMenuBar.ITEM_QUIT)){
+            jMenuBar.copyRecentFiles();
             int response = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Confirm",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION){
