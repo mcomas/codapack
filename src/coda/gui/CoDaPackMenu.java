@@ -210,11 +210,11 @@ public class CoDaPackMenu extends JMenuBar{
         //Obtenim el nom del fitxer amb l'extensió, que utilitzarem com a clau
         String fname = new File(pathFile).getName();
         //Comprovem si el fitxer es troba al hashmap, si es troba l'eliminem
-        if (newRecentFile.containsKey(fname)){
-            newRecentFile.remove(fname);
+        if (newRecentFile.containsKey(pathFile)){
+            newRecentFile.remove(pathFile);
         }
         //Inserim clau valor al final del hashmap
-        newRecentFile.put(fname,pathFile);
+        newRecentFile.put(pathFile,pathFile);
         //Actualitzada la llista anem a actualitzar el menu i l'acció pertinent
         loadRecentFiles();
     }
@@ -265,11 +265,9 @@ public class CoDaPackMenu extends JMenuBar{
             arx = new File("recentFiles.txt");
             fr = new FileReader(arx);
             br = new BufferedReader(fr);
-            String clau;
             String linia;
             while ((linia=br.readLine())!=null) {
-                clau = new File(linia).getName();
-                newRecentFile.put(clau,linia);
+                newRecentFile.put(linia,linia);
             }
         }
         catch (Exception e) {
@@ -295,6 +293,12 @@ public class CoDaPackMenu extends JMenuBar{
             String s;
             Collection c=newRecentFile.values();
             Iterator itr=c.iterator();
+            if (newRecentFile.size()>20) {
+                int i=newRecentFile.size()-20;
+                for (int j=0;j<i;j++) {
+                    itr.next();
+                }
+            }
             while(itr.hasNext()) {
                 s=(String) itr.next();
                 pw.println(s);
