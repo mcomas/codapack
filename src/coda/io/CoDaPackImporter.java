@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -119,6 +120,7 @@ public class CoDaPackImporter implements Importer{
             JSONArray dataFrames = configuration.getJSONArray("dataframes");
             df = readDataFrame(dataFrames.getJSONObject(i));
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "The file is not available");
         } catch (JSONException ex) {
         }
         return df;
@@ -136,6 +138,7 @@ public class CoDaPackImporter implements Importer{
             for(int i=0;i<dataFrames.length();i++)
                 dfs.add(readDataFrame(dataFrames.getJSONObject(i)));
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "The file is not available");
         } catch (JSONException ex) {
         }
         return dfs;
