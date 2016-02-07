@@ -32,8 +32,11 @@ import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import java.awt.Component;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,15 +50,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class CoDaPackImporter implements Importer{
     String fname;
+    String ruta=fillRecentPath();
     ArrayList<DataFrame> dfs = new ArrayList<DataFrame>();
     @Override
     public CoDaPackImporter setParameters(Component frame) {
-        JFileChooser chooseFile = new JFileChooser();
+        JFileChooser chooseFile = new JFileChooser(ruta);
         chooseFile.setFileFilter(
                     new FileNameExtensionFilter("CoDaPack files", "cdp"));
         chooseFile.showOpenDialog(frame);
         fname = chooseFile.getSelectedFile().getAbsolutePath();
-        
+        System.out.println("El fname del arxiu és: "+fname);
+        ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
+        System.out.println("La ruta del arxiu és: "+ruta);
+        copyRecentPath(ruta);
         return this;
     }
     Variable readVariable(JSONObject var){
@@ -158,6 +165,54 @@ public class CoDaPackImporter implements Importer{
             
         }
         return this;
+    }
+    public String fillRecentPath() {
+        String path = null;
+        File arx = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            arx = new File("recentPath.txt");
+            fr = new FileReader(arx);
+            br = new BufferedReader(fr);
+            String linia;
+            if ((linia=br.readLine())!=null) {
+                path=linia;
+            }
+        }
+        catch (Exception e) {
+           e.printStackTrace(); 
+        }
+        finally {
+            try {
+                if (null != fr) fr.close();
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return path;
+    }
+    
+    public void copyRecentPath(String path) {
+        FileWriter fit = null;
+        PrintWriter pw = null;
+        try {
+            fit = new FileWriter("recentPath.txt");
+            pw = new PrintWriter(fit);
+            pw.println(path);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (null!= fit) fit.close();
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
     }
     
 }
