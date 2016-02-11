@@ -46,9 +46,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -101,7 +104,6 @@ public final class CoDaPackMain extends JFrame{
 
 
     public static CoDaPackConf config = new CoDaPackConf();
-    private final JFileChooser chooseFile = new JFileChooser();
     
     // Mac users expect the menu bar to be at the top of the screen, not in the
     // window, so enable that setting. (This is ignored on non-Mac systems).
@@ -225,6 +227,8 @@ public final class CoDaPackMain extends JFrame{
     }
     public void eventCoDaPack(String action){
         String title = action;
+        String ruta = fillRecentPath();
+        JFileChooser chooseFile = new JFileChooser(ruta);
         if(title.equals(jMenuBar.ITEM_IMPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
@@ -237,6 +241,8 @@ public final class CoDaPackMain extends JFrame{
                 if( df != null) addDataFrame(df);
                 importMenu.dispose();
             }
+            ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
+            copyRecentPath(ruta);
         }else if(title.equals(jMenuBar.ITEM_IMPORT_CSV)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
@@ -252,6 +258,8 @@ public final class CoDaPackMain extends JFrame{
                 if( df != null) addDataFrame(df);
                 importMenu.dispose();
             }
+            ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
+            copyRecentPath(ruta);
         }else if(title.equals(jMenuBar.ITEM_EXPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
@@ -267,6 +275,8 @@ public final class CoDaPackMain extends JFrame{
                     Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
+            copyRecentPath(ruta);
         }else if(title.equals(jMenuBar.ITEM_EXPORT_R)){
             new ExportRDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_OPEN)){
@@ -302,6 +312,8 @@ public final class CoDaPackMain extends JFrame{
                             .log(Level.SEVERE, null, ex);
                 }
             }
+            ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
+            copyRecentPath(ruta);  
         }else if(title.equals(jMenuBar.ITEM_DEL_DATAFRAME)){
             if( dataFrame.size() > 0 ){
                 removeDataFrame(dataFrame.get(activeDataFrame));
@@ -545,6 +557,55 @@ public final class CoDaPackMain extends JFrame{
                 } catch (JSONException ex) {
                     Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+        }
+    }
+    //LLegeix l'ultim path escrit al arxiu recentPath.txt
+    public String fillRecentPath() {
+        String path = null;
+        File arx = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            arx = new File("recentPath.txt");
+            fr = new FileReader(arx);
+            br = new BufferedReader(fr);
+            String linia;
+            if ((linia=br.readLine())!=null) {
+                path=linia;
+            }
+        }
+        catch (Exception e) {
+           e.printStackTrace(); 
+        }
+        finally {
+            try {
+                if (null != fr) fr.close();
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return path;
+    }
+    //Copia o substitueix l'últim path
+    public void copyRecentPath(String path) {
+        FileWriter fit = null;
+        PrintWriter pw = null;
+        try {
+            fit = new FileWriter("recentPath.txt");
+            pw = new PrintWriter(fit);
+            pw.println(path);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (null!= fit) fit.close();
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
             }
         }
     }

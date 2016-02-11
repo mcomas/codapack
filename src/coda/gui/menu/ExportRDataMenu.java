@@ -28,9 +28,13 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.FileNameExtensionFilter;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.text.Normalizer;
 import java.util.zip.GZIPOutputStream;
 import javax.swing.JFileChooser;
@@ -76,7 +80,8 @@ public class ExportRDataMenu extends AbstractMenuDialog{
     }
     @Override
     public void acceptButtonActionPerformed() {
-        JFileChooser chooseFile = new JFileChooser();
+        String ruta = fillRecentPath();
+        JFileChooser chooseFile = new JFileChooser(ruta);
         chooseFile.setFileFilter(
                     new FileNameExtensionFilter("R data file", "RData"));
          if(chooseFile.showSaveDialog(this) ==
@@ -115,11 +120,62 @@ public class ExportRDataMenu extends AbstractMenuDialog{
                 RDataWriter writer = new RDataWriter(context, zos);
                 writer.save(list.build());
                 zos.close();
-                fos.close();                
+                fos.close();    
+                ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
+                copyRecentPath(ruta);
                 
                 setVisible(false);
             }catch (Exception e){ //Catch exception if any
                 System.err.println("Error: " + e.getMessage());
+            }
+        }
+    }
+    //LLegeix l'ultim path escrit al arxiu recentPath.txt
+    public String fillRecentPath() {
+        String path = null;
+        File arx = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            arx = new File("recentPath.txt");
+            fr = new FileReader(arx);
+            br = new BufferedReader(fr);
+            String linia;
+            if ((linia=br.readLine())!=null) {
+                path=linia;
+            }
+        }
+        catch (Exception e) {
+           e.printStackTrace(); 
+        }
+        finally {
+            try {
+                if (null != fr) fr.close();
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return path;
+    }
+    //Copia o substitueix l'últim path
+    public void copyRecentPath(String path) {
+        FileWriter fit = null;
+        PrintWriter pw = null;
+        try {
+            fit = new FileWriter("recentPath.txt");
+            pw = new PrintWriter(fit);
+            pw.println(path);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (null!= fit) fit.close();
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
             }
         }
     }

@@ -47,6 +47,7 @@ import javax.swing.ListModel;
  * @author mcomas
  */
 public final class DataSelector extends JPanel {
+    DataFrame df_instance;
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
     int releaseIndex = -1;
@@ -55,6 +56,7 @@ public final class DataSelector extends JPanel {
     
     public DataSelector(DataFrame dataFrame){
         initComponents();
+        df_instance = dataFrame;
         if(dataFrame != null)
             this.setDataLists(dataFrame, null);
     }
@@ -62,7 +64,7 @@ public final class DataSelector extends JPanel {
         initComponents();
         groupsComboBox.setVisible(groups);
         labGroups.setVisible(groups);
-        
+        df_instance = dataFrame;
         if (all == true){
             if(dataFrame != null)
                 this.setAllDataLists(dataFrame, null);
@@ -75,6 +77,7 @@ public final class DataSelector extends JPanel {
         initComponents();
         groupsComboBox.setVisible(groups);
         labGroups.setVisible(groups);
+        df_instance = dataFrame;
         //jList2.setModel(new DefaultListModel());
         if(dataFrame != null)
             setDataLists(dataFrame, selected);
@@ -84,7 +87,7 @@ public final class DataSelector extends JPanel {
         initComponents();
         groupsComboBox.setVisible(groups);
         labGroups.setVisible(groups);
-
+        df_instance = dataFrame;
         //jList2.setModel(new DefaultListModel());
         //jList2.setModel(new DefaultListModel());
         if(dataFrame != null)
@@ -350,13 +353,14 @@ public final class DataSelector extends JPanel {
     }
 
     private void resetActionPerformed(java.awt.event.ActionEvent evt) {
-        DefaultListModel model1 = new DefaultListModel();
-        for(int i=0; i< variables.length; i++){
-            model1.addElement(variables[i]);
-        }
-        toSelectList.setModel(model1);
-        DefaultListModel model2 = new DefaultListModel();
-        selectedList.setModel(model2);
+        setDataLists(df_instance, null);
+//        DefaultListModel model1 = new DefaultListModel();
+//        for(int i=0; i< variables.length; i++){
+//            model1.addElement(variables[i]);
+//        }
+//        toSelectList.setModel(model1);
+//        DefaultListModel model2 = new DefaultListModel();
+//        selectedList.setModel(model2);
     }
 
     private void insertActionPerformed(java.awt.event.ActionEvent evt) {

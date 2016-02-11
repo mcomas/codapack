@@ -59,9 +59,7 @@ public class CoDaPackImporter implements Importer{
                     new FileNameExtensionFilter("CoDaPack files", "cdp"));
         chooseFile.showOpenDialog(frame);
         fname = chooseFile.getSelectedFile().getAbsolutePath();
-        System.out.println("El fname del arxiu és: "+fname);
         ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-        System.out.println("La ruta del arxiu és: "+ruta);
         copyRecentPath(ruta);
         return this;
     }
