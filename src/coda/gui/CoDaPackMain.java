@@ -307,13 +307,15 @@ public final class CoDaPackMain extends JFrame{
                 try {
                     WorkspaceIO.saveWorkspace(
                             filename.endsWith(".cdp") ? filename : filename + ".cdp", this);
+                ruta = filename + ".cdp";
+                jMenuBar.saveRecentFile(ruta);
                 } catch (JSONException ex) {
                     Logger.getLogger(CoDaPackMain.class.getName())
                             .log(Level.SEVERE, null, ex);
                 }
             }
             ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-            copyRecentPath(ruta);  
+            copyRecentPath(ruta);
         }else if(title.equals(jMenuBar.ITEM_DEL_DATAFRAME)){
             if( dataFrame.size() > 0 ){
                 removeDataFrame(dataFrame.get(activeDataFrame));
@@ -356,6 +358,8 @@ public final class CoDaPackMain extends JFrame{
             new PowerDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZEROS)){
             new ZeroReplacementMenu(this).setVisible(true);
+        }else if (title.equals(jMenuBar.ITEM_SETDETECTION)){
+            new SetDetectionLimitMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
             new TernaryPlotMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PRED_REG_PLOT)){

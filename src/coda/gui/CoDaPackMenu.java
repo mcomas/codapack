@@ -96,6 +96,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_POWER = "Power transformation";
         public JMenuItem itemZeros;
         public final String ITEM_ZEROS = "Rounded zero replacement";
+        public JMenuItem itemSetDetectionLimit;
+        public final String ITEM_SETDETECTION ="Set detection limit";
         public JMenuItem itemCategorizeVariables;
         public final String ITEM_CAT_VAR = "Numeric to categorical";
         public JMenuItem itemNumerizeVariables;
@@ -354,6 +356,7 @@ public class CoDaPackMenu extends JMenuBar{
             itemPerturbate = new JMenuItem();
             itemPower = new JMenuItem();
             itemZeros = new JMenuItem();
+            itemSetDetectionLimit = new JMenuItem();
             itemCategorizeVariables = new JMenuItem();
             itemNumerizeVariables = new JMenuItem();
             itemAddVariables = new JMenuItem();
@@ -423,6 +426,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuData, itemAmalgamation, ITEM_AMALGAM);
         addJMenuItem(menuData, itemPerturbate, ITEM_PERTURBATE);
         addJMenuItem(menuData, itemPower, ITEM_POWER);
+        addJMenuItem(menuData, itemSetDetectionLimit, ITEM_SETDETECTION); 
         addJMenuItem(menuData, itemZeros, ITEM_ZEROS);
         menuData.addSeparator();
         addJMenuItem(menuData, itemCategorizeVariables, ITEM_CAT_VAR);
