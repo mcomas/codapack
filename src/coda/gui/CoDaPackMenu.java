@@ -230,17 +230,23 @@ public class CoDaPackMenu extends JMenuBar{
             //Creem la colecció i l'iterador per a recorrer els valors del LinkedHashMap
             Collection c=newRecentFile.values();
             Iterator itr=c.iterator();
-            //Fem el recorregut pertinent
+            String[] v = new String[newRecentFile.size()];
+            int j=0;
+            //Fem el recorregut pertinent per posar els paths en l'array
             while(itr.hasNext()) {
+                String s=(String) itr.next();
+                v[j]=s;
+                j++;
+            }
+            for (int i=v.length-1;i>=0;i--) {
                 //Creem i afegim el valor a Recent Files
                 JMenuItem item = new JMenuItem();
                 menuRecent.add(item);
-                String s=(String) itr.next();
                 //Tornem a posar el prefix al pathFile
                 String s1="format:codapack¿";
-                String rf=s1.concat(s);
-                //Obtenim el text del item
-                item.setText(s);
+                final String rf=s1.concat(v[i]);
+                //Posem el text al item
+                item.setText(v[i]);
                 //Definim l'acció a realitzar al clicar l'item
                 item.addActionListener(new java.awt.event.ActionListener() {
                     @Override
@@ -252,6 +258,27 @@ public class CoDaPackMenu extends JMenuBar{
                         }
                     }});
             }
+            /*while(itr.hasNext()) {
+                //Creem i afegim el valor a Recent Files
+                JMenuItem item = new JMenuItem();
+                menuRecent.add(item);
+                String s=(String) itr.next();
+                //Tornem a posar el prefix al pathFile
+                String s1="format:codapack¿";
+                final String rf=s1.concat(s);
+                //Posem el text al item
+                item.setText(s);
+                //Definim l'acció a realitzar al clicar l'item
+                item.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        JMenuItem jMenuItem = (JMenuItem)evt.getSource();
+                        String title = jMenuItem.getText();
+                        for(CoDaPackMenuListener e: listeners){
+                            e.menuItemClicked(rf);
+                        }
+                    }});
+            }*/
         }
         //Afegim un separador i l'item Clear Items a Recent Files
         menuRecent.addSeparator();

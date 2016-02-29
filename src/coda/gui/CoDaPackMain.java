@@ -79,7 +79,6 @@ public final class CoDaPackMain extends JFrame{
     private int activeDataFrame = -1;
     
     
-    
     public static String RESOURCE_PATH = "resources/";
 
     private final Dimension screenDimension;
@@ -465,12 +464,51 @@ public final class CoDaPackMain extends JFrame{
         new Thread(uc).start();
         
         main.setVisible(true);
+        
+        //Si s'ha clicat un arxiu associat ens arribarà com argument i el tractem
+        if (args.length>0) {
+            //Creem un CoDaPackMenu per guardar l'arxiu a recent files
+            CoDaPackMenu cpm = new CoDaPackMenu();
+            //Guardem la ruta i l'arxiu a recent files
+            cpm.saveRecentFile(args[0]);
+            //Obrim l'arxiu 
+            CoDaPackImporter imp = new CoDaPackImporter().setParameters("format:codapack¿" + args[0]);
+            ArrayList<DataFrame> dfs = imp.importDataFrames();
+            
+            for(DataFrame df: dfs) {
+                main.addDataFrame(df);
+            }
+        }
+        
+        
+        /*FileWriter fit = null;
+        PrintWriter pw = null;
+        try {
+            fit = new FileWriter("arguments.txt");
+            pw = new PrintWriter(fit);
+            int i;
+            for (i = 0; i < args.length; i++) {
+                pw.println(args[i]);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (null!= fit) fit.close();
+            }
+            catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }*/
+        
     }
     public void forceUpdate(){
         String previous  = CoDaPackConf.CoDaVersion;
         try {
             
-            CoDaPackConf.CoDaVersion = "2 00 0";
+            CoDaPackConf.CoDaVersion = "2 02 04";
             CoDaPackConf.saveConfiguration();
             Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");
         } catch (IOException ex) {
