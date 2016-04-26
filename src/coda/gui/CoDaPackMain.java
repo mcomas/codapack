@@ -30,6 +30,7 @@ import coda.gui.table.TablePanel;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.CoDaPackImporter;
 import coda.io.ExportData;
+import coda.io.ImportRDA;
 import coda.io.WorkspaceIO;
 import coda.plot2.TernaryPlot2dDisplay;
 import coda.plot2.objects.Ternary2dGridObject;
@@ -56,6 +57,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.script.ScriptException;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -132,7 +134,11 @@ public final class CoDaPackMain extends JFrame{
         jMenuBar.addCoDaPackMenuListener(new CoDaPackMenuListener(){
             @Override
             public void menuItemClicked(String v) {
-                eventCoDaPack(v);
+                try {
+                    eventCoDaPack(v);
+                } catch (ScriptException ex) {
+                    Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
@@ -224,7 +230,7 @@ public final class CoDaPackMain extends JFrame{
         if(activeDataFrame == -1) return null;
         return dataFrame.get(activeDataFrame);
     }
-    public void eventCoDaPack(String action){
+    public void eventCoDaPack(String action) throws ScriptException{
         String title = action;
         String ruta = fillRecentPath();
         JFileChooser chooseFile = new JFileChooser(ruta);
@@ -240,6 +246,20 @@ public final class CoDaPackMain extends JFrame{
                 if( df != null) addDataFrame(df);
                 importMenu.dispose();
             }
+            ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
+            copyRecentPath(ruta);
+        }else if(title.equals(jMenuBar.ITEM_IMPORT_RDA)){
+            //Aquí tractem l'event IMPORT_RDA
+            chooseFile.resetChoosableFileFilters();
+            chooseFile.setFileFilter(new FileNameExtensionFilter("R data file", "RData", "rda"));
+            
+            if(chooseFile.showOpenDialog(jSplitPane) == JFileChooser.APPROVE_OPTION){
+                ImportRDA impdf = new ImportRDA(chooseFile);
+                ImportRDAMenu imprdam = new ImportRDAMenu(this, chooseFile, impdf);
+                imprdam.setVisible(true,true);
+                
+            }
+            //Copiem la ruta per recordar-la
             ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
             copyRecentPath(ruta);
         }else if(title.equals(jMenuBar.ITEM_IMPORT_CSV)){
@@ -467,10 +487,8 @@ public final class CoDaPackMain extends JFrame{
         
         //Si s'ha clicat un arxiu associat ens arribarà com argument i el tractem
         if (args.length>0) {
-            //Creem un CoDaPackMenu per guardar l'arxiu a recent files
-            CoDaPackMenu cpm = new CoDaPackMenu();
             //Guardem la ruta i l'arxiu a recent files
-            cpm.saveRecentFile(args[0]);
+            main.jMenuBar.saveRecentFile(args[0]);
             //Obrim l'arxiu 
             CoDaPackImporter imp = new CoDaPackImporter().setParameters("format:codapack¿" + args[0]);
             ArrayList<DataFrame> dfs = imp.importDataFrames();
