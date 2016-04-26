@@ -22,35 +22,61 @@ package coda.gui.menu;
 import coda.DataFrame;
 import coda.gui.utils.DataSelector;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataFrameSelector;
+import coda.io.ImportRDA;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Point;
+import javax.script.ScriptException;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import org.renjin.sexp.StringVector;
 /**
  *
  * @author mcomas
  */
 public abstract class AbstractMenuDialog extends JDialog{
     final DataSelector ds;
+    DataFrameSelector dfs;
     public JPanel optionsPanel = new JPanel();;
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     CoDaPackMain mainApplication;
+    ImportRDA imp_df;
     boolean allowEmpty = false;
+    String variables[];
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty, boolean categoric){
         super(mainApp, title);
         mainApplication = mainApp;
 
+        dfs = null;
         ds = new DataSelector(mainApplication.getActiveDataFrame(), groups, categoric);
         initialize();
+    }
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, JFileChooser chooseFile, ImportRDA impdf) throws ScriptException{
+        super(mainApp, title);
+        mainApplication = mainApp;
+        ds = null;
+        imp_df = impdf;
+        String fname = chooseFile.getSelectedFile().getAbsolutePath();
+        StringVector df_names = (StringVector)imp_df.getDataFramesNames(fname);
+        if (df_names.length()!=0) {
+            variables = df_names.toArray();
+            dfs = new DataFrameSelector(variables);
+            initialize();
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "No data frames available");
+            dfs = null;
+        }
     }
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty){
         super(mainApp, title);
         mainApplication = mainApp;
-
+        dfs = null;
         this.allowEmpty = allowEmpty;
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
         initialize();
@@ -58,6 +84,7 @@ public abstract class AbstractMenuDialog extends JDialog{
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups){
         super(mainApp, title);
         mainApplication = mainApp;
+        dfs = null;
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
         initialize();
     }
@@ -70,7 +97,8 @@ public abstract class AbstractMenuDialog extends JDialog{
         setResizable(false);
         getContentPane().setLayout(new BorderLayout());
         setSize(560,430);
-        getContentPane().add(ds, BorderLayout.CENTER);
+        if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);
+        else if (dfs!=null) getContentPane().add(dfs, BorderLayout.CENTER);
 
         JPanel eastPanel = new JPanel();
         optionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
@@ -106,7 +134,14 @@ public abstract class AbstractMenuDialog extends JDialog{
             super.setVisible(v);
         }
     }
+    public void setVisible(boolean v, boolean b){
+        if (b==true && v==true) super.setVisible(v);
+        else if (b==false && v==false) super.setVisible(v);
+    }
     public abstract void acceptButtonActionPerformed();
+    public DataFrameSelector getDFS() {
+        return dfs;
+    }
 
     public boolean[] getValidComposition(DataFrame df, String[] selectedNames){
         boolean selection[] = df.getValidCompositions(selectedNames);
@@ -163,6 +198,9 @@ public abstract class AbstractMenuDialog extends JDialog{
     }
     public String[] getSelectedData(){
         return ds.getSelectedData();
+    }
+    public ImportRDA getRDA() {
+        return imp_df;
     }
 }
 
