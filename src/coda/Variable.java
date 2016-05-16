@@ -74,6 +74,8 @@ public class Variable extends ArrayList<Element>{
         for(int i=0;i<data.length;i++){
             if(data[i] == 0)
                 this.add(i, new Zero());
+            else if(Double.isNaN(data[i]))
+                this.add(i, new NonAvailable());
             else
                 this.add(i , new Numeric(data[i]));
         }

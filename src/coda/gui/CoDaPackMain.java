@@ -251,16 +251,22 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_IMPORT_RDA)){
             //Aquí tractem l'event IMPORT_RDA
             chooseFile.resetChoosableFileFilters();
+            //Filtrem per llegir només els arxius RDA
             chooseFile.setFileFilter(new FileNameExtensionFilter("R data file", "RData", "rda"));
-            
+
+            //Comprovem si es selecciona un arxiu aprovat
             if(chooseFile.showOpenDialog(jSplitPane) == JFileChooser.APPROVE_OPTION){
+                //Creem una nova instància ImportRDA, serà l'encarregada de mostrar i obrir els dataframes
                 ImportRDA impdf = new ImportRDA(chooseFile);
+                //Creem una nova instància ImportRDAMenu, serà l'encarregada de gestionar el menú
                 ImportRDAMenu imprdam = new ImportRDAMenu(this, chooseFile, impdf);
+                //Fem el menú visible
                 imprdam.setVisible(true,true);
                 
             }
             //Copiem la ruta per recordar-la
             ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
+            //Guardem la ruta
             copyRecentPath(ruta);
         }else if(title.equals(jMenuBar.ITEM_IMPORT_CSV)){
             chooseFile.resetChoosableFileFilters();

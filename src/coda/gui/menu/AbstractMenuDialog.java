@@ -61,7 +61,7 @@ public abstract class AbstractMenuDialog extends JDialog{
         mainApplication = mainApp;
         ds = null;
         imp_df = impdf;
-        String fname = chooseFile.getSelectedFile().getAbsolutePath();
+        String fname = chooseFile.getSelectedFile().getAbsolutePath().replace("\\","/");
         StringVector df_names = (StringVector)imp_df.getDataFramesNames(fname);
         if (df_names.length()!=0) {
             variables = df_names.toArray();

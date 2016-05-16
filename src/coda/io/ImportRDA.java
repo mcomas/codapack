@@ -25,6 +25,7 @@
 package coda.io;
 
 import coda.DataFrame;
+import coda.NonAvailable;
 import coda.Variable;
 import java.util.ArrayList;
 import javax.script.ScriptEngine;
@@ -42,36 +43,41 @@ import org.renjin.sexp.StringVector;
  * @author david
  */
 public class ImportRDA {
-    static ScriptEngineManager manager = new ScriptEngineManager();
-    static ScriptEngine engine = manager.getEngineByName("Renjin");
+    ScriptEngineManager manager;
+    ScriptEngine engine;
     
-    static String fname;
-    static StringVector df_names;
+    String fname;
+    StringVector df_names;
     //Creem la llista de dataFrames que contindrà els data frames seleccionats
     ArrayList<DataFrame> sel_dfs = new ArrayList<DataFrame>();
     JFileChooser cf;
     String prefix = null;
     String suffix = null;
-    
+
+    //El constructor
     public ImportRDA(JFileChooser chooseFile) throws ScriptException {
+        manager = new ScriptEngineManager(); //Static ¿?
+        engine = manager.getEngineByName("Renjin");
         cf = chooseFile;
-        df_names = getDataFramesNames(chooseFile.getSelectedFile().getAbsolutePath());
+        df_names = getDataFramesNames(chooseFile.getSelectedFile().getAbsolutePath().replace("\\","/"));
+        
     }
-    
-    static public StringVector getDataFramesNames(String filename) throws ScriptException {
+
+    //Obté el nom dels dataframes que conté l'arxiu filename i el retorna
+    public StringVector getDataFramesNames(String filename) throws ScriptException {
         if(engine == null) {
             throw new RuntimeException("Renjin Script Engine not found on the classpath.");
         }
         fname = filename;
         engine.eval("load('" + fname + "')");
-        engine.eval("x = sapply(sapply(ls(), get), is.data.frame)");
-        System.out.println(engine.eval("names(x)"));
-        System.out.println(engine.eval("names(x)[(x==TRUE)]"));
-        StringVector sdf = (StringVector)engine.eval("names(x)[(x==TRUE)]");
+        engine.eval("CDP_nms = ls()");
+        engine.eval("CDP_x = sapply(lapply(CDP_nms, get), is.data.frame)");
+        StringVector sdf = (StringVector)engine.eval("CDP_nms[CDP_x==TRUE]");
         
         return sdf;
     }
-    
+
+    //Aquest mètode és l'encarregat d'obrir els dataframes seleccionats
     public ArrayList<DataFrame> getDfSelected(String[] sel_names, String pre, String su) throws ScriptException, DataFrame.DataFrameException {
         int d=0;
         prefix = pre;
@@ -80,8 +86,9 @@ public class ImportRDA {
             for (String name : df_names.toArray()) {
                 if (sel_name.equals(name)){
                     String titledf = name;
-                    if (prefix!=null) titledf=prefix+name;
-                    if (suffix!=null) titledf=name+suffix;
+                    if (prefix!=null && suffix!=null) titledf=prefix+name+suffix;
+                    else if (prefix!=null) titledf=prefix+name;
+                    else if (suffix!=null) titledf=name+suffix;
                     DataFrame dataf = new DataFrame(titledf);
                     
                     ListVector df = (ListVector)engine.eval(name);
