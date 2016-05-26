@@ -62,13 +62,13 @@ public class CoDaPackMenu extends JMenuBar{
             public JMenuItem itemImportCSV;
             public final String ITEM_IMPORT_CSV = "Import CSV/Text Data...";
             public JMenuItem itemImportRDA;
-            public final String ITEM_IMPORT_RDA = "Import RDA Data...";
+            public final String ITEM_IMPORT_RDA = "Import R Data...";
         public JMenu menuExport;
         public final String ITEM_EXPORT = "Export";
             public JMenuItem itemExportXLS;
             public final String ITEM_EXPORT_XLS = "Export Data to XLS...";
             public JMenuItem itemExportR;
-            public final String ITEM_EXPORT_R = "Export Data to RData...";
+            public final String ITEM_EXPORT_R = "Export Data to R Data...";
         public JMenuItem itemdelDataFrame;
         public final String ITEM_DEL_DATAFRAME = "Delete Table";
         public JMenuItem itemConfiguration;

@@ -450,7 +450,8 @@ public final class CoDaPackMain extends JFrame{
         /*
          * Look and Feel: change appearence according to OS
          */
-        try {
+
+       try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(CoDaPackMain.class.getName())

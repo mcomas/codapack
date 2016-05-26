@@ -79,7 +79,7 @@ public class ImportRDAMenu extends AbstractMenuDialog{
     
     
     public ImportRDAMenu(CoDaPackMain mainApp, JFileChooser chooseFile, ImportRDA impdf) throws ScriptException {
-        super(mainApp, "Import RDA File", false, chooseFile, impdf);
+        super(mainApp, "Import R Data File", false, chooseFile, impdf);
         
         
         //assignem mida als quadres de text
@@ -122,7 +122,7 @@ public class ImportRDAMenu extends AbstractMenuDialog{
                 mainApplication.addDataFrame(dataf);
             }
         }else{
-            JOptionPane.showMessageDialog(this, "Select at list one Data Frame");
+            JOptionPane.showMessageDialog(this, "Select at least one Data Frame");
         }
     }
 

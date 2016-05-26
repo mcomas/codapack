@@ -25,7 +25,6 @@
 package coda.io;
 
 import coda.DataFrame;
-import coda.NonAvailable;
 import coda.Variable;
 import java.util.ArrayList;
 import javax.script.ScriptEngine;
@@ -34,7 +33,6 @@ import javax.script.ScriptException;
 import javax.swing.JFileChooser;
 import org.renjin.sexp.DoubleVector;
 import org.renjin.sexp.ListVector;
-import org.renjin.sexp.LogicalVector;
 import org.renjin.sexp.SEXP;
 import org.renjin.sexp.StringVector;
 
