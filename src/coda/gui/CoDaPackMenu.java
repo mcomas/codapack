@@ -50,7 +50,7 @@ public class CoDaPackMenu extends JMenuBar{
         public JMenuItem itemSave;
         public final String ITEM_SAVE = "Save Workspace...";
         public JMenu menuRecent;
-        public final String ITEM_RECENT = "Open Recent Workspace";
+        public final String ITEM_RECENT = "Recent Workspace";
             public JMenuItem itemClearRecent;
             public final String ITEM_CLEAR_RECENT = "Clear Items";
         public JMenuItem itemNewDF;
@@ -61,12 +61,14 @@ public class CoDaPackMenu extends JMenuBar{
             public final String ITEM_IMPORT_XLS = "Import XLS Data...";
             public JMenuItem itemImportCSV;
             public final String ITEM_IMPORT_CSV = "Import CSV/Text Data...";
+            public JMenuItem itemImportRDA;
+            public final String ITEM_IMPORT_RDA = "Import R Data...";
         public JMenu menuExport;
         public final String ITEM_EXPORT = "Export";
             public JMenuItem itemExportXLS;
             public final String ITEM_EXPORT_XLS = "Export Data to XLS...";
             public JMenuItem itemExportR;
-            public final String ITEM_EXPORT_R = "Export Data to RData...";
+            public final String ITEM_EXPORT_R = "Export Data to R Data...";
         public JMenuItem itemdelDataFrame;
         public final String ITEM_DEL_DATAFRAME = "Delete Table";
         public JMenuItem itemConfiguration;
@@ -365,6 +367,7 @@ public class CoDaPackMenu extends JMenuBar{
                 menuImport = new JMenu();
                     itemImportCSV = new JMenuItem();
                     itemImportXLS = new JMenuItem();
+                    itemImportRDA = new JMenuItem();
                 menuExport = new JMenu();
                     itemExportXLS = new JMenuItem();
                     itemExportR = new JMenuItem();
@@ -429,6 +432,7 @@ public class CoDaPackMenu extends JMenuBar{
         menuFile.add(menuImport);
         addJMenuItem(menuImport, itemImportCSV, ITEM_IMPORT_CSV);
         addJMenuItem(menuImport, itemImportXLS, ITEM_IMPORT_XLS);
+        addJMenuItem(menuImport, itemImportRDA, ITEM_IMPORT_RDA);
         
         menuExport.setText(ITEM_EXPORT);
         menuFile.add(menuExport);

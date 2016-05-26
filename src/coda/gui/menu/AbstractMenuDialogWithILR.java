@@ -56,8 +56,8 @@ public abstract class AbstractMenuDialogWithILR extends AbstractMenuDialog{
         ButtonGroup group1 = new ButtonGroup();
         group1.add(part);
         group1.add(base);
-        optionsPanel.add(part);
-        optionsPanel.add(base);
+        //optionsPanel.add(part);
+        //optionsPanel.add(base);
 
     }
     public void setPartition(int partition[][]){
