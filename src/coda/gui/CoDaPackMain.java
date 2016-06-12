@@ -219,6 +219,21 @@ public final class CoDaPackMain extends JFrame{
                     df.name + "</i> is already loaded.</html>");
         }
     }
+    public void addDataFrameRDR(DataFrame df){
+        if(isDataFrameNameAvailable(df.name)){
+            activeDataFrame = dataFrame.size();
+            dataFrame.add(df);
+            dataList.setData(df);
+            tablePanel.setDataFrame(df);
+            dataFrameSelector.removeItemListener(dataFrameListener);
+            dataFrameSelector.addItem(df.name);
+            dataFrameSelector.setSelectedItem(df.name);
+            dataFrameSelector.addItemListener(dataFrameListener);
+        }else{
+            JOptionPane.showMessageDialog(this,"<html>Dataframe <i>" +
+                    df.name + "</i> is already loaded.<br/>Please, use Prefix or Suffix Options.</html>");
+        }
+    }
     public void updateDataFrame(DataFrame df){
         dataList.setData(df);
         tablePanel.setDataFrame(df);

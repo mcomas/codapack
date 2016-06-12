@@ -119,7 +119,7 @@ public class ImportRDAMenu extends AbstractMenuDialog{
             setVisible(false, false);
             //Carreguem els dataframes seleccionats
             for (DataFrame dataf : sel_dfs) {
-                mainApplication.addDataFrame(dataf);
+                mainApplication.addDataFrameRDR(dataf);
             }
         }else{
             JOptionPane.showMessageDialog(this, "Select at least one Data Frame");
