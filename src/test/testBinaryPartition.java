@@ -27,8 +27,6 @@ package test;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.BinaryPartitionSelect;
-import coda.gui.menu.TransformationILRMenu;
-import coda.gui.utils.BinaryPartitionSelect;
 import coda.io.ImportData;
 import java.io.FileNotFoundException;
 import java.io.IOException;

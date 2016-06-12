@@ -361,8 +361,10 @@ public final class CoDaPackMain extends JFrame{
             new TransformationALRMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_RAW_CLR)){
             new TransformationCLRMenu(this).setVisible(true);
-        }else if(title.equals(jMenuBar.ITEM_RAW_ILR)){
-            new TransformationILRMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_T_RAW_ILR)) {
+            new TransformationRawILRMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_T_ILR_RAW)) {
+            new TransformationILRRawMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLAS_STATS_SUMMARY)){
             new ClasStatsSummaryMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_COMP_STATS_SUMMARY)){
@@ -533,7 +535,7 @@ public final class CoDaPackMain extends JFrame{
         String previous  = CoDaPackConf.CoDaVersion;
         try {
             
-            CoDaPackConf.CoDaVersion = "2 02 04";
+            CoDaPackConf.CoDaVersion = "2 02 05";
             CoDaPackConf.saveConfiguration();
             Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");
         } catch (IOException ex) {

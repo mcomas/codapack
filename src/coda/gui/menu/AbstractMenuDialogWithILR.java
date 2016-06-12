@@ -43,7 +43,7 @@ public abstract class AbstractMenuDialogWithILR extends AbstractMenuDialog{
     JRadioButton base;
     public AbstractMenuDialogWithILR(CoDaPackMain main, String text, boolean groups){
         super(main,text, groups);
-        optionsPanel.add(new JLabel("Defined base:"));
+        optionsPanel.add(new JLabel("Defined partition:"));
         JScrollPane jScrollPane1 = new JScrollPane();
         jScrollPane1.setPreferredSize(new java.awt.Dimension(185, 150));
 

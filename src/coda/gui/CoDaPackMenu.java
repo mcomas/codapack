@@ -84,8 +84,10 @@ public class CoDaPackMenu extends JMenuBar{
             public final String ITEM_RAW_ALR = "ALR";
             public JMenuItem itemTransformCLR;
             public final String ITEM_RAW_CLR = "CLR";
-            public JMenuItem itemTransformILR;
-            public final String ITEM_RAW_ILR = "ILR";
+            public JMenuItem itemTransformRawILR;
+            public final String ITEM_T_RAW_ILR = "Raw-ILR";
+            public JMenuItem itemTransformILRRaw;
+            public final String ITEM_T_ILR_RAW = "ILR-Raw";
         public JMenuItem itemCenter;
         public final String ITEM_CENTER = "Centering";
         public JMenuItem itemClosure;
@@ -379,7 +381,8 @@ public class CoDaPackMenu extends JMenuBar{
             menuTransforms = new JMenu();
                 itemTransformALR = new JMenuItem();
                 itemTransformCLR = new JMenuItem();
-                itemTransformILR = new JMenuItem();
+                itemTransformRawILR = new JMenuItem();
+                itemTransformILRRaw = new JMenuItem();
             itemCenter = new JMenuItem();
             itemClosure = new JMenuItem();
             itemAmalgamation = new JMenuItem();
@@ -451,7 +454,8 @@ public class CoDaPackMenu extends JMenuBar{
         menuData.add(menuTransforms);
         addJMenuItem(menuTransforms, itemTransformALR, ITEM_RAW_ALR);
         addJMenuItem(menuTransforms, itemTransformCLR, ITEM_RAW_CLR);
-        addJMenuItem(menuTransforms, itemTransformILR, ITEM_RAW_ILR);
+        addJMenuItem(menuTransforms, itemTransformRawILR, ITEM_T_RAW_ILR);
+        addJMenuItem(menuTransforms, itemTransformILRRaw, ITEM_T_ILR_RAW);
         addJMenuItem(menuData, itemCenter, ITEM_CENTER);
         addJMenuItem(menuData, itemClosure, ITEM_CLOSURE);
         addJMenuItem(menuData, itemAmalgamation, ITEM_AMALGAM);

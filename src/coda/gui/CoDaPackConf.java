@@ -105,7 +105,7 @@ public class CoDaPackConf {
 public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
 
 
-    public static String CoDaVersion = "2 02 04";
+    public static String CoDaVersion = "2 02 05";
     public static int CoDaUpdaterVersion = 4;
 
     public static int[] getVersionNum(){
