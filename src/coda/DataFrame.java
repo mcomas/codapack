@@ -53,6 +53,7 @@ public class DataFrame extends HashMap<String, Variable>{
      *  - varnames: Array containing the variable names ordered.
      */
     public String name;
+    public boolean change = false;
     private ArrayList<String> varnames = new ArrayList<String>();
     /**
      * Default constructor. DataFrame is initialized with name "default"
@@ -75,6 +76,7 @@ public class DataFrame extends HashMap<String, Variable>{
      *
      */
     public void setName(String name){
+        change = true;
         this.name = name;
     }
     /**
@@ -83,13 +85,16 @@ public class DataFrame extends HashMap<String, Variable>{
      *  @return  name the name
      *
      */
+    public void setChange(boolean b) { change = b;}
     public String getName(){
     	return name;
     }
+    public Boolean getChange() { return change; }
     public ArrayList<String> getNames(){
         return varnames;
     }
     public void rename(String oldname, String newname) throws DataFrameException{
+        change = true;
         Variable var = this.get(oldname);
         if(this.containsKey(newname))
             throw new DataFrameException("Variable name already defined");
@@ -122,11 +127,11 @@ public class DataFrame extends HashMap<String, Variable>{
      * name is already defined, the method add a character 'c' at the end
      * of the name.
      * 
-     * @param name
      * @param variable
      * @return
      */
     public Variable add(Variable variable) throws DataFrameException{
+        change = true;
         if(varnames.contains(variable.name))
             throw new DataFrameException("Variable name already defined");
         int m = varnames.size();
@@ -136,6 +141,7 @@ public class DataFrame extends HashMap<String, Variable>{
         return v;
     }
     public Variable replace(Variable variable) throws DataFrameException{
+        change = true;
         if(!varnames.contains(variable.name))
             throw new DataFrameException("Variable does not exist");
         Variable v = put(variable.name, variable);
@@ -143,6 +149,7 @@ public class DataFrame extends HashMap<String, Variable>{
         return v;
     }
     public Variable remove(String vname) throws DataFrameException{
+        change = true;
         if(!varnames.contains(vname))
             throw new DataFrameException("Variable does not exist");
         varnames.remove(vname);
@@ -151,6 +158,7 @@ public class DataFrame extends HashMap<String, Variable>{
         return v;
     }
     public Variable remove(Variable variable) throws DataFrameException{
+        change = true;
         return remove(variable.name);
     }
     public static class DataFrameException extends Exception{
@@ -318,7 +326,7 @@ public class DataFrame extends HashMap<String, Variable>{
         return valid;
     }
     public Variable addData(String name, Variable data){
-        
+        change = true;
         int m = varnames.size();
         if(varnames.contains(name)){
             return addData(name+"c",data);
@@ -327,7 +335,7 @@ public class DataFrame extends HashMap<String, Variable>{
         return this.put(name, data);
     }
     public Variable addData(String name, double[] data){
-
+        change = true;
         int n = varnames.size();
         if(varnames.contains(name)){
             return addData(name+"c",data);
@@ -336,6 +344,7 @@ public class DataFrame extends HashMap<String, Variable>{
         return this.put(name, new Variable(name, data));
     }
     public void addData(String name[], double[][] data){
+        change = true;
         int n = varnames.size();
         int m = name.length;
         for(int i=0;i<m;i++){

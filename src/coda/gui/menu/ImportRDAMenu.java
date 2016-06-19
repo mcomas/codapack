@@ -76,12 +76,15 @@ public class ImportRDAMenu extends AbstractMenuDialog{
     String[] sel_names;
     ArrayList<DataFrame> sel_dfs = new ArrayList<DataFrame>();
     ImportRDA imp_df;
+    //Guardem la ruta a l'arxiu en un string
+    String rf;
     
     
     public ImportRDAMenu(CoDaPackMain mainApp, JFileChooser chooseFile, ImportRDA impdf) throws ScriptException {
         super(mainApp, "Import R Data File", false, chooseFile, impdf);
         
-        
+        //Assignem el path a l'string rf
+        rf = chooseFile.getCurrentDirectory().getAbsolutePath();
         //assignem mida als quadres de text
         usedPrefix = new JTextField(8);
         usedSuffix = new JTextField(8);
