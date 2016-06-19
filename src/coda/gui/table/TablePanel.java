@@ -218,7 +218,6 @@ public final class TablePanel extends JPanel{
             }
         });
         table.setModel(new DataTableModel(df));
-        
     }
     private static Color outputColor = new Color(162,193,215);
     private class DataRenderer extends DefaultTableCellRenderer{

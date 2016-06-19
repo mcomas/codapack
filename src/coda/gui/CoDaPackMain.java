@@ -55,6 +55,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.script.ScriptException;
@@ -214,9 +215,26 @@ public final class CoDaPackMain extends JFrame{
             dataFrameSelector.addItem(df.name);
             dataFrameSelector.setSelectedItem(df.name);
             dataFrameSelector.addItemListener(dataFrameListener);
+            df.setChange(false);
         }else{
             JOptionPane.showMessageDialog(this,"<html>Dataframe <i>" +
                     df.name + "</i> is already loaded.</html>");
+        }
+    }
+    public void addDataFrameRDR(DataFrame df){
+        if(isDataFrameNameAvailable(df.name)){
+            activeDataFrame = dataFrame.size();
+            dataFrame.add(df);
+            dataList.setData(df);
+            tablePanel.setDataFrame(df);
+            dataFrameSelector.removeItemListener(dataFrameListener);
+            dataFrameSelector.addItem(df.name);
+            dataFrameSelector.setSelectedItem(df.name);
+            dataFrameSelector.addItemListener(dataFrameListener);
+            df.setChange(false);
+        }else{
+            JOptionPane.showMessageDialog(this,"<html>Dataframe <i>" +
+                    df.name + "</i> is already loaded.<br/>Please, use Prefix or Suffix Options.</html>");
         }
     }
     public void updateDataFrame(DataFrame df){
@@ -240,14 +258,16 @@ public final class CoDaPackMain extends JFrame{
                     new FileNameExtensionFilter("Excel files", "xls", "xlsx"));
             if(chooseFile.showOpenDialog(jSplitPane) ==
                     JFileChooser.APPROVE_OPTION){
+                ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
                 ImportXLSMenu importMenu = new ImportXLSMenu(this, true, chooseFile);
                 importMenu.setVisible(true);
                 DataFrame df = importMenu.getDataFrame();
-                if( df != null) addDataFrame(df);
+                if( df != null) {
+                    addDataFrame(df);
+                }
                 importMenu.dispose();
+                copyRecentPath(ruta);
             }
-            ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-            copyRecentPath(ruta);
         }else if(title.equals(jMenuBar.ITEM_IMPORT_RDA)){
             //Aquí tractem l'event IMPORT_RDA
             chooseFile.resetChoosableFileFilters();
@@ -277,14 +297,17 @@ public final class CoDaPackMain extends JFrame{
             
             if(chooseFile.showOpenDialog(jSplitPane) ==
                     JFileChooser.APPROVE_OPTION){
+
+                ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
                 ImportCSVMenu importMenu = new ImportCSVMenu(this, true, chooseFile);
                 importMenu.setVisible(true);
                 DataFrame df = importMenu.getDataFrame();
-                if( df != null) addDataFrame(df);
+                if( df != null) {
+                    addDataFrame(df);
+                }
                 importMenu.dispose();
+                copyRecentPath(ruta);
             }
-            ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-            copyRecentPath(ruta);
         }else if(title.equals(jMenuBar.ITEM_EXPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
@@ -302,27 +325,144 @@ public final class CoDaPackMain extends JFrame{
             }
             ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
             copyRecentPath(ruta);
-        }else if(title.equals(jMenuBar.ITEM_EXPORT_R)){
+        }else if(title.equals(jMenuBar.ITEM_EXPORT_R)) {
             new ExportRDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_OPEN)){
+            if (!dataFrame.isEmpty()) {
+                //Comprovar si hi ha canvis. si n'hi ha finestra
+                boolean hasChange = false;
+                Iterator<DataFrame> i = dataFrame.iterator();
+                while (hasChange == false && i.hasNext()) {
+                    DataFrame df = i.next();
+                    if (df.getChange()) hasChange = true;
+                }
+                if (hasChange) {
+                    int response = JOptionPane.showConfirmDialog(this, "<html>Your changes will be lost if you close <br/>Do you want to continue?</html>", "Confirm",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (response == JOptionPane.YES_OPTION){
+                        dataFrame.clear();
+                        activeDataFrame = -1;
+                        jMenuBar.active_path = null;
+                        dataList.clearData();
+                        tablePanel.clearData();
+                        dataFrameSelector.removeAllItems();
+                        CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
+                        ArrayList<DataFrame> dfs = imp.importDataFrames();
+                        for (DataFrame df : dfs) {
+                            addDataFrame(df);
+                        }
+                        jMenuBar.fillRecentFiles();
+                        jMenuBar.saveRecentFile(imp.getParameters());
+                        String fn = imp.getParameters();
+                        if (fn.startsWith("format:codapack¿")) {
+                            jMenuBar.active_path = fn.substring(16);
+                        } else jMenuBar.active_path = fn;
+                    }
+                }
+                else {
+                    dataFrame.clear();
+                    activeDataFrame = -1;
+                    jMenuBar.active_path = null;
+                    dataList.clearData();
+                    tablePanel.clearData();
+                    dataFrameSelector.removeAllItems();
+                    CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
+                    ArrayList<DataFrame> dfs = imp.importDataFrames();
+                    for (DataFrame df : dfs) {
+                        addDataFrame(df);
+                    }
+                    jMenuBar.fillRecentFiles();
+                    jMenuBar.saveRecentFile(imp.getParameters());
+                    String fn = imp.getParameters();
+                    if (fn.startsWith("format:codapack¿")) {
+                        jMenuBar.active_path = fn.substring(16);
+                    } else jMenuBar.active_path = fn;
+                }
+            }else {
+                CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
+                ArrayList<DataFrame> dfs = imp.importDataFrames();
+                for (DataFrame df : dfs) {
+                    addDataFrame(df);
+                }
+                jMenuBar.fillRecentFiles();
+                jMenuBar.saveRecentFile(imp.getParameters());
+                String fn = imp.getParameters();
+                if (fn.startsWith("format:codapack¿")) {
+                    jMenuBar.active_path = fn.substring(16);
+                } else jMenuBar.active_path = fn;
+            }
+        }else if(title.equals(jMenuBar.ITEM_ADD)){
             CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
             ArrayList<DataFrame> dfs = imp.importDataFrames();
-            for(DataFrame df: dfs)
+            for(DataFrame df: dfs) {
                 addDataFrame(df);
+            }
             jMenuBar.fillRecentFiles();
             jMenuBar.saveRecentFile(imp.getParameters());
             //jMenuBar.addRecentFile(imp.getParameters());
         }else if("format:codapack".equals(action.split("¿")[0])){
             CoDaPackImporter imp = new CoDaPackImporter().setParameters(action);
             ArrayList<DataFrame> dfs = imp.importDataFrames();
-            
-            for(DataFrame df: dfs)
+
+            String rf = imp.getRuta();
+            for(DataFrame df: dfs) {
                 addDataFrame(df);
+            }
             jMenuBar.fillRecentFiles();
             jMenuBar.saveRecentFile(imp.getParameters());
             //jMenuBar.addRecentFile(imp.getParameters());
-        }else if(title.equals(jMenuBar.ITEM_CLEAR_RECENT)){
+        }else if(title.equals(jMenuBar.ITEM_CLEAR_RECENT)) {
             jMenuBar.removeRecentFiles();
+        }
+        else if(title.equals(jMenuBar.ITEM_SAV)){
+            if (jMenuBar.active_path != null) {
+                String fileNameExt = ".cdp";
+                String fileName = jMenuBar.active_path;
+                String fn;
+                if (fileName.endsWith(".xls") || fileName.endsWith(".rda") || fileName.endsWith(".cdp") || fileName.endsWith(".rda") || fileName.endsWith(".txt") || fileName.endsWith(".csv")) {
+                    fn = fileName.substring(0, fileName.length() - 4);
+                } else if (fileName.endsWith(".xlsx")) fn = fileName.substring(0, fileName.length() - 5);
+                else if (fileName.endsWith(".RData")) fn = fileName.substring(0, fileName.length() - 6);
+                else fn = fileName + fileNameExt;
+                try {
+                    WorkspaceIO.saveWorkspace(fn + fileNameExt, this);
+                    jMenuBar.saveRecentFile(fn + fileNameExt);
+                    //Posem el valor de change de tots els dataframes a false
+                    Iterator<DataFrame> i = dataFrame.iterator();
+                    while (i.hasNext()) {
+                        DataFrame df = i.next();
+                        df.setChange(false);
+                    }
+                } catch (JSONException ex) {
+                    Logger.getLogger(CoDaPackMain.class.getName())
+                            .log(Level.SEVERE, null, ex);
+                }
+            }
+            else {
+                chooseFile.resetChoosableFileFilters();
+                chooseFile.setFileFilter(
+                        new FileNameExtensionFilter("CoDaPack Workspace", "cdp"));
+                if( chooseFile.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+                    String filename = chooseFile.getSelectedFile().getAbsolutePath();
+                    try {
+                        WorkspaceIO.saveWorkspace(
+                                filename.endsWith(".cdp") ? filename : filename + ".cdp", this);
+                        ruta = filename + ".cdp";
+                        jMenuBar.saveRecentFile(ruta);
+                        //Posem el valor de change de tots els dataframes a false
+                        Iterator<DataFrame> i = dataFrame.iterator();
+                        while (i.hasNext()) {
+                            DataFrame df = i.next();
+                            df.setChange(false);
+                        }
+                    } catch (JSONException ex) {
+                        Logger.getLogger(CoDaPackMain.class.getName())
+                                .log(Level.SEVERE, null, ex);
+                    }
+                }
+                ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
+                copyRecentPath(ruta);
+            }
         }else if(title.equals(jMenuBar.ITEM_SAVE)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
@@ -334,6 +474,12 @@ public final class CoDaPackMain extends JFrame{
                             filename.endsWith(".cdp") ? filename : filename + ".cdp", this);
                 ruta = filename + ".cdp";
                 jMenuBar.saveRecentFile(ruta);
+                    //Posem el valor de change de tots els dataframes a false
+                    Iterator<DataFrame> i = dataFrame.iterator();
+                    while (i.hasNext()) {
+                        DataFrame df = i.next();
+                        df.setChange(false);
+                    }
                 } catch (JSONException ex) {
                     Logger.getLogger(CoDaPackMain.class.getName())
                             .log(Level.SEVERE, null, ex);
@@ -349,11 +495,27 @@ public final class CoDaPackMain extends JFrame{
             }
         }else if(title.equals(jMenuBar.ITEM_QUIT)){
             jMenuBar.copyRecentFiles();
-            int response = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Confirm",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (response == JOptionPane.YES_OPTION){
-                dispose();
-                System.exit(0);
+            //Comprovar si hi ha canvis. si n'hi ha finestra
+            boolean hasChange = false;
+            Iterator<DataFrame> i = dataFrame.iterator();
+            while (hasChange == false && i.hasNext()) {
+                DataFrame df = i.next();
+                if (df.getChange()) hasChange = true;
+            }
+            if (hasChange) {
+                int response = JOptionPane.showConfirmDialog(this, "<html>Your changes will be lost if you close <br/>Do you want to exit?</html>", "Confirm",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (response == JOptionPane.YES_OPTION) {
+                    dispose();
+                    System.exit(0);
+                }
+            }else {
+                int response = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Confirm",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (response == JOptionPane.YES_OPTION) {
+                    dispose();
+                    System.exit(0);
+                }
             }
         }else if(title.equals(jMenuBar.ITEM_CONF)){
             new ConfigurationMenu(this).setVisible(true);
@@ -361,8 +523,10 @@ public final class CoDaPackMain extends JFrame{
             new TransformationALRMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_RAW_CLR)){
             new TransformationCLRMenu(this).setVisible(true);
-        }else if(title.equals(jMenuBar.ITEM_RAW_ILR)){
-            new TransformationILRMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_T_RAW_ILR)) {
+            new TransformationRawILRMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_T_ILR_RAW)) {
+            new TransformationILRRawMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLAS_STATS_SUMMARY)){
             new ClasStatsSummaryMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_COMP_STATS_SUMMARY)){
@@ -440,6 +604,7 @@ public final class CoDaPackMain extends JFrame{
                 activeDataFrame = combo.getSelectedIndex();
                 dataList.setData(dataFrame.get(activeDataFrame));
                 tablePanel.setDataFrame(dataFrame.get(activeDataFrame));
+                dataFrame.get(activeDataFrame).setChange(true);
             }
         }
     }    
@@ -533,7 +698,7 @@ public final class CoDaPackMain extends JFrame{
         String previous  = CoDaPackConf.CoDaVersion;
         try {
             
-            CoDaPackConf.CoDaVersion = "2 02 04";
+            CoDaPackConf.CoDaVersion = "2 03 00";
             CoDaPackConf.saveConfiguration();
             Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");
         } catch (IOException ex) {

@@ -164,6 +164,9 @@ public class CoDaPackImporter implements Importer{
         }
         return this;
     }
+    public String getRuta() {
+        return ruta;
+    }
     public String fillRecentPath() {
         String path = null;
         File arx = null;

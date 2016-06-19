@@ -46,8 +46,12 @@ public class CoDaPackMenu extends JMenuBar{
     public JMenu menuFile;
     public final String ITEM_FILE = "File";
         public JMenuItem itemOpen;
-        public final String ITEM_OPEN = "Open Workspace...";
+        public final String ITEM_OPEN = "Open Workspace";
+        public JMenuItem itemAdd;
+        public final String ITEM_ADD = "Add Workspace...";
         public JMenuItem itemSave;
+        public final String ITEM_SAV = "Save...";
+        public JMenuItem itemSaveWork;
         public final String ITEM_SAVE = "Save Workspace...";
         public JMenu menuRecent;
         public final String ITEM_RECENT = "Recent Workspace";
@@ -84,8 +88,10 @@ public class CoDaPackMenu extends JMenuBar{
             public final String ITEM_RAW_ALR = "ALR";
             public JMenuItem itemTransformCLR;
             public final String ITEM_RAW_CLR = "CLR";
-            public JMenuItem itemTransformILR;
-            public final String ITEM_RAW_ILR = "ILR";
+            public JMenuItem itemTransformRawILR;
+            public final String ITEM_T_RAW_ILR = "Raw-ILR";
+            public JMenuItem itemTransformILRRaw;
+            public final String ITEM_T_ILR_RAW = "ILR-Raw";
         public JMenuItem itemCenter;
         public final String ITEM_CENTER = "Centering";
         public JMenuItem itemClosure;
@@ -152,6 +158,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_FORCE_UPDATE = "Force update";
         public JMenuItem itemAbout;
         public final String ITEM_ABOUT = "About";
+
+    public String active_path = null;
     
     private JMenuItem addJMenuItem(JMenu menu, JMenuItem item, String title){
         //item.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
@@ -258,6 +266,7 @@ public class CoDaPackMenu extends JMenuBar{
                         for(CoDaPackMenuListener e: listeners){
                             e.menuItemClicked(rf);
                         }
+                        active_path = title;
                     }});
             }
             /*while(itr.hasNext()) {
@@ -360,7 +369,9 @@ public class CoDaPackMenu extends JMenuBar{
         
             menuFile = new JMenu();
                 itemOpen = new JMenuItem();
+                itemAdd = new JMenuItem();
                 itemSave = new JMenuItem();
+                itemSaveWork = new JMenuItem();
                 menuRecent = new JMenu();
                     itemClearRecent = new JMenuItem();
                 itemNewDF = new JMenuItem();
@@ -379,7 +390,8 @@ public class CoDaPackMenu extends JMenuBar{
             menuTransforms = new JMenu();
                 itemTransformALR = new JMenuItem();
                 itemTransformCLR = new JMenuItem();
-                itemTransformILR = new JMenuItem();
+                itemTransformRawILR = new JMenuItem();
+                itemTransformILRRaw = new JMenuItem();
             itemCenter = new JMenuItem();
             itemClosure = new JMenuItem();
             itemAmalgamation = new JMenuItem();
@@ -418,7 +430,9 @@ public class CoDaPackMenu extends JMenuBar{
         
         menuFile.setText(ITEM_FILE);
         addJMenuItem(menuFile, itemOpen, ITEM_OPEN);
-        addJMenuItem(menuFile, itemSave, ITEM_SAVE);
+        addJMenuItem(menuFile, itemAdd, ITEM_ADD);
+        addJMenuItem(menuFile, itemSave, ITEM_SAV);
+        addJMenuItem(menuFile, itemSaveWork, ITEM_SAVE);
         menuRecent.setText(ITEM_RECENT);
         menuFile.add(menuRecent);
         fillRecentFiles();
@@ -451,7 +465,8 @@ public class CoDaPackMenu extends JMenuBar{
         menuData.add(menuTransforms);
         addJMenuItem(menuTransforms, itemTransformALR, ITEM_RAW_ALR);
         addJMenuItem(menuTransforms, itemTransformCLR, ITEM_RAW_CLR);
-        addJMenuItem(menuTransforms, itemTransformILR, ITEM_RAW_ILR);
+        addJMenuItem(menuTransforms, itemTransformRawILR, ITEM_T_RAW_ILR);
+        addJMenuItem(menuTransforms, itemTransformILRRaw, ITEM_T_ILR_RAW);
         addJMenuItem(menuData, itemCenter, ITEM_CENTER);
         addJMenuItem(menuData, itemClosure, ITEM_CLOSURE);
         addJMenuItem(menuData, itemAmalgamation, ITEM_AMALGAM);

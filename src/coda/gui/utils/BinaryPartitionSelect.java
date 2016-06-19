@@ -311,6 +311,7 @@ public class BinaryPartitionSelect extends JDialog{
         }
         partitionTable.setNextStep(partition);
         partitionTable.updateUI();
+        partitionTable.setDefaultRenderer(Object.class, partitionTable.cellRend );
 
         if(actualStep + 1 == nvariables){
             next.setText("Accept");
