@@ -86,9 +86,6 @@ public class DataFrame extends HashMap<String, Variable>{
      *
      */
     public void setChange(boolean b) {
-        System.out.print("Canviat valor variable CHANGE del dataframe "+name+" a ");
-        if (change == true) System.out.println("CERT");
-        else System.out.println("FALÇ");
         change = b;
     }
     public String getName(){

@@ -328,9 +328,7 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_EXPORT_R)) {
             new ExportRDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_OPEN)){
-            System.out.println("Entrem a OPEN");
             if (!dataFrame.isEmpty()) {
-                System.out.println("Hi ha dataframes oberts");
                 //Comprovar si hi ha canvis. si n'hi ha finestra
                 boolean hasChange = false;
                 Iterator<DataFrame> i = dataFrame.iterator();
@@ -339,7 +337,6 @@ public final class CoDaPackMain extends JFrame{
                     if (df.getChange()) hasChange = true;
                 }
                 if (hasChange) {
-                    System.out.println("Algun dataframe obert ha patit canvis");
                     int response = JOptionPane.showConfirmDialog(this, "<html>Your changes will be lost if you close <br/>Do you want to continue?</html>", "Confirm",
                             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (response == JOptionPane.YES_OPTION){
@@ -363,14 +360,12 @@ public final class CoDaPackMain extends JFrame{
                     }
                 }
                 else {
-                    System.out.println("Cap dataframe obert ha patit canvis");
                     dataFrame.clear();
                     activeDataFrame = -1;
                     jMenuBar.active_path = null;
                     dataList.clearData();
                     tablePanel.clearData();
                     dataFrameSelector.removeAllItems();
-                    System.out.println("Despres de netejar hi ha "+dataFrame.size()+" dataframes actius");
                     CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
                     ArrayList<DataFrame> dfs = imp.importDataFrames();
                     for (DataFrame df : dfs) {
@@ -384,7 +379,6 @@ public final class CoDaPackMain extends JFrame{
                     } else jMenuBar.active_path = fn;
                 }
             }else {
-                System.out.println("NO hi ha dataframes oberts");
                 CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
                 ArrayList<DataFrame> dfs = imp.importDataFrames();
                 for (DataFrame df : dfs) {
@@ -430,7 +424,6 @@ public final class CoDaPackMain extends JFrame{
                 } else if (fileName.endsWith(".xlsx")) fn = fileName.substring(0, fileName.length() - 5);
                 else if (fileName.endsWith(".RData")) fn = fileName.substring(0, fileName.length() - 6);
                 else fn = fileName + fileNameExt;
-                System.out.println("Adreça on guardar: " + fn + fileNameExt);
                 try {
                     WorkspaceIO.saveWorkspace(fn + fileNameExt, this);
                     jMenuBar.saveRecentFile(fn + fileNameExt);
@@ -451,7 +444,6 @@ public final class CoDaPackMain extends JFrame{
                         new FileNameExtensionFilter("CoDaPack Workspace", "cdp"));
                 if( chooseFile.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
                     String filename = chooseFile.getSelectedFile().getAbsolutePath();
-                    System.out.println("filename és: "+filename);
                     try {
                         WorkspaceIO.saveWorkspace(
                                 filename.endsWith(".cdp") ? filename : filename + ".cdp", this);
@@ -477,7 +469,6 @@ public final class CoDaPackMain extends JFrame{
                     new FileNameExtensionFilter("CoDaPack Workspace", "cdp"));
             if( chooseFile.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
                 String filename = chooseFile.getSelectedFile().getAbsolutePath();
-                System.out.println("filename és: "+filename);
                 try {
                     WorkspaceIO.saveWorkspace(
                             filename.endsWith(".cdp") ? filename : filename + ".cdp", this);
@@ -512,7 +503,6 @@ public final class CoDaPackMain extends JFrame{
                 if (df.getChange()) hasChange = true;
             }
             if (hasChange) {
-                System.out.println("Algun dataframe obert ha patit canvis");
                 int response = JOptionPane.showConfirmDialog(this, "<html>Your changes will be lost if you close <br/>Do you want to exit?</html>", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
