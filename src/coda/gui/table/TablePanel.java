@@ -338,8 +338,10 @@ public final class TablePanel extends JPanel{
             Variable var = dataFrame.get(col);
             Element el = dataFrame.get(col).get(row);
             Element new_el = var.setElementFromString(((String)arg).trim());
-            if(new_el != null)
+            if(new_el != null) {
                 var.set(row, new_el);
+                dataFrame.setChange(true);
+            }
         }
     }
 }
