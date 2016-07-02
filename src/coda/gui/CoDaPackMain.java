@@ -698,7 +698,7 @@ public final class CoDaPackMain extends JFrame{
         String previous  = CoDaPackConf.CoDaVersion;
         try {
             
-            CoDaPackConf.CoDaVersion = "2 03 00";
+            CoDaPackConf.CoDaVersion = "2 02 06";
             CoDaPackConf.saveConfiguration();
             Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");
         } catch (IOException ex) {
