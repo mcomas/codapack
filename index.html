@@ -33,7 +33,7 @@
   
   
 
-<link rel="next" href="codapack-start-developing.html">
+<link rel="next" href="importingexporting.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -99,9 +99,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> CoDaPack</a></li>
-<li class="chapter" data-level="2" data-path="codapack-start-developing.html"><a href="codapack-start-developing.html"><i class="fa fa-check"></i><b>2</b> CoDaPack: start developing</a></li>
-<li class="chapter" data-level="3" data-path="importingexporting.html"><a href="importingexporting.html"><i class="fa fa-check"></i><b>3</b> Importing/Exporting</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> CoDaPack</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#developing"><i class="fa fa-check"></i><b>1.1</b> Developing</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="importingexporting.html"><a href="importingexporting.html"><i class="fa fa-check"></i><b>2</b> Importing/Exporting</a></li>
 </ul>
 
       </nav>
@@ -128,6 +129,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Historically CoDaPack 3D was intended to be a package of Compositional Data with an easy and intuitive way of use. For this reason from the beginning it has been associated with Excel, software known and used for many people. However, over the years different versions of Excel and Windows have been appeared and CoDaPack has had to be adapted to these new versions due to some incompatibilities.</p>
 <p>For this reason and also because of CoDaPack only worked with Excel under windows; the Girona Compositional Data Group decided to implement a new software with at least the same capabilities and the same profile of users but independent of any other software.</p>
 <p>The new CoDaPack has three different areas: the variables area, the data area and the results area which has a textual output window and independent graphical output. Also it is expected to work at least under Unix, Window and MacOS operating systems.</p>
+<div id="developing" class="section level2">
+<h2><span class="header-section-number">1.1</span> Developing</h2>
+<p>Clone codapack (and optionally codapack-updater)</p>
+<pre><code>git clone http://github.com/mcomas/codapack.git
+git clone http://github.com/mcomas/codapack-updater.git</code></pre>
+<p>Download external libraries.</p>
+<pre><code>curl mcomas.net/codapack/codapack-lib.zip &gt; codapack-lib.zip</code></pre>
+<p>and decompress them into <code>codapack/libs</code> folder</p>
+<pre><code>unzip codapack-lib.zip -d codapack/lib/</code></pre>
+
+</div>
 </div>
             </section>
 
@@ -135,7 +147,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
         </div>
       </div>
 
-<a href="codapack-start-developing.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="importingexporting.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
