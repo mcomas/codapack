@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="codapack-start-developing.html">
+<link rel="prev" href="index.html">
+<link rel="next" href="importingexporting.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -119,23 +119,24 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">CoDaPack Manual</h1>
-<h4 class="date"><em>2016-07-05</em></h4>
-</div>
-<div id="codapack" class="section level1">
-<h1><span class="header-section-number">1</span> CoDaPack</h1>
-<p>Historically CoDaPack 3D was intended to be a package of Compositional Data with an easy and intuitive way of use. For this reason from the beginning it has been associated with Excel, software known and used for many people. However, over the years different versions of Excel and Windows have been appeared and CoDaPack has had to be adapted to these new versions due to some incompatibilities.</p>
-<p>For this reason and also because of CoDaPack only worked with Excel under windows; the Girona Compositional Data Group decided to implement a new software with at least the same capabilities and the same profile of users but independent of any other software.</p>
-<p>The new CoDaPack has three different areas: the variables area, the data area and the results area which has a textual output window and independent graphical output. Also it is expected to work at least under Unix, Window and MacOS operating systems.</p>
+<div id="codapack-start-developing" class="section level1">
+<h1><span class="header-section-number">2</span> CoDaPack: start developing</h1>
+<p>Clone codapack (and optionally codapack-updater)</p>
+<pre><code>git clone http://github.com/mcomas/codapack.git
+git clone http://github.com/mcomas/codapack-updater.git</code></pre>
+<p>Download external libraries.</p>
+<pre><code>curl mcomas.net/codapack/codapack-lib.zip &gt; codapack-lib.zip</code></pre>
+<p>and decompress them into <code>codapack/libs</code> folder</p>
+<pre><code>unzip codapack-lib.zip -d codapack/lib/</code></pre>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="codapack-start-developing.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="importingexporting.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
