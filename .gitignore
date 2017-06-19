@@ -2,4 +2,6 @@ lib/*
 !lib/README.txt
 build/
 dist/
+out/
 /nbproject/private/
+/target/

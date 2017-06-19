@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="lib">
+    <archive path="C:/Users/marcc/Research/codapack/lib/opencsv-2.3.jar" />
+    <archive path="C:/Users/marcc/Research/codapack/lib/jlatexmath-0.9.3.jar" />
+    <archive path="C:/Users/marcc/Research/codapack/lib/commons-math-2.1.jar" />
+    <archive path="C:/Users/marcc/Research/codapack/lib/poi-ooxml-3.7-20101029.jar" />
+    <archive path="C:/Users/marcc/Research/codapack/lib/swing-layout-1.0.4.jar" />
+    <archive path="C:/Users/marcc/Research/codapack/lib/poi-ooxml-schemas-3.7-20101029.jar" />
+    <archive path="C:/Users/marcc/Research/codapack/lib/poi-3.7-20101029.jar" />
+    <archive path="C:/Users/marcc/Research/codapack/lib/dom4j-1.6.1.jar" />
+    <archive path="C:/Users/marcc/Research/codapack/lib/xmlbeans-2.3.0.jar" />
+    <archive path="C:/Users/marcc/Research/codapack/lib/renjin-script-engine-0.8.1911-jar-with-dependencies.jar" />
+  </library>
+</eclipse-userlibraries>
+
