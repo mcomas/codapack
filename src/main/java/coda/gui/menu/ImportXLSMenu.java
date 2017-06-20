@@ -46,6 +46,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.jdesktop.layout.GroupLayout;
 import org.jdesktop.layout.LayoutStyle;
 
@@ -117,7 +118,11 @@ public class ImportXLSMenu extends JDialog {
         okButton.setText("OK");
         okButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                okButtonActionPerformed(evt);
+                try {
+                    okButtonActionPerformed(evt);
+                } catch (InvalidFormatException ex) {
+                    Logger.getLogger(ImportXLSMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
@@ -243,7 +248,7 @@ public class ImportXLSMenu extends JDialog {
             absolutePath.setText(chooseFile.getSelectedFile().getAbsolutePath());
         }
     }
-    private void okButtonActionPerformed(ActionEvent evt) {
+    private void okButtonActionPerformed(ActionEvent evt) throws InvalidFormatException {
         String fileName = absolutePath.getText();
         String nameDataFrame = dfname.getText();
 

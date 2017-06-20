@@ -34,13 +34,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 /**
  *
  * @author mcomas
  */
 public class testDendrogram {
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InvalidFormatException {
         try {
             DataFrame df = ImportData.importXLS("/Users/marc/CoDa.xls", true);
             //DataFrame df = ImportData.importXLS("G:/Recerca/EIO_RECERCA/New CoDaPack/CoData.xls", true);

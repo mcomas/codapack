@@ -58,4 +58,16 @@
             <url>http://dist.wso2.org/maven2/</url>
         </repository>
       </repositories>
+      <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <mainClass>coda.gui.CoDaPackMain</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
