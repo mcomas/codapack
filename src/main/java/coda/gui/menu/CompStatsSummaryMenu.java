@@ -71,7 +71,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
         percentileField = new JTextField("0 25 50 75 100",14);
         
         vararrayCheck = new JCheckBox("Variation Array", true);
-        vararrayOptions = new JButton("Options", new ImageIcon(CoDaPackMain.RESOURCE_PATH + "options.png"));
+        vararrayOptions = new JButton("Options", new ImageIcon(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "options.png")));
         //vararrayOptions.setSize(new Dimension(16,16));
         vararrayOptions.setAlignmentX(RIGHT_ALIGNMENT);
 

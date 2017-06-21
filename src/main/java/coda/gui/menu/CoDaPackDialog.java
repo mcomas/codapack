@@ -36,7 +36,7 @@ import javax.swing.JFrame;
 public class CoDaPackDialog extends JDialog{
     public CoDaPackDialog(){
         this.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(CoDaPackMain.RESOURCE_PATH + "logo.png"));
+                .getImage(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logo.png")));
         
     }
     public CoDaPackDialog(JFrame app, String title){

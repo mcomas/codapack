@@ -143,7 +143,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         });
 
         this.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(CoDaPackMain.RESOURCE_PATH + "logo.png"));
+                .getImage(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logo.png")));
 
         menuFile.add(itemImage);
         menuFile.add(itemConf);

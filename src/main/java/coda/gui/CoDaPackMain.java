@@ -38,6 +38,7 @@ import coda.plot2.objects.Ternary2dObject;
 import coda.plot2.window.TernaryPlot2dWindow;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -53,12 +54,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.script.ScriptException;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -82,7 +85,7 @@ public final class CoDaPackMain extends JFrame{
     private int activeDataFrame = -1;
     
     
-    public static String RESOURCE_PATH = "resources/";
+    public static String RESOURCE_PATH = "/resources/";
 
     private final Dimension screenDimension;
     
@@ -117,11 +120,12 @@ public final class CoDaPackMain extends JFrame{
     }
     public CoDaPackMain() {
         screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        // Es carrega el logo del CoDaPack
-        this.setIconImage(
-                Toolkit.getDefaultToolkit().getImage(
-                CoDaPackMain.RESOURCE_PATH + "logoL.png"));
+        // Es carrega el logo del CoDaPack        
         initComponents();
+        this.setIconImage(
+                Toolkit.getDefaultToolkit().
+                        getImage(
+                getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logoL.png")));
         outputPanel.addWelcome(CoDaPackConf.getVersion());
     }
     private void initComponents() {
@@ -668,43 +672,27 @@ public final class CoDaPackMain extends JFrame{
             for(DataFrame df: dfs) {
                 main.addDataFrame(df);
             }
-        }
-        
-        
-        /*FileWriter fit = null;
-        PrintWriter pw = null;
-        try {
-            fit = new FileWriter("arguments.txt");
-            pw = new PrintWriter(fit);
-            int i;
-            for (i = 0; i < args.length; i++) {
-                pw.println(args[i]);
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                if (null!= fit) fit.close();
-            }
-            catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }*/
-        
+        }    
     }
     public void forceUpdate(){
-        String previous  = CoDaPackConf.CoDaVersion;
-        try {
-            
-            CoDaPackConf.CoDaVersion = "2 02 06";
-            CoDaPackConf.saveConfiguration();
-            Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");
-        } catch (IOException ex) {
-            Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.exit(0);
+              
+        CoDaPackConf.saveConfiguration();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog(this, 
+                "CoDaPack is going to be updated. We need to close the application.", "Warning", dialogButton);
+        if(dialogResult == JOptionPane.YES_OPTION){
+            try {
+                //Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");
+                CoDaPackUpdater.main(null);
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (JSONException ex) {
+                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.exit(0);
+        }        
     }
     public static class UpdateConnection implements Runnable{
         CoDaPackMain main;

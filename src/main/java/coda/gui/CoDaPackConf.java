@@ -102,10 +102,11 @@ public class CoDaPackConf {
      * 
      * This object keeps the last version
      */
-public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
+    //public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
+    public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
 
 
-    public static String CoDaVersion = "2 02 10";
+    public static String CoDaVersion = "2 02 21";
     public static int CoDaUpdaterVersion = 4;
 
     public static int[] getVersionNum(){
@@ -119,6 +120,24 @@ public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
     public static String getVersion(){
         String[] version = CoDaVersion.split(" ");
         return version[0] + "." + version[1] + "." + version[2];
+    }
+    public static String newest(String v1, String v2){
+        String[] version1 = v1.split(" ");
+        String[] version2 = v2.split(" ");
+        
+        int iversion1, iversion2;
+        
+        for(int s=0;s<3;s++){
+            iversion1 = Integer.parseInt(version1[s]);
+            iversion2 = Integer.parseInt(version2[s]);
+            if(iversion1 > iversion2){
+                return v1;
+            }
+            if(iversion1 < iversion2){
+                return v2;
+            } 
+        }
+        return v1;
     }
     public static boolean updateNeeded(String v){
         int[] actVersion = getVersionNum();
@@ -214,8 +233,8 @@ public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
             FileReader file = new FileReader("codapack.conf");
             JSONObject configuration = new JSONObject(new BufferedReader(file).readLine());
             file.close();
-
-            CoDaVersion = configuration.getString("codapack-version");
+            
+            CoDaVersion = newest(CoDaVersion, configuration.getString("codapack-version"));
             CoDaUpdaterVersion = configuration.getInt("codapack-updater-version");
 
             decimalFormat = (char) configuration.getInt("decimal-format");

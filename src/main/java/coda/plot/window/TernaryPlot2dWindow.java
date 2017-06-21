@@ -87,8 +87,8 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
 
         
         //standard = new JButton(new ImageIcon("resources/ternary_xyz.png"));
-        inverted = new JButton(new ImageIcon(CoDaPackMain.RESOURCE_PATH + "ternary_xzy.png"));
-        rotate = new JButton(new ImageIcon(CoDaPackMain.RESOURCE_PATH + "rotate.png"));
+        inverted = new JButton(new ImageIcon(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "ternary_xzy.png")));
+        rotate = new JButton(new ImageIcon(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "rotate.png")));
 
         inverted.addActionListener(new java.awt.event.ActionListener() {
             
