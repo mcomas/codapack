@@ -48,6 +48,8 @@ public abstract class AbstractMenuDialog extends JDialog{
     ImportRDA imp_df;
     boolean allowEmpty = false;
     String variables[];
+    int WIDTH = 600;//560;
+    int HEIGHT = 500;//430;
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty, boolean categoric){
         super(mainApp, title);
         mainApplication = mainApp;
@@ -96,7 +98,7 @@ public abstract class AbstractMenuDialog extends JDialog{
 
         setResizable(false);
         getContentPane().setLayout(new BorderLayout());
-        setSize(560,430);
+        setSize(WIDTH,HEIGHT);
         if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);
         else if (dfs!=null) getContentPane().add(dfs, BorderLayout.CENTER);
 

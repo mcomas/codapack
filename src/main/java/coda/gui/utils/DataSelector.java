@@ -237,7 +237,7 @@ public final class DataSelector extends JPanel {
         selectedScrollPane.setViewportView(selectedList);
 
         insertButton.setText(">");
-        insertButton.setPreferredSize(new Dimension(42,25));
+        insertButton.setPreferredSize(new Dimension(50,30));
         insertButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 insertActionPerformed(evt);
@@ -245,7 +245,7 @@ public final class DataSelector extends JPanel {
         });
 
         removeButton.setText("<");
-        removeButton.setPreferredSize(new Dimension(42,25));
+        removeButton.setPreferredSize(new Dimension(50,30));
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeActionPerformed(evt);
