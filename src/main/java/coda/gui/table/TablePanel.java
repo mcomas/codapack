@@ -81,7 +81,7 @@ public final class TablePanel extends JPanel{
         table.setColumnSelectionAllowed(true); // allow selection only by columns
         table.setRowSelectionAllowed(false);
         table.getTableHeader().setReorderingAllowed(false); // avoid column reordering
-
+        table.setRowHeight(22);
         // create a row headers with default numbering
         rowTable = new RowNumberTable(table);
 
@@ -236,7 +236,7 @@ public final class TablePanel extends JPanel{
             setForeground(Color.black);
             setBackground(Color.white);
             setHorizontalAlignment(SwingConstants.RIGHT);
-            setFont(new Font ("Monospace", Font.PLAIN, 12));
+            setFont(new Font ("Monospace", Font.PLAIN, 14));
             
             Variable var = dataFrame.get(column);
             if(row < var.size()){

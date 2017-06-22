@@ -52,7 +52,7 @@ public class RowNumberTable extends JTable
         setModel( main.getModel() );
         setSelectionModel( main.getSelectionModel() );
         
-        
+    
         setRowSelectionAllowed(false);
         TableColumn column = new TableColumn();
         column.setHeaderValue(" ");

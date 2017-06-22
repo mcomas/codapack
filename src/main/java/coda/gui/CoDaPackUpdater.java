@@ -38,6 +38,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 /**
  *
@@ -171,24 +173,27 @@ public class CoDaPackUpdater {
                         URL url = new URL( CoDaPackConf.HTTP_ROOT + "codapack/" + addFiles.getString(j));
                         //URL url = new URL("http://ima.udg.edu/~mcomas/codapack/" + addFiles.getString(j));
                         URLConnection urlC = url.openConnection();
-                        InputStream is = url.openStream();
-                        FileOutputStream fos = null;
+                        //InputStream is = url.openStream();
+                        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+                        
+                        FileOutputStream fos = null;                        
                         File tempFile = new File(addFiles.getString(j).concat("_temp"));
                         fos = new FileOutputStream(tempFile);
-
-                        int val = 0, pval=0;
-                        while ((oneChar=is.read()) != -1){
-                            fos.write(oneChar);
-                            byteSize++;
-                            val = (int)((float)byteSize/(float)size * 100);
-                            if(pval < val){
-                                pval = val;
-                                pb.setValue(pval);
-                            }
-                        }
-                        System.out.println(((float)byteSize/(float)size) + "%");
-                        is.close();
-                        fos.close();
+                        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                        
+//                        int val = 0, pval=0;
+//                        while ((oneChar=is.read()) != -1){
+//                            fos.write(oneChar);
+//                            byteSize++;
+//                            val = (int)((float)byteSize/(float)size * 100);
+//                            if(pval < val){
+//                                pval = val;
+//                                pb.setValue(pval);
+//                            }
+//                        }
+                        //System.out.println(((float)byteSize/(float)size) + "%");
+                        //is.close();
+                        //fos.close();
 
                         (new File(addFiles.getString(j))).delete();
                         tempFile.renameTo(new File(addFiles.getString(j)));
