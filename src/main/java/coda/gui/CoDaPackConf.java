@@ -208,8 +208,6 @@ public class CoDaPackConf {
     public static void saveConfiguration(){
         try {
             JSONObject configuration = new JSONObject();
-            configuration.put("codapack-version", CoDaVersion);
-            configuration.put("codapack-updater-version", CoDaUpdaterVersion);
             configuration.put("decimal-format", decimalFormat);
             configuration.put("decimal-output", decimalOutputFormat);
             configuration.put("decimal-table", decimalTableFormat);
@@ -233,10 +231,6 @@ public class CoDaPackConf {
             FileReader file = new FileReader("codapack.conf");
             JSONObject configuration = new JSONObject(new BufferedReader(file).readLine());
             file.close();
-            
-            CoDaVersion = newest(CoDaVersion, configuration.getString("codapack-version"));
-            CoDaUpdaterVersion = configuration.getInt("codapack-updater-version");
-
             decimalFormat = (char) configuration.getInt("decimal-format");
             decimalOutputFormat = configuration.getString("decimal-output");
             decimalTableFormat = configuration.getString("decimal-table");

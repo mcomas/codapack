@@ -37,6 +37,7 @@ import coda.plot2.objects.Ternary2dGridObject;
 import coda.plot2.objects.Ternary2dObject;
 import coda.plot2.window.TernaryPlot2dWindow;
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -55,6 +56,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -596,7 +599,7 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_PC_PLOT)){
             new PrincipalComponentMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_FORCE_UPDATE)){
-            this.forceUpdate();
+            this.checkForUpdate();
         }else if(title.equals(jMenuBar.ITEM_ABOUT)){
             new CoDaPackAbout(this).setVisible(true);
         }
@@ -674,25 +677,32 @@ public final class CoDaPackMain extends JFrame{
             }
         }    
     }
-    public void forceUpdate(){
-              
-        CoDaPackConf.saveConfiguration();
-        int dialogButton = JOptionPane.YES_NO_OPTION;
-        int dialogResult = JOptionPane.showConfirmDialog(this, 
-                "CoDaPack is going to be updated. We need to close the application.", "Warning", dialogButton);
-        if(dialogResult == JOptionPane.YES_OPTION){
+    public void redirectForUpdating(){
+        Object[] options = {"Quit and download...",
+                    "No, thanks. Maybe later"};
+        int n = JOptionPane.showOptionDialog(this,
+                "CoDaPack 2.02.** is now available (you're using 2.02.**).",
+                "Update Available",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+        if(n == JOptionPane.YES_OPTION){
+            System.out.println("Update!!");
             try {
-                //Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");
-                CoDaPackUpdater.main(null);
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (JSONException ex) {
+                Desktop.getDesktop().browse(new URI("http://mcomas.net/codapack"));
+            } catch (URISyntaxException ex) {
                 Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.exit(0);
-        }        
+        }           
+    }
+    public void checkForUpdate(){
+
+                
+
     }
     public static class UpdateConnection implements Runnable{
         CoDaPackMain main;
@@ -723,33 +733,7 @@ public final class CoDaPackMain extends JFrame{
                     }
                     // The updater needs to be updated
                     if(CoDaPackConf.CoDaUpdaterVersion < updaterVersion){
-                        int response = JOptionPane.showConfirmDialog(main, "CoDaPack Updater needs to be updated", "Update confirmation",
-                            JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-                        if(response == JOptionPane.YES_OPTION){
-                            //System.out.println("Updating CoDaPack updater");
-                            url = new URL(CoDaPackConf.HTTP_ROOT + "codapack/CoDaPackUpdater.jar");
-
-                            InputStream is = url.openStream();
-                            
-                            File tempFile = new File("CoDaPackUpdater.jar_temp");
-                            FileOutputStream fos = new FileOutputStream(tempFile);
-                            int oneChar;
-                            while ((oneChar=is.read()) != -1){
-                                fos.write(oneChar);
-                            }
-                            is.close();
-                            fos.close();
-
-                            (new File("CoDaPackUpdater.jar")).delete();
-                            boolean result = tempFile.renameTo(new File("CoDaPackUpdater.jar"));
-
-                            CoDaPackConf.CoDaUpdaterVersion = updaterVersion;
-                            CoDaPackConf.saveConfiguration();
-                            CoDaPackUpdaterUpdated = true;
-                        }
-                    }else{
-                        // No update is needed
-                        CoDaPackUpdaterUpdated = true;
+                        main.redirectForUpdating();
                     }
                 }else{
                     CoDaPackUpdaterUpdated = false;
@@ -796,14 +780,14 @@ public final class CoDaPackMain extends JFrame{
             }
         }
         catch (Exception e) {
-           e.printStackTrace(); 
+          
         }
         finally {
             try {
                 if (null != fr) fr.close();
             }
             catch (Exception e2) {
-                e2.printStackTrace();
+                
             }
         }
         return path;

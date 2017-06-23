@@ -155,7 +155,7 @@ public class CoDaPackMenu extends JMenuBar{
    public JMenu menuHelp;
    public final String ITEM_HELP = "Help";
         public JMenuItem itemForceUpdate;
-        public final String ITEM_FORCE_UPDATE = "Force update";
+        public final String ITEM_FORCE_UPDATE = "Check for Updates";
         public JMenuItem itemAbout;
         public final String ITEM_ABOUT = "About";
 
@@ -180,32 +180,7 @@ public class CoDaPackMenu extends JMenuBar{
     public void saveLoadRecentFiles(){
         
     }
-    /*public void addRecentFile(final String rf){
-            if(rf != null){
-                String pars[] = rf.split("¿");
-                String path = pars[1];
-                
-                if(recentFile.containsKey(path)){
-                    menuFile.remove(recentFile.remove(path));
-                }
-                
-                JMenuItem item = new JMenuItem();
-                menuFile.add(item);
-                String fname = new File(path).getName();
-                item.setText(fname);
-                item.addActionListener(new java.awt.event.ActionListener() {
-                    @Override
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        JMenuItem jMenuItem = (JMenuItem)evt.getSource();
-                        String title = jMenuItem.getText();
-                        for(CoDaPackMenuListener e: listeners){
-                            e.menuItemClicked(rf);
-                        }
-                    }});
-               recentFile.put(path, item);
-            }
-        
-    }*/
+
     HashMap<String ,JMenuItem> recentFile;
     
     //Definició del LinkedHashMap que farà la gestió dels arxius recents
