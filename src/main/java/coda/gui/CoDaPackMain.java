@@ -131,6 +131,10 @@ public final class CoDaPackMain extends JFrame{
                 getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logoL.png")));
         outputPanel.addWelcome(CoDaPackConf.getVersion());
     }
+    public void closeApplication(){
+        CoDaPackConf.saveConfiguration();
+        System.exit(0);
+    }
     private void initComponents() {
         ITEM_APPLICATION_NAME = "CoDaPack v" + CoDaPackConf.getVersion();
         outputPanel = new OutputPanel();
@@ -257,7 +261,7 @@ public final class CoDaPackMain extends JFrame{
     }
     public void eventCoDaPack(String action) throws ScriptException{
         String title = action;
-        String ruta = fillRecentPath();
+        String ruta = CoDaPackConf.lastPath; //fillRecentPath();
         JFileChooser chooseFile = new JFileChooser(ruta);
         if(title.equals(jMenuBar.ITEM_IMPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
@@ -273,7 +277,7 @@ public final class CoDaPackMain extends JFrame{
                     addDataFrame(df);
                 }
                 importMenu.dispose();
-                copyRecentPath(ruta);
+                CoDaPackConf.lastPath = ruta;
             }
         }else if(title.equals(jMenuBar.ITEM_IMPORT_RDA)){
             //Aquí tractem l'event IMPORT_RDA
@@ -294,7 +298,7 @@ public final class CoDaPackMain extends JFrame{
             //Copiem la ruta per recordar-la
             ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
             //Guardem la ruta
-            copyRecentPath(ruta);
+            CoDaPackConf.lastPath = ruta;
         }else if(title.equals(jMenuBar.ITEM_IMPORT_CSV)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
@@ -313,7 +317,7 @@ public final class CoDaPackMain extends JFrame{
                     addDataFrame(df);
                 }
                 importMenu.dispose();
-                copyRecentPath(ruta);
+                CoDaPackConf.lastPath = ruta;
             }
         }else if(title.equals(jMenuBar.ITEM_EXPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
@@ -331,7 +335,7 @@ public final class CoDaPackMain extends JFrame{
                 }
             }
             ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-            copyRecentPath(ruta);
+            CoDaPackConf.lastPath = ruta;
         }else if(title.equals(jMenuBar.ITEM_EXPORT_R)) {
             new ExportRDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_OPEN)){
@@ -361,7 +365,7 @@ public final class CoDaPackMain extends JFrame{
                         jMenuBar.fillRecentFiles();
                         jMenuBar.saveRecentFile(imp.getParameters());
                         String fn = imp.getParameters();
-                        if (fn.startsWith("format:codapack¿")) {
+                        if (fn.startsWith("format:codapack?")) {
                             jMenuBar.active_path = fn.substring(16);
                         } else jMenuBar.active_path = fn;
                     }
@@ -381,7 +385,7 @@ public final class CoDaPackMain extends JFrame{
                     jMenuBar.fillRecentFiles();
                     jMenuBar.saveRecentFile(imp.getParameters());
                     String fn = imp.getParameters();
-                    if (fn.startsWith("format:codapack¿")) {
+                    if (fn.startsWith("format:codapack?")) {
                         jMenuBar.active_path = fn.substring(16);
                     } else jMenuBar.active_path = fn;
                 }
@@ -394,7 +398,7 @@ public final class CoDaPackMain extends JFrame{
                 jMenuBar.fillRecentFiles();
                 jMenuBar.saveRecentFile(imp.getParameters());
                 String fn = imp.getParameters();
-                if (fn.startsWith("format:codapack¿")) {
+                if (fn.startsWith("format:codapack?")) {
                     jMenuBar.active_path = fn.substring(16);
                 } else jMenuBar.active_path = fn;
             }
@@ -407,11 +411,9 @@ public final class CoDaPackMain extends JFrame{
             jMenuBar.fillRecentFiles();
             jMenuBar.saveRecentFile(imp.getParameters());
             //jMenuBar.addRecentFile(imp.getParameters());
-        }else if("format:codapack".equals(action.split("¿")[0])){
+        }else if("format:codapack".equals(action.split("\\?")[0])){
             CoDaPackImporter imp = new CoDaPackImporter().setParameters(action);
             ArrayList<DataFrame> dfs = imp.importDataFrames();
-
-            String rf = imp.getRuta();
             for(DataFrame df: dfs) {
                 addDataFrame(df);
             }
@@ -468,7 +470,7 @@ public final class CoDaPackMain extends JFrame{
                     }
                 }
                 ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-                copyRecentPath(ruta);
+                CoDaPackConf.lastPath = ruta;
             }
         }else if(title.equals(jMenuBar.ITEM_SAVE)){
             chooseFile.resetChoosableFileFilters();
@@ -493,7 +495,7 @@ public final class CoDaPackMain extends JFrame{
                 }
             }
             ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-            copyRecentPath(ruta);
+            CoDaPackConf.lastPath = ruta;
         }else if(title.equals(jMenuBar.ITEM_DEL_DATAFRAME)){
             if( dataFrame.size() > 0 ){
                 removeDataFrame(dataFrame.get(activeDataFrame));
@@ -514,14 +516,14 @@ public final class CoDaPackMain extends JFrame{
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
                     dispose();
-                    System.exit(0);
+                    this.closeApplication();
                 }
             }else {
                 int response = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
                     dispose();
-                    System.exit(0);
+                    this.closeApplication();
                 }
             }
         }else if(title.equals(jMenuBar.ITEM_CONF)){
@@ -599,7 +601,9 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_PC_PLOT)){
             new PrincipalComponentMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_FORCE_UPDATE)){
-            this.checkForUpdate();
+            CoDaPackConf.refusedVersion = CoDaPackConf.CoDaVersion;
+            UpdateConnection uc = new UpdateConnection(this);
+            new Thread(uc).start();
         }else if(title.equals(jMenuBar.ITEM_ABOUT)){
             new CoDaPackAbout(this).setVisible(true);
         }
@@ -643,7 +647,7 @@ public final class CoDaPackMain extends JFrame{
         /*
          *  Congifuration file creation if it not exists. Using static class CoDaPackConf
          */
-        File f = new File("codapack.conf");
+        File f = new File(CoDaPackConf.configurationFile);
         if(f.exists())
             CoDaPackConf.loadConfiguration();
         else
@@ -669,7 +673,7 @@ public final class CoDaPackMain extends JFrame{
             //Guardem la ruta i l'arxiu a recent files
             main.jMenuBar.saveRecentFile(args[0]);
             //Obrim l'arxiu 
-            CoDaPackImporter imp = new CoDaPackImporter().setParameters("format:codapack¿" + args[0]);
+            CoDaPackImporter imp = new CoDaPackImporter().setParameters("format:codapack?" + args[0]);
             ArrayList<DataFrame> dfs = imp.importDataFrames();
             
             for(DataFrame df: dfs) {
@@ -677,140 +681,70 @@ public final class CoDaPackMain extends JFrame{
             }
         }    
     }
-    public void redirectForUpdating(){
-        Object[] options = {"Quit and download...",
-                    "No, thanks. Maybe later"};
-        int n = JOptionPane.showOptionDialog(this,
-                "CoDaPack 2.02.** is now available (you're using 2.02.**).",
-                "Update Available",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[1]);
-        if(n == JOptionPane.YES_OPTION){
-            System.out.println("Update!!");
-            try {
-                Desktop.getDesktop().browse(new URI("http://mcomas.net/codapack"));
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }           
-    }
-    public void checkForUpdate(){
-
-                
-
-    }
+    
     public static class UpdateConnection implements Runnable{
         CoDaPackMain main;
         public UpdateConnection(CoDaPackMain main){
             this.main = main;
         }
         public void run() {
-            boolean CoDaPackUpdaterUpdated = false;
-            JSONObject data = null;
-            try {
-                URL url = new URL(CoDaPackConf.HTTP_ROOT + "codapack-updater.json");
-                InputStreamReader isr = new InputStreamReader( url.openStream() );
-
+            checkForUpdate();
+        }
+        public void redirectForUpdating(String newversion){
+            Object[] options = {"Quit and download...",
+                "No, thanks. Maybe later",
+                "No, thanks. Stop asking"};
+            int n = JOptionPane.showOptionDialog(main,
+                    "CoDaPack " + 
+                            newversion.replace(' ', '.') + 
+                            " is now available (you're using " + 
+                            CoDaPackConf.CoDaVersion.replace(' ','.') +
+                            ").",
+                    "Update Available",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+            if(n == JOptionPane.YES_OPTION){
                 try {
-                    data = new JSONObject(new BufferedReader(isr).readLine());
-                } catch (JSONException ex) {
-                    System.out.println("Error reading the JSON file");
+                    Desktop.getDesktop().browse(new URI("http://mcomas.net/codapack"));
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                main.closeApplication();
+            }
+            if(n == JOptionPane.CANCEL_OPTION){
+                CoDaPackConf.refusedVersion = newversion;
+                CoDaPackConf.saveConfiguration();
+            }
+        }
+        public void checkForUpdate(){
+                try {
+                    JSONObject serverData = null;
 
-                isr.close();
+                    System.out.println("Connecting to server...");
+                    URL url = new URL(CoDaPackConf.HTTP_ROOT + "codapack-updater.json");
 
-                if(data != null){
-                    int updaterVersion = 0;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
                     try {
-                        updaterVersion = data.getInt("updater-version");
+                        serverData = new JSONObject(br.readLine());
                     } catch (JSONException ex) {
                         Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    // The updater needs to be updated
-                    if(CoDaPackConf.CoDaUpdaterVersion < updaterVersion){
-                        main.redirectForUpdating();
-                    }
-                }else{
-                    CoDaPackUpdaterUpdated = false;
-                }
-            } catch (IOException ex) {
-                CoDaPackUpdaterUpdated = false;
-                System.out.println("Some problem connecting to IMA server");
-            }
-
-            // If updater is up to date updating process, if needed, can start
-            if(CoDaPackUpdaterUpdated == true){
-                try {
-                    // Checking if CoDaPack is updated
-                    if (CoDaPackConf.updateNeeded(data.getString("codapack-version"))) {
-                        int response = JOptionPane.showConfirmDialog(main, "There is a new version of CoDaPack available. Do you want to install it? If you say yes, CoDaPack is going to be closed automatically.", "Update confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-                        if (response == JOptionPane.YES_OPTION) {
-                            try {
-                                Process ps = Runtime.getRuntime().exec("java -jar CoDaPackUpdater.jar");
-                                System.exit(0);
-                            } catch (IOException ex) {
-                                System.out.println("It's not possible to execute the updater");
-                            }
-                        }
-                    }
-                } catch (JSONException ex) {
+                    br.close();
+                    System.out.println("Server version is: " + serverData.getString("codapack-version"));
+                    if(CoDaPackConf.updateNeeded(serverData.getString("codapack-version")))
+                        redirectForUpdating(serverData.getString("codapack-version"));
+                } catch (MalformedURLException ex) {
                     Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
-    //LLegeix l'ultim path escrit al arxiu recentPath.txt
-    public String fillRecentPath() {
-        String path = null;
-        File arx = null;
-        FileReader fr = null;
-        BufferedReader br = null;
-        try {
-            arx = new File("recentPath.txt");
-            fr = new FileReader(arx);
-            br = new BufferedReader(fr);
-            String linia;
-            if ((linia=br.readLine())!=null) {
-                path=linia;
-            }
-        }
-        catch (Exception e) {
-          
-        }
-        finally {
-            try {
-                if (null != fr) fr.close();
-            }
-            catch (Exception e2) {
-                
-            }
-        }
-        return path;
-    }
-    //Copia o substitueix l'últim path
-    public void copyRecentPath(String path) {
-        FileWriter fit = null;
-        PrintWriter pw = null;
-        try {
-            fit = new FileWriter("recentPath.txt");
-            pw = new PrintWriter(fit);
-            pw.println(path);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                if (null!= fit) fit.close();
-            }
-            catch (Exception e2) {
-                e2.printStackTrace();
-            }
+                } catch (IOException ex) {
+                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (JSONException ex) {
+                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+            } 
         }
     }
 }

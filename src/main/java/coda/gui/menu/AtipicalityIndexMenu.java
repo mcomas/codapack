@@ -60,7 +60,7 @@ public class AtipicalityIndexMenu extends AbstractMenuDialog{
         double atip[] = Utils.recoverData(CoDaStats.atipicalityIndex(vdata), selection);
 
         int count = 0;
-        for(int i=0;i<atip.length;i++) count += atip[i] > threshold ? 1 :0;
+        for(int i=0;i<atip.length;i++) count += atip[i] > threshold ? 1 : 0;
 
         int atipData[] = new int[count];
         count = 0;
@@ -71,7 +71,7 @@ public class AtipicalityIndexMenu extends AbstractMenuDialog{
         CoDaPackMain.outputPanel.addOutput(
                         new OutputAtipicality(threshold, atipData));
 
-        df.addData("atip", coda.Utils.recoverData(atip, selection));
+        df.addData("atip", atip);
         mainApplication.updateDataFrame(df);
 
         setVisible(false);

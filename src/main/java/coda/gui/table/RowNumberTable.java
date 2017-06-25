@@ -20,6 +20,8 @@
 package coda.gui.table;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -40,20 +42,32 @@ public class RowNumberTable extends JTable
     String names[] = null;
 
     public static final long serialVersionUID = 1L;
-    private JTable main;
+    private final JTable mainTable;
 
     public RowNumberTable(JTable table){
         
-        main = table;
-        main.addPropertyChangeListener( this );
+        mainTable = table;
+        mainTable.addPropertyChangeListener( this );
 
         setFocusable( false );
         setAutoCreateColumnsFromModel( false );
-        setModel( main.getModel() );
-        setSelectionModel( main.getSelectionModel() );
+        setModel(mainTable.getModel() );
+        setSelectionModel(mainTable.getSelectionModel() );
         
     
         setRowSelectionAllowed(false);
+
+        this.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mousePressed(MouseEvent me) {
+                updateUI();
+            }
+            @Override
+            public void mouseReleased(MouseEvent me) {
+                updateUI();
+            }
+        });
+        
         TableColumn column = new TableColumn();
         column.setHeaderValue(" ");
         addColumn( column );
@@ -90,7 +104,7 @@ public class RowNumberTable extends JTable
      */
     @Override
     public int getRowCount(){
-        return main.getRowCount();
+        return mainTable.getRowCount();
     }
     /**
      *
@@ -99,7 +113,7 @@ public class RowNumberTable extends JTable
      */
     @Override
     public int getRowHeight(int row){
-        return main.getRowHeight(row);
+        return mainTable.getRowHeight(row);
     }
     /*
      *  This table does not use any data from the main TableModel,
@@ -156,10 +170,10 @@ public class RowNumberTable extends JTable
     public void propertyChange(PropertyChangeEvent e){
         //  Keep the row table in sync with the main table
         if ("selectionModel".equals(e.getPropertyName())){
-                setSelectionModel( main.getSelectionModel() );
+                setSelectionModel(mainTable.getSelectionModel() );
         }
         if ("model".equals(e.getPropertyName())){
-                setModel( main.getModel() );
+                setModel(mainTable.getModel() );
         }
     }
 

@@ -63,7 +63,7 @@ public final class TablePanel extends JPanel{
      */
     DataFrame df = new DataFrame();
     public JTable table;
-    private JTable rowTable;
+    //private JTable rowTable;
     JScrollPane scrollPane1 = new JScrollPane();
     JPopupMenu pm = new JPopupMenu();
     CoDaPackMain main;
@@ -83,24 +83,26 @@ public final class TablePanel extends JPanel{
         table.getTableHeader().setReorderingAllowed(false); // avoid column reordering
         table.setRowHeight(22);
         // create a row headers with default numbering
-        rowTable = new RowNumberTable(table);
+        RowNumberTable rowTable = new RowNumberTable(table);
 
         // add scrolling to table panel
         add(scrollPane1, BorderLayout.CENTER);
         scrollPane1.getViewport().add(table, null);
         scrollPane1.setRowHeaderView(rowTable);
-        scrollPane1.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-            rowTable.getTableHeader());
+        scrollPane1.setCorner(
+                JScrollPane.UPPER_LEFT_CORNER,
+                rowTable.getTableHeader());
 
         table.addMouseListener(new MouseAdapter(){
             @Override
             public void mousePressed(MouseEvent me) {
                 showPopup(me);
+                table.updateUI();
             }
-
             @Override
             public void mouseReleased(MouseEvent me) {
                 showPopup(me);
+                table.updateUI();
             }
         });
         /*
@@ -114,7 +116,7 @@ public final class TablePanel extends JPanel{
         this.add(actions, java.awt.BorderLayout.NORTH);
         
     }
-
+   
     public void clearData(){
         table.setModel(new DataTableModel(new DataFrame()));
     }
@@ -194,9 +196,7 @@ public final class TablePanel extends JPanel{
                 DataFrame dfloc = ((DataTableModel)table.getModel()).dataFrame;
                 pm = new JPopupMenu();
                 pm.add(menuRenameVariable(dfloc, dfloc.get(col)));
-                pm.add(menuFactorizeVariable(dfloc, dfloc.get(col)));//new JMenuItem("factorize " + dfloc.get(col).getName()));
-                //one.setText("Rename variable " + df.get(col).getName() + ".");
-                //two.setText("Eliminate variable " + df.get(col).getName() + ".");
+                pm.add(menuFactorizeVariable(dfloc, dfloc.get(col)));
                 pm.show(table, p.x, p.y);
             }
         }
@@ -247,11 +247,6 @@ public final class TablePanel extends JPanel{
                     setBackground(isSelected ? new Color(162,193,215):  Color.orange);
                     setBackground(Color.orange);
                 }
-//                if(el instanceof NonAvailable){
-//                    setHorizontalAlignment(SwingConstants.CENTER);
-//                    //setBackground(isSelected ? outputColor :  new Color(162,193,215));
-//                    setBackground(new Color(162,193,215));
-//                }
             }
             if (isSelected){
                 setFont( getFont().deriveFont(Font.BOLD) );
@@ -265,10 +260,6 @@ public final class TablePanel extends JPanel{
     *
     */
     public class DataTableModel extends AbstractTableModel{
-        /**
-        *
-        */
-        
         DataFrame dataFrame;
         public static final long serialVersionUID = 1L;
         int COLSIZE, ROWSIZE;
@@ -286,44 +277,24 @@ public final class TablePanel extends JPanel{
                 ROWSIZE = Math.max(ROWSIZE, dataFrame.get(i).size());
             }
         }
-        /**
-         *
-         * @return
-         */
         @Override
         public int getRowCount() {
             return ROWSIZE;
         }
-        /**
-         *
-         * @return
-         */
         @Override
         public int getColumnCount() {
             return COLSIZE;
         }
-        /*
-         *
-         * @param i
-         * @return
-         */
         @Override
         public String getColumnName(int i){
             
             Variable var = dataFrame.get(i);
-            return dataFrame.get(i).getName();
-            
+            return dataFrame.get(i).getName();   
         }
         @Override
         public boolean isCellEditable(int arg0, int arg1){
             return is_editable;
         }
-        /**
-         *
-         * @param arg0
-         * @param arg1
-         * @return
-         */
         @Override
         public Object getValueAt(int row, int col) {
             Variable var = dataFrame.get(col);

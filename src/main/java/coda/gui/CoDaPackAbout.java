@@ -59,8 +59,8 @@ public class CoDaPackAbout extends JDialog{
                 "and Applied Mathematics</a> in the University of Girona</p><br>";
 
         aboutText += "<p>Please, if you detect some bug or if you think in new features send us an e-mail at:</p><br>" +
-                "<b>Marc Comas-Cufí</b>: mcomas@ima.udg.edu,<br>" +
-                "<b>Santiago Thió-Henestrosa</b>: thio@ima.udg.edu";
+                "<b>Marc Comas-Cuf&iacute;</b>: mcomas@ima.udg.edu,<br>" +
+                "<b>Santiago Thi&oacute;-Henestrosa</b>: thio@ima.udg.edu";
 
         text.setText("<html><center>" + aboutText + "</center></html>");
         about.add(text, BorderLayout.CENTER);

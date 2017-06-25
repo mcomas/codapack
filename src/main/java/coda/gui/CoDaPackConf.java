@@ -102,16 +102,16 @@ public class CoDaPackConf {
      * 
      * This object keeps the last version
      */
-    //public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
-    public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
+    public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
+    //public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
 
 
-    public static String CoDaVersion = "2 02 20";
+    public static String CoDaVersion = "2 02 21";
     public static int CoDaUpdaterVersion = 4;
 
-    public static int[] getVersionNum(){
+    public static int[] getVersionNum(String version_str){
         int num[] = new int[3];
-        String[] version = CoDaVersion.split(" ");
+        String[] version = version_str.split(" ");
         num[0] = Integer.parseInt(version[0]);
         num[1] = Integer.parseInt(version[1]);
         num[2] = Integer.parseInt(version[2]);
@@ -140,7 +140,7 @@ public class CoDaPackConf {
         return v1;
     }
     public static boolean updateNeeded(String v){
-        int[] actVersion = getVersionNum();
+        int[] actVersion = getVersionNum(CoDaPackConf.refusedVersion);
         int [] newVersion = new int[3];
         
         String[] version = v.split(" ");
@@ -169,6 +169,8 @@ public class CoDaPackConf {
     public static String decimalOutputFormat = "0.0000";
     public static String decimalTableFormat = "0.00";
     public static String decimalExportFormat = "0.00########";
+    public static String lastPath = System.getProperty("user.dir");
+    public static String refusedVersion = CoDaVersion;
     //private static DecimalFormat decimalOutputFormat = new DecimalFormat("0.0000", decimalFormat);
     //private static DecimalFormat decimalOutputFormat = new DecimalFormat("##0.##E0", decimalFormat);
     //private static DecimalFormat decimalTableFormat = new DecimalFormat("0.00", decimalFormat);
@@ -205,6 +207,7 @@ public class CoDaPackConf {
     public static void setOutputColor(Color c){ ouputColor = c; }
     public static Color getOutputColor(){ return ouputColor; }
 
+    public static String configurationFile = ".codapack";
     public static void saveConfiguration(){
         try {
             JSONObject configuration = new JSONObject();
@@ -212,8 +215,10 @@ public class CoDaPackConf {
             configuration.put("decimal-output", decimalOutputFormat);
             configuration.put("decimal-table", decimalTableFormat);
             configuration.put("decimal-export", decimalExportFormat);
+            configuration.put("last-path", lastPath);
+            configuration.put("refused-version", refusedVersion);
 
-            PrintWriter printer = new PrintWriter("codapack.conf");
+            PrintWriter printer = new PrintWriter(CoDaPackConf.configurationFile);
 
             configuration.write(printer);
             printer.flush();
@@ -228,13 +233,15 @@ public class CoDaPackConf {
     }
     public static void loadConfiguration(){
         try {
-            FileReader file = new FileReader("codapack.conf");
+            FileReader file = new FileReader(CoDaPackConf.configurationFile);
             JSONObject configuration = new JSONObject(new BufferedReader(file).readLine());
             file.close();
             decimalFormat = (char) configuration.getInt("decimal-format");
             decimalOutputFormat = configuration.getString("decimal-output");
             decimalTableFormat = configuration.getString("decimal-table");
             decimalExportFormat = configuration.getString("decimal-export");
+            lastPath = configuration.getString("last-path");
+            refusedVersion = configuration.getString("refused-version");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

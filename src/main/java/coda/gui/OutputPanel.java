@@ -98,7 +98,7 @@ public final class OutputPanel extends JPanel{
         styleSheet.addRule(
                 "body{"
           + "font-family: Monospace; "
-          + "font-size:small;"
+          + "font-size:" + "12px" + ";"
           + "color:#000000;"
           + "text-decoration: none;"
           + "margin:10px;"
@@ -108,9 +108,8 @@ public final class OutputPanel extends JPanel{
     public void addWelcome(String CoDaVersion){
         windowText = "<b>CoDaPack</b> - Version " + CoDaVersion
                 + "<br>This software is being developed by the "
-                + "<a href='http://ima.udg.edu/Recerca/EIO/"
-                + "inici_eng.html'>EAD</a> group (Grup d'Estad&iacute;stica "
-                + "i An&agrave;lisi de Dades).<br><br>";
+                + "Research Group in Statistics and Compositional Data Analysis "
+                + "at University of Girona";
         jEditorPane1.setText(windowText);
         repaint();
     }

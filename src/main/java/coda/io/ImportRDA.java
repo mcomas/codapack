@@ -54,7 +54,7 @@ public class ImportRDA {
 
     //El constructor
     public ImportRDA(JFileChooser chooseFile) throws ScriptException {
-        manager = new ScriptEngineManager(); //Static ¿?
+        manager = new ScriptEngineManager(); //Static ?
         engine = manager.getEngineByName("Renjin");
         cf = chooseFile;
         df_names = getDataFramesNames(chooseFile.getSelectedFile().getAbsolutePath().replace("\\","/"));

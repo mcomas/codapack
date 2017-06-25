@@ -30,6 +30,7 @@ import coda.Zero;
 import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
+import coda.gui.CoDaPackConf;
 import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
@@ -50,7 +51,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class CoDaPackImporter implements Importer{
     String fname;
-    String ruta=fillRecentPath();
+    String ruta = CoDaPackConf.lastPath;
     ArrayList<DataFrame> dfs = new ArrayList<DataFrame>();
     @Override
     public CoDaPackImporter setParameters(Component frame) {
@@ -60,7 +61,7 @@ public class CoDaPackImporter implements Importer{
         chooseFile.showOpenDialog(frame);
         fname = chooseFile.getSelectedFile().getAbsolutePath();
         ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-        copyRecentPath(ruta);
+        CoDaPackConf.lastPath = ruta;
         return this;
     }
     Variable readVariable(JSONObject var){
@@ -79,7 +80,6 @@ public class CoDaPackImporter implements Importer{
                         variable.add(variable.setElementFromString(object.getString("v")));
                     }
                 }
-                
             }else{
                 variable.setType(Variable.VAR_TEXT);
                 for(int i=0;i<values.length();i++){
@@ -151,69 +151,16 @@ public class CoDaPackImporter implements Importer{
     @Override
     public String getParameters() {
         String conf = "format:codapack";
-         conf += "¿" + fname;
+         conf += "?" + fname;
          return conf;
     }
 
     @Override
     public CoDaPackImporter setParameters(String pars) {
-        String parameters[] = pars.split("¿");
+        String parameters[] = pars.split("\\?");
         if("format:codapack".equals(parameters[0])) {
-            fname = parameters[1];
-            
+            fname = parameters[1];            
         }
         return this;
     }
-    public String getRuta() {
-        return ruta;
-    }
-    public String fillRecentPath() {
-        String path = null;
-        File arx = null;
-        FileReader fr = null;
-        BufferedReader br = null;
-        try {
-            arx = new File("recentPath.txt");
-            fr = new FileReader(arx);
-            br = new BufferedReader(fr);
-            String linia;
-            if ((linia=br.readLine())!=null) {
-                path=linia;
-            }
-        }
-        catch (Exception e) {
-           e.printStackTrace(); 
-        }
-        finally {
-            try {
-                if (null != fr) fr.close();
-            }
-            catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-        return path;
-    }
-    
-    public void copyRecentPath(String path) {
-        FileWriter fit = null;
-        PrintWriter pw = null;
-        try {
-            fit = new FileWriter("recentPath.txt");
-            pw = new PrintWriter(fit);
-            pw.println(path);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                if (null!= fit) fit.close();
-            }
-            catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-    }
-    
 }

@@ -190,7 +190,7 @@ public class CoDaPackMenu extends JMenuBar{
     public void saveRecentFile(String rf){ 
         String pathFile;
         //Si la te, li treiem l'inici al nom del path
-        if (rf.startsWith("format:codapack¿")) {
+        if (rf.startsWith("format:codapack?")) {
             pathFile = rf.substring(16);
         }
         else pathFile = rf;
@@ -228,7 +228,7 @@ public class CoDaPackMenu extends JMenuBar{
                 JMenuItem item = new JMenuItem();
                 menuRecent.add(item);
                 //Tornem a posar el prefix al pathFile
-                String s1="format:codapack¿";
+                String s1="format:codapack?";
                 final String rf=s1.concat(v[i]);
                 //Posem el text al item
                 item.setText(v[i]);
@@ -244,40 +244,19 @@ public class CoDaPackMenu extends JMenuBar{
                         active_path = title;
                     }});
             }
-            /*while(itr.hasNext()) {
-                //Creem i afegim el valor a Recent Files
-                JMenuItem item = new JMenuItem();
-                menuRecent.add(item);
-                String s=(String) itr.next();
-                //Tornem a posar el prefix al pathFile
-                String s1="format:codapack¿";
-                final String rf=s1.concat(s);
-                //Posem el text al item
-                item.setText(s);
-                //Definim l'acció a realitzar al clicar l'item
-                item.addActionListener(new java.awt.event.ActionListener() {
-                    @Override
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        JMenuItem jMenuItem = (JMenuItem)evt.getSource();
-                        String title = jMenuItem.getText();
-                        for(CoDaPackMenuListener e: listeners){
-                            e.menuItemClicked(rf);
-                        }
-                    }});
-            }*/
         }
         //Afegim un separador i l'item Clear Items a Recent Files
         menuRecent.addSeparator();
         addJMenuItem(menuRecent, itemClearRecent, ITEM_CLEAR_RECENT);
     }
     
-    //Aquest mètode emplena el LinkedHashMap des de l'arxiu recentFiles.txt cada vegada que s'inicia el programa
+    //Aquest mètode emplena el LinkedHashMap des de l'arxiu .recent_files cada vegada que s'inicia el programa
     public void fillRecentFiles() {
         File arx = null;
         FileReader fr = null;
         BufferedReader br = null;
         try {
-            arx = new File("recentFiles.txt");
+            arx = new File(".recent_files");
             fr = new FileReader(arx);
             br = new BufferedReader(fr);
             String linia;
@@ -298,12 +277,12 @@ public class CoDaPackMenu extends JMenuBar{
         }
     }
     
-    //Aquest mètode sobreescriu l'arxiu recentFiles.txt, quan es tanca el programa i cada vegada que es fa un Clear Items
+    //Aquest mètode sobreescriu l'arxiu .recent_files, quan es tanca el programa i cada vegada que es fa un Clear Items
     public void copyRecentFiles() {
         FileWriter fit = null;
         PrintWriter pw = null;
         try {
-            fit = new FileWriter("recentFiles.txt");
+            fit = new FileWriter(".recent_files");
             pw = new PrintWriter(fit);
             String s;
             Collection c=newRecentFile.values();
