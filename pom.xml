@@ -36,16 +36,38 @@
                   </execution>
                 </executions>
               </plugin>
-            <!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <configuration>
-                    <mainClass>coda.gui.CoDaPackMain</mainClass>
-                </configuration>
+            <!-- Windows application -->
+           <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                        <id>l4j-gui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <outfile>target/CoDaPack.exe</outfile>
+                            <jar>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</jar>
+                            <dontWrapJar>false</dontWrapJar>
+                            <errTitle>Error in launch4j plugin</errTitle>
+                            <classPath>
+                                <mainClass>coda.gui.CoDaPackMain</mainClass>
+                            </classPath>
+                            <icon>src/main/resources/icon.ico</icon>
+                            <jre>
+                                <minVersion>1.8.0</minVersion>
+                                <maxVersion></maxVersion>
+                                <initialHeapSize>1024</initialHeapSize>
+                                <maxHeapSize>8192</maxHeapSize>
+                            </jre>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
-            -->                 
             <!-- Mac application -->
             <plugin>
                 <groupId>sh.tak.appbundler</groupId>

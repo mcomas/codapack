@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="codapack:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/codapack_jar</output-path>
-    <root id="archive" name="codapack.jar">
-      <element id="module-output" name="codapack" />
-    </root>
-  </artifact>
-</component>
