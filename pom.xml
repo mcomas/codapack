@@ -54,6 +54,7 @@
                 <configuration>                    
                   <mainClass>coda.gui.CoDaPackMain</mainClass>
                   <iconFile>src/main/resources/icons.icns</iconFile>
+                  <!--<jrePath>/Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/</jrePath>-->
                   <generateDiskImageFile>true</generateDiskImageFile>
                 </configuration>
                 <executions>
