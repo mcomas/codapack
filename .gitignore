@@ -1,9 +1,3 @@
-lib/*
-!lib/README.txt
-build/
-dist/
-out/
-/nbproject/private/
 /target/
 .codapack
 .recent_files
