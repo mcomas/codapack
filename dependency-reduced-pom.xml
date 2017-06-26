@@ -16,14 +16,18 @@
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.0.1</version>
         <executions>
           <execution>
-            <phase>install</phase>
+            <phase>package</phase>
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <excludeTransitive>true</excludeTransitive>
             </configuration>
           </execution>
         </executions>
@@ -49,6 +53,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <minimizeJar>true</minimizeJar>
               <transformers>
                 <transformer>
                   <mainClass>coda.gui.CoDaPackMain</mainClass>

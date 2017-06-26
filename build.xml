@@ -9,7 +9,7 @@
       <javac srcdir="src" destdir="bin" classpathref="classpath" />
   </target>
   <target name="build-jar">
-    <jar destfile="CoDaPack.jar" basedir="bin">
+    <jar destfile="CoDaPack2.jar" basedir="bin">
       <manifest>
         <attribute name="Main-Class" value="coda.gui.CoDaPackMain"/>
       </manifest>
