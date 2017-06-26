@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>groupId</groupId>
-    <artifactId>codapack</artifactId>
+    <groupId>EADC</groupId>
+    <artifactId>CoDaPack</artifactId>
     <version>2.02.21</version>
     <build>
         <plugins>
@@ -53,6 +53,7 @@
                 <version>1.2.0</version>
                 <configuration>                    
                   <mainClass>coda.gui.CoDaPackMain</mainClass>
+                  <iconFile>src/main/resources/icons.icns</iconFile>
                   <generateDiskImageFile>true</generateDiskImageFile>
                 </configuration>
                 <executions>

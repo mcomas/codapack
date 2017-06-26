@@ -88,7 +88,7 @@ public final class CoDaPackMain extends JFrame{
     private int activeDataFrame = -1;
     
     
-    public static String RESOURCE_PATH = "/resources/";
+    public static String RESOURCE_PATH = "/";
 
     private final Dimension screenDimension;
     
