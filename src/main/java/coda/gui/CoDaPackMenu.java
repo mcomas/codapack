@@ -23,6 +23,7 @@
  */
 package coda.gui;
 
+import java.awt.FlowLayout;
 import java.io.File;
 import java.io.*;
 import java.util.ArrayList;
@@ -31,9 +32,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -465,8 +471,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
         add(menuHelp);
         
-    }
-
+    }    
     public void addDataFrame(){
         
     }

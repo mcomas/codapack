@@ -53,7 +53,7 @@ public class testTernaryPlot3d {
         System.out.println(CoDaStats.ternaryTransform(0,0,1,0)[0]+","+CoDaStats.ternaryTransform(0,0,1,0)[1]+","+CoDaStats.ternaryTransform(0,0,1,0)[2]);
         System.out.println(CoDaStats.ternaryTransform(0,0,0,1)[0]+","+CoDaStats.ternaryTransform(0,0,0,1)[1]+","+CoDaStats.ternaryTransform(0,0,0,1)[2]);
         try {
-            DataFrame df = ImportData.importXLS("/home/marc/software/codapack-dev/data/halimba.xls", true);
+            DataFrame df = ImportData.importXLS("halimba.xls", true);
             //DataFrame df = ImportData.importXLS("G:/Recerca/EIO_RECERCA/New CoDaPack/CoData.xls", true);
             String[] names = new String[4];
             names[0] = df.get(0).getName();

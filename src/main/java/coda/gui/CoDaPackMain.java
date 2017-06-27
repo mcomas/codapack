@@ -39,10 +39,13 @@ import coda.plot2.window.TernaryPlot2dWindow;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -65,7 +68,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.script.ScriptException;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -73,6 +78,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 /**
@@ -153,7 +159,23 @@ public final class CoDaPackMain extends JFrame{
                 }
             }
         });
-
+        addKeyListener( new KeyAdapter(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_R && e.getModifiers() == KeyEvent.CTRL_MASK) {
+                    runRCmd();
+                }              
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
+        
+        setFocusable(true);
+        
         setTitle(ITEM_APPLICATION_NAME);
         setPreferredSize(new Dimension(1000,700));
         setLocation((screenDimension.width-1000)/2,
@@ -183,7 +205,8 @@ public final class CoDaPackMain extends JFrame{
         
         setJMenuBar(jMenuBar);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-       
+        
+        
         addWindowListener(new WindowAdapter(){
             @Override
             public void windowClosing(WindowEvent e){
@@ -191,6 +214,19 @@ public final class CoDaPackMain extends JFrame{
             }
         });        
         pack();
+    }
+    public void runRCmd(){
+        JPanel pan=new JPanel();
+        pan.setLayout(new FlowLayout());
+        pan.add(new JLabel("Execute R command:"));
+        pan.add(new JTextField(20));
+        pan.add(new JButton("Execute"));
+
+        JDialog jd = new JDialog();
+        jd.setLocationRelativeTo(this);
+        jd.setSize(300, 100);
+        jd.add(pan);
+        jd.setVisible(true);
     }
     public boolean isDataFrameNameAvailable(String name){
         for(DataFrame df : dataFrame)
