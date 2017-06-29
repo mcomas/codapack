@@ -48,9 +48,26 @@ import javafx.stage.Stage;
 public final class CoDaPackMain extends Application{
     private final ArrayList<DataFrame> dataFrame = new ArrayList<DataFrame>();
     private int activeDataFrame = -1;
-    
-    private MenuBar menu;
-    
+    public ArrayList<DataFrame> getAllDataFrames(){
+        return dataFrame;
+    }
+    public void addDataFrame(DataFrame df){
+//        if(isDataFrameNameAvailable(df.name)){
+//            activeDataFrame = dataFrame.size();
+//            dataFrame.add(df);
+//            dataList.setData(df);
+//            tablePanel.setDataFrame(df);
+//            dataFrameSelector.removeItemListener(dataFrameListener);
+//            dataFrameSelector.addItem(df.name);
+//            dataFrameSelector.setSelectedItem(df.name);
+//            dataFrameSelector.addItemListener(dataFrameListener);
+//            df.setChange(false);
+//        }else{
+//            JOptionPane.showMessageDialog(this,"<html>Dataframe <i>" +
+//                    df.name + "</i> is already loaded.</html>");
+//        }
+    }
+    public MainMenu menu;
     public static Output outputPane;
     public static DataList datalistPane;
     public static Table tablePane;
@@ -64,7 +81,7 @@ public final class CoDaPackMain extends Application{
         datalistPane = new DataList();
         datalistPane.setPrefWidth(100);
         outputPane = new Output();
-        tablePane = new Table();   
+        tablePane = new Table(this);   
         
         SplitPane sp = new SplitPane();
         sp.setOrientation(Orientation.VERTICAL);
@@ -75,16 +92,15 @@ public final class CoDaPackMain extends Application{
         sp.getItems().addAll(sp1, sp2);
       
         
-        menu = new MenuBar();
-        final Menu menu1 = new Menu("File");
-        menu.getMenus().addAll(menu1);
+        menu = new MainMenu();
+
         
         BorderPane borderPane = new BorderPane();
         borderPane.setLeft(datalistPane);
         borderPane.setCenter(sp);
         borderPane.setTop(menu);
         
-        Scene scene = new Scene(borderPane, 400, 250, Color.WHITE);        
+        Scene scene = new Scene(borderPane, 800, 500, Color.WHITE);        
         stage.setTitle("CoDaPack"); 
         stage.setScene(scene); 
         stage.sizeToScene(); 
@@ -171,10 +187,6 @@ public final class CoDaPackMain extends Application{
 //    
 //    // dataFrame is the class containing the data
 //    
-//    
-//    
-//    
-//    public static String RESOURCE_PATH = "/";
 //
 //    private final Dimension screenDimension;
 //    
@@ -326,22 +338,7 @@ public final class CoDaPackMain extends Application{
 //            dataFrameSelector.removeAllItems();
 //        }
 //    }
-//    public void addDataFrame(DataFrame df){
-//        if(isDataFrameNameAvailable(df.name)){
-//            activeDataFrame = dataFrame.size();
-//            dataFrame.add(df);
-//            dataList.setData(df);
-//            tablePanel.setDataFrame(df);
-//            dataFrameSelector.removeItemListener(dataFrameListener);
-//            dataFrameSelector.addItem(df.name);
-//            dataFrameSelector.setSelectedItem(df.name);
-//            dataFrameSelector.addItemListener(dataFrameListener);
-//            df.setChange(false);
-//        }else{
-//            JOptionPane.showMessageDialog(this,"<html>Dataframe <i>" +
-//                    df.name + "</i> is already loaded.</html>");
-//        }
-//    }
+
 //    public void addDataFrameRDR(DataFrame df){
 //        if(isDataFrameNameAvailable(df.name)){
 //            activeDataFrame = dataFrame.size();
@@ -361,9 +358,6 @@ public final class CoDaPackMain extends Application{
 //    public void updateDataFrame(DataFrame df){
 //        dataList.setData(df);
 //        tablePanel.setDataFrame(df);
-//    }
-//    public ArrayList<DataFrame> getAllDataFrames(){
-//        return dataFrame;
 //    }
 //    public DataFrame getActiveDataFrame(){
 //        if(activeDataFrame == -1) return null;

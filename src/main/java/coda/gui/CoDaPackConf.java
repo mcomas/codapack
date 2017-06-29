@@ -105,7 +105,7 @@ public class CoDaPackConf {
     public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
     //public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
 
-
+    public static String RESOURCE_PATH = "/";
     public static String CoDaVersion = "2 02 22";
     public static int CoDaUpdaterVersion = 4;
 

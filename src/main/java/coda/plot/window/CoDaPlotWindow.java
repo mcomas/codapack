@@ -34,6 +34,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.ext.eps.ColorMode;
 import coda.ext.eps.EpsGraphics;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.menu.SelectVariableMenu;
 import coda.gui.utils.FileNameExtensionFilter;
@@ -143,7 +144,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         });
 
         this.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logo.png")));
+                .getImage(getClass().getResource(CoDaPackConf.RESOURCE_PATH + "logo.png")));
 
         menuFile.add(itemImage);
         menuFile.add(itemConf);

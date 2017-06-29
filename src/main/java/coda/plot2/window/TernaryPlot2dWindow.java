@@ -31,6 +31,7 @@ package coda.plot2.window;
 
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.plot.window.*;
 import coda.gui.CoDaPackMain;
 import coda.plot2.objects.Ternary2dGridObject;
@@ -146,8 +147,8 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
             }
         });
         //standard = new JButton(new ImageIcon("resources/ternary_xyz.png"));
-        inverted = new JButton(new ImageIcon(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "ternary_xzy.png")));
-        rotate = new JButton(new ImageIcon(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "rotate.png")));
+        inverted = new JButton(new ImageIcon(getClass().getResource(CoDaPackConf.RESOURCE_PATH + "ternary_xzy.png")));
+        rotate = new JButton(new ImageIcon(getClass().getResource(CoDaPackConf.RESOURCE_PATH + "rotate.png")));
 
         inverted.addActionListener(new java.awt.event.ActionListener() {
             

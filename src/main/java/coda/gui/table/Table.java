@@ -21,25 +21,31 @@ package coda.gui.table;
 
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import org.controlsfx.control.spreadsheet.GridBase;
+import org.controlsfx.control.spreadsheet.SpreadsheetCell;
+import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
+import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
 
 /**
  *
  * @author marc
  */
-public final class Table extends Pane{
+public final class Table extends BorderPane{
     public static final long serialVersionUID = 1L;
     ExcelAdapter ed;
     /**
      *
      */
     DataFrame df = new DataFrame();
-    public JTable table;
-    //private JTable rowTable;
+
     JScrollPane scrollPane1 = new JScrollPane();
     JPopupMenu pm = new JPopupMenu();
     CoDaPackMain main;
@@ -47,8 +53,24 @@ public final class Table extends Pane{
      *
      */
     
-    public Table(){
+    public Table(CoDaPackMain main){
+        this.main = main;
         
-   
+        int rowCount = 0;
+        int columnCount = 0;
+        GridBase grid = new GridBase(rowCount, columnCount);
+
+        ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+//        for (int row = 0; row < grid.getRowCount(); ++row) {
+//            final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
+//            for (int column = 0; column < grid.getColumnCount(); ++column) {
+//                list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1,"value"));
+//            }
+//            rows.add(list);
+//        }
+        grid.setRows(rows);
+
+        SpreadsheetView spv = new SpreadsheetView(grid);
+        this.setCenter(spv);
     }
 }
