@@ -98,10 +98,10 @@ public class ILRPlotMenu extends AbstractMenuDialogWithILR{
 
         CoDaPlotWindow plotWindow = null;
 
-        CoDaPackMain.outputPanel.addOutput(
+        CoDaPackMain.outputPane.addOutput(
                 new OutputPlotHeader("ILR plot", selectedNames));
 
-        CoDaPackMain.outputPanel.addOutput(
+        CoDaPackMain.outputPane.addOutput(
                     new OutputILRPartition(selectedNames, partition));
         if(dimension == 3){
 

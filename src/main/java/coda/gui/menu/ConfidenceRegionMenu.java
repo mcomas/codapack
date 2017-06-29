@@ -84,7 +84,7 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
             String[] categories = null;
 
 
-            CoDaPackMain.outputPanel.addOutput(
+            CoDaPackMain.outputPane.addOutput(
                     new OutputPlotHeader("Confidence region", selectedNames));
 
             if(groupedBy != null){

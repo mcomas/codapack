@@ -76,7 +76,7 @@ public class NormalityTestMenu extends AbstractMenuDialog{
         ArrayList<OutputElement> outputs = new ArrayList<OutputElement>();
         outputs.add(new OutputNormalityTest(names, marginal, bivariate, radius));
 
-        CoDaPackMain.outputPanel.addOutput(outputs);
+        CoDaPackMain.outputPane.addOutput(outputs);
         setVisible(false);
     }
 

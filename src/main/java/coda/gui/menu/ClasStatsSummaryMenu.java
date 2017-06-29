@@ -177,7 +177,7 @@ public class ClasStatsSummaryMenu extends AbstractMenuDialog{
                             selectedNames, selectedNames, covariance));
             }
         }
-        CoDaPackMain.outputPanel.addOutput(outputs);
+        CoDaPackMain.outputPane.addOutput(outputs);
         setVisible(false);
     }
 }

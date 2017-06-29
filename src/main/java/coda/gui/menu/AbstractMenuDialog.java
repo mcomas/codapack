@@ -80,14 +80,14 @@ public abstract class AbstractMenuDialog extends JDialog{
         mainApplication = mainApp;
         dfs = null;
         this.allowEmpty = allowEmpty;
-        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
+        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.datalistPane.getSelectedData(), groups);
         initialize();
     }
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups){
         super(mainApp, title);
         mainApplication = mainApp;
         dfs = null;
-        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
+        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.datalistPane.getSelectedData(), groups);
         initialize();
     }
     private void initialize(){

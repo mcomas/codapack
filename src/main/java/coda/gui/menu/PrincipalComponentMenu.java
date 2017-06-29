@@ -69,7 +69,7 @@ public class PrincipalComponentMenu extends AbstractMenuDialog{
 
             String groupedBy = ds.getSelectedGroup();
 
-            CoDaPackMain.outputPanel.addOutput(
+            CoDaPackMain.outputPane.addOutput(
                         new OutputPlotHeader("Principal components", selectedNames));
 
             double cpExp[] = coda.BasicStats.cumulativeProportionExplained(svd.getSingularValues());
@@ -90,7 +90,7 @@ public class PrincipalComponentMenu extends AbstractMenuDialog{
                     ternarypcomp[i][j] = pcomp[i][j];
             }
 
-            CoDaPackMain.outputPanel.addOutput(
+            CoDaPackMain.outputPane.addOutput(
                     new OutputTableTwoEntries("Principal Components", pcheaders, pcnames, ternarypcomp));
 
             CoDaPlotWindow window = null;
