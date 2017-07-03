@@ -34,7 +34,6 @@ import java.util.logging.Logger;
  * @author mcomas
  */
 public class Variable extends ArrayList<Element>{
-    public static final long serialVersionUID = 1L;
 /**
  * Constants defining variable type.
  */
@@ -265,69 +264,5 @@ public class Variable extends ArrayList<Element>{
     public boolean isText(){
         if(dtype == VAR_TEXT ) return true;
         return false;
-    }
-    public JSONObject toJSON(){
-        JSONObject variable = new JSONObject();
-        JSONArray values = new JSONArray();
-
-        try {
-            variable.put("n", name);
-            variable.put("t", dtype);
-            if( dtype == VAR_NUMERIC ){               
-                for(int i=0;i<size();i++){
-                    JSONObject obj = new JSONObject();
-                    Element el = get(i);
-                    if( el instanceof Zero){
-                        Zero zero = (Zero)el;
-                        obj.put("l", zero.detection);
-                    }else if( el instanceof Numeric){
-                        Numeric el_n = (Numeric)el;
-                        obj.put("v", el_n.getValue().toString());
-                        /*
-                        if(value.isNaN()){
-                            obj.put("value", "NaN");
-                        }else{
-                            obj.put("value", value);
-                        }
-                         * */
-                    }
-                    values.put(obj);
-                }
-            }else{
-                for(int i=0;i<size();i++){
-                    Text el = (Text)get(i);
-                    values.put(el.getValue());
-                }
-            }
-            variable.put("a", values);
-        } catch (JSONException ex) {
-            Logger.getLogger(Variable.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return variable;
-    }
-    public static Variable createFromJSON(JSONObject var){
-        Variable variable = new Variable();
-        try {
-            variable.name = var.getString("n");
-            variable.dtype = var.getInt("t");
-            JSONArray values = var.getJSONArray("a");
-            if(variable.dtype == VAR_NUMERIC){
-                for(int i=0;i<values.length();i++){
-                    JSONObject object = values.getJSONObject(i);
-                    if(object.has("l")){
-                        variable.add(i, new Zero(Double.parseDouble(object.getString("l"))));//Double.parseDouble(object.getString("value")));
-                    }else{
-                        variable.add(i, new Numeric(Double.parseDouble(object.getString("v"))));
-                    }
-                }
-            }else{
-                for(int i=0;i<values.length();i++){
-                    variable.add(i, new Text(values.getString(i)));
-                }
-            }
-        } catch (JSONException ex) {
-            Logger.getLogger(Variable.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return variable;
     }
 }

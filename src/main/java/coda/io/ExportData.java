@@ -54,11 +54,11 @@ public class ExportData {
         for(String vname: vnames){
             row.createCell(col++).setCellValue(vname);
         }
-        Variable vars[] = new Variable[dataframe.size()];
+        Variable vars[] = new Variable[dataframe.nVariables()];
 
         int nrows = 0;
-        int nrow[] = new int[dataframe.size()];
-        for(int i=0;i<dataframe.size();i++){
+        int nrow[] = new int[dataframe.nVariables()];
+        for(int i=0;i<dataframe.nVariables();i++){
             vars[i] = dataframe.get(vnames.get(i));
             nrow[i] = vars[i].size();
             nrows = Math.max(nrows, nrow[i]);

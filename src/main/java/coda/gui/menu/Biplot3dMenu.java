@@ -107,10 +107,10 @@ public class Biplot3dMenu extends AbstractMenuDialog{
                 df.addData(unames, coda.Utils.recoverData(UD.transpose().getArray(),selection));
                 mainApplication.updateDataFrame(df);
             }
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                     new OutputPlotHeader("Biplot generated", selectedNames));
             
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                     new OutputTableTwoEntries("Principal Components", pcheaders, pcnames, pcomp));
 
             int dim = m > 3 ? 3 : 2;

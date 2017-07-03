@@ -81,7 +81,7 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
 
             String groupedBy = ds.getSelectedGroup();
 
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                     new OutputPlotHeader("Predictive region", selectedNames));
 
             if(selectedNames.length == 3){

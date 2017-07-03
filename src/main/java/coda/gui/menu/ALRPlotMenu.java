@@ -92,10 +92,10 @@ public class ALRPlotMenu extends AbstractMenuDialog{
                         df, builder.build(),
                         "ALR Plot 3d");
             }
-            plotWindow.setLocationRelativeTo(mainApplication);
+            plotWindow.setLocationRelativeTo(null);
             plotWindow.setVisible(true);
             
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                     new OutputPlotHeader("ALR plot generated", selectedNames));
             /*if(groupedBy != null) CoDaPackMain.outputPanel.addOutput(
                     new OutputColorGroups(CoDaPack.reduceData(

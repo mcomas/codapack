@@ -76,7 +76,7 @@ public class TransformationRawILRMenu extends AbstractMenuDialogWithILR{
 
             double ilr[][] = CoDaStats.transformRawILR(vdata, partition);
             df.addData(new_names, coda.Utils.recoverData(ilr, selection));
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                     new OutputILRPartition(sel_names, partition));
             mainApplication.updateDataFrame(df);
             setVisible(false);

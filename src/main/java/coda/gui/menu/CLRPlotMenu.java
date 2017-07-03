@@ -99,7 +99,7 @@ public class CLRPlotMenu extends AbstractMenuDialog{
             plotWindow.setLocationRelativeTo(mainApplication);
             plotWindow.setVisible(true);
 
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                     new OutputPlotHeader("CLR plot generated", selectedNames));
   
             setVisible(false);

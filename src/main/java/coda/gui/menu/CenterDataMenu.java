@@ -58,7 +58,7 @@ public class CenterDataMenu extends AbstractMenuDialog{
             if(centerCheck.isSelected()){
                 //mainApplication.outputPanel.writeCenter(selectedNames, center);
                 //CoDaPackMain.outputPanel.writeCenter(selectedNames, center);
-                CoDaPackMain.outputPane.addOutput(
+                CoDaPackMain.output.addOutput(
                         new OutputVector("Center", selectedNames, center));
             }
             for(int i=0;i<center.length;i++) center[i] = 1 / center[i];

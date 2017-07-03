@@ -146,4 +146,8 @@
             <url>http://dist.wso2.org/maven2/</url>
         </repository>
     </repositories>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 </project>

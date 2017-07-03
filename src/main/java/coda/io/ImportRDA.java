@@ -76,7 +76,7 @@ public class ImportRDA {
     }
 
     //Aquest mètode és l'encarregat d'obrir els dataframes seleccionats
-    public ArrayList<DataFrame> getDfSelected(String[] sel_names, String pre, String su) throws ScriptException, DataFrame.DataFrameException {
+    public ArrayList<DataFrame> getDfSelected(String[] sel_names, String pre, String su) throws ScriptException{
         int d=0;
         prefix = pre;
         suffix = su;
@@ -102,8 +102,7 @@ public class ImportRDA {
                                 vardouble[i]=v;
                                 i++;
                             }
-                            Variable vardf = new Variable(varname,vardouble);
-                            Variable vardfin = dataf.add(vardf);
+                            dataf.add(new Variable(varname,vardouble));
                         }else{
                             String varname = df.getName(j);
                             StringVector sv = (StringVector)engine.eval("as.character(" + name + "[['" + df.getName(j) + "']])");
@@ -113,8 +112,7 @@ public class ImportRDA {
                                 varstring[i]=v;
                                 i++;
                             }
-                            Variable vardf = new Variable(varname,varstring);
-                            Variable vardfin = dataf.add(vardf);
+                            dataf.add(new Variable(varname,varstring));
                         }
                     }
                     sel_dfs.add(dataf);

@@ -200,7 +200,7 @@ public class ImportData{
                 }
                 nrow++;
             }
-            df.addData(name, var);
+            df.add(var);
             k++;
         }
         return df;
@@ -311,7 +311,7 @@ public class ImportData{
         }
         DataFrame dataframe = new DataFrame();
         for(Variable vv:variables){
-            dataframe.addData(vv.getName(), vv);
+            dataframe.add(vv);
         }
         return dataframe;
     }

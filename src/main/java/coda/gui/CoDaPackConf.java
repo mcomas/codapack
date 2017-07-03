@@ -34,68 +34,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Versioning history
- * 
- * 2 01 16
- * - Text in figures and other objects can be resized from menu File-> Configuration at tab Sizes.
- * - Exportation to R has been modified. Now, CoDaPack generates a RData file instead of a source code.
- * 
- * 2 01 15
- * 
- * 
- * 2 01 14
- * - Decimal point configuration available through File->Configuration menu
- * - MAC version: Save to R menu (problem solved)
- * 
- * 2 01 13
- * - Sorry, the update 2 01 12 was not correctly integrated in CoDaPack. This update correctly integrates the previous one
- * 
- * 2 01 12
- * - The user can select the fraction to be used in the zero replacement menu
- * 
- * 2 01 11
- *  - Problem when exporting variables with non-regular characters to R  solved
- * 
- * 2 01 10
- * - Amalgamation problems solved
- * - Export tables to R data-frames as source code
- * - Text file importation
- * - CRITICAL: CLR variances in Variation Array corrected
- * 
- * 2 01 9
- * - Datasets without headers importation problems solved
- * - In graphics: Now it is possible to associate a variable as observation name
- * - In graphics: Show/Hide all observation labels automatically
- *
- * 2 01 8
- * - Added Excel formula evaluation capabilities
- * - Order inside groups in the manually partition table
- * - Dendrogram: Counting from 1 in the ilr generated variables
- *
- * 2 01 7
- * - Predictive region estimation
- * - Confidence region for the mean
- * - Empty Ternary Plot Simplistic Editor
- * - Biplot: covariance biplot as default biplot representation
- *
- * 2 01 6
- * - Correlation matrix calculation in Classical Statistics
- * - Biplot: representation of UV decomposition
- * - Biplot: coordinates output
- *
- * 2 01 5
- *
- * - Update protocol improved
- * - IMPORTANT: xlsx files compatibilities removed
- * - Atipicality index calculation implemented
- * - Simple color menu editor for plots
- * - Add numeric variables menu allows tabs and spaces in variable names
- * - Number of groups on plots unlimited
- *
- *
- * @author mcomas
- */
 public class CoDaPackConf {
     /*
      * Decimal configuration output
@@ -106,8 +44,7 @@ public class CoDaPackConf {
     //public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
 
     public static String RESOURCE_PATH = "/";
-    public static String CoDaVersion = "2 02 22";
-    public static int CoDaUpdaterVersion = 4;
+    public static String CoDaVersion = "3 01 1";
 
     public static int[] getVersionNum(String version_str){
         int num[] = new int[3];

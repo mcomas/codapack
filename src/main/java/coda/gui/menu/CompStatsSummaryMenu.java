@@ -196,7 +196,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
                 outputs.add(new OutputSingleValue("Total variance", totalVariance));
             }
         }
-        CoDaPackMain.outputPane.addOutput(outputs);
+        CoDaPackMain.output.addOutput(outputs);
         setVisible(false);
     }
 }

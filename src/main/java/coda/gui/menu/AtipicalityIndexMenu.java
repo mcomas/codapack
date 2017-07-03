@@ -68,7 +68,7 @@ public class AtipicalityIndexMenu extends AbstractMenuDialog{
             if(atip[i] > threshold) atipData[count++] = (i+1);
         }
 
-        CoDaPackMain.outputPane.addOutput(
+        CoDaPackMain.output.addOutput(
                         new OutputAtipicality(threshold, atipData));
 
         df.addData("atip", atip);

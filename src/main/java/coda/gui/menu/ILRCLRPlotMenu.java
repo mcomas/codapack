@@ -150,7 +150,7 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
                 df.addData(unames, coda.Utils.recoverData(data,selection));
                 mainApplication.updateDataFrame(df);
             }
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                     new OutputPlotHeader("ILR/CLR plot generated", selectedNames));
             
             //CoDaPackMain.outputPanel.addOutput(

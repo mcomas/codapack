@@ -116,10 +116,10 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
             plotWindow.setVisible(true);
 
             
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                     new OutputPlotHeader("Balance dendrogram", selectedNames));
 
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                         new OutputILRPartition(selectedNames, partition));
 
             if(statisticsCheck.isSelected()){
@@ -130,10 +130,10 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
                 double [] variance = BasicStats.variance(ilr);
                 //mainApplication.outputPanel.writeVariationArray(selectedNames, varArray);
 
-                CoDaPackMain.outputPane.addOutput(
+                CoDaPackMain.output.addOutput(
                         new OutputVector("Mean", ilrNames, mean));
 
-                CoDaPackMain.outputPane.addOutput(
+                CoDaPackMain.output.addOutput(
                     new OutputVector("Variance", ilrNames, variance));
             }
             setVisible(false);

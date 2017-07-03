@@ -58,7 +58,7 @@ public class TernaryPlotMenu extends AbstractMenuDialog{
 
             String groupedBy = ds.getSelectedGroup();
 
-            CoDaPackMain.outputPane.addOutput(
+            CoDaPackMain.output.addOutput(
                     new OutputPlotHeader("Ternary plot", selectedNames));
 
             if(selectedNames.length == 3){

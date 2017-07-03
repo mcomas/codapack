@@ -23,14 +23,20 @@
  */
 package coda.gui;
 
-import java.io.File;
+import coda.Workspace;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
+import javax.swing.event.HyperlinkEvent;
 
 
 
@@ -42,121 +48,122 @@ public class MainMenu extends MenuBar{
     /*
      * Defining actions
      */
-    public final Menu menuFile;
-    public final String ITEM_FILE = "File";
+    public Workspace workspace;
+    public Menu menuFile;
+    public final static String ITEM_FILE = "File";
         public MenuItem itemOpen;
-        public final String ITEM_OPEN = "Open Workspace";
+        public final static String ITEM_OPEN = "Open Workspace";
         public MenuItem itemAdd;
-        public final String ITEM_ADD = "Add Workspace...";
+        public final static String ITEM_ADD = "Add Workspace...";
         public MenuItem itemSave;
-        public final String ITEM_SAV = "Save...";
+        public final static String ITEM_SAV = "Save...";
         public MenuItem itemSaveWork;
-        public final String ITEM_SAVE = "Save Workspace...";
+        public final static String ITEM_SAVE = "Save Workspace...";
         public Menu menuRecent;
-        public final String ITEM_RECENT = "Recent Workspace";
+        public final static String ITEM_RECENT = "Recent Workspace";
             public MenuItem itemClearRecent;
-            public final String ITEM_CLEAR_RECENT = "Clear Items";
+            public final static String ITEM_CLEAR_RECENT = "Clear Items";
         public MenuItem itemNewDF;
-        public final String ITEM_NEWDF = "New DataFrame";
+        public final static String ITEM_NEWDF = "New DataFrame";
         public Menu menuImport;
-        public final String ITEM_IMPORT = "Import";
+        public final static String ITEM_IMPORT = "Import";
             public MenuItem itemImportXLS;
-            public final String ITEM_IMPORT_XLS = "Import XLS Data...";
+            public final static String ITEM_IMPORT_XLS = "Import XLS Data...";
             public MenuItem itemImportCSV;
-            public final String ITEM_IMPORT_CSV = "Import CSV/Text Data...";
+            public final static String ITEM_IMPORT_CSV = "Import CSV/Text Data...";
             public MenuItem itemImportRDA;
-            public final String ITEM_IMPORT_RDA = "Import R Data...";
+            public final static String ITEM_IMPORT_RDA = "Import R Data...";
         public Menu menuExport;
-        public final String ITEM_EXPORT = "Export";
+        public final static String ITEM_EXPORT = "Export";
             public MenuItem itemExportXLS;
-            public final String ITEM_EXPORT_XLS = "Export Data to XLS...";
+            public final static String ITEM_EXPORT_XLS = "Export Data to XLS...";
             public MenuItem itemExportR;
-            public final String ITEM_EXPORT_R = "Export Data to R Data...";
+            public final static String ITEM_EXPORT_R = "Export Data to R Data...";
         public MenuItem itemdelDataFrame;
-        public final String ITEM_DEL_DATAFRAME = "Delete Table";
+        public final static String ITEM_DEL_DATAFRAME = "Delete Table";
         public MenuItem itemConfiguration;
-        public final String ITEM_CONF = "Configuration";
+        public final static String ITEM_CONF = "Configuration";
         public MenuItem itemQuit;
-        public final String ITEM_QUIT = "Quit CoDaPack";
+        public final static String ITEM_QUIT = "Quit CoDaPack";
 
-    public final Menu menuData;
-    public final String ITEM_DATA = "Data";
+    public Menu menuData;
+    public final static String ITEM_DATA = "Data";
         public Menu menuTransforms;
-        public final String ITEM_TRANS = "Transformations";
+        public final static String ITEM_TRANS = "Transformations";
             public MenuItem itemTransformALR;
-            public final String ITEM_RAW_ALR = "ALR";
+            public final static String ITEM_RAW_ALR = "ALR";
             public MenuItem itemTransformCLR;
-            public final String ITEM_RAW_CLR = "CLR";
+            public final static String ITEM_RAW_CLR = "CLR";
             public MenuItem itemTransformRawILR;
-            public final String ITEM_T_RAW_ILR = "Raw-ILR";
+            public final static String ITEM_T_RAW_ILR = "Raw-ILR";
             public MenuItem itemTransformILRRaw;
-            public final String ITEM_T_ILR_RAW = "ILR-Raw";
+            public final static String ITEM_T_ILR_RAW = "ILR-Raw";
         public MenuItem itemCenter;
-        public final String ITEM_CENTER = "Centering";
+        public final static String ITEM_CENTER = "Centering";
         public MenuItem itemClosure;
-        public final String ITEM_CLOSURE = "Subcomposition/Closure";
+        public final static String ITEM_CLOSURE = "Subcomposition/Closure";
         public MenuItem itemAmalgamation;
-        public final String ITEM_AMALGAM = "Amalgamation";
+        public final static String ITEM_AMALGAM = "Amalgamation";
         public MenuItem itemPerturbate;
-        public final String ITEM_PERTURBATE = "Perturbation";
+        public final static String ITEM_PERTURBATE = "Perturbation";
         public MenuItem itemPower;
-        public final String ITEM_POWER = "Power transformation";
+        public final static String ITEM_POWER = "Power transformation";
         public MenuItem itemZeros;
-        public final String ITEM_ZEROS = "Rounded zero replacement";
+        public final static String ITEM_ZEROS = "Rounded zero replacement";
         public MenuItem itemSetDetectionLimit;
-        public final String ITEM_SETDETECTION ="Set detection limit";
+        public final static String ITEM_SETDETECTION ="Set detection limit";
         public MenuItem itemCategorizeVariables;
-        public final String ITEM_CAT_VAR = "Numeric to categorical";
+        public final static String ITEM_CAT_VAR = "Numeric to categorical";
         public MenuItem itemNumerizeVariables;
-        public final String ITEM_NUM_VAR = "Categorical to Numeric";
+        public final static String ITEM_NUM_VAR = "Categorical to Numeric";
         public MenuItem itemAddVariables;
-        public final String ITEM_ADD_VAR = "Add Numeric Variables";
+        public final static String ITEM_ADD_VAR = "Add Numeric Variables";
         public MenuItem itemDeleteVariables;
-        public final String ITEM_DEL_VAR = "Delete variables";
+        public final static String ITEM_DEL_VAR = "Delete variables";
 
-    public final Menu menuStatistics;
-    public final String ITEM_STATS = "Statistics";
+    public Menu menuStatistics;
+    public final static String ITEM_STATS = "Statistics";
         public MenuItem itemCompStatsSummary;
-        public final String ITEM_COMP_STATS_SUMMARY = "Compositional statistics summary";
+        public final static String ITEM_COMP_STATS_SUMMARY = "Compositional statistics summary";
         public MenuItem itemClasStatsSummary;
-        public final String ITEM_CLAS_STATS_SUMMARY = "Classical statistics summary";
+        public final static String ITEM_CLAS_STATS_SUMMARY = "Classical statistics summary";
         public MenuItem itemNormalityTest;
-        public final String ITEM_NORM_TEST = "Additive Logistic Normality Tests";
+        public final static String ITEM_NORM_TEST = "Additive Logistic Normality Tests";
         public MenuItem itemAtipicalityIndex;
-        public final String ITEM_ATIP_INDEX = "Atipicality index";
+        public final static String ITEM_ATIP_INDEX = "Atipicality index";
 
 
-    public final Menu menuGraphs;
-    public final String ITEM_GRAPHS = "Graphs";
+    public Menu menuGraphs;
+    public final static String ITEM_GRAPHS = "Graphs";
         public MenuItem itemTernaryPlot;
-        public final String ITEM_TERNARY_PLOT = "Ternary plot";
+        public final static String ITEM_TERNARY_PLOT = "Ternary plot";
         public MenuItem itemEmptyTernaryPlot;
-        public final String ITEM_EMPTY_TERNARY_PLOT = "Ternary plot [Empty]";
+        public final static String ITEM_EMPTY_TERNARY_PLOT = "Ternary plot [Empty]";
         public MenuItem itemIlrBiPlot;
-        public final String ITEM_ILR_BIPLOT = "ILR/CLR plot";
+        public final static String ITEM_ILR_BIPLOT = "ILR/CLR plot";
         public MenuItem itemBiPlot;
-        public final String ITEM_BIPLOT = "CLR biplot";
+        public final static String ITEM_BIPLOT = "CLR biplot";
         public MenuItem itemDendrogramPlot;
-        public final String ITEM_DENDROGRAM_PLOT = "Balance dendrogram";
+        public final static String ITEM_DENDROGRAM_PLOT = "Balance dendrogram";
         public MenuItem itemALRPlot;
-        public final String ITEM_ALR_PLOT = "ALR plot";
+        public final static String ITEM_ALR_PLOT = "ALR plot";
         public MenuItem itemCLRPlot;
-        public final String ITEM_CLR_PLOT = "CLR plot";
+        public final static String ITEM_CLR_PLOT = "CLR plot";
         public MenuItem itemILRPlot;
-        public final String ITEM_ILR_PLOT = "ILR plot";
+        public final static String ITEM_ILR_PLOT = "ILR plot";
         public MenuItem principalComponentPlot;
-        public final String ITEM_PC_PLOT = "Ternary Principal Components";
+        public final static String ITEM_PC_PLOT = "Ternary Principal Components";
         public MenuItem predictiveRegionPlot;
-        public final String ITEM_PRED_REG_PLOT = "Predictive Region";
+        public final static String ITEM_PRED_REG_PLOT = "Predictive Region";
         public MenuItem confidenceRegionPlot;
-        public final String ITEM_CONF_REG_PLOT = "Center Confidence Region";
+        public final static String ITEM_CONF_REG_PLOT = "Center Confidence Region";
 
-   public final Menu menuHelp;
-   public final String ITEM_HELP = "Help";
+   public Menu menuHelp;
+   public final static String ITEM_HELP = "Help";
         public MenuItem itemForceUpdate;
-        public final String ITEM_FORCE_UPDATE = "Check for Updates";
+        public final static String ITEM_FORCE_UPDATE = "Check for Updates";
         public MenuItem itemAbout;
-        public final String ITEM_ABOUT = "About";
+        public final static String ITEM_ABOUT = "About";
 
     public String active_path = null;
     
@@ -164,40 +171,42 @@ public class MainMenu extends MenuBar{
         //item.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
         menu.getItems().add(item);
         item.setText(title);
-//        item.addEventHandler(new java.awt.event.ActionListener() {
-//            @Override
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                MenuItem jMenuItem = (MenuItem)evt.getSource();
-//                String title = jMenuItem.getText();
-//                for(CoDaPackMenuListener e: listeners){
-//                    e.menuItemClicked(title);
-//                }
-//            }
-//        });
+        item.setOnAction(new EventHandler(){
+            @Override
+            public void handle(Event event) {
+                MenuItem menuItem = (MenuItem)event.getSource();
+                String title = menuItem.getText();
+                System.out.println(title);
+                //for(CoDaPackMenuListener e: listeners){
+                //  e.menuItemClicked(title);
+                //}
+            }
+        });
         return item;
     }
     
-    public MainMenu(){
+    public MainMenu(Workspace workspace){
+        this.workspace = workspace;
         //this.recentFile = new HashMap<String ,MenuItem>();
         
-            menuFile = new Menu(ITEM_FILE);
-                itemOpen = new MenuItem();
-                itemAdd = new MenuItem();
-                itemSave = new MenuItem();
-                itemSaveWork = new MenuItem();
-                menuRecent = new Menu();
-                    itemClearRecent = new MenuItem();
-                itemNewDF = new MenuItem();
-                menuImport = new Menu();
-                    itemImportCSV = new MenuItem();
-                    itemImportXLS = new MenuItem();
-                    itemImportRDA = new MenuItem();
-                menuExport = new Menu();
-                    itemExportXLS = new MenuItem();
-                    itemExportR = new MenuItem();
-                itemdelDataFrame = new MenuItem();
-                itemConfiguration = new MenuItem();
-                itemQuit = new MenuItem();
+        menuFile = new Menu(ITEM_FILE);
+            itemOpen = new MenuItem();
+            itemAdd = new MenuItem();
+            itemSave = new MenuItem();
+            itemSaveWork = new MenuItem();
+            menuRecent = new Menu();
+                itemClearRecent = new MenuItem();
+            itemNewDF = new MenuItem();
+            menuImport = new Menu();
+                itemImportCSV = new MenuItem();
+                itemImportXLS = new MenuItem();
+                itemImportRDA = new MenuItem();
+            menuExport = new Menu();
+                itemExportXLS = new MenuItem();
+                itemExportR = new MenuItem();
+            itemdelDataFrame = new MenuItem();
+            itemConfiguration = new MenuItem();
+            itemQuit = new MenuItem();
 
         menuData = new Menu();
             menuTransforms = new Menu();
@@ -325,20 +334,8 @@ public class MainMenu extends MenuBar{
         getMenus().add(menuHelp);
         
     }    
-    public void addDataFrame(){
-        
-    }
-    /*
-     * 
-     * Delegating events
-     */
-    ArrayList<CoDaPackMenuListener> listeners = new ArrayList<CoDaPackMenuListener>();
-    public void addCoDaPackMenuListener(CoDaPackMenuListener listener){
-        listeners.add(listener);
-    }
-    public interface CoDaPackMenuListener{
-        public void menuItemClicked(String label);
-    }
+
+    
     
     
 //       HashMap<String ,MenuItem> recentFile;

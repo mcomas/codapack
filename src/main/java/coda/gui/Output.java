@@ -20,101 +20,75 @@
 package coda.gui;
 
 import coda.gui.output.OutputElement;
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import javafx.scene.layout.Pane;
-import javax.swing.JEditorPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
-import javax.swing.text.Document;
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.StyleSheet;
-import javax.swing.undo.UndoManager;
+import java.awt.Desktop;
+import java.net.URI;
+import javafx.concurrent.Worker.State;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.events.Event;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.EventTarget;
+import org.w3c.dom.html.HTMLAnchorElement;
+
 
 /**
  *
  * @author mcomas
  */
-public final class Output extends Pane{
-    public final long serialVersionUID = 1L;
-    
-    private String windowText = "";
-
-    private HTMLEditorKit hed = new HTMLEditorKit();
-    protected UndoManager undoManager = new UndoManager();
-
-    private Document doc;
-
-    private static JEditorPane jEditorPane1;
-    private static JScrollPane jScrollPane1;
-
+public final class Output extends BorderPane{
     // De moment no cal
     //private ArrayList<OutputElement> output = new ArrayList<OutputElement>();
-
+    public String windowText = "<html>{POINTER}</html>";
     public Output() {
-//        setLayout(new BorderLayout());
-//
-//        jScrollPane1 = new javax.swing.JScrollPane();
-//        jEditorPane1 = new javax.swing.JEditorPane();
-//
-//        //jEditorPane1.setEditable(false); //<- No sé què és millor?
-//        setPreferredSize(new java.awt.Dimension(500, 350));
-//        setVisible(true);
-//
-//        jScrollPane1.setViewportView(jEditorPane1);
-//        add(jScrollPane1, java.awt.BorderLayout.CENTER);
-//
-//        jEditorPane1.setContentType("text/html");
-//        setHTMLStyle(hed.getStyleSheet());
-//
-//        doc = hed.createDefaultDocument();
-//
-//        jEditorPane1.setEditorKit(hed);
-//        jEditorPane1.setDocument(doc);
+        addWelcome(CoDaPackConf.CoDaVersion);
+        
+        WebView browser = new WebView();
+        WebEngine webEngine = browser.getEngine();
+                
+        webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+            if (newState == State.SUCCEEDED) {
+                Document doc = webEngine.getDocument();
+                NodeList nodeList = doc.getElementsByTagName("a");
+                for (int i = 0; i < nodeList.getLength(); i++){
+                    Node node= nodeList.item(i);
+                    EventTarget eventTarget = (EventTarget) node;
+                    eventTarget.addEventListener("click", new EventListener(){
+                        @Override
+                        public void handleEvent(Event evt)
+                        {
+                            EventTarget target = evt.getCurrentTarget();
+                            HTMLAnchorElement anchorElement = (HTMLAnchorElement) target;
+                            String href = anchorElement.getHref();
+                            //System.out.println(href);
+                            Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+                            if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+                                try {
+                                    desktop.browse(new URI(href));
+                                } catch (Exception e) {
+                                }
+                            }                            
+                            evt.preventDefault();
+                        }
+                    }, false);
+                }
+            }
+        });
+        webEngine.loadContent(windowText.replace("{POINTER}", ""));
+        this.setCenter(browser);
+
     }
-//    public void setHTMLStyle(StyleSheet styleSheet){
-//        styleSheet.addRule("td,th {"
-//            + "border:1px solid #98bf21;"
-//            + "padding:3px 7px 2px 7px;}");
-//        styleSheet.addRule("th{"
-//            + "text-align:left;"
-//            + "padding-top:5px;"
-//            + "padding-bottom:4px;"
-//            + "background-color:#277BCC;"
-//            + "color:#ffffff;}");
-//        styleSheet.addRule(".alt{"
-//            + "color:#000000;"
-//            + "background-color:#FFFADA;}"); //#A2C1D7;}");
-//        styleSheet.addRule("td.h2{"
-//            + "background-color:#CC0000;}");
-//        styleSheet.addRule("td.h1{"
-//            + "background-color:#FFCCCC;}");
-//        styleSheet.addRule("td.l2{"
-//            + "background-color:#2B60DE;}");
-//        styleSheet.addRule("td.l1{"
-//            + "background-color:#ADDFFF;}");
-//        styleSheet.addRule("td.normal{"
-//            + "background-color:#FFFFFF;}");
-//        styleSheet.addRule(
-//                "body{"
-//          + "font-family: Monospace; "
-//          + "font-size:" + "12px" + ";"
-//          + "color:#000000;"
-//          + "text-decoration: none;"
-//          + "margin:10px;"
-//          + "border-collapse:collapse;}");        
-//    }
-//
-//    public void addWelcome(String CoDaVersion){
-//        windowText = "<b>CoDaPack</b> - Version " + CoDaVersion
-//                + "<br>This software is being developed by the "
-//                + "Research Group in Statistics and Compositional Data Analysis "
-//                + "at University of Girona<br><br>";
-//        jEditorPane1.setText(windowText);
-//        repaint();
-//    }
-//    public void addOutput(OutputElement oe){
+    public void addWelcome(String CoDaVersion){
+        String message = "<div><b>CoDaPack</b> - Version " + CoDaVersion
+                + "<p>This software is being developed by the "
+                + "<a href='http://imae.udg.edu/Recerca/EIO/inici_eng.html'>Research Group in Statistics and Compositional Data Analysis</a> "
+                + "(University of Girona).</p></div> {POINTER}";
+        windowText = windowText.replace("{POINTER}", message);
+    }
+    public void addOutput(OutputElement oe){
 //        //De moment no cal
 //        //output.add(oe); 
 //        String text = jEditorPane1.getText();
@@ -122,7 +96,7 @@ public final class Output extends Pane{
 //        windowText = oe.printHTML(windowText)+ "<br>";
 //        jEditorPane1.setText(windowText);
 //        repaint();
-//    }
+   }
 //    public void addOutput(ArrayList<OutputElement> outputs){
 //        String text = jEditorPane1.getText();
 //        windowText = text.substring(39, text.length()-15);
