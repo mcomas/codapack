@@ -15,7 +15,8 @@ public class Workspace {
     
     private final ArrayList<DataFrame> dataFrame = new ArrayList<DataFrame>();
     private int activeDataFrame = -1;
-    
+    public Workspace(){
+    }
     public void addDataFrame(DataFrame df){
 //        if(isDataFrameNameAvailable(df.name)){
             activeDataFrame = dataFrame.size();
@@ -35,8 +36,7 @@ public class Workspace {
     public int numberOfDataFrames(){
         return dataFrame.size();
     }
-    public Workspace(){
-    }
+    
     public DataFrame getActiveDataFrame(){
         return dataFrame.get(activeDataFrame);
     }

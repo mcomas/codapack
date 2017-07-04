@@ -1,5 +1,6 @@
 package coda.gui.menu;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
@@ -15,18 +16,20 @@ import javafx.scene.layout.HBox;
  * @author marc
  */
 public class ALRMenuOptions extends OptionPane{
-        public ALRMenuOptions(){
-            
-            HBox hb = new HBox();
-            hb.setSpacing(10);
-            RadioButton ra = new RadioButton("Raw-ALR");
-            ra.setSelected(true);
-            RadioButton ar = new RadioButton("ALR-Raw");
-            ToggleGroup group = new ToggleGroup();
-            ar.setToggleGroup(group);
-            ar.setSelected(true);
-            ra.setToggleGroup(group);
-            hb.getChildren().addAll(ar,ra);
-            getChildren().add(hb);
-        }
+    RadioButton ra;
+    RadioButton ar;
+    public ALRMenuOptions(){
+
+        HBox hb = new HBox();
+
+        hb.setSpacing(10);
+        ra = new RadioButton("Raw-ALR");
+        ra.setSelected(true);
+        ar = new RadioButton("ALR-Raw");
+        ToggleGroup group = new ToggleGroup();
+        ar.setToggleGroup(group);
+        ra.setToggleGroup(group);
+        hb.getChildren().addAll(ra,ar);
+        getChildren().add(hb);
     }
+}

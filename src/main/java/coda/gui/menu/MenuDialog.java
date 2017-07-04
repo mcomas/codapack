@@ -43,22 +43,28 @@ import org.controlsfx.control.ListSelectionView;
  * @author mcomas
  */
 public abstract class MenuDialog extends Stage{
-    CoDaPackMain mainApplication;
-    
+    protected CoDaPackMain mainApplication;
+    protected DataFrame dataframe;
+    protected ListSelectionView selector;
+    protected OptionPane options;
     
     int WIDTH = 650;//560;
     int HEIGHT = 500;//430;
     public MenuDialog(final CoDaPackMain mainApp, String title, OptionPane options){
-        Stage mainStage = mainApp.mainStage;        
+        this.mainApplication = mainApp;
         this.setTitle(title);
-        DataFrame df = mainApp.workspace.getActiveDataFrame();
-        ArrayList<String> vnumeric = df.getNames(Variable.VAR_NUMERIC);
-        ArrayList<String> vtext = df.getNames(Variable.VAR_TEXT);
+        this.options = options;
+        
+        Stage mainStage = mainApp.mainStage;   
+        
+        dataframe = mainApp.workspace.getActiveDataFrame();
+        ArrayList<String> vnumeric = dataframe.getNames(Variable.VAR_NUMERIC);
+        ArrayList<String> vtext = dataframe.getNames(Variable.VAR_TEXT);
         
         
         // Selection pane
-        ListSelectionView lsv = new ListSelectionView();
-        lsv.getSourceItems().addAll(vnumeric);        
+        selector = new ListSelectionView();
+        selector.getSourceItems().addAll(vnumeric);        
         
         CheckComboBox ccb = new CheckComboBox();
         ccb.getItems().addAll(vtext);
@@ -70,7 +76,7 @@ public abstract class MenuDialog extends Stage{
         groups.getChildren().addAll(lgroup,ccb);
         
         BorderPane bps = new BorderPane();
-        bps.setCenter(lsv);
+        bps.setCenter(selector);
         bps.setBottom(groups);
         
         // Accept, cancel buttons

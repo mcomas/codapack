@@ -23,10 +23,8 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import java.awt.TextField;
+import javafx.collections.ObservableList;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.Pane;
-import javax.swing.ButtonGroup;
 
 /**
  *
@@ -34,17 +32,31 @@ import javax.swing.ButtonGroup;
  */
 public class ALRMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
-    RadioButton ra;
-    RadioButton ar;
-    TextField closure = new TextField("1.0");
 
-    public ALRMenu(final CoDaPackMain mainApp, String title, OptionPane options){
+    TextField closure = new TextField("1.0");
+    public ALRMenu(final CoDaPackMain mainApp, String title, ALRMenuOptions options){
         super(mainApp, title, options);
     }
     
     @Override
     public void acceptButtonActionPerformed() {
-        System.out.println();
+        ALRMenuOptions opt = (ALRMenuOptions)options;
+        if(opt.ra.isSelected()){
+            ObservableList<String> selectedItems = selector.getTargetItems();
+            int K = selectedItems.size();
+            int k = K-1;
+            System.out.println();
+            String[] sel_names = new String[K];
+            for(int i =0; i < K; i++) sel_names[i] = (String)selectedItems.get(i);
+            String[] new_names = new String[k];
+            for(int i=0;i<k;i++){
+                new_names[i] = "alr." + sel_names[i] + "_" + sel_names[k];
+            }
+            double X[][] = dataframe.getNumericalData(sel_names);
+            double alr[][] = CoDaStats.transformRawALR(X);
+            dataframe.addNumericalData(new_names, alr);
+        }
+        this.close();
     }    
 }
 

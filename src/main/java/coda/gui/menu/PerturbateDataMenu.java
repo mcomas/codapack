@@ -32,6 +32,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import static coda.CoDaStats.closure;
+import static coda.CoDaStats.closure;
+import static coda.CoDaStats.closure;
 
 
 /**

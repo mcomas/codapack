@@ -25,14 +25,14 @@ public class DataFrame{
         this.name = "default";
     }
     public DataFrame(String name){
-        this.vars = new HashMap<String, Variable>();
+        this.vars = new HashMap<>();
         this.name = name;
     }
     public ArrayList<String> getNames(){
         return varnames;
     }
     public ArrayList<String> getNames(int type){
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         if(Variable.VAR_TEXT == type){
             for(Variable var : vars.values()){
                 if(var.isText()){
@@ -79,5 +79,27 @@ public class DataFrame{
     public int nObservations(){
         return nobservations;
     }
-    
+    public double[][] getNumericalData(String[] names){
+        int n =this.get(names[0]).getNumericalData().length;
+        int m = names.length;
+        double[][] data = new double[m][n];
+        for(int j=0;j<names.length;j++){
+            data[j] = this.get(names[j]).getNumericalData();
+        }
+        return data;
+    }
+    public void addNumericalData(String name[], double[][] data){
+        int n = varnames.size();
+        int m = name.length;
+        for(int i=0;i<m;i++){
+            addNumericalData(name[i], data[i]);
+        }
+    }
+    public void addNumericalData(String name, double[] data){
+        int n = varnames.size();
+        if(varnames.contains(name)){
+            addNumericalData(name+"c",data);
+        }
+       add(new Variable(name, data));
+    }
 }

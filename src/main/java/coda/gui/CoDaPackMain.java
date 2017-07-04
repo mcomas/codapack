@@ -188,7 +188,8 @@ public final class CoDaPackMain extends Application{
     }
     public void runMenuItem(String title){
         if(title.equals(MainMenu.ITEM_RAW_ALR)){
-            new ALRMenu(this, title, new ALRMenuOptions()).show();
+            new ALRMenu(this, title, new ALRMenuOptions()).showAndWait();
+            table.addDataFrame(workspace.getActiveDataFrame());
         }
         if(title.equals(MainMenu.ITEM_QUIT)){
             mainStage.close();
