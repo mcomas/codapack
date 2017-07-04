@@ -20,34 +20,86 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.Variable;
 import coda.gui.CoDaPackMain;
-import java.util.Arrays;
+import java.util.ArrayList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.ListSelectionView;
 
 /**
  *
  * @author mcomas
  */
-public class MenuDialog extends Stage{
+public abstract class MenuDialog extends Stage{
     CoDaPackMain mainApplication;
-
+    
+    
     int WIDTH = 650;//560;
     int HEIGHT = 500;//430;
-    public MenuDialog(final CoDaPackMain mainApp, String title){
+    public MenuDialog(final CoDaPackMain mainApp, String title, OptionPane options){
         Stage mainStage = mainApp.mainStage;        
         this.setTitle(title);
-        BorderPane bp = new BorderPane();
-        ListSelectionView lsv = new ListSelectionView();
         DataFrame df = mainApp.workspace.getActiveDataFrame();
-        System.out.println(df.getNames().toString());
-        lsv.getSourceItems().addAll(df.getNames());
-        bp.setCenter(lsv);
-        setScene(new Scene(bp, 600, 400));
+        ArrayList<String> vnumeric = df.getNames(Variable.VAR_NUMERIC);
+        ArrayList<String> vtext = df.getNames(Variable.VAR_TEXT);
+        
+        
+        // Selection pane
+        ListSelectionView lsv = new ListSelectionView();
+        lsv.getSourceItems().addAll(vnumeric);        
+        
+        CheckComboBox ccb = new CheckComboBox();
+        ccb.getItems().addAll(vtext);
+        VBox groups = new VBox();
+        groups.setPadding(new Insets(5,25,5,5));
+        groups.setAlignment(Pos.BASELINE_RIGHT);
+        Label lgroup = new Label("Group by:");
+        lgroup.setStyle("-fx-font-weight: bold");
+        groups.getChildren().addAll(lgroup,ccb);
+        
+        BorderPane bps = new BorderPane();
+        bps.setCenter(lsv);
+        bps.setBottom(groups);
+        
+        // Accept, cancel buttons
+        HBox buttons = new HBox();
+        buttons.setPadding(new Insets(25));
+        //buttons.setPrefHeight(50);
+        buttons.setAlignment(Pos.BASELINE_RIGHT);
+        buttons.setSpacing(10);
+        Button cancel = new Button("Cancel");
+        cancel.setOnAction((ActionEvent e) -> {
+            cancelButtonActionPerformed();
+        });
+        Button accept = new Button("Accept");
+        accept.setOnAction((ActionEvent e) -> {
+            acceptButtonActionPerformed();
+        });
+        buttons.getChildren().addAll(cancel, accept);
+        
+        BorderPane bp = new BorderPane();        
+        bp.setCenter(bps);
+        bp.setRight(options);
+        bp.setBottom(buttons);
+        
+        setScene(new Scene(bp, 700, 400));
         
         initialize(mainStage);
+        
+        
+        
     }
     private void initialize(Stage mainStage){
         
@@ -63,7 +115,9 @@ public class MenuDialog extends Stage{
             this.setY(centerYPosition - this.getHeight()/2d);
             this.show();
         });
-        
-        
+    }
+    public abstract void acceptButtonActionPerformed();
+    public void cancelButtonActionPerformed(){
+        this.close();
     }
 }

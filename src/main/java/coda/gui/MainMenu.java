@@ -23,22 +23,12 @@
  */
 package coda.gui;
 
-import coda.Workspace;
-import java.util.ArrayList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.input.InputEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
-import javax.swing.event.HyperlinkEvent;
-
-
 
 /**
  *

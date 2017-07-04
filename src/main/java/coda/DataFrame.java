@@ -31,6 +31,24 @@ public class DataFrame{
     public ArrayList<String> getNames(){
         return varnames;
     }
+    public ArrayList<String> getNames(int type){
+        ArrayList<String> names = new ArrayList<String>();
+        if(Variable.VAR_TEXT == type){
+            for(Variable var : vars.values()){
+                if(var.isText()){
+                    names.add(var.name);
+                }
+            }
+        }
+        if(Variable.VAR_NUMERIC == type){
+            for(Variable var : vars.values()){
+                if(var.isNumeric()){
+                    names.add(var.name);
+                }
+            }
+        }
+        return names;
+    }
     public Variable get(int index){
         return vars.get(varnames.get(index));
     }
@@ -38,7 +56,6 @@ public class DataFrame{
         return vars.get(vname);
     }
     public boolean add(Variable variable){
-        System.out.print(variable.name);
         int n = variable.size();
         if(nobservations == 0 | nobservations == n){
             nobservations = n;

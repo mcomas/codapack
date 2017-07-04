@@ -19,28 +19,21 @@
 
 package coda.gui;
 
-import coda.DataFrame;
+import coda.gui.menu.ALRMenuOptions;
 import coda.Workspace;
 import coda.gui.menu.MenuDialog;
+import coda.gui.menu.ALRMenu;
 import coda.io.WorkspaceIO;
-import coda.util.Node;
-import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Orientation;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -186,18 +179,19 @@ public final class CoDaPackMain extends Application{
 //        pack();
 
     }
+    @Override
+    public void stop(){
+        System.out.println("Good bye");
+    }
     public static void main(String[] args) {
         Application.launch(args);
     }
     public void runMenuItem(String title){
         if(title.equals(MainMenu.ITEM_RAW_ALR)){
-            //BorderPane bp = new BorderPane();
-            MenuDialog stage = new MenuDialog(this, title);
-            //stage.setScene(new Scene(bp, 600, 400));
-            stage.show();
-
-            
-            //this.setStyle("-fx-background-color:tan;-fx-padding:10px;");
+            new ALRMenu(this, title, new ALRMenuOptions()).show();
+        }
+        if(title.equals(MainMenu.ITEM_QUIT)){
+            mainStage.close();
         }
        
     }
