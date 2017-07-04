@@ -31,13 +31,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import static coda.CoDaStats.closure;
 
 
 /**
  *
  * @author mcomas
  */
-public class PerturbateDataMenu extends AbstractMenuDialog{
+public class PerturbateDataMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     String selected[];
     JTextField perturbateWith;

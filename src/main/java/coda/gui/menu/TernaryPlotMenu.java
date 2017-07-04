@@ -40,7 +40,7 @@ import javax.swing.JOptionPane;
  *
  * @author mcomas
  */
-public class TernaryPlotMenu extends AbstractMenuDialog{
+public class TernaryPlotMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     public TernaryPlotMenu(final CoDaPackMain mainApp){
         super(mainApp, "Ternary Plot Menu", true);//, false, true, false);

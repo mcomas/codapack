@@ -43,7 +43,7 @@ import javax.swing.JOptionPane;
  *
  * @author mcomas
  */
-public class Biplot3dMenu extends AbstractMenuDialog{
+public class Biplot3dMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     JCheckBox coordinates;
     public Biplot3dMenu(final CoDaPackMain mainApp){

@@ -31,7 +31,7 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class TransformationCLRMenu extends AbstractMenuDialog{
+public class TransformationCLRMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     JRadioButton rc;
     JRadioButton cr;

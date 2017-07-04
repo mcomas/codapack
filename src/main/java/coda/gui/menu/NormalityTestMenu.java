@@ -36,7 +36,7 @@ import java.util.ArrayList;
  *
  * @author mcomas
  */
-public class NormalityTestMenu extends AbstractMenuDialog{
+public class NormalityTestMenu extends MenuDialog{
 
     public NormalityTestMenu(final CoDaPackMain mainApp){
         super(mainApp, "Additive Logistic Normality Test", false);

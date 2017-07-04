@@ -45,7 +45,7 @@ import javax.swing.event.ChangeListener;
  *
  * @author mcomas
  */
-public class CompStatsSummaryMenu extends AbstractMenuDialog{
+public class CompStatsSummaryMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     JCheckBox centerCheck;
     JCheckBox vararrayCheck;

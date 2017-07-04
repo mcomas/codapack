@@ -38,6 +38,7 @@ public class DataFrame{
         return vars.get(vname);
     }
     public boolean add(Variable variable){
+        System.out.print(variable.name);
         int n = variable.size();
         if(nobservations == 0 | nobservations == n){
             nobservations = n;

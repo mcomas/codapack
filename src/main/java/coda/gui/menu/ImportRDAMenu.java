@@ -58,7 +58,7 @@ import org.renjin.sexp.StringVector;
  *
  * @author david
  */
-public class ImportRDAMenu extends AbstractMenuDialog{
+public class ImportRDAMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     //Fixem el valor per defecte de prefix i suffix
     String prefix = null;

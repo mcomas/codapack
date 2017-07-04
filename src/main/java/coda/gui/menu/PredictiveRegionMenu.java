@@ -51,7 +51,7 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class PredictiveRegionMenu extends AbstractMenuDialog{
+public class PredictiveRegionMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     JTextField predLevel;
     JLabel text1 = new JLabel("Predictive level");

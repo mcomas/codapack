@@ -48,7 +48,7 @@ public class MainMenu extends MenuBar{
     /*
      * Defining actions
      */
-    public Workspace workspace;
+    public CoDaPackMain main;
     public Menu menuFile;
     public final static String ITEM_FILE = "File";
         public MenuItem itemOpen;
@@ -177,6 +177,7 @@ public class MainMenu extends MenuBar{
                 MenuItem menuItem = (MenuItem)event.getSource();
                 String title = menuItem.getText();
                 System.out.println(title);
+                main.runMenuItem(title);
                 //for(CoDaPackMenuListener e: listeners){
                 //  e.menuItemClicked(title);
                 //}
@@ -185,8 +186,8 @@ public class MainMenu extends MenuBar{
         return item;
     }
     
-    public MainMenu(Workspace workspace){
-        this.workspace = workspace;
+    public MainMenu(CoDaPackMain main){
+        this.main = main;
         //this.recentFile = new HashMap<String ,MenuItem>();
         
         menuFile = new Menu(ITEM_FILE);

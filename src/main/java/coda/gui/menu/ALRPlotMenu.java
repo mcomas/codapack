@@ -39,7 +39,7 @@ import javax.swing.JOptionPane;
  *
  * @author mcomas
  */
-public class ALRPlotMenu extends AbstractMenuDialog{
+public class ALRPlotMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
 
     public ALRPlotMenu(final CoDaPackMain mainApp){

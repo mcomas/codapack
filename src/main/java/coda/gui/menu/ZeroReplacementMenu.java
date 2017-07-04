@@ -32,7 +32,7 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class ZeroReplacementMenu extends AbstractMenuDialog{
+public class ZeroReplacementMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     JTextField closure = new JTextField("1.0");
     double percentatgeDL = 0.65;

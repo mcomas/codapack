@@ -35,7 +35,7 @@ import javax.swing.JTextArea;
  *
  * @author mcomas
  */
-public abstract class AbstractMenuDialogWithILR extends AbstractMenuDialog{
+public abstract class AbstractMenuDialogWithILR extends MenuDialog{
     protected int [][] partitionILR = null;
     protected double [][] basisILR = null;
     JTextArea areaPart = new JTextArea(5, 5);

@@ -53,7 +53,7 @@ import org.renjin.sexp.StringArrayVector;
  *
  * @author mcomas
  */
-public class ExportRDataMenu extends AbstractMenuDialog{
+public class ExportRDataMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     JTextField dfname;
     JLabel text1 = new JLabel("Data Frame name:");

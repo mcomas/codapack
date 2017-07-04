@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
  *
  * @author mcomas
  */
-public class CenterDataMenu extends AbstractMenuDialog{
+public class CenterDataMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     String selected[];
     JCheckBox centerCheck;

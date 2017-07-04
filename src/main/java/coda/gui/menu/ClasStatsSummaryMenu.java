@@ -42,7 +42,7 @@ import javax.swing.event.ChangeListener;
  *
  * @author mcomas
  */
-public class ClasStatsSummaryMenu extends AbstractMenuDialog{
+public class ClasStatsSummaryMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     JCheckBox meanCheck;
     JCheckBox stdDevCheck;

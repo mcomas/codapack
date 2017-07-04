@@ -42,7 +42,7 @@ import javax.swing.JOptionPane;
  *
  * @author mcomas
  */
-public class PrincipalComponentMenu extends AbstractMenuDialog{
+public class PrincipalComponentMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
 
     public PrincipalComponentMenu(final CoDaPackMain mainApp){

@@ -32,7 +32,7 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class AtipicalityIndexMenu extends AbstractMenuDialog{
+public class AtipicalityIndexMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     JLabel text1 = new JLabel("Threshold:");
     JTextField  thresholdField;

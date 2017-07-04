@@ -110,7 +110,6 @@ public class WorkspaceIO {
             Variable variable;
             for(int i=0;i<variables.length();i++){
                 variable = JSONtoVariable(variables.getJSONObject(i));
-                dataFrame.getNames().add(i, variable.getName());
                 dataFrame.add(variable);
             }
         } catch (JSONException ex) {

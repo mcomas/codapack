@@ -34,7 +34,7 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class PowerDataMenu extends AbstractMenuDialog{
+public class PowerDataMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     String selected[];
     JTextField powerWith;

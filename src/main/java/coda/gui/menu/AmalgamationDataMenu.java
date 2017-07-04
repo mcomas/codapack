@@ -37,7 +37,7 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class AmalgamationDataMenu extends AbstractMenuDialog{
+public class AmalgamationDataMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     String selected[];
 

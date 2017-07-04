@@ -21,6 +21,7 @@ package coda.gui;
 
 import coda.DataFrame;
 import coda.Workspace;
+import coda.gui.menu.MenuDialog;
 import coda.io.WorkspaceIO;
 import coda.util.Node;
 import java.util.ArrayList;
@@ -53,16 +54,17 @@ public final class CoDaPackMain extends Application{
     
    
     public MainMenu menu;
+    public Stage mainStage;
     public static Output output;
     public static DataList dataList;
     public static Table table;
       
-    public static Workspace workspace;
+    public Workspace workspace;
     
     @Override 
     public void start(Stage stage) {
         //setUserAgentStylesheet(STYLESHEET_CASPIAN);
-        
+        mainStage = stage;
         dataList = new DataList();
         dataList.setPrefWidth(100);
         
@@ -99,7 +101,7 @@ public final class CoDaPackMain extends Application{
         sp.getItems().addAll(sp1, sp2);
       
         
-        menu = new MainMenu(workspace);
+        menu = new MainMenu(this);
 
         
         BorderPane borderPane = new BorderPane();
@@ -188,9 +190,11 @@ public final class CoDaPackMain extends Application{
         Application.launch(args);
     }
     public void runMenuItem(String title){
-        if(title.equals(MainMenu.ITEM_IMPORT_XLS)){
-            FlowPane pane1=new FlowPane();
-            
+        if(title.equals(MainMenu.ITEM_RAW_ALR)){
+            //BorderPane bp = new BorderPane();
+            MenuDialog stage = new MenuDialog(this, title);
+            //stage.setScene(new Scene(bp, 600, 400));
+            stage.show();
 
             
             //this.setStyle("-fx-background-color:tan;-fx-padding:10px;");

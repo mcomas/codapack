@@ -31,7 +31,7 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class ClosureDataMenu extends AbstractMenuDialog{
+public class ClosureDataMenu extends MenuDialog{
     public static final long serialVersionUID = 1L;
     String selected[];
     JTextField closureTo;
