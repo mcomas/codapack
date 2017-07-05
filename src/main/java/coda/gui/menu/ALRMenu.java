@@ -20,11 +20,16 @@
 package coda.gui.menu;
 
 import coda.CoDaStats;
-import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.Reval;
 import java.awt.TextField;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.ObservableList;
-import javafx.scene.control.RadioButton;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import org.renjin.sexp.DoubleArrayVector;
 
 /**
  *
@@ -36,6 +41,7 @@ public class ALRMenu extends MenuDialog{
     TextField closure = new TextField("1.0");
     public ALRMenu(final CoDaPackMain mainApp, String title, ALRMenuOptions options){
         super(mainApp, title, options);
+        System.out.println("Constructed");
     }
     
     @Override
@@ -53,8 +59,11 @@ public class ALRMenu extends MenuDialog{
                 new_names[i] = "alr." + sel_names[i] + "_" + sel_names[k];
             }
             double X[][] = dataframe.getNumericalData(sel_names);
-            double alr[][] = CoDaStats.transformRawALR(X);
-            dataframe.addNumericalData(new_names, alr);
+            double alr[][] = CoDaStats.transformRawALR(X);            
+            double alr_R[][] = Reval.alr(dataframe, sel_names);
+            
+            dataframe.addNumericalData(new_names, alr); 
+            dataframe.addNumericalData(new_names, alr_R);
         }
         this.close();
     }    

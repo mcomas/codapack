@@ -34,14 +34,16 @@ public class DataFrame{
     public ArrayList<String> getNames(int type){
         ArrayList<String> names = new ArrayList<>();
         if(Variable.VAR_TEXT == type){
-            for(Variable var : vars.values()){
+            for(String vname : varnames){
+                Variable var = vars.get(vname);
                 if(var.isText()){
                     names.add(var.name);
                 }
             }
         }
         if(Variable.VAR_NUMERIC == type){
-            for(Variable var : vars.values()){
+            for(String vname : varnames){
+                Variable var = vars.get(vname);
                 if(var.isNumeric()){
                     names.add(var.name);
                 }
@@ -99,7 +101,8 @@ public class DataFrame{
         int n = varnames.size();
         if(varnames.contains(name)){
             addNumericalData(name+"c",data);
+        }else{
+            add(new Variable(name, data));
         }
-       add(new Variable(name, data));
     }
 }
