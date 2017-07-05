@@ -30,7 +30,18 @@
 
 package coda.gui;
 
+import coda.DataFrame;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.scene.control.CheckBoxTreeItem;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TreeItem;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import org.controlsfx.control.CheckListView;
+import org.controlsfx.control.CheckTreeView;
 
 
 
@@ -38,9 +49,23 @@ import javafx.scene.layout.Pane;
  *
  * @author mcomas
  */
-public class DataList extends Pane {
+public class DataList extends BorderPane {
+    CheckTreeView<String> list = new CheckTreeView<>();
     public DataList(){
-        
+        //list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        setCenter(list);
+    }
+    public void addDataFrame(DataFrame df){
+        ObservableList<String> items =  FXCollections.observableArrayList();
+        CheckBoxTreeItem<String> root = new CheckBoxTreeItem<>("Data");
+        root.setExpanded(true);
+        for(String vname: df.getNames()){
+            root.getChildren().add(new CheckBoxTreeItem<>(vname));
+        }
+        root.selectedProperty().setValue(true);
+        list = new CheckTreeView<>(root);
+        list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        setCenter(list);
     }
 //    public static final long serialVersionUID = 1L;
 //    //private String rootName = "CoDaPack";

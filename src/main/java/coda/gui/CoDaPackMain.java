@@ -59,7 +59,7 @@ public final class CoDaPackMain extends Application{
         //setUserAgentStylesheet(STYLESHEET_CASPIAN);
         mainStage = stage;
         dataList = new DataList();
-        dataList.setPrefWidth(100);
+        dataList.setPrefWidth(200);
         
         TabPane tp = new TabPane();
         tp.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -83,6 +83,7 @@ public final class CoDaPackMain extends Application{
         stage.getIcons().add(new Image(CoDaPackMain.class.getResourceAsStream( CoDaPackConf.RESOURCE_PATH + "logoL.png" )));
         workspace = WorkspaceIO.openWorkspace("alimentation.cdp");
         table.addDataFrame(workspace.getActiveDataFrame());
+        dataList.addDataFrame(workspace.getActiveDataFrame());
         
         
         SplitPane sp = new SplitPane();
@@ -190,6 +191,7 @@ public final class CoDaPackMain extends Application{
         if(title.equals(MainMenu.ITEM_RAW_ALR)){
             new ALRMenu(this, title, new ALRMenuOptions()).showAndWait();
             table.addDataFrame(workspace.getActiveDataFrame());
+            dataList.addDataFrame(workspace.getActiveDataFrame());
         }
         if(title.equals(MainMenu.ITEM_QUIT)){
             mainStage.close();

@@ -4,9 +4,6 @@ import coda.DataFrame;
 import coda.Numeric;
 import coda.Text;
 import coda.Variable;
-import coda.Workspace;
-import coda.gui.table.ExcelAdapter;
-import java.util.HashSet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.BorderPane;
@@ -78,7 +75,7 @@ public final class Table extends BorderPane{
         spv.setGrid(grid);
         ObservableList<SpreadsheetColumn> cols = spv.getColumns();
         for(SpreadsheetColumn col: cols){
-            col.setPrefWidth(70);
+            col.setPrefWidth(90);
             
         }
     }
