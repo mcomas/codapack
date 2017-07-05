@@ -133,6 +133,11 @@
             <artifactId>controlsfx</artifactId>
             <version>8.40.12</version>
         </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>fxgraphics2d</artifactId>
+            <version>1.5</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
