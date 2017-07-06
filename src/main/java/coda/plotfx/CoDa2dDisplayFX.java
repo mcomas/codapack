@@ -26,7 +26,9 @@ package coda.plotfx;
 
 
 import java.awt.geom.AffineTransform;
+import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 
 /**
  *
@@ -50,7 +52,10 @@ public abstract class CoDa2dDisplayFX extends AbstractCoDaDisplayFX {
         addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
             mouseReleased(e);
         });
-        
+        setOnScroll((ScrollEvent event) -> {
+            mouseWheelMoved(event);
+            event.consume();
+        });
     }
 
     public final double[] transform(double x, double y, double[] sol){
@@ -130,5 +135,11 @@ public abstract class CoDa2dDisplayFX extends AbstractCoDaDisplayFX {
             origin[1] = 0;
         }
         //repaint();
+    }
+    
+    public final void mouseWheelMoved(ScrollEvent mwe) {
+        double dzoom = 1 - .1 * mwe.getDeltaY();
+        zoom(dzoom);
+        paintComponent(getWidth(), getHeight());
     }
 }
