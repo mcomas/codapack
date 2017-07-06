@@ -85,15 +85,16 @@ public abstract class MenuDialog extends Stage{
         //buttons.setPrefHeight(50);
         buttons.setAlignment(Pos.BASELINE_RIGHT);
         buttons.setSpacing(10);
-        Button cancel = new Button("Cancel");
-        cancel.setOnAction((ActionEvent e) -> {
-            cancelButtonActionPerformed();
-        });
         Button accept = new Button("Accept");
         accept.setOnAction((ActionEvent e) -> {
             acceptButtonActionPerformed();
         });
-        buttons.getChildren().addAll(cancel, accept);
+        Button cancel = new Button("Cancel");
+        cancel.setOnAction((ActionEvent e) -> {
+            cancelButtonActionPerformed();
+        });
+        
+        buttons.getChildren().addAll(accept, cancel);
         
         BorderPane bp = new BorderPane();        
         bp.setCenter(bps);

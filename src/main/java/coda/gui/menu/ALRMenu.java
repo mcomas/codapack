@@ -51,19 +51,27 @@ public class ALRMenu extends MenuDialog{
             ObservableList<String> selectedItems = selector.getTargetItems();
             int K = selectedItems.size();
             int k = K-1;
-            System.out.println();
             String[] sel_names = new String[K];
             for(int i =0; i < K; i++) sel_names[i] = (String)selectedItems.get(i);
             String[] new_names = new String[k];
             for(int i=0;i<k;i++){
                 new_names[i] = "alr." + sel_names[i] + "_" + sel_names[k];
-            }
-            double X[][] = dataframe.getNumericalData(sel_names);
-            double alr[][] = CoDaStats.transformRawALR(X);            
-            double alr_R[][] = Reval.alr(dataframe, sel_names);
-            
-            dataframe.addNumericalData(new_names, alr); 
+            }       
+            double alr_R[][] = new Reval().alr(dataframe, sel_names);
             dataframe.addNumericalData(new_names, alr_R);
+        }
+        if(opt.ar.isSelected()){
+            ObservableList<String> selectedItems = selector.getTargetItems();
+            int k = selectedItems.size();
+            int K = k+1;
+            String[] sel_names = new String[k];
+            for(int i = 0; i < k; i++) sel_names[i] = (String)selectedItems.get(i);
+            String[] new_names = new String[K];
+            for(int i=0;i<K;i++){
+                new_names[i] = "alr.inv." + (i+1);
+            }
+            double alr_inv_R[][] = new Reval().alrInv(dataframe, sel_names);
+            dataframe.addNumericalData(new_names, alr_inv_R);
         }
         this.close();
     }    

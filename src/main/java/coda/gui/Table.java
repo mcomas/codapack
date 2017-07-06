@@ -63,10 +63,15 @@ public final class Table extends BorderPane{
                 Variable var = df.get(column); 
                 if(var.isNumeric()){
                     Numeric num = (Numeric)var.get(row);
-                    list.add(SpreadsheetCellType.DOUBLE.createCell(row, column, 1, 1, num.getValue()));
+                    SpreadsheetCell cell = SpreadsheetCellType.DOUBLE.createCell(row, column, 1, 1, num.getValue());
+                    cell.setStyle( "-fx-alignment: CENTER-RIGHT;");
+                    cell.setFormat("0.##");
+                    list.add(cell);
                 }else{
                     Text txt = (Text)var.get(row);
-                    list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1, txt.getValue()));
+                    SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(row, column, 1, 1, txt.getValue());
+                    cell.setStyle( "-fx-alignment: CENTER-LEFT;-fx-background-color: #FFA500;");
+                    list.add(cell);
                 }                
             }
             rows.add(list);
@@ -75,8 +80,7 @@ public final class Table extends BorderPane{
         spv.setGrid(grid);
         ObservableList<SpreadsheetColumn> cols = spv.getColumns();
         for(SpreadsheetColumn col: cols){
-            col.setPrefWidth(90);
-            
+            col.setPrefWidth(80);
         }
     }
 }
