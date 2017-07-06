@@ -41,7 +41,7 @@ public class Reval {
             }
             engine.eval("X = cbind(" + joiner.toString() + ")");
             engine.eval("logX <- log(X)");
-            res = (Vector)engine.eval(String.format("logX[,-%d] - logX[,%d]", K, K));
+            res = (Vector)engine.eval("logX[,-ncol(X)] - logX[,ncol(X)]");
             } catch (ScriptException ex) {
             Logger.getLogger(ALRMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
