@@ -138,6 +138,12 @@
             <artifactId>fxgraphics2d</artifactId>
             <version>1.5</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.jbytecode</groupId>
+            <artifactId>RCaller</artifactId>
+            <version>3.0</version>
+        </dependency>
+
     </dependencies>
     <repositories>
         <repository>
