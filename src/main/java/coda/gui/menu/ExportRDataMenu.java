@@ -45,6 +45,7 @@ import org.renjin.eval.Context;
 import org.renjin.primitives.io.serialization.RDataWriter;
 import org.renjin.sexp.IntArrayVector;
 import org.renjin.sexp.DoubleArrayVector;
+import org.renjin.sexp.DoubleVector;
 import org.renjin.sexp.ListVector;
 import org.renjin.sexp.PairList;
 import org.renjin.sexp.StringArrayVector;
@@ -100,7 +101,14 @@ public class ExportRDataMenu extends AbstractMenuDialog{
                     Variable var = df.get(sel_names[j]);
                     
                     if(var.isNumeric()){
-                        dataframe.add(var.getName(), new DoubleArrayVector(var.getNumericalData()));
+                        double num[] = var.getNumericalData();
+                        for(int i=0;i<num.length;i++){
+                            if(Double.isNaN(num[i])){
+                                num[i] = DoubleVector.NA;
+                            }
+                        }
+                        dataframe.add(var.getName(), new DoubleArrayVector(num));
+                        
                     }
                     if(var.isText()){
                         dataframe.add(var.getName(), new StringArrayVector(var.getTextData()));
