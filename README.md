@@ -17,23 +17,27 @@ area and the results area which has a textual output window and independent
 graphical output. Also it is expected to work at least under Unix, Window 
 and MacOS operating systems.
 
-# CoDaPack: start developing
+# CoDaPack building 
 
-Clone codapack (and optionally codapack-updater)
+To run CoDaPack you need at least Java SE Runtime Environment 8. To build the executables Java SE Development Kit 8 and Maven are required.
+
+## Command line steps to build CoDaPack
+
+Clone codapack from Github and move into codapack's folder
 
 ```{r}
 git clone http://github.com/mcomas/codapack.git
-git clone http://github.com/mcomas/codapack-updater.git
+cd codapack
+```
+`codapack` is packaged as a Maven project and can be imported to any IDE: Netbeans, Eclipse or IntelliJ IDEA. To build CoDaPack from the command line just execute
+
+```
+mvn package
 ```
 
-Download external libraries.
+Maven will create the follwing targets:
 
-```{r}
-curl mcomas.net/codapack/codapack-lib.zip > codapack-lib.zip
-```
+* `CoDaPack-2.02.21-jar-with-dependencies.jar` jar file with all dependencies needed.
+* `CoDaPack.exe` executable file for Windows.
+* `CoDaPack-2.02.21.dmg` application for MacOSX.
 
-and decompress them into `codapack/libs` folder
-
-```{r}
-unzip codapack-lib.zip -d codapack/lib/
-```
