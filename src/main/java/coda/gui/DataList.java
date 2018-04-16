@@ -32,15 +32,10 @@ package coda.gui;
 
 import coda.DataFrame;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import org.controlsfx.control.CheckListView;
 import org.controlsfx.control.CheckTreeView;
 
 
