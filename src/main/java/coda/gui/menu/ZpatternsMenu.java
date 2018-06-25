@@ -26,6 +26,9 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import static coda.gui.CoDaPackMain.outputPanel;
+import coda.gui.output.OutputElement;
+import coda.gui.output.OutputForR;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import javax.swing.JFrame;
@@ -81,7 +84,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 re.eval(dataR);
                 re.eval("png('out.png',width=700,height=700)");
                 re.eval("zCompositions::zPatterns(X,label=0)");
-                re.eval("out <- zCompositions::zPatterns(X,label=0))");
+                re.eval("out <- capture.output(zCompositions::zPatterns(X,label=0))");
                 re.eval("dev.off()");
                 
                 setVisible(false);
@@ -89,6 +92,11 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                         // jframe configuration
         
                 panel.setSize(800,800);
+                plotPNG.setTitle("zPatterns Plot Output");
+                plotPNG.setIconImage(
+                Toolkit.getDefaultToolkit().
+                        getImage(
+                getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logoL.png")));
                 ImageIcon icon = new ImageIcon("out.png");
                 JLabel label = new JLabel(icon,JLabel.CENTER);
                 label.setSize(700,700);
@@ -101,6 +109,11 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 
                 File file = new File("out.png");
                 file.delete();
+                
+                // we show the output 
+                
+                OutputElement e = new OutputForR(re.eval("out").asStringArray());
+                outputPanel.addOutput(e);
         }
         else{ // no data selected
             JOptionPane.showMessageDialog(frame, "Please select data");
