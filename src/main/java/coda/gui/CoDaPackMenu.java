@@ -104,6 +104,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_POWER = "Power transformation";
         public JMenuItem itemZeros;
         public final String ITEM_ZEROS = "Rounded zero replacement";
+        public final JMenuItem itemZerosR;
+        public final String ITEM_ZEROS_R = "Rounded zero replacement with R";
         public JMenuItem itemSetDetectionLimit;
         public final String ITEM_SETDETECTION ="Set detection limit";
         public JMenuItem itemCategorizeVariables;
@@ -151,6 +153,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_PRED_REG_PLOT = "Predictive Region";
         public JMenuItem confidenceRegionPlot;
         public final String ITEM_CONF_REG_PLOT = "Center Confidence Region";
+        public JMenuItem zPatternsPlot;
+        public final String ITEM_ZPATTERNS = "ZPatterns plot";
 
    public JMenu menuHelp;
    public final String ITEM_HELP = "Help";
@@ -158,6 +162,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_FORCE_UPDATE = "Check for Updates";
         public JMenuItem itemAbout;
         public final String ITEM_ABOUT = "About";
+        public JMenuItem itemR_Test;
+        public final String R_TEST = "Get R status";
 
     public String active_path = null;
     
@@ -352,6 +358,7 @@ public class CoDaPackMenu extends JMenuBar{
             itemPerturbate = new JMenuItem();
             itemPower = new JMenuItem();
             itemZeros = new JMenuItem();
+            itemZerosR = new JMenuItem();
             itemSetDetectionLimit = new JMenuItem();
             itemCategorizeVariables = new JMenuItem();
             itemNumerizeVariables = new JMenuItem();
@@ -376,10 +383,12 @@ public class CoDaPackMenu extends JMenuBar{
             principalComponentPlot = new JMenuItem();
             predictiveRegionPlot = new JMenuItem();
             confidenceRegionPlot = new JMenuItem();
+            zPatternsPlot = new JMenuItem();
 
         menuHelp = new JMenu();
             itemForceUpdate = new JMenuItem();
-            itemAbout = new JMenuItem();  
+            itemAbout = new JMenuItem();
+            itemR_Test = new JMenuItem();
         
         
         menuFile.setText(ITEM_FILE);
@@ -428,6 +437,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuData, itemPower, ITEM_POWER);
         addJMenuItem(menuData, itemSetDetectionLimit, ITEM_SETDETECTION); 
         addJMenuItem(menuData, itemZeros, ITEM_ZEROS);
+        addJMenuItem(menuData, itemZerosR, ITEM_ZEROS_R);
         menuData.addSeparator();
         addJMenuItem(menuData, itemCategorizeVariables, ITEM_CAT_VAR);
         addJMenuItem(menuData, itemNumerizeVariables, ITEM_NUM_VAR);
@@ -449,8 +459,9 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuGraphs, itemEmptyTernaryPlot, ITEM_EMPTY_TERNARY_PLOT);
         addJMenuItem(menuGraphs, principalComponentPlot, ITEM_PC_PLOT);
         addJMenuItem(menuGraphs, predictiveRegionPlot, ITEM_PRED_REG_PLOT);
-        addJMenuItem(menuGraphs, confidenceRegionPlot, ITEM_CONF_REG_PLOT);        
+        addJMenuItem(menuGraphs, confidenceRegionPlot, ITEM_CONF_REG_PLOT);
         menuGraphs.addSeparator();
+        addJMenuItem(menuGraphs, zPatternsPlot, ITEM_ZPATTERNS);
         addJMenuItem(menuGraphs, itemALRPlot, ITEM_ALR_PLOT);
         addJMenuItem(menuGraphs, itemCLRPlot, ITEM_CLR_PLOT);
         addJMenuItem(menuGraphs, itemILRPlot, ITEM_ILR_PLOT);
@@ -463,6 +474,7 @@ public class CoDaPackMenu extends JMenuBar{
         menuHelp.setText(ITEM_HELP);
         addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
         addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
+        addJMenuItem(menuHelp,itemR_Test, R_TEST);
         add(menuHelp);
         
     }

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.renjin:renjin-asm:5.0.4b">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/renjin/renjin-asm/5.0.4b/renjin-asm-5.0.4b.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/renjin/renjin-asm/5.0.4b/renjin-asm-5.0.4b-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/renjin/renjin-asm/5.0.4b/renjin-asm-5.0.4b-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

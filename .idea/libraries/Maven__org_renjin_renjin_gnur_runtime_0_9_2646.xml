@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.renjin:renjin-gnur-runtime:0.9.2646">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/renjin/renjin-gnur-runtime/0.9.2646/renjin-gnur-runtime-0.9.2646.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/renjin/renjin-gnur-runtime/0.9.2646/renjin-gnur-runtime-0.9.2646-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/renjin/renjin-gnur-runtime/0.9.2646/renjin-gnur-runtime-0.9.2646-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

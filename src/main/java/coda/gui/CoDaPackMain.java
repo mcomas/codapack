@@ -26,6 +26,9 @@ import coda.ext.json.JSONObject;
 import coda.gui.CoDaPackMain.UpdateConnection;
 import coda.gui.CoDaPackMenu.CoDaPackMenuListener;
 import coda.gui.menu.*;
+import coda.gui.output.OutputElement;
+import coda.gui.output.OutputForR;
+import coda.gui.output.OutputText;
 import coda.gui.table.TablePanel;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.CoDaPackImporter;
@@ -39,6 +42,8 @@ import coda.plot2.window.TernaryPlot2dWindow;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
@@ -75,6 +80,10 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+// R LIBRARIES
+import org.rosuda.JRI.*;
+
 /**
  *
  * @author mcomas
@@ -100,6 +109,10 @@ public final class CoDaPackMain extends JFrame{
     public static DataList dataList;
     private JSplitPane jSplitPane;
     
+    /**
+     * VARIABLE R
+     */
+    public static Rengine re = new Rengine(null, false, null);
     
     private JComboBox dataFrameSelector;
     private final DataFrameSelectorListener dataFrameListener = new DataFrameSelectorListener();
@@ -556,6 +569,8 @@ public final class CoDaPackMain extends JFrame{
             new PowerDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZEROS)){
             new ZeroReplacementMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_ZEROS_R)){
+            new ZeroReplacementRMenu(this,re).setVisible(true);
         }else if (title.equals(jMenuBar.ITEM_SETDETECTION)){
             new SetDetectionLimitMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
@@ -564,6 +579,8 @@ public final class CoDaPackMain extends JFrame{
             new PredictiveRegionMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CONF_REG_PLOT)){
             new ConfidenceRegionMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_ZPATTERNS)){
+            new ZpatternsMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_EMPTY_TERNARY_PLOT)){
             String names[] = {"X", "Y", "Z"};
             TernaryPlot2dDisplay display = new TernaryPlot2dDisplay(names);
@@ -607,6 +624,25 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_ABOUT)){
             new CoDaPackAbout(this).setVisible(true);
         }
+        else if(title.equals(jMenuBar.R_TEST)){
+            // first we get the session info
+            re.eval("a <- capture.output(sessionInfo())");
+            OutputElement e = new OutputForR(re.eval("a").asStringArray());
+            outputPanel.addOutput(e);
+            
+            
+            // after we get the system variables
+            
+            re.eval("a <- capture.output(Sys.getenv())");
+            e = new OutputForR(re.eval("a").asStringArray());
+            outputPanel.addOutput(e);
+            
+            // finally the capabilities
+            
+            re.eval("a <- capture.output(capabilities())");
+            e = new OutputForR(re.eval("a").asStringArray());
+            outputPanel.addOutput(e);
+        }
     }
     public class DataFrameSelectorListener implements ItemListener{
         public void itemStateChanged(ItemEvent ie) {
@@ -619,6 +655,7 @@ public final class CoDaPackMain extends JFrame{
             }
         }
     }    
+    
     /**
     * @param args the command line arguments
     */
@@ -641,8 +678,7 @@ public final class CoDaPackMain extends JFrame{
         } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(CoDaPackMain.class.getName())
                     .log(Level.SEVERE, null, ex);
-        }
-        
+        } 
         
         /*
          *  Congifuration file creation if it not exists. Using static class CoDaPackConf
