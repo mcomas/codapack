@@ -128,7 +128,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
             if(containsZero){ // if contains zero then we do something
             
                 // transform the data to string for R
-                String dataR = "X <- matrix(c(";
+                /*String dataR = "X <- matrix(c(";
                 for (int i = 0; i < data.length; i++) {
                     for (int j = 0; j < data[i].length; j++) {
                         dataR += String.valueOf(data[i][j]) + ",";
@@ -137,7 +137,14 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                 dataR = dataR.substring(0, dataR.length() - 1); // we delete the last ,
                 dataR += "),byrow=FALSE,ncol=" + String.valueOf(m) + ")";
 
-                re.eval(dataR);
+                re.eval(dataR);*/;
+                re.assign("X", data[0]);
+                re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
+                for(int i=1; i < data.length; i++){
+                    re.assign("tmp", data[i]);
+                    re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
+                }
+                
                 double dlevel[][] = df.getDetectionLevel(sel_names);
                 
                 // modificació en el cas de que no tingui level detector agafant minim columna
@@ -149,7 +156,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                 }
                 
                 
-                String dl = "DL = matrix(c(";
+                /*String dl = "DL = matrix(c(";
                 
                 for (int i = 0; i < dlevel.length; i++) {
                     for (int j = 0; j < dlevel[i].length; j++) {
@@ -159,7 +166,13 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                 
                 dl = dl.substring(0, dl.length() - 1); // we delete the last ,
                 dl += "),byrow=FALSE,ncol=" + String.valueOf(m) + ")";
-                re.eval(dl);
+                re.eval(dl);*/
+                re.assign("DL", dlevel[0]);
+                re.eval("DL" + " <- matrix( " + "DL" + " ,nc=1)");
+                for(int i=1; i < dlevel.length; i++){
+                    re.assign("tmp", dlevel[i]);
+                    re.eval("DL" + " <- cbind(" + "DL" + ",matrix(tmp,nc=1))");
+                }
                 //re.eval("DL = matrix(as.numeric(X == 0), ncol=" + String.valueOf(m) + ")");
                 re.eval("out <- capture.output(zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + "))");
                 //OutputElement e;
