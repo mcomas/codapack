@@ -113,11 +113,16 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
             boolean containsZero = false;
 
             double data[][] = df.getNumericalData(sel_names);
+            double minimumsOfColumns[] = new double[m]; double minimumOfColumn;
             
-            for(int i =0; (i < data.length) && (!containsZero);i++){
-                for(int j=0; (j < data[i].length) && (!containsZero);j++){
+            // we search the minimum number diferent of 0 for each column
+            for(int i =0; i < data.length;i++){
+                minimumOfColumn = 0.0;
+                for(int j=0;j < data[i].length;j++){
                     if(data[i][j] == 0) containsZero = true;
+                    if((data[i][j] != 0 && data[i][j] < minimumOfColumn) || minimumOfColumn == 0) minimumOfColumn = data[i][j];
                 }
+                minimumsOfColumns[i] = minimumOfColumn;
             }
             
             if(containsZero){ // if contains zero then we do something
@@ -133,7 +138,29 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                 dataR += "),byrow=FALSE,ncol=" + String.valueOf(m) + ")";
 
                 re.eval(dataR);
-                re.eval("DL = matrix(as.numeric(X == 0), ncol=" + String.valueOf(m) + ")");
+                double dlevel[][] = df.getDetectionLevel(sel_names);
+                
+                // modificació en el cas de que no tingui level detector agafant minim columna
+                
+                for(int i = 0; i < data.length;i++){
+                    for(int j = 0; j < data[i].length;j++){ // no data level 
+                        if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
+                    }
+                }
+                
+                
+                String dl = "DL = matrix(c(";
+                
+                for (int i = 0; i < dlevel.length; i++) {
+                    for (int j = 0; j < dlevel[i].length; j++) {
+                        dl += String.valueOf(dlevel[i][j]) + ",";
+                    }
+                }
+                
+                dl = dl.substring(0, dl.length() - 1); // we delete the last ,
+                dl += "),byrow=FALSE,ncol=" + String.valueOf(m) + ")";
+                re.eval(dl);
+                //re.eval("DL = matrix(as.numeric(X == 0), ncol=" + String.valueOf(m) + ")");
                 re.eval("out <- capture.output(zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + "))");
                 //OutputElement e;
                 String[] out = re.eval("out").asStringArray();

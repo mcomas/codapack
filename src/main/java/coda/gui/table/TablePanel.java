@@ -97,12 +97,10 @@ public final class TablePanel extends JPanel{
             @Override
             public void mousePressed(MouseEvent me) {
                 showPopup(me);
-                table.updateUI();
             }
             @Override
             public void mouseReleased(MouseEvent me) {
                 showPopup(me);
-                table.updateUI();
             }
         });
         /*

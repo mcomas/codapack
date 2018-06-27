@@ -18,7 +18,6 @@ public class OutputForR implements OutputElement{
     // constructor
     public OutputForR(String[] l){
         this.label = l;
-        System.out.println("HOla");
     }
     
     public String printHTML(String html){
