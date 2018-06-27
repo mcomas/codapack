@@ -72,7 +72,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             
              // transform the data to string for R
              
-                String dataR = "X <- matrix(c(";
+                /*String dataR = "X <- matrix(c(";
                 for (int i = 0; i < data.length; i++) {
                     for (int j = 0; j < data[i].length; j++) {
                         dataR += String.valueOf(data[i][j]) + ",";
@@ -81,7 +81,15 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 dataR = dataR.substring(0, dataR.length() - 1); // we delete the last ,
                 dataR += "),byrow=FALSE,ncol=" + String.valueOf(selectedNames.length) + ")";
                 
-                re.eval(dataR);
+                re.eval(dataR);*/
+                
+                re.assign("X", data[0]);
+                re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
+                for(int i=1; i < data.length; i++){
+                    re.assign("tmp", data[i]);
+                    re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
+                }
+                
                 re.eval("png('out.png',width=700,height=700)");
                 re.eval("zCompositions::zPatterns(X,label=0)");
                 re.eval("out <- capture.output(zCompositions::zPatterns(X,label=0))");
