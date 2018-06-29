@@ -177,7 +177,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                 re.eval("out <- capture.output(zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + "))");
                 //OutputElement e;
                 String[] out = re.eval("out").asStringArray();
-
+                
                 // extract the numbers of out
                 double resultat[][] = new double[data.length][data[0].length];
                 int aux = 0; // y
