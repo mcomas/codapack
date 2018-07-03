@@ -90,6 +90,13 @@ public abstract class AbstractMenuDialog extends JDialog{
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
         initialize();
     }
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, String categoric){
+        super(mainApp, title);
+        mainApplication = mainApp;
+        dfs = null;
+        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), categoric);
+        initialize();
+    }
     private void initialize(){
         Point p = mainApplication.getLocation();
         p.x = p.x + (mainApplication.getWidth()-520)/2;

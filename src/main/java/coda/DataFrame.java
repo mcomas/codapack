@@ -30,6 +30,9 @@ import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -277,6 +280,20 @@ public class DataFrame extends HashMap<String, Variable>{
     public String[] getCategoricalData(String n){
         return this.get(n).getTextData();
     }
+    
+    public String[] getCategoriaclNames(){
+        
+        Vector<String> vec = new Vector<String>();
+        
+        for(int i=0; i < this.size();i++){
+            if(this.get(i).getType() == 1) vec.add(this.get(i).name);
+        }
+        
+        String[] res = vec.toArray(new String[vec.size()]);
+        
+        return res;
+    }
+    
     public boolean[] getValidCompositions(String[] names){
         int n = this.get(names[0]).size();
         boolean valid[] = new boolean[n];

@@ -108,6 +108,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_ZEROS_R = "Rounded zero replacement with R";
         public final JMenuItem itemLogRatio;
         public final String ITEM_LOG_RATIO = "Log-ratio EM Algorithm";
+        public final JMenuItem itemFilter;
+        public final String ITEM_FILTER = "Simple filter";
         public JMenuItem itemSetDetectionLimit;
         public final String ITEM_SETDETECTION ="Set detection limit";
         public JMenuItem itemCategorizeVariables;
@@ -362,6 +364,7 @@ public class CoDaPackMenu extends JMenuBar{
             itemZeros = new JMenuItem();
             itemZerosR = new JMenuItem();
             itemLogRatio = new JMenuItem();
+            itemFilter = new JMenuItem();
             itemSetDetectionLimit = new JMenuItem();
             itemCategorizeVariables = new JMenuItem();
             itemNumerizeVariables = new JMenuItem();
@@ -443,6 +446,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuData, itemZerosR, ITEM_ZEROS_R);
         addJMenuItem(menuData,itemLogRatio,ITEM_LOG_RATIO);
         menuData.addSeparator();
+        addJMenuItem(menuData,itemFilter,ITEM_FILTER);
         addJMenuItem(menuData, itemCategorizeVariables, ITEM_CAT_VAR);
         addJMenuItem(menuData, itemNumerizeVariables, ITEM_NUM_VAR);
         menuData.addSeparator();

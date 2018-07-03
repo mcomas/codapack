@@ -93,6 +93,14 @@ public final class DataSelector extends JPanel {
         if(dataFrame != null)
             setDataLists(dataFrame, null);
     }
+
+    public DataSelector(DataFrame activeDataFrame, int[] selectedData, String categoric) {
+        initComponents();
+        groupsComboBox.setVisible(false);
+        labGroups.setVisible(false);
+        df_instance = activeDataFrame;
+        if(activeDataFrame != null) setDataListsCat(activeDataFrame,null);
+    }
     private void reorder() {
         DefaultListModel model = (DefaultListModel) selectedList.getModel();
         Object dragee = model.elementAt(pressIndex);
@@ -151,6 +159,35 @@ public final class DataSelector extends JPanel {
         toSelectList.setModel(model1);
         selectedList.setModel(model2);
     }
+    
+    public void setDataListsCat(DataFrame dataFrame, int[] selected){
+        DefaultListModel model1 = new DefaultListModel();
+        DefaultListModel model2 = new DefaultListModel();
+        variables = new String[dataFrame.size()];
+        //Iterator it = dataFrame.getNamesIterator();
+        int i = -1;
+        for(String name : dataFrame.getNames()){
+            variables[++i] = name;
+            if(((Variable)dataFrame.get(variables[i])).isNumeric())
+                groupsComboBox.addItem(variables[i]);
+            else{
+                boolean isSelected = false;
+                if(selected != null)
+                    for(int j=0;j<selected.length;j++)
+                    if(i == selected[j]){
+                        isSelected = true;
+                        break;
+                    }
+                if(!isSelected)
+                    model1.addElement(variables[i]);
+                else
+                    model2.addElement(variables[i]);
+            }
+        }
+        toSelectList.setModel(model1);
+        selectedList.setModel(model2);
+    }
+    
     public ListModel getAvailableData(){
         return toSelectList.getModel();
     }

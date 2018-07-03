@@ -40,7 +40,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
     JLabel robOption = new JLabel("Rob Option");
     JLabel iniCovOption = new JLabel("IniCov Option");
     JCheckBox performMax;
-    JLabel lmax = new JLabel("Use maximum on detection limit");
+    JLabel lmax = new JLabel("Use minimum on detection limit");
     JLabel l_usedPercentatgeDL = new JLabel("DL proportion");
     JTextField dlProportion;
     Rengine re;
@@ -83,7 +83,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
         optionsPanel.add(dlProportion);
         optionsPanel.add(Box.createVerticalStrut(25));
         optionsPanel.add(Box.createHorizontalStrut(50));
-        performMax = new JCheckBox("Max result", false);
+        performMax = new JCheckBox("Min result", false);
         performMax.setSelected(true);
         optionsPanel.add(lmax);
         optionsPanel.add(performMax);
@@ -115,8 +115,8 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
         
         // configurem si és vol agafara els maxims de les columnes
         
-        boolean takeMax = true;
-        if(!performMax.isSelected()) takeMax = false;
+        boolean takeMin = true;
+        if(!performMax.isSelected()) takeMin = false;
         
         DataFrame df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData();
@@ -131,17 +131,17 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
             
             boolean containsZero = false;
             double data[][] = df.getNumericalData(sel_names);
-            double maximumsOfColumns[] = new double[m]; double maximumOfColumn;
+            double minimumsOfColumns[] = new double[m]; double minimumOfColumn;
             
             // we search the maximum number for each column
             
-            for(int i=0; i < data.length;i++){
-                maximumOfColumn = 0.0;
-                for(int j=0; j < data[i].length;j++){
+            for(int i =0; i < data.length;i++){
+                minimumOfColumn = 0.0;
+                for(int j=0;j < data[i].length;j++){
                     if(data[i][j] == 0) containsZero = true;
-                    if(data[i][j] > maximumOfColumn) maximumOfColumn = data[i][j];
+                    if((data[i][j] != 0 && data[i][j] < minimumOfColumn) || minimumOfColumn == 0) minimumOfColumn = data[i][j];
                 }
-                maximumsOfColumns[i] = maximumOfColumn;
+                minimumsOfColumns[i] = minimumOfColumn;
             }
             
             if(containsZero){ // if contains zero then we do something
@@ -159,10 +159,10 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
                 
                 double dlevel[][] = df.getDetectionLevel(sel_names);
                 
-                if(takeMax){ // si s'ha seleccionat la opció d'agafar el màxim
+                if(takeMin){ // si s'ha seleccionat la opció d'agafar el màxim
                     for(int i =0; i < data.length;i++){
                         for(int j=0; j < data[i].length;j++){
-                            if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = maximumsOfColumns[i];
+                            if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
                         }
                     }
                 }
