@@ -45,7 +45,9 @@ public class FilterMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
     BoxDataSelector boxdataSel;
+    DataFrame df;
     JDialog dialog;
+    String[] sel_names;
     
     public FilterMenu(final CoDaPackMain mainApp){
        
@@ -60,8 +62,8 @@ public class FilterMenu extends AbstractMenuDialog{
         JFrame frame2 = new JFrame();
         frame2.setTitle("Message");
         
-        DataFrame df = mainApplication.getActiveDataFrame();
-        String[] sel_names = ds.getSelectedData();
+        df = mainApplication.getActiveDataFrame();
+        sel_names = ds.getSelectedData();
         int m = sel_names.length;
         if(m == 1){
            
@@ -89,13 +91,24 @@ public class FilterMenu extends AbstractMenuDialog{
             accept.addActionListener(new java.awt.event.ActionListener() {
             
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                String selected[] = boxdataSel.getSelectedData();
+                String selected[] = boxdataSel.getSelectedData(); //variables que volem fer subframe
                 int n = selected.length;
-                /*for(int i=0;i<n;i++){
-                    df.get(selected[i]).toNumeric();
-                }
-                mainApp.updateDataFrame(df);*/
                 dialog.setVisible(false);
+                
+                // començem el filtratge
+                
+                // Creem tots els subframes que ens facin falta
+                
+                DataFrame[] dataframes = new DataFrame[selected.length]; // array de dataframes
+                
+                for(int i=0; i < selected.length;i++){
+                    // cal obtenir les files que hem d'eliminar
+                    int[] rowsToDelete = df.getRowsToDelete(sel_names[0],selected[i]); // obtenim posicions que em de borrar
+                    dataframes[i] = new DataFrame(df);
+                    dataframes[i].subFrame(rowsToDelete);
+                }
+                
+                for(int i=0; i < dataframes.length;i++) mainApplication.addDataFrame(dataframes[i]);
             }
             
             });

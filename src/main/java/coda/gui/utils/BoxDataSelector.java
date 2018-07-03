@@ -59,12 +59,21 @@ public final class BoxDataSelector extends javax.swing.JPanel {
     }
     
     public void setDataListString(String[] var){
-        jList1 = new JList(var);
-        jList1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        
+        DefaultListModel model = new DefaultListModel();
         variables = new String[var.length];
-        jList1.setVisibleRowCount(6);
-        JScrollPane scrollPane = new JScrollPane(jList1);
-        this.add(scrollPane);
+        //Iterator it = dataFrame.getNamesIterator();
+        int i = 0;
+        for(String name : var){
+            variables[i] = name;
+            model.addElement(variables[i++]);
+        }
+        /*
+        while(it.hasNext()){
+            variables[i] = (String) it.next();
+            model.addElement(variables[i++]);
+        }*/
+        jList1.setModel(model);
     }
     
     public void setDataList(DataFrame dataFrame){

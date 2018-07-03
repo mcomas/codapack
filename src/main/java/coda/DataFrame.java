@@ -72,6 +72,30 @@ public class DataFrame extends HashMap<String, Variable>{
     public DataFrame(String name){
         this.name = name;
     }
+    
+    /**
+     * Construtor used to copy dataframes
+     * 
+     * @param activeDataframe
+     */
+    public DataFrame(DataFrame activeDataFrame){
+        
+        // copiem el hashmap
+        
+        for(Map.Entry<String,Variable> entry: activeDataFrame.entrySet()){
+            super.put(entry.getKey(),new Variable(entry.getValue()));
+        }
+        
+        this.name = "";
+        
+        // copiem el nom de les variables
+        
+        for(String i : activeDataFrame.varnames){
+            this.varnames.add(i);
+        }
+        
+    }
+    
     /**
      * Sets the name of this DataFrame
      *
@@ -231,6 +255,35 @@ public class DataFrame extends HashMap<String, Variable>{
         }
         return data;
     }
+    
+    public int[] getRowsToDelete(String variable, String value){
+        Vector<Integer> aux = new Vector<Integer>();
+        Variable var = this.get(variable); // obtenim valors de variables
+        
+        for(int i=0; i < var.size();i++){
+            if(!((Text)var.get(i)).value.equals(value)){
+                aux.add(i);
+            }
+        }
+    
+        int[] res = new int[aux.size()];
+        for(int i=0; i < aux.size();i++) res[i] = aux.elementAt(i);
+        
+        return res;
+    }
+    
+    public void subFrame(int[] rowsToDelete){
+        
+        for(int i=0; i < this.size(); i++){
+            Variable var = this.get(i);
+            Variable aux = var;
+            for(int j=0; j < rowsToDelete.length;j++){
+                aux.removeIndex(rowsToDelete[j]-j); // anem borrant els elements
+            }
+            this.replace(this.varnames.get(i),aux);
+        }
+    }
+    
     public double[][] getNumericalData(String[] names, int[] mapping){
         int n = mapping.length;
         int m = names.length;

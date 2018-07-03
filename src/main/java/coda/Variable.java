@@ -63,6 +63,13 @@ public class Variable extends ArrayList<Element>{
         name = n;
         dtype = t;
     }
+    
+    public Variable(Variable var){
+        super.clear();
+        for(int i=0; i < var.size();i++){
+            this.add(var.get(i));
+        }
+    }
 /**
  * The variable is set to numeric type
  * @param n variable name
@@ -124,6 +131,11 @@ public class Variable extends ArrayList<Element>{
     public void add(String data){
         super.add(new Text(data));
     }
+    
+    public void removeIndex(int indexToDelete){
+       super.remove(indexToDelete);
+    }
+    
     public void add(double data){
         if(data == 0)
             add(new Zero());
