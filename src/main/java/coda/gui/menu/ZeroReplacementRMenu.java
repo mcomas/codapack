@@ -53,6 +53,8 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
     JCheckBox performClosure;
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
+    JCheckBox performMax;
+    JLabel lmax = new JLabel("Use minimum on detection limit");
     Rengine re;
 
     /**
@@ -86,6 +88,10 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         optionsPanel.add(performClosure);
         optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
+        performMax = new JCheckBox("Min result", false);
+        performMax.setSelected(true);
+        optionsPanel.add(lmax);
+        optionsPanel.add(performMax);
     }
 
     @Override
@@ -96,6 +102,11 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
 
         String percentatgeDL = "delta=" + usedPercentatgeDL.getText(); // we get the percentatgeDL
         String label = "label=0"; // label for default its 0
+        
+        // configurem si és vol agafara els maxims de les columnes
+        
+        boolean takeMin = true;
+        if(!performMax.isSelected()) takeMin = false;
 
         DataFrame df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData(); // we get the names of selected variables
@@ -149,12 +160,14 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                 
                 // modificació en el cas de que no tingui level detector agafant minim columna
                 
-                for(int i = 0; i < data.length;i++){
-                    for(int j = 0; j < data[i].length;j++){ // no data level 
-                        if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
+                if(takeMin){
+                    
+                    for(int i = 0; i < data.length;i++){
+                        for(int j = 0; j < data[i].length;j++){ // no data level 
+                            if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
+                        }
                     }
-                }
-                
+                }                
                 
                 /*String dl = "DL = matrix(c(";
                 
