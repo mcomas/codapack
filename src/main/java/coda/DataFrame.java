@@ -93,7 +93,6 @@ public class DataFrame extends HashMap<String, Variable>{
         for(String i : activeDataFrame.varnames){
             this.varnames.add(i);
         }
-        
     }
     
     /**

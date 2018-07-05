@@ -25,6 +25,7 @@ import coda.gui.utils.BoxDataSelector;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -48,6 +49,7 @@ public class FilterMenu extends AbstractMenuDialog{
     DataFrame df;
     JDialog dialog;
     String[] sel_names;
+    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public FilterMenu(final CoDaPackMain mainApp){
        
@@ -85,6 +87,7 @@ public class FilterMenu extends AbstractMenuDialog{
             dialog.getContentPane().setLayout(new BorderLayout());
 
             dialog.getContentPane().add(boxdataSel, BorderLayout.CENTER);
+            dialog.setLocation(dim.width/2-dialog.getSize().width/2, dim.height/2-dialog.getSize().height/2);
             
             JButton accept = new JButton("Accept");
             dialog.getContentPane().add(accept, BorderLayout.SOUTH);
@@ -106,6 +109,7 @@ public class FilterMenu extends AbstractMenuDialog{
                     int[] rowsToDelete = df.getRowsToDelete(sel_names[0],selected[i]); // obtenim posicions que em de borrar
                     dataframes[i] = new DataFrame(df);
                     dataframes[i].subFrame(rowsToDelete);
+                    dataframes[i].setName(df.name + "_" + selected[i]);
                 }
                 
                 for(int i=0; i < dataframes.length;i++) mainApplication.addDataFrame(dataframes[i]);
