@@ -69,19 +69,6 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         if(selectedNames.length > 0){
             DataFrame df = mainApplication.getActiveDataFrame();
             double[][] data = df.getNumericalData(selectedNames); // matriu amb les dades corresponents
-            
-             // transform the data to string for R
-             
-                /*String dataR = "X <- matrix(c(";
-                for (int i = 0; i < data.length; i++) {
-                    for (int j = 0; j < data[i].length; j++) {
-                        dataR += String.valueOf(data[i][j]) + ",";
-                    }
-                }
-                dataR = dataR.substring(0, dataR.length() - 1); // we delete the last ,
-                dataR += "),byrow=FALSE,ncol=" + String.valueOf(selectedNames.length) + ")";
-                
-                re.eval(dataR);*/
                 
                 re.assign("X", data[0]);
                 re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
