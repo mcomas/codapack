@@ -69,6 +69,8 @@ public class Variable extends ArrayList<Element>{
         for(int i=0; i < var.size();i++){
             this.add(var.get(i));
         }
+        this.dtype = var.dtype;
+        this.name = var.name;
     }
 /**
  * The variable is set to numeric type
