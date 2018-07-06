@@ -189,8 +189,9 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
                 double resultat[][] = new double[data.length][data[0].length];
                 int aux = 0; // y
                 Pattern p = Pattern.compile("(\\d+(?:\\.\\d+))");
+                char coma = ',';
                 for (int i = 3; i < out.length; i++) {
-                    Matcher match = p.matcher(out[i]);
+                    Matcher match = p.matcher(out[i].replace(coma, '.'));
                     int aux2 = 0; //x
                     while (match.find()) {
                         double d = Double.parseDouble(match.group(1));

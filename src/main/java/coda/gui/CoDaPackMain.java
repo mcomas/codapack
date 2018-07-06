@@ -112,7 +112,8 @@ public final class CoDaPackMain extends JFrame{
     /**
      * VARIABLE R
      */
-    public static Rengine re = new Rengine(null, false, null);
+    public static String[] Rargs = {"--vanilla"};
+    public static Rengine re = new Rengine(Rargs, false, null);
     
     private JComboBox dataFrameSelector;
     private final DataFrameSelectorListener dataFrameListener = new DataFrameSelectorListener();
