@@ -59,6 +59,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     
     Rengine re;
     JFrame frameZPatterns;
+    String tempDirR;
     
     public static final long serialVersionUID = 1L;
     
@@ -86,7 +87,14 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                     re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
                 }
                 
-                re.eval("png('out.png',width=700,height=700)");
+                //String OS = System.getProperty("os.name").toLowerCase();
+                //String tempDir = System.getProperty("java.io.tmpdir");
+                re.eval("mypath = tempdir()");
+                tempDirR = re.eval("print(mypath)").asString();
+                tempDirR += "\\out.png";
+                
+                re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
+                re.eval("png(mypath,width=700,height=700");
                 re.eval("zCompositions::zPatterns(X,label=0)");
                 re.eval("out <- capture.output(zCompositions::zPatterns(X,label=0))");
                 re.eval("dev.off()");
@@ -137,7 +145,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             menu.add(menuItem);
             frameZPatterns.setJMenuBar(menuBar);
             panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon("out.png");
+            ImageIcon icon = new ImageIcon(tempDirR);
             JLabel label = new JLabel(icon,JLabel.CENTER);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
@@ -154,7 +162,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
                         frameZPatterns.dispose();
-                        File file = new File("out.png");
+                        File file = new File(tempDirR);
                         file.delete();
                     }
                 }
@@ -170,7 +178,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
                 frameZPatterns.dispose();
-                File file = new File("out.png");
+                File file = new File(tempDirR);
                 file.delete();
             }
         }
@@ -197,7 +205,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                     canExit = true;
                 }
                 if(JFileChooser.APPROVE_OPTION == result){ // guardem arxiu en el path
-                    File f = new File("out.png");
+                    File f = new File(tempDirR);
                     f.deleteOnExit();
                     String path = jf.getSelectedFile().getAbsolutePath();
                     File f2 = new File(path);
