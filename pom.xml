@@ -7,6 +7,10 @@
     <groupId>EADC</groupId>
     <artifactId>CoDaPack</artifactId>
     <version>2.02.21</version>
+    <properties>
+      <maven.compiler.source>1.6</maven.compiler.source>
+      <maven.compiler.target>1.6</maven.compiler.target>
+    </properties>
     <build>
         <plugins>
             <plugin>
