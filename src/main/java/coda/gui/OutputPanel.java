@@ -1,5 +1,5 @@
 /**	
- *	Copyright 2011-2016 Marc Comas - Santiago ThiÃ³
+ *	Copyright 2011-2016 Marc Comas - Santiago Thió
  *
  *	This file is part of CoDaPack.
  *
@@ -30,12 +30,16 @@ import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.undo.UndoManager;
+import javafx.application.Application;
+import javafx.embed.swing.JFXPanel;
+import javafx.stage.Stage;
 
 /**
  *
  * @author mcomas
  */
-public final class OutputPanel extends JPanel{
+public final class OutputPanel extends JFXPanel{
+    
     public final long serialVersionUID = 1L;
     
     private String windowText = "";
@@ -57,7 +61,7 @@ public final class OutputPanel extends JPanel{
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
 
-        //jEditorPane1.setEditable(false); //<- No sÃ© quÃ¨ Ã©s millor?
+        //jEditorPane1.setEditable(false); //<- No sé què és millor?
         setPreferredSize(new java.awt.Dimension(500, 350));
         setVisible(true);
 
@@ -98,11 +102,12 @@ public final class OutputPanel extends JPanel{
         styleSheet.addRule(
                 "body{"
           + "font-family: Monospace; "
-          + "font-size:" + "12px" + ";"
+          + "font-size:" + "10px" + ";"
           + "color:#000000;"
           + "text-decoration: none;"
           + "margin:10px;"
-          + "border-collapse:collapse;}");        
+          + "border-collapse:collapse;}");
+        
     }
 
     public void addWelcome(String CoDaVersion){

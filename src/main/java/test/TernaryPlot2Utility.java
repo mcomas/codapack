@@ -61,6 +61,5 @@ public class TernaryPlot2Utility {
                 
                 ArrayList<Ternary2dObject> visObjet = display.getCoDaObjects();
                 
-                System.out.println("Hola");
     }
 }

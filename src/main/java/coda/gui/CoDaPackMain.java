@@ -1,5 +1,5 @@
 /**	
- *	Copyright 2011-2016 Marc Comas - Santiago Thi√≥
+ *	Copyright 2011-2016 Marc Comas - Santiago ThiÛ
  *
  *	This file is part of CoDaPack.
  *
@@ -26,6 +26,9 @@ import coda.ext.json.JSONObject;
 import coda.gui.CoDaPackMain.UpdateConnection;
 import coda.gui.CoDaPackMenu.CoDaPackMenuListener;
 import coda.gui.menu.*;
+import coda.gui.output.OutputElement;
+import coda.gui.output.OutputForR;
+import coda.gui.output.OutputText;
 import coda.gui.table.TablePanel;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.CoDaPackImporter;
@@ -39,6 +42,8 @@ import coda.plot2.window.TernaryPlot2dWindow;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
@@ -75,6 +80,10 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+// R LIBRARIES
+import org.rosuda.JRI.*;
+
 /**
  *
  * @author mcomas
@@ -100,6 +109,11 @@ public final class CoDaPackMain extends JFrame{
     public static DataList dataList;
     private JSplitPane jSplitPane;
     
+    /**
+     * VARIABLE R
+     */
+    public static String[] Rargs = {"--vanilla"};
+    public static Rengine re = new Rengine(Rargs, false, null);
     
     private JComboBox dataFrameSelector;
     private final DataFrameSelectorListener dataFrameListener = new DataFrameSelectorListener();
@@ -280,18 +294,18 @@ public final class CoDaPackMain extends JFrame{
                 CoDaPackConf.lastPath = ruta;
             }
         }else if(title.equals(jMenuBar.ITEM_IMPORT_RDA)){
-            //Aqu√≠ tractem l'event IMPORT_RDA
+            //AquÌ tractem l'event IMPORT_RDA
             chooseFile.resetChoosableFileFilters();
-            //Filtrem per llegir nom√©s els arxius RDA
+            //Filtrem per llegir nomÈs els arxius RDA
             chooseFile.setFileFilter(new FileNameExtensionFilter("R data file", "RData", "rda"));
 
             //Comprovem si es selecciona un arxiu aprovat
             if(chooseFile.showOpenDialog(jSplitPane) == JFileChooser.APPROVE_OPTION){
-                //Creem una nova inst√†ncia ImportRDA, ser√† l'encarregada de mostrar i obrir els dataframes
+                //Creem una nova inst‡ncia ImportRDA, ser‡ l'encarregada de mostrar i obrir els dataframes
                 ImportRDA impdf = new ImportRDA(chooseFile);
-                //Creem una nova inst√†ncia ImportRDAMenu, ser√† l'encarregada de gestionar el men√∫
+                //Creem una nova inst‡ncia ImportRDAMenu, ser‡ l'encarregada de gestionar el men˙
                 ImportRDAMenu imprdam = new ImportRDAMenu(this, chooseFile, impdf);
-                //Fem el men√∫ visible
+                //Fem el men˙ visible
                 imprdam.setVisible(true,true);
                 
             }
@@ -556,6 +570,14 @@ public final class CoDaPackMain extends JFrame{
             new PowerDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZEROS)){
             new ZeroReplacementMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_ZEROS_R)){
+            new ZeroReplacementRMenu(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_LOG_RATIO)){
+            new LogRatioEMMenu(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_FILTER)){
+            new FilterMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_ADV_FILTER)){
+            new AdvancedFilterMenu(this,re);
         }else if (title.equals(jMenuBar.ITEM_SETDETECTION)){
             new SetDetectionLimitMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
@@ -564,6 +586,8 @@ public final class CoDaPackMain extends JFrame{
             new PredictiveRegionMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CONF_REG_PLOT)){
             new ConfidenceRegionMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_ZPATTERNS)){
+            new ZpatternsMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_EMPTY_TERNARY_PLOT)){
             String names[] = {"X", "Y", "Z"};
             TernaryPlot2dDisplay display = new TernaryPlot2dDisplay(names);
@@ -607,6 +631,25 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_ABOUT)){
             new CoDaPackAbout(this).setVisible(true);
         }
+        else if(title.equals(jMenuBar.R_TEST)){
+            // first we get the session info
+            re.eval("a <- capture.output(sessionInfo())");
+            OutputElement e = new OutputForR(re.eval("a").asStringArray());
+            outputPanel.addOutput(e);
+            
+            
+            // after we get the system variables
+            
+            re.eval("a <- capture.output(Sys.getenv())");
+            e = new OutputForR(re.eval("a").asStringArray());
+            outputPanel.addOutput(e);
+            
+            // finally the capabilities
+            
+            re.eval("a <- capture.output(capabilities())");
+            e = new OutputForR(re.eval("a").asStringArray());
+            outputPanel.addOutput(e);
+        }
     }
     public class DataFrameSelectorListener implements ItemListener{
         public void itemStateChanged(ItemEvent ie) {
@@ -619,6 +662,7 @@ public final class CoDaPackMain extends JFrame{
             }
         }
     }    
+    
     /**
     * @param args the command line arguments
     */
@@ -641,8 +685,7 @@ public final class CoDaPackMain extends JFrame{
         } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(CoDaPackMain.class.getName())
                     .log(Level.SEVERE, null, ex);
-        }
-        
+        } 
         
         /*
          *  Congifuration file creation if it not exists. Using static class CoDaPackConf
@@ -668,7 +711,7 @@ public final class CoDaPackMain extends JFrame{
         
         main.setVisible(true);
         
-        //Si s'ha clicat un arxiu associat ens arribar√† com argument i el tractem
+        //Si s'ha clicat un arxiu associat ens arribar‡ com argument i el tractem
         if (args.length>0) {
             //Guardem la ruta i l'arxiu a recent files
             main.jMenuBar.saveRecentFile(args[0]);

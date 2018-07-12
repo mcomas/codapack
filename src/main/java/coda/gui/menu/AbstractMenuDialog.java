@@ -1,5 +1,5 @@
 /**	
- *	Copyright 2011-2016 Marc Comas - Santiago ThiÃ³
+ *	Copyright 2011-2016 Marc Comas - Santiago Thió
  *
  *	This file is part of CoDaPack.
  *
@@ -88,6 +88,13 @@ public abstract class AbstractMenuDialog extends JDialog{
         mainApplication = mainApp;
         dfs = null;
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
+        initialize();
+    }
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, String categoric){
+        super(mainApp, title);
+        mainApplication = mainApp;
+        dfs = null;
+        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), categoric);
         initialize();
     }
     private void initialize(){
@@ -205,5 +212,3 @@ public abstract class AbstractMenuDialog extends JDialog{
         return imp_df;
     }
 }
-
-

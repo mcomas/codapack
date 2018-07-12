@@ -1,5 +1,5 @@
 /**	
- *	Copyright 2011-2016 Marc Comas - Santiago Thi√≥
+ *	Copyright 2011-2016 Marc Comas - Santiago ThiÛ
  *
  *	This file is part of CoDaPack.
  *
@@ -104,6 +104,14 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_POWER = "Power transformation";
         public JMenuItem itemZeros;
         public final String ITEM_ZEROS = "Rounded zero replacement";
+        public final JMenuItem itemZerosR;
+        public final String ITEM_ZEROS_R = "Rounded zero replacement with R";
+        public final JMenuItem itemLogRatio;
+        public final String ITEM_LOG_RATIO = "Log-ratio EM Algorithm";
+        public final JMenuItem itemFilter;
+        public final String ITEM_FILTER = "Simple filter";
+        public final JMenuItem itemAdvFilter;
+        public final String ITEM_ADV_FILTER = "Advanced filter";
         public JMenuItem itemSetDetectionLimit;
         public final String ITEM_SETDETECTION ="Set detection limit";
         public JMenuItem itemCategorizeVariables;
@@ -151,6 +159,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_PRED_REG_PLOT = "Predictive Region";
         public JMenuItem confidenceRegionPlot;
         public final String ITEM_CONF_REG_PLOT = "Center Confidence Region";
+        public JMenuItem zPatternsPlot;
+        public final String ITEM_ZPATTERNS = "ZPatterns plot";
 
    public JMenu menuHelp;
    public final String ITEM_HELP = "Help";
@@ -158,6 +168,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_FORCE_UPDATE = "Check for Updates";
         public JMenuItem itemAbout;
         public final String ITEM_ABOUT = "About";
+        public JMenuItem itemR_Test;
+        public final String R_TEST = "Get R status";
 
     public String active_path = null;
     
@@ -183,7 +195,7 @@ public class CoDaPackMenu extends JMenuBar{
 
     HashMap<String ,JMenuItem> recentFile;
     
-    //Definici√≥ del LinkedHashMap que far√† la gesti√≥ dels arxius recents
+    //DefiniciÛ del LinkedHashMap que far‡ la gestiÛ dels arxius recents
     LinkedHashMap<String, String> newRecentFile= new LinkedHashMap();
     
     //Afegeix o actualitza la llista d'arxius recents
@@ -194,7 +206,7 @@ public class CoDaPackMenu extends JMenuBar{
             pathFile = rf.substring(16);
         }
         else pathFile = rf;
-        //Obtenim el nom del fitxer amb l'extensi√≥, que utilitzarem com a clau
+        //Obtenim el nom del fitxer amb l'extensiÛ, que utilitzarem com a clau
         String fname = new File(pathFile).getName();
         //Comprovem si el fitxer es troba al hashmap, si es troba l'eliminem
         if (newRecentFile.containsKey(pathFile)){
@@ -202,17 +214,17 @@ public class CoDaPackMenu extends JMenuBar{
         }
         //Inserim clau valor al final del hashmap
         newRecentFile.put(pathFile,pathFile);
-        //Actualitzada la llista anem a actualitzar el menu i l'acci√≥ pertinent
+        //Actualitzada la llista anem a actualitzar el menu i l'acciÛ pertinent
         loadRecentFiles();
     }
     
-    //S'encarrega d'escriure el submen√∫ Recent Files i definir l'acci√≥ pertinent
+    //S'encarrega d'escriure el submen˙ Recent Files i definir l'acciÛ pertinent
     public void loadRecentFiles() {
-        //Borra tots els items del men√∫ Recent Files
+        //Borra tots els items del men˙ Recent Files
         menuRecent.removeAll();
         //Comprovem que hi hagi entrada per posar a Recent Files
         if (newRecentFile.size()>0) {
-            //Creem la colecci√≥ i l'iterador per a recorrer els valors del LinkedHashMap
+            //Creem la colecciÛ i l'iterador per a recorrer els valors del LinkedHashMap
             Collection c=newRecentFile.values();
             Iterator itr=c.iterator();
             String[] v = new String[newRecentFile.size()];
@@ -232,7 +244,7 @@ public class CoDaPackMenu extends JMenuBar{
                 final String rf=s1.concat(v[i]);
                 //Posem el text al item
                 item.setText(v[i]);
-                //Definim l'acci√≥ a realitzar al clicar l'item
+                //Definim l'acciÛ a realitzar al clicar l'item
                 item.addActionListener(new java.awt.event.ActionListener() {
                     @Override
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -250,7 +262,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuRecent, itemClearRecent, ITEM_CLEAR_RECENT);
     }
     
-    //Aquest m√®tode emplena el LinkedHashMap des de l'arxiu .recent_files cada vegada que s'inicia el programa
+    //Aquest mËtode emplena el LinkedHashMap des de l'arxiu .recent_files cada vegada que s'inicia el programa
     public void fillRecentFiles() {
         File arx = null;
         FileReader fr = null;
@@ -277,7 +289,7 @@ public class CoDaPackMenu extends JMenuBar{
         }
     }
     
-    //Aquest m√®tode sobreescriu l'arxiu .recent_files, quan es tanca el programa i cada vegada que es fa un Clear Items
+    //Aquest mËtode sobreescriu l'arxiu .recent_files, quan es tanca el programa i cada vegada que es fa un Clear Items
     public void copyRecentFiles() {
         FileWriter fit = null;
         PrintWriter pw = null;
@@ -352,6 +364,10 @@ public class CoDaPackMenu extends JMenuBar{
             itemPerturbate = new JMenuItem();
             itemPower = new JMenuItem();
             itemZeros = new JMenuItem();
+            itemZerosR = new JMenuItem();
+            itemLogRatio = new JMenuItem();
+            itemFilter = new JMenuItem();
+            itemAdvFilter = new JMenuItem();
             itemSetDetectionLimit = new JMenuItem();
             itemCategorizeVariables = new JMenuItem();
             itemNumerizeVariables = new JMenuItem();
@@ -376,10 +392,12 @@ public class CoDaPackMenu extends JMenuBar{
             principalComponentPlot = new JMenuItem();
             predictiveRegionPlot = new JMenuItem();
             confidenceRegionPlot = new JMenuItem();
+            zPatternsPlot = new JMenuItem();
 
         menuHelp = new JMenu();
             itemForceUpdate = new JMenuItem();
-            itemAbout = new JMenuItem();  
+            itemAbout = new JMenuItem();
+            itemR_Test = new JMenuItem();
         
         
         menuFile.setText(ITEM_FILE);
@@ -428,7 +446,11 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuData, itemPower, ITEM_POWER);
         addJMenuItem(menuData, itemSetDetectionLimit, ITEM_SETDETECTION); 
         addJMenuItem(menuData, itemZeros, ITEM_ZEROS);
+        addJMenuItem(menuData, itemZerosR, ITEM_ZEROS_R);
+        addJMenuItem(menuData,itemLogRatio,ITEM_LOG_RATIO);
         menuData.addSeparator();
+        addJMenuItem(menuData,itemFilter,ITEM_FILTER);
+        addJMenuItem(menuData,itemAdvFilter,ITEM_ADV_FILTER);
         addJMenuItem(menuData, itemCategorizeVariables, ITEM_CAT_VAR);
         addJMenuItem(menuData, itemNumerizeVariables, ITEM_NUM_VAR);
         menuData.addSeparator();
@@ -449,8 +471,9 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuGraphs, itemEmptyTernaryPlot, ITEM_EMPTY_TERNARY_PLOT);
         addJMenuItem(menuGraphs, principalComponentPlot, ITEM_PC_PLOT);
         addJMenuItem(menuGraphs, predictiveRegionPlot, ITEM_PRED_REG_PLOT);
-        addJMenuItem(menuGraphs, confidenceRegionPlot, ITEM_CONF_REG_PLOT);        
+        addJMenuItem(menuGraphs, confidenceRegionPlot, ITEM_CONF_REG_PLOT);
         menuGraphs.addSeparator();
+        addJMenuItem(menuGraphs, zPatternsPlot, ITEM_ZPATTERNS);
         addJMenuItem(menuGraphs, itemALRPlot, ITEM_ALR_PLOT);
         addJMenuItem(menuGraphs, itemCLRPlot, ITEM_CLR_PLOT);
         addJMenuItem(menuGraphs, itemILRPlot, ITEM_ILR_PLOT);
@@ -463,6 +486,7 @@ public class CoDaPackMenu extends JMenuBar{
         menuHelp.setText(ITEM_HELP);
         addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
         addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
+        addJMenuItem(menuHelp,itemR_Test, R_TEST);
         add(menuHelp);
         
     }
