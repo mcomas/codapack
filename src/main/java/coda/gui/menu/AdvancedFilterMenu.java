@@ -27,23 +27,34 @@ import org.rosuda.JRI.Rengine;
  *
  * @author Guest2
  */
-public class AdvancedFilterMenu{
+public class AdvancedFilterMenu extends AbstractMenuDialog{
     
     Rengine re;
     
+    public static final long serialVersionUID = 1L;
+    
     public AdvancedFilterMenu(final CoDaPackMain mainApp, Rengine r ){
         
-        if(mainApp.getActiveDataFrame() == null){  // si no hi ha cap dataframe actiu
-            JOptionPane.showMessageDialog(null, "No data available");
-        }
-        else{ // fem el filtratge
-            DataFrame df = mainApp.getActiveDataFrame();
+        super(mainApp,"Advanced Filter Menu",false, false,true);
+        re = r;
+    }
+    
+    @Override
+    public void acceptButtonActionPerformed(){
+        
+        this.dispose();
+        
+        String selectedNames[] = ds.getSelectedData();
+        
+        if(selectedNames.length > 0){ // minimum one variable
+            
+            DataFrame df = mainApplication.getActiveDataFrame();
             boolean exit = false;
-            re = r;
+            
             while(!exit){
                 JTextField expressionField = new JTextField(20);
                 JPanel myPanel = new JPanel();
-                JLabel labelMessage = new JLabel("Use x1 to x" + String.valueOf(df.getNames().size()) + " names values for variables");
+                JLabel labelMessage = new JLabel("Use x1 to x" + String.valueOf(selectedNames.length) + " names values for variables");
                 JOptionPane.showMessageDialog(null, labelMessage);
                 myPanel.add(new JLabel("R expression to subset:"));
                 myPanel.add(expressionField);
@@ -59,7 +70,7 @@ public class AdvancedFilterMenu{
                         
                         // create dataframe on r
                         
-                        for(int i=0; i < df.getNames().size();i++){ // totes les columnes
+                        for(int i=0; i < selectedNames.length;i++){ // totes les columnes
                             re.eval("x" + String.valueOf(i+1) + " <- NULL");
                             if(df.get(i).isNumeric()){
                                 for(double j : df.get(i).getNumericalData()){
@@ -74,9 +85,9 @@ public class AdvancedFilterMenu{
                         }
                         
                         String dataFrameString = "mydf <- data.frame(";
-                        for(int i=0; i < df.getNames().size();i++){
+                        for(int i=0; i < selectedNames.length;i++){
                             dataFrameString += "x" + String.valueOf(i+1);
-                            if(i != df.getNames().size()-1) dataFrameString += ",";
+                            if(i != selectedNames.length-1) dataFrameString += ",";
                         }
                         
                         dataFrameString +=")";
@@ -118,12 +129,12 @@ public class AdvancedFilterMenu{
                                 filtredDataFrame.subFrame(resRowsToDelete);
                                 int nameNum = 0;
                                 String newDataFrameName = df.name + "advFilt" + String.valueOf(nameNum);
-                                while(!mainApp.isDataFrameNameAvailable(newDataFrameName)){
+                                while(!mainApplication.isDataFrameNameAvailable(newDataFrameName)){
                                     nameNum++;
                                     newDataFrameName = df.name + "advFilt" + String.valueOf(nameNum);
                                 }
                                 filtredDataFrame.setName(newDataFrameName);
-                                mainApp.addDataFrame(filtredDataFrame);
+                                mainApplication.addDataFrame(filtredDataFrame);
                             }
                             else{
                                 JOptionPane.showMessageDialog(null, "No data for this expression");
@@ -142,6 +153,10 @@ public class AdvancedFilterMenu{
                     exit = true;
                 }
             }
+            
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "No data available");
         }
     }
 }

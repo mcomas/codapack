@@ -577,7 +577,7 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_FILTER)){
             new FilterMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ADV_FILTER)){
-            new AdvancedFilterMenu(this,re);
+            new AdvancedFilterMenu(this,re).setVisible(true);
         }else if (title.equals(jMenuBar.ITEM_SETDETECTION)){
             new SetDetectionLimitMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
