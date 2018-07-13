@@ -114,8 +114,9 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                         re.eval ("newdata <- subset(mydf," + expression + ")");
                         
                        REXP rexp = re.eval("out <- capture.output(newdata)");
+                       REXP rexp2 = re.eval("is.logical(" + expression +")");
                         
-                        if(rexp != null){
+                        if(rexp != null && rexp2 != null){
                             
                             goodExpression = true;
                         
