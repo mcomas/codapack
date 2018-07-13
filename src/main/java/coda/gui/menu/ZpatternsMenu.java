@@ -64,7 +64,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     
     public ZpatternsMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "ZPatterns Plot Menu", true);
+        super(mainApp, "ZPatterns Plot Menu", false);
         re = r;
     }
     
