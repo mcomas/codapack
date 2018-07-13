@@ -9,6 +9,7 @@ import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.io.ImportRDA;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +31,8 @@ import org.rosuda.JRI.Rengine;
 public class AdvancedFilterMenu extends AbstractMenuDialog{
     
     Rengine re;
+    JFrame frame;
+    JPanel pane;
     
     public static final long serialVersionUID = 1L;
     
@@ -50,23 +53,35 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
             
             DataFrame df = mainApplication.getActiveDataFrame();
             boolean exit = false;
+            JLabel labelMessage = new JLabel("Use x1 to x" + String.valueOf(selectedNames.length) + " names values for variables");
+            JOptionPane.showMessageDialog(null, labelMessage);
+            boolean goodExpression = false, goodName = false;
+            String expression = null, dataFrameNewName = null;
             
             while(!exit){
-                JTextField expressionField = new JTextField(20);
-                JPanel myPanel = new JPanel();
-                JLabel labelMessage = new JLabel("Use x1 to x" + String.valueOf(selectedNames.length) + " names values for variables");
-                JOptionPane.showMessageDialog(null, labelMessage);
-                myPanel.add(new JLabel("R expression to subset:"));
-                myPanel.add(expressionField);
-                int answer = JOptionPane.showConfirmDialog(null,myPanel, "Advanced Filter", JOptionPane.OK_CANCEL_OPTION);
+                
+                pane = new JPanel();
+                pane.setLayout(new GridLayout(0,2,2,2));
+                JTextField expressionField, dataFrameName;
+                if(goodExpression) expressionField = new JTextField(expression,20);
+                else expressionField = new JTextField(20);
+                if(goodName) dataFrameName = new JTextField(dataFrameNewName,20);
+                else dataFrameName = new JTextField(20);
+                pane.add(new JLabel("R expression to subset: "));
+                pane.add(expressionField);
+                pane.add(new JLabel("Name of the new dataframe: "));
+                pane.add(dataFrameName);
+                
+                int answer = JOptionPane.showConfirmDialog(frame, pane, "Adavanced Filter Menu", JOptionPane.OK_CANCEL_OPTION);
 
                 // respostes
 
                 if(answer == JOptionPane.OK_OPTION){
 
-                    String expression = expressionField.getText();
+                    expression = expressionField.getText();
+                    dataFrameNewName = dataFrameName.getText();
 
-                    if(expression.length() != 0){
+                    if(expression.length() != 0 && dataFrameNewName.length() != 0){
                         
                         // create dataframe on r
                         
@@ -102,7 +117,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                         
                         if(rexp != null){
                             
-                            exit = true;
+                            goodExpression = true;
                         
                             String[] out = re.eval("out").asStringArray();
                             
@@ -127,26 +142,44 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
 
                                 DataFrame filtredDataFrame = new DataFrame(df);
                                 filtredDataFrame.subFrame(resRowsToDelete);
-                                int nameNum = 0;
-                                String newDataFrameName = df.name + "advFilt" + String.valueOf(nameNum);
-                                while(!mainApplication.isDataFrameNameAvailable(newDataFrameName)){
-                                    nameNum++;
-                                    newDataFrameName = df.name + "advFilt" + String.valueOf(nameNum);
+                                
+                                // put name
+                                
+                                if(mainApplication.isDataFrameNameAvailable(dataFrameNewName)){
+                                    goodName = true;
+                                    goodExpression = true;
+                                    exit = true;
+                                    filtredDataFrame.setName(dataFrameNewName);
+                                    mainApplication.addDataFrame(filtredDataFrame);
                                 }
-                                filtredDataFrame.setName(newDataFrameName);
-                                mainApplication.addDataFrame(filtredDataFrame);
+                                else{
+                                    goodName = false;
+                                    goodExpression = true;
+                                    JOptionPane.showMessageDialog(null, "This dataframe name is not available");
+                                }
                             }
                             else{
                                 JOptionPane.showMessageDialog(null, "No data for this expression");
                             }
                         }
                         else{
+                            goodExpression = false;
+                            goodName = true;
                             JOptionPane.showMessageDialog(null, "Invalid expression");
                         }
                        
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "Please put some expression");
+                        if(expression.length() == 0){
+                            if(dataFrameNewName.length() != 0 && mainApplication.isDataFrameNameAvailable(dataFrameNewName)){
+                                goodName = true;
+                            }
+                            JOptionPane.showMessageDialog(null, "Please put some expression");
+                        }
+                        else{
+                            goodExpression = true;
+                            JOptionPane.showMessageDialog(null, "Please put some dataframe name");
+                        }
                     }
                 }
                 else{
