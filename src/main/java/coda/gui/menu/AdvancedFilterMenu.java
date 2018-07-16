@@ -10,6 +10,7 @@ import coda.gui.CoDaPackMain;
 import coda.io.ImportRDA;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.Arrays;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +49,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
         this.dispose();
         
         String selectedNames[] = ds.getSelectedData();
+        Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
         
         if(selectedNames.length > 0){ // minimum one variable
             
@@ -84,18 +86,21 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                     if(expression.length() != 0 && dataFrameNewName.length() != 0){
                         
                         // create dataframe on r
-                        
-                        for(int i=0; i < selectedNames.length;i++){ // totes les columnes
-                            re.eval("x" + String.valueOf(i+1) + " <- NULL");
-                            if(df.get(i).isNumeric()){
-                                for(double j : df.get(i).getNumericalData()){
-                                    re.eval("x" + String.valueOf(i+1) + " <- c(x" + String.valueOf(i+1) +"," + String.valueOf(j) + ")");
+                        int auxPos = 0;
+                        for(int i=0; i < df.size();i++){ // totes les columnes
+                            if(vSelectedNames.contains(df.get(i).getName())){
+                                re.eval("x" + String.valueOf(auxPos+1) + " <- NULL");
+                                if(df.get(i).isNumeric()){
+                                    for(double j : df.get(i).getNumericalData()){
+                                        re.eval("x" + String.valueOf(auxPos+1) + " <- c(x" + String.valueOf(auxPos+1) +"," + String.valueOf(j) + ")");
+                                    }
                                 }
-                            }
-                            else{
-                                for(String j : df.get(i).getTextData()){
-                                    re.eval("x" + String.valueOf(i+1) + " <- c(x" + String.valueOf(i+1) +",'" + j + "')");
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval("x" + String.valueOf(auxPos+1) + " <- c(x" + String.valueOf(auxPos+1) +",'" + j + "')");
+                                    }
                                 }
+                                auxPos++;
                             }
                         }
                         
@@ -108,6 +113,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                         dataFrameString +=")";
                         
                         re.eval(dataFrameString); // we create the dataframe in R
+                        String [] out2 = re.eval("mydf").asStringArray();
                         
                         // cal fer el subset
                         
