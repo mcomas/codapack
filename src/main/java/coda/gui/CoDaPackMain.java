@@ -68,6 +68,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.embed.swing.JFXPanel;
 import javax.script.ScriptException;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -536,6 +537,10 @@ public final class CoDaPackMain extends JFrame{
                 int response = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
+                    int responseSaveHTML = JOptionPane.showConfirmDialog(null, "Do you want to save the session?", "Save the session",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                    if(responseSaveHTML == JOptionPane.NO_OPTION){
+                        outputPanel.deleteHtml();
+                    }
                     dispose();
                     this.closeApplication();
                 }
