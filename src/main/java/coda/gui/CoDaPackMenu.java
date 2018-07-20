@@ -82,6 +82,8 @@ public class CoDaPackMenu extends JMenuBar{
 
     public JMenu menuData;
     public final String ITEM_DATA = "Data";
+        public JMenuItem itemCreateFrame;
+        public final String ITEM_CREATE_FRAME = "Create new Frame";
         public JMenu menuTransforms;
         public final String ITEM_TRANS = "Transformations";
             public JMenuItem itemTransformALR;
@@ -353,6 +355,7 @@ public class CoDaPackMenu extends JMenuBar{
                 itemQuit = new JMenuItem();
 
         menuData = new JMenu();
+            itemCreateFrame = new JMenuItem();
             menuTransforms = new JMenu();
                 itemTransformALR = new JMenuItem();
                 itemTransformCLR = new JMenuItem();
@@ -434,6 +437,7 @@ public class CoDaPackMenu extends JMenuBar{
 
         menuData.setText(ITEM_DATA);
         menuTransforms.setText(ITEM_TRANS);
+        addJMenuItem(menuData,itemCreateFrame,ITEM_CREATE_FRAME);
         menuData.add(menuTransforms);
         addJMenuItem(menuTransforms, itemTransformALR, ITEM_RAW_ALR);
         addJMenuItem(menuTransforms, itemTransformCLR, ITEM_RAW_CLR);

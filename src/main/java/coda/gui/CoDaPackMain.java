@@ -547,6 +547,8 @@ public final class CoDaPackMain extends JFrame{
             }
         }else if(title.equals(jMenuBar.ITEM_CONF)){
             new ConfigurationMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_CREATE_FRAME)){
+            new DataFrameCreator(this);
         }else if(title.equals(jMenuBar.ITEM_RAW_ALR)){
             new TransformationALRMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_RAW_CLR)){

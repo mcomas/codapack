@@ -46,8 +46,6 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed(){
         
-        this.dispose();
-        
         String selectedNames[] = ds.getSelectedData();
         Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
         
@@ -158,6 +156,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                                     exit = true;
                                     filtredDataFrame.setName(dataFrameNewName);
                                     mainApplication.addDataFrame(filtredDataFrame);
+                                    this.dispose();
                                 }
                                 else{
                                     goodName = false;
