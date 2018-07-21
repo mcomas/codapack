@@ -63,10 +63,25 @@ public class DataFrameCreator extends JFrame{
                 panel.add(columnsField);
                 panel.add(new JLabel("Put the number of rows: "));
                 panel.add(rowsField);
-                
-        int answer = JOptionPane.showConfirmDialog(this, panel, "Create new dataframe", JOptionPane.OK_CANCEL_OPTION);
+                int answer = JOptionPane.showConfirmDialog(this, panel, "Create new dataframe", JOptionPane.OK_CANCEL_OPTION);
         
         if(answer == JOptionPane.OK_OPTION){
+            
+            while(columnsField.getText().length() <= 0  || rowsField.getText().length() <= 0 || !StringUtils.isNumeric(columnsField.getText()) || !StringUtils.isNumeric(rowsField.getText()) || Double.valueOf(columnsField.getText()) < 1 || Double.valueOf(rowsField.getText()) < 1){
+            
+                if(columnsField.getText().length() <= 0 || rowsField.getText().length() <= 0){
+                    JOptionPane.showMessageDialog(null, "Some field empty");
+                }
+                else if(!StringUtils.isNumeric(columnsField.getText()) || !StringUtils.isNumeric(rowsField.getText())){
+                    JOptionPane.showMessageDialog(null, "Some field is not numeric");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Pleas put a number bigger than 0");
+                }
+
+                answer = JOptionPane.showConfirmDialog(this, panel, "Create new dataframe", JOptionPane.OK_CANCEL_OPTION);
+            }
+            
             int numberOfColumns = Integer.valueOf(columnsField.getText());
             int numberOfRows = Integer.valueOf(rowsField.getText());
             this.setTitle("Create new dataFrame");
@@ -110,36 +125,69 @@ public class DataFrameCreator extends JFrame{
     
     private void createANewDataFrame(CoDaPackMain mainApp){
         
-        String[] varNames = new String[table.getColumnCount()]; // names data
-        
         DataFrame df = new DataFrame();
         
-        for (int count = 0; count < table.getColumnCount(); count++){
-            double[] auxNum = new double[table.getRowCount()-1];
-            String[] auxCat = new String[table.getRowCount()-1];
-            boolean isNumeric = false;
-            boolean isCategoric = false;
-            
-            for(int j = 0; j < table.getRowCount(); j++){
-                if(j == 0){
-                    varNames[count] = table.getValueAt(j,count).toString();
+            String[] varNames = new String[table.getColumnCount()]; // names data
+            boolean noEmpty = true, varNamesCorrect = true, coherentData = true;
+
+            for (int count = 0; count < table.getColumnCount() && noEmpty && varNamesCorrect && coherentData; count++){
+                double[] auxNum = new double[table.getRowCount()-1];
+                String[] auxCat = new String[table.getRowCount()-1];
+                boolean isNumeric = false;
+                boolean isCategoric = false;
+
+                for(int j = 0; j < table.getRowCount() && noEmpty && varNamesCorrect && coherentData; j++){
+                    if(table.getValueAt(j,count) == null || table.getValueAt(j, count).toString().length() == 0) noEmpty = false;
+                    else if(j == 0){
+                        if(StringUtils.isNumeric(table.getValueAt(j,count).toString())) varNamesCorrect = false;
+                        else varNames[count] = table.getValueAt(j,count).toString();
+                    }
+                    else if(StringUtils.isNumeric(table.getValueAt(j,count).toString())){
+                        isNumeric = true;
+                        auxNum[j-1] = Double.valueOf(table.getValueAt(j, count).toString());
+                    }
+                    else{
+                        isCategoric = true;
+                        auxCat[j-1] = table.getValueAt(j,count).toString();
+                    }
                 }
-                else if(StringUtils.isNumeric(table.getValueAt(j,count).toString())){
-                    isNumeric = true;
-                    auxNum[j-1] = Double.valueOf(table.getValueAt(j, count).toString());
+                if(noEmpty && (isNumeric == false || isCategoric == false)){
+                    if(isNumeric) df.addData(varNames[count], auxNum);
+                    else if(isCategoric) df.addData(varNames[count], new Variable(varNames[count],auxCat));
                 }
-                else{
-                    isCategoric = true;
-                    auxCat[j-1] = table.getValueAt(j,count).toString();
+                else if(isNumeric && isCategoric){
+                    coherentData = false;
                 }
             }
-            if(isNumeric) df.addData(varNames[count], auxNum);
-            else if(isCategoric) df.addData(varNames[count], new Variable(varNames[count],auxCat));
-        }
-        
-        df.setName("prova");
-        
-        mainApp.addDataFrame(df);
+            
+            if(!noEmpty){
+                JOptionPane.showMessageDialog(null, "Some cell is empty");
+            }
+            else if(!varNamesCorrect){
+                JOptionPane.showMessageDialog(null, "Some cell of var names is not correct");
+            }
+            else if(!coherentData){
+                JOptionPane.showMessageDialog(null, "Revise some coherent column");
+            }
+            else{
+                panel = new JPanel();
+                JTextField dataFrameName = new JTextField(20);
+                panel.add(new JLabel("Put the name of the new dataframe: "));
+                panel.add(dataFrameName);
+                
+                int answer = JOptionPane.showConfirmDialog(this, panel, "Set the name of the dataframe", JOptionPane.OK_CANCEL_OPTION);
+                
+                if(answer == JOptionPane.OK_OPTION){
+                    while(dataFrameName.getText().length() == 0 || !mainApp.isDataFrameNameAvailable(dataFrameName.getText())){
+                        if(dataFrameName.getText().length() == 0) JOptionPane.showMessageDialog(null, "Please put some name");
+                        else JOptionPane.showMessageDialog(null, "The name is not available");
+                        answer = JOptionPane.showConfirmDialog(this, panel, "Set the name of the newframe", JOptionPane.OK_CANCEL_OPTION);
+                    }
+                    df.setName(dataFrameName.getText());
+                    mainApp.addDataFrame(df);
+                    this.dispose();
+                }
+            }
     }
     
 }

@@ -530,6 +530,10 @@ public final class CoDaPackMain extends JFrame{
                 int response = JOptionPane.showConfirmDialog(this, "<html>Your changes will be lost if you close <br/>Do you want to exit?</html>", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
+                    int responseSaveHTML = JOptionPane.showConfirmDialog(null, "Do you want to save the session?", "Save the session",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                    if(responseSaveHTML == JOptionPane.NO_OPTION){
+                        outputPanel.deleteHtml();
+                    }
                     dispose();
                     this.closeApplication();
                 }
