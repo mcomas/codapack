@@ -51,6 +51,8 @@ public class DataFrameCreator extends JFrame{
     JPanel panel;
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     
+    public static final long serialVersionUID = 1L;
+    
     public DataFrameCreator(final CoDaPackMain mainApp){
                 panel = new JPanel();
                 panel.add(new JLabel("Use the first row to set the variable names"));
