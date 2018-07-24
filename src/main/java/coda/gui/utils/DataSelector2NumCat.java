@@ -40,13 +40,14 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListModel;
 /**
  *
  * @author mcomas
  */
-public final class DataSelector2 extends JPanel {
+public final class DataSelector2NumCat extends JPanel {
     DataFrame df_instance;
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
@@ -54,13 +55,13 @@ public final class DataSelector2 extends JPanel {
     String variables[];
     boolean groupedBy = true;
     
-    public DataSelector2(DataFrame dataFrame){
+    public DataSelector2NumCat(DataFrame dataFrame){
         initComponents();
         df_instance = dataFrame;
         if(dataFrame != null)
             this.setDataLists(dataFrame, null);
     }
-    public DataSelector2(DataFrame dataFrame, boolean groups, boolean all) {
+    public DataSelector2NumCat(DataFrame dataFrame, boolean groups, boolean all) {
         initComponents();
         groupsComboBox.setVisible(groups);
         labGroups.setVisible(groups);
@@ -73,7 +74,7 @@ public final class DataSelector2 extends JPanel {
                 this.setDataLists(dataFrame, null);
         }
     }
-    public DataSelector2(DataFrame dataFrame, int[]selected, boolean groups) {
+    public DataSelector2NumCat(DataFrame dataFrame, int[]selected, boolean groups) {
         initComponents();
         groupsComboBox.setVisible(groups);
         labGroups.setVisible(groups);
@@ -83,7 +84,7 @@ public final class DataSelector2 extends JPanel {
             setDataLists(dataFrame, selected);
 
     }
-    public DataSelector2(DataFrame dataFrame, boolean groups) {
+    public DataSelector2NumCat(DataFrame dataFrame, boolean groups) {
         initComponents();
         groupsComboBox.setVisible(groups);
         labGroups.setVisible(groups);
@@ -94,7 +95,7 @@ public final class DataSelector2 extends JPanel {
             setDataLists(dataFrame, null);
     }
 
-    public DataSelector2(DataFrame activeDataFrame, int[] selectedData, String categoric) {
+    public DataSelector2NumCat(DataFrame activeDataFrame, int[] selectedData, String categoric) {
         initComponents();
         groupsComboBox.setVisible(false);
         labGroups.setVisible(false);
@@ -370,7 +371,7 @@ public final class DataSelector2 extends JPanel {
         resetButton2.setText("Reset");
         resetButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetActionPerformed(evt);
+                resetActionPerformed2(evt);
             }
         });
         
@@ -468,8 +469,13 @@ public final class DataSelector2 extends JPanel {
             DefaultListModel model2 = (DefaultListModel) selectedList1.getModel();
 
             Object dragee = model1.elementAt(index);
-            model1.removeElementAt(index);
-            model2.insertElementAt(dragee,model2.getSize());
+            if(df_instance.get(dragee).isNumeric()){
+                model1.removeElementAt(index);
+                model2.insertElementAt(dragee,model2.getSize());
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"Sorry the data is not numeric");
+            }
         }
     }
 
@@ -510,7 +516,37 @@ public final class DataSelector2 extends JPanel {
     }
 
     private void resetActionPerformed(java.awt.event.ActionEvent evt) {
-        setDataLists(df_instance, null);
+        //setDataLists(df_instance, null);
+        DefaultListModel model1 = (DefaultListModel) toSelectList.getModel();
+        DefaultListModel model2 = (DefaultListModel) selectedList1.getModel();
+
+        int from = model1.getSize();
+        for(int i=model2.getSize()-1; i>=0; i--){
+            Object ee = model2.elementAt(i);
+            model2.removeElementAt(i);
+            model1.insertElementAt(ee, from);
+        }
+//        DefaultListModel model1 = new DefaultListModel();
+//        for(int i=0; i< variables.length; i++){
+//            model1.addElement(variables[i]);
+//        }
+//        toSelectList.setModel(model1);
+//        DefaultListModel model2 = new DefaultListModel();
+//        selectedList.setModel(model2);
+    }
+    
+    private void resetActionPerformed2(java.awt.event.ActionEvent evt) {
+        //setDataListsCat(df_instance, null);
+
+        DefaultListModel model1 = (DefaultListModel) toSelectList.getModel();
+        DefaultListModel model2 = (DefaultListModel) selectedList2.getModel();
+
+        int from = model1.getSize();
+        for(int i=model2.getSize()-1; i>=0; i--){
+            Object ee = model2.elementAt(i);
+            model2.removeElementAt(i);
+            model1.insertElementAt(ee, from);
+        }
 //        DefaultListModel model1 = new DefaultListModel();
 //        for(int i=0; i< variables.length; i++){
 //            model1.addElement(variables[i]);
@@ -529,8 +565,13 @@ public final class DataSelector2 extends JPanel {
         int from = model2.getSize();
         for(int i=index.length-1; i>=0; i--){
             Object ee = model1.elementAt(index[i]);
-            model1.removeElementAt(index[i]);
-            model2.insertElementAt(ee, from);
+            if(df_instance.get(ee).isNumeric()){
+                model1.removeElementAt(index[i]);
+                model2.insertElementAt(ee, from);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Sorry the data is not numeric");
+            }
         }
     }
     
@@ -543,8 +584,13 @@ public final class DataSelector2 extends JPanel {
         int from = model2.getSize();
         for(int i=index.length-1; i>=0; i--){
             Object ee = model1.elementAt(index[i]);
-            model1.removeElementAt(index[i]);
-            model2.insertElementAt(ee, from);
+            if(df_instance.get(ee).isText()){
+                model1.removeElementAt(index[i]);
+                model2.insertElementAt(ee, from);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Sorry the data is not categoric");
+            }
         }
     }
 
@@ -597,4 +643,5 @@ public final class DataSelector2 extends JPanel {
     // End of variables declaration
 
 }
+
 

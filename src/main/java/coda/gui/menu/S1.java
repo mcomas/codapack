@@ -43,7 +43,7 @@ public class S1 extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
-    JFrame frameZPatterns;
+    JFrame frameS1;
     String tempDirR;
     
     public static final long serialVersionUID = 1L;
@@ -148,7 +148,7 @@ public class S1 extends AbstractMenuDialog{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            frameZPatterns = new JFrame();
+            frameS1 = new JFrame();
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -168,17 +168,17 @@ public class S1 extends AbstractMenuDialog{
             menuItem.addActionListener(new quitListener());
             menu.add(submenuExport);
             menu.add(menuItem);
-            frameZPatterns.setJMenuBar(menuBar);
+            frameS1.setJMenuBar(menuBar);
             panel.setSize(800,800);
             ImageIcon icon = new ImageIcon(tempDirR);
             JLabel label = new JLabel(icon,JLabel.CENTER);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
             panel.add(label);
-            frameZPatterns.getContentPane().add(panel);
+            frameS1.getContentPane().add(panel);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frameZPatterns.setSize(800,800);
-            frameZPatterns.setLocation(dim.width/2-frameZPatterns.getSize().width/2, dim.height/2-frameZPatterns.getSize().height/2);
+            frameS1.setSize(800,800);
+            frameS1.setLocation(dim.width/2-frameS1.getSize().width/2, dim.height/2-frameS1.getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -186,23 +186,23 @@ public class S1 extends AbstractMenuDialog{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        frameZPatterns.dispose();
+                        frameS1.dispose();
                         File file = new File(tempDirR);
                         file.delete();
                     }
                 }
             };
             
-            frameZPatterns.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            frameZPatterns.addWindowListener(exitListener);
-            frameZPatterns.setVisible(true);
+            frameS1.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            frameS1.addWindowListener(exitListener);
+            frameS1.setVisible(true);
     }
     
     private class quitListener implements ActionListener{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                frameZPatterns.dispose();
+                frameS1.dispose();
                 File file = new File(tempDirR);
                 file.delete();
             }

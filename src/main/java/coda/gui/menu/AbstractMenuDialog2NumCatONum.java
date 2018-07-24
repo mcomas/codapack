@@ -23,7 +23,7 @@ import coda.DataFrame;
 import coda.gui.utils.DataSelector;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
-import coda.gui.utils.DataSelector2;
+import coda.gui.utils.DataSelector2NumCatONum;
 import coda.io.ImportRDA;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -40,8 +40,8 @@ import org.renjin.sexp.StringVector;
  *
  * @author mcomas
  */
-public abstract class AbstractMenuDialog2 extends JDialog{
-    final DataSelector2 ds;
+public abstract class AbstractMenuDialog2NumCatONum extends JDialog{
+    final DataSelector2NumCatONum ds;
     DataFrameSelector dfs;
     public JPanel optionsPanel = new JPanel();;
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -51,15 +51,15 @@ public abstract class AbstractMenuDialog2 extends JDialog{
     String variables[];
     int WIDTH = 650;//560;
     int HEIGHT = 500;//430;
-    public AbstractMenuDialog2(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty, boolean categoric){
+    public AbstractMenuDialog2NumCatONum(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty, boolean categoric){
         super(mainApp, title);
         mainApplication = mainApp;
 
         dfs = null;
-        ds = new DataSelector2(mainApplication.getActiveDataFrame(), groups, categoric);
+        ds = new DataSelector2NumCatONum(mainApplication.getActiveDataFrame(), groups, categoric);
         initialize();
     }
-    public AbstractMenuDialog2(final CoDaPackMain mainApp, String title, boolean groups, JFileChooser chooseFile, ImportRDA impdf) throws ScriptException{
+    public AbstractMenuDialog2NumCatONum(final CoDaPackMain mainApp, String title, boolean groups, JFileChooser chooseFile, ImportRDA impdf) throws ScriptException{
         super(mainApp, title);
         mainApplication = mainApp;
         ds = null;
@@ -76,26 +76,26 @@ public abstract class AbstractMenuDialog2 extends JDialog{
             dfs = null;
         }
     }
-    public AbstractMenuDialog2(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty){
+    public AbstractMenuDialog2NumCatONum(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty){
         super(mainApp, title);
         mainApplication = mainApp;
         dfs = null;
         this.allowEmpty = allowEmpty;
-        ds = new DataSelector2(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
+        ds = new DataSelector2NumCatONum(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
         initialize();
     }
-    public AbstractMenuDialog2(final CoDaPackMain mainApp, String title, boolean groups){
+    public AbstractMenuDialog2NumCatONum(final CoDaPackMain mainApp, String title, boolean groups){
         super(mainApp, title);
         mainApplication = mainApp;
         dfs = null;
-        ds = new DataSelector2(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
+        ds = new DataSelector2NumCatONum(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
         initialize();
     }
-    public AbstractMenuDialog2(final CoDaPackMain mainApp, String title, String categoric){
+    public AbstractMenuDialog2NumCatONum(final CoDaPackMain mainApp, String title, String categoric){
         super(mainApp, title);
         mainApplication = mainApp;
         dfs = null;
-        ds = new DataSelector2(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), categoric);
+        ds = new DataSelector2NumCatONum(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), categoric);
         initialize();
     }
     private void initialize(){
@@ -203,7 +203,7 @@ public abstract class AbstractMenuDialog2 extends JDialog{
     public void closeMenuDialog(){        
         setVisible(false);
     }
-    public DataSelector2 getDataSelector(){
+    public DataSelector2NumCatONum getDataSelector(){
         return ds;
     }
     public String[] getSelectedData1(){
