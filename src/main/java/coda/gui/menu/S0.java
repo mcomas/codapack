@@ -36,10 +36,10 @@ import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
 /**
- * S1 -> X numerica i positiva amb opció de retornar text, crear dataframe i  mostrar grafics
+ * S0 -> X numerica amb opció de retornar text, crear dataframe i  mostrar grafics
  * @author Guest2
  */
-public class S1 extends AbstractMenuDialog{
+public class S0 extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
@@ -48,8 +48,9 @@ public class S1 extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
     
-    public S1(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "S1 menu", false);
+    public S0(final CoDaPackMain mainApp, Rengine r){
+        super(mainApp, "S"
+                + "S0 menu", false);
         re = r;
     }
     
@@ -61,37 +62,8 @@ public class S1 extends AbstractMenuDialog{
         if(selectedNames.length > 0){
             
             df = mainApplication.getActiveDataFrame();
-            DataFrame transformedDataFrame = new DataFrame(df);
             
             double[][] data = df.getNumericalData(selectedNames);
-            Vector<Integer> rowsToDeleteVect = new Vector<Integer>();
-            
-            for(int i=0; i < data.length; i++){
-                for(int j = 0; j < data[i].length;j++){
-                    if(data[i][j] <= 0.0) rowsToDeleteVect.add(j);
-                }
-            }
-            
-            if(rowsToDeleteVect.size() == df.getMaxVariableLength()) JOptionPane.showMessageDialog(null,"No positive data to analize");
-            else{
-                if(rowsToDeleteVect.size() > 0){ // if some row to ignore we transform the dataFrame
-                    JOptionPane.showMessageDialog(null, "Some data will be ignored in the calcs");
-                    int[] rowsToDelete = new int[rowsToDeleteVect.size()];
-                    for(int i=0; i < rowsToDeleteVect.size();i++) rowsToDelete[i] = rowsToDeleteVect.elementAt(i);
-                    transformedDataFrame.subFrame(rowsToDelete);
-                    double[][] dataTransformed = transformedDataFrame.getNumericalData(selectedNames);
-                        
-                    // Construim la matriu de dades
-
-                    re.assign("X", dataTransformed[0]);
-                    re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
-                    for(int i=1; i < dataTransformed.length; i++){
-                        re.assign("tmp", dataTransformed[i]);
-                        re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
-                    }
-                }
-                else{             
-                    // Construim la matriu de dades
 
                     re.assign("X", data[0]);
                     re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
@@ -99,15 +71,12 @@ public class S1 extends AbstractMenuDialog{
                         re.assign("tmp", data[i]);
                         re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
                     }
-                }
                 
                 // executem script d'R
                 
                 re.eval("source(\"nameofThePathFile\")");
                 
-            }
-            
-        }
+        }    
         else{
             JOptionPane.showMessageDialog(null,"Please select data");
         }
