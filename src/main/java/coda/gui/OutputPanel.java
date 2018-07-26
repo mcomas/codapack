@@ -1,4 +1,4 @@
-/**	
+/**
  *	Copyright 2011-2016 Marc Comas - Santiago Thió
  *
  *	This file is part of CoDaPack.
@@ -50,13 +50,13 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public final class OutputPanel extends JFXPanel {
-    
+
     public final long serialVersionUID = 1L;
-    
+
     private Scene scene;
-    
+
     private Writer fileWriter;
-    
+
         public OutputPanel(){
             try{
                 fileWriter = new OutputStreamWriter(new FileOutputStream("prova.html",true),StandardCharsets.ISO_8859_1);
@@ -70,18 +70,18 @@ public final class OutputPanel extends JFXPanel {
                     }
                 });
         }
-        
+
         public void iniFx(){
             scene = new Scene(new Browser(),500,350,Color.web("#666970"));
             this.setScene(scene);
         }
-    
+
     	public void addWelcome(String CoDaVersion){
 		String windowText = "<b>CoDaPack</b> - Version " + CoDaVersion
                 + "<br>This software is being developed by the "
                 + "Research Group in Statistics and Compositional Data Analysis "
                 + "at University of Girona<br><br>";
-                
+
                 Platform.runLater(new Runnable(){
                         public void run(){
                             ((Browser)scene.getRoot()).repaint(windowText);
@@ -92,9 +92,9 @@ public final class OutputPanel extends JFXPanel {
 	public void addOutput(OutputElement oe){
 		String windowText = "";
 		windowText = oe.printHTML(windowText) + "<br>";
-                
+
                 final String aux = windowText;
-                
+
 		Platform.runLater(new Runnable(){
                         public void run(){
                             ((Browser)scene.getRoot()).repaint(aux);
@@ -109,7 +109,7 @@ public final class OutputPanel extends JFXPanel {
 		for(OutputElement oe: outputs){
 			windowText = oe.printHTML(windowText) + "<br>";
 		}
-                
+
                 final String aux = windowText;
 
 		Platform.runLater(new Runnable(){
@@ -117,16 +117,16 @@ public final class OutputPanel extends JFXPanel {
                             ((Browser)scene.getRoot()).repaint(aux);
                         }
                 });
-                
+
 	}
-        
+
         public void deleteHtml(){
-            
+
             try {
                 fileWriter.close();
                 File htmlFile = new File("prova.html");
                 htmlFile.delete();
-                
+
             } catch (IOException ex) {
                 System.out.println("Problem occurs when deleting the directory : prova.html");
                 ex.printStackTrace();
@@ -144,7 +144,9 @@ class Browser extends Region{
 		getStyleClass().add("browser");
 		webEngine.load("file:\\" + System.getProperty("user.dir") + "\\prova.html");
 		getChildren().add(browser);
-		webEngine.setUserStyleSheetLocation("file:\\" + System.getProperty("user.dir") + "\\resources\\style.css".toString());
+    String url = "file:" + File.separator + File.separator + System.getProperty("user.dir") +  File.separator + "resources" + File.separator + "style.css";
+    //System.out.println(url);
+		webEngine.setUserStyleSheetLocation(url);
 	}
 
 	private Node createSpacer(){
@@ -168,7 +170,7 @@ class Browser extends Region{
 	}
 
 	public void repaint(String text){
-            
+
             try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream("prova.html",true),StandardCharsets.ISO_8859_1)){
                 fileWriter.write(text);
             }catch(IOException e){
