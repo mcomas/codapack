@@ -643,7 +643,7 @@ public final class CoDaPackMain extends JFrame{
             new CoDaPackAbout(this).setVisible(true);
         }
         else if(title.equals(jMenuBar.R_TEST)){
-            /*// first we get the session info
+            // first we get the session info
             re.eval("a <- capture.output(sessionInfo())");
             OutputElement e = new OutputForR(re.eval("a").asStringArray());
             outputPanel.addOutput(e);
@@ -659,8 +659,7 @@ public final class CoDaPackMain extends JFrame{
             
             re.eval("a <- capture.output(capabilities())");
             e = new OutputForR(re.eval("a").asStringArray());
-            outputPanel.addOutput(e);*/
-            new S4(this,re).setVisible(true);
+            outputPanel.addOutput(e);
         }
     }
     public class DataFrameSelectorListener implements ItemListener{

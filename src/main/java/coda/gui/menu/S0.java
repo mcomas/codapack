@@ -20,9 +20,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -73,9 +78,9 @@ public class S0 extends AbstractMenuDialog{
                     }
                 
                 // executem script d'R
-                
-                re.eval("source(\"nameofThePathFile\")");
-                
+                String url = System.getProperty("user.dir") + "\\resources\\SumScript.R".toString();
+                url = url.replaceAll("\\\\", "/");
+                re.eval("source(\"" + url + "\")");
         }    
         else{
             JOptionPane.showMessageDialog(null,"Please select data");

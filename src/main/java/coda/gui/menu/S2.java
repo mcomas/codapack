@@ -82,7 +82,9 @@ public class S2 extends AbstractMenuDialog2NumCat{
             
             // executem script d'R
                 
-            re.eval("source(\"nameofThePathFile\")");
+                String url = System.getProperty("user.dir") + "\\resources\\SumScript.R".toString();
+                url = url.replaceAll("\\\\", "/");
+                re.eval("source(\"" + url + "\")");
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null,"No data selected in data 1");

@@ -105,7 +105,9 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
                 }
             }
             
-            re.eval("source(\"nameofThePathFile\")");
+                String url = System.getProperty("user.dir") + "\\resources\\SumScript.R".toString();
+                url = url.replaceAll("\\\\", "/");
+                re.eval("source(\"" + url + "\")");
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");
