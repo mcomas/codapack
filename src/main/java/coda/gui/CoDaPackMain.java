@@ -660,7 +660,7 @@ public final class CoDaPackMain extends JFrame{
             re.eval("a <- capture.output(capabilities())");
             e = new OutputForR(re.eval("a").asStringArray());
             outputPanel.addOutput(e);*/
-            new S3(this,re).setVisible(true);
+            new S4(this,re).setVisible(true);
         }
     }
     public class DataFrameSelectorListener implements ItemListener{
