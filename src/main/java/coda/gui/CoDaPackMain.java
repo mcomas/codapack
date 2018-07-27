@@ -802,6 +802,7 @@ public final class CoDaPackMain extends JFrame{
                     System.out.println("Server version is: " + serverData.getString("codapack-version"));
                     if(CoDaPackConf.updateNeeded(serverData.getString("codapack-version")))
                         redirectForUpdating(serverData.getString("codapack-version"));
+                    else JOptionPane.showMessageDialog(null, "No update available");
                 } catch (MalformedURLException ex) {
                     Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
