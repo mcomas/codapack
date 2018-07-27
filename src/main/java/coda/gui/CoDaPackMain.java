@@ -551,6 +551,8 @@ public final class CoDaPackMain extends JFrame{
             }
         }else if(title.equals(jMenuBar.ITEM_CONF)){
             new ConfigurationMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_HELP_FILE)){
+            // HELP FILE ACTION
         }else if(title.equals(jMenuBar.ITEM_CREATE_FRAME)){
             new DataFrameCreator(this);
         }else if(title.equals(jMenuBar.ITEM_RAW_ALR)){
@@ -569,6 +571,8 @@ public final class CoDaPackMain extends JFrame{
             new NormalityTestMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ATIP_INDEX)){
             new AtipicalityIndexMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_HELP_STATISTICS)){
+            // HELP STATISTICS ACTION
         }else if(title.equals(jMenuBar.ITEM_CENTER)){
             new CenterDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLOSURE)){
@@ -619,6 +623,8 @@ public final class CoDaPackMain extends JFrame{
             new ILRCLRPlotMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DENDROGRAM_PLOT)){
             new DendrogramMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_HELP_GRAPHS)){
+            // HELP GRAPHS ACTION
         }else if(title.equals(jMenuBar.ITEM_ALR_PLOT)){
             new ALRPlotMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLR_PLOT)){
@@ -629,12 +635,16 @@ public final class CoDaPackMain extends JFrame{
             new AddMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DEL_VAR)){
             new DeleteMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_HELP_DATA)){
+            // HELP DATA ACTION
         }else if(title.equals(jMenuBar.ITEM_CAT_VAR)){
             new Numeric2CategoricMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_NUM_VAR)){
             new Categoric2NumericMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PC_PLOT)){
             new PrincipalComponentMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_HELP_HELP)){
+            // HELP HELP ACTION
         }else if(title.equals(jMenuBar.ITEM_FORCE_UPDATE)){
             CoDaPackConf.refusedVersion = CoDaPackConf.CoDaVersion;
             UpdateConnection uc = new UpdateConnection(this);

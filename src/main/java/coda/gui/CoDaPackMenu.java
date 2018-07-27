@@ -77,6 +77,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_DEL_DATAFRAME = "Delete Table";
         public JMenuItem itemConfiguration;
         public final String ITEM_CONF = "Configuration";
+        public JMenuItem itemHelpFile;
+        public final String ITEM_HELP_FILE = "Help";
         public JMenuItem itemQuit;
         public final String ITEM_QUIT = "Quit CoDaPack";
 
@@ -124,6 +126,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_ADD_VAR = "Add Numeric Variables";
         public JMenuItem itemDeleteVariables;
         public final String ITEM_DEL_VAR = "Delete variables";
+        public JMenuItem itemHelpData;
+        public final String ITEM_HELP_DATA = "Help";
 
     public JMenu menuStatistics;
     public final String ITEM_STATS = "Statistics";
@@ -135,6 +139,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_NORM_TEST = "Additive Logistic Normality Tests";
         public JMenuItem itemAtipicalityIndex;
         public final String ITEM_ATIP_INDEX = "Atipicality index";
+        public JMenuItem itemHelpStatistics;
+        public final String ITEM_HELP_STATISTICS = "Help";
 
 
     public JMenu menuGraphs;
@@ -163,9 +169,13 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_CONF_REG_PLOT = "Center Confidence Region";
         public JMenuItem zPatternsPlot;
         public final String ITEM_ZPATTERNS = "ZPatterns plot";
+        public JMenuItem itemHelpGraphs;
+        public final String ITEM_HELP_GRAPHS = "Help";
 
    public JMenu menuHelp;
    public final String ITEM_HELP = "Help";
+        public JMenuItem itemHelpHelp;
+        public final String ITEM_HELP_HELP = "Help";
         public JMenuItem itemForceUpdate;
         public final String ITEM_FORCE_UPDATE = "Check for Updates";
         public JMenuItem itemAbout;
@@ -352,6 +362,7 @@ public class CoDaPackMenu extends JMenuBar{
                     itemExportR = new JMenuItem();
                 itemdelDataFrame = new JMenuItem();
                 itemConfiguration = new JMenuItem();
+                itemHelpFile = new JMenuItem();
                 itemQuit = new JMenuItem();
 
         menuData = new JMenu();
@@ -376,12 +387,14 @@ public class CoDaPackMenu extends JMenuBar{
             itemNumerizeVariables = new JMenuItem();
             itemAddVariables = new JMenuItem();
             itemDeleteVariables = new JMenuItem();
+            itemHelpData = new JMenuItem();
 
         menuStatistics = new JMenu();
             itemCompStatsSummary = new JMenuItem();
             itemClasStatsSummary = new JMenuItem();
             itemNormalityTest = new JMenuItem();
-            itemAtipicalityIndex = new JMenuItem();                        
+            itemAtipicalityIndex = new JMenuItem();
+            itemHelpStatistics = new JMenuItem();
 
         menuGraphs = new JMenu();
             itemTernaryPlot = new JMenuItem();
@@ -396,8 +409,10 @@ public class CoDaPackMenu extends JMenuBar{
             predictiveRegionPlot = new JMenuItem();
             confidenceRegionPlot = new JMenuItem();
             zPatternsPlot = new JMenuItem();
+            itemHelpGraphs = new JMenuItem();
 
         menuHelp = new JMenu();
+            itemHelpHelp = new JMenuItem();
             itemForceUpdate = new JMenuItem();
             itemAbout = new JMenuItem();
             itemR_Test = new JMenuItem();
@@ -431,6 +446,8 @@ public class CoDaPackMenu extends JMenuBar{
         menuFile.addSeparator();
         addJMenuItem(menuFile, itemConfiguration, ITEM_CONF);
         menuFile.addSeparator();
+        addJMenuItem(menuFile,itemHelpFile,ITEM_HELP_FILE);
+        menuFile.addSeparator();
         addJMenuItem(menuFile, itemQuit, ITEM_QUIT);
         menuFile.addSeparator();  
         add(menuFile);
@@ -460,6 +477,8 @@ public class CoDaPackMenu extends JMenuBar{
         menuData.addSeparator();
         addJMenuItem(menuData, itemAddVariables, ITEM_ADD_VAR);
         addJMenuItem(menuData, itemDeleteVariables, ITEM_DEL_VAR);
+        menuData.addSeparator();
+        addJMenuItem(menuData,itemHelpData,ITEM_HELP_DATA);
         add(menuData);
 
         menuStatistics.setText(ITEM_STATS);
@@ -469,6 +488,8 @@ public class CoDaPackMenu extends JMenuBar{
         menuStatistics.addSeparator();
         addJMenuItem(menuStatistics, itemNormalityTest, ITEM_NORM_TEST);
         addJMenuItem(menuStatistics, itemAtipicalityIndex, ITEM_ATIP_INDEX);
+        menuStatistics.addSeparator();
+        addJMenuItem(menuStatistics,itemHelpStatistics,ITEM_HELP_STATISTICS);
 
         menuGraphs.setText(ITEM_GRAPHS);
         addJMenuItem(menuGraphs, itemTernaryPlot, ITEM_TERNARY_PLOT);
@@ -485,9 +506,12 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuGraphs, itemBiPlot, ITEM_BIPLOT);
         addJMenuItem(menuGraphs, itemIlrBiPlot, ITEM_ILR_BIPLOT);
         addJMenuItem(menuGraphs, itemDendrogramPlot, ITEM_DENDROGRAM_PLOT);
+        menuGraphs.addSeparator();
+        addJMenuItem(menuGraphs,itemHelpGraphs,ITEM_HELP_GRAPHS);
         add(menuGraphs);       
 
         menuHelp.setText(ITEM_HELP);
+        addJMenuItem(menuHelp,itemHelpHelp,ITEM_HELP_HELP);
         addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
         addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
         addJMenuItem(menuHelp,itemR_Test, R_TEST);
