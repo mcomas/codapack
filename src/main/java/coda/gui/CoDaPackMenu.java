@@ -50,7 +50,7 @@ public class CoDaPackMenu extends JMenuBar{
         public JMenuItem itemAdd;
         public final String ITEM_ADD = "Add Workspace...";
         public JMenuItem itemSave;
-        public final String ITEM_SAV = "Save...";
+        public final String ITEM_SAV = "Save as...";
         public JMenuItem itemSaveWork;
         public final String ITEM_SAVE = "Save Workspace...";
         public JMenu menuRecent;
