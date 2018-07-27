@@ -88,6 +88,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
     //private JButton saveButton = new JButton("Save..");
     static public JFileChooser fc = new JFileChooser();
     static{
+        fc.setFileFilter(new FileNameExtensionFilter("PDF file", "pdf"));
         fc.setFileFilter(new FileNameExtensionFilter("EPS file", "eps"));
         //fc.setFileFilter(new FileNameExtensionFilter("LaTeX file", "tex"));
         fc.setFileFilter(new FileNameExtensionFilter("PNG file", "png"));
@@ -100,7 +101,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         protected JMenu menuFile;
         private final String ITEM_FILE = "File";
             private JMenuItem itemImage;
-            private final String ITEM_IMAGE = "Snapshot...";
+            private final String ITEM_IMAGE = "Save as...";
             private JMenuItem itemConf;
             private final String ITEM_CONF = "Configuration...";
             private JMenuItem itemQuit;

@@ -155,6 +155,12 @@
             <artifactId>controlsfx</artifactId>
             <version>8.40.12</version>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.8</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
