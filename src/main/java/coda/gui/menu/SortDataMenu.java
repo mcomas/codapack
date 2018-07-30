@@ -33,9 +33,10 @@ public class SortDataMenu extends AbstractMenuDialog{
         
         String selectedNames[] = ds.getSelectedData(); // we take the selected data
         Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
-        DataFrame df = mainApplication.getActiveDataFrame();
         
         if(selectedNames.length > 0){
+            
+            DataFrame df = mainApplication.getActiveDataFrame();
             
             // create dataframe on r
             

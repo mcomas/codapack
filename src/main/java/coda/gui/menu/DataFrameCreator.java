@@ -69,7 +69,7 @@ public class DataFrameCreator extends JFrame{
         
         if(answer == JOptionPane.OK_OPTION){
             
-            while(columnsField.getText().length() <= 0  || rowsField.getText().length() <= 0 || !StringUtils.isNumeric(columnsField.getText()) || !StringUtils.isNumeric(rowsField.getText()) || Double.valueOf(columnsField.getText()) < 1 || Double.valueOf(rowsField.getText()) < 1){
+            while(answer == JOptionPane.OK_OPTION && (columnsField.getText().length() <= 0  || rowsField.getText().length() <= 0 || !StringUtils.isNumeric(columnsField.getText()) || !StringUtils.isNumeric(rowsField.getText()) || Double.valueOf(columnsField.getText()) < 1 || Double.valueOf(rowsField.getText()) < 1)){
             
                 if(columnsField.getText().length() <= 0 || rowsField.getText().length() <= 0){
                     JOptionPane.showMessageDialog(null, "Some field empty");
@@ -84,44 +84,47 @@ public class DataFrameCreator extends JFrame{
                 answer = JOptionPane.showConfirmDialog(this, panel, "Create new dataframe", JOptionPane.OK_CANCEL_OPTION);
             }
             
-            int numberOfColumns = Integer.valueOf(columnsField.getText());
-            int numberOfRows = Integer.valueOf(rowsField.getText());
-            this.setTitle("Create new dataFrame");
-            panel = new JPanel();
-            this.setSize(800,650);
-            panel.setLayout(new GridBagLayout());
-            GridBagConstraints c = new GridBagConstraints();
-            c.gridx = 0;
-            c.gridy = 0;
-            c.insets = new Insets(10,10,10,10);
-            table = new JTable(numberOfRows,numberOfColumns);
-            table.setRowHeight(30);
-            ExcelAdapter ex = new ExcelAdapter(table);
-            table = ex.getJTable();
-            table.setSize(panel.getWidth(),panel.getHeight());
-            panel.add(table,c);
-            JButton acceptButton = new JButton("Accept");
-            southPanel.add(acceptButton);
-            acceptButton.addActionListener(new java.awt.event.ActionListener() {
+            if(answer == JOptionPane.OK_OPTION){
+            
+                int numberOfColumns = Integer.valueOf(columnsField.getText());
+                int numberOfRows = Integer.valueOf(rowsField.getText());
+                this.setTitle("Create new dataFrame");
+                panel = new JPanel();
+                this.setSize(800,650);
+                panel.setLayout(new GridBagLayout());
+                GridBagConstraints c = new GridBagConstraints();
+                c.gridx = 0;
+                c.gridy = 0;
+                c.insets = new Insets(10,10,10,10);
+                table = new JTable(numberOfRows,numberOfColumns);
+                table.setRowHeight(30);
+                ExcelAdapter ex = new ExcelAdapter(table);
+                table = ex.getJTable();
+                table.setSize(panel.getWidth(),panel.getHeight());
+                panel.add(table,c);
+                JButton acceptButton = new JButton("Accept");
+                southPanel.add(acceptButton);
+                acceptButton.addActionListener(new java.awt.event.ActionListener() {
 
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    createANewDataFrame(mainApp);
-                }
-            });
-            JButton cancelButton = new JButton("Cancel");
-            southPanel.add(cancelButton);
-            cancelButton.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        createANewDataFrame(mainApp);
+                    }
+                });
+                JButton cancelButton = new JButton("Cancel");
+                southPanel.add(cancelButton);
+                cancelButton.addActionListener(new java.awt.event.ActionListener() {
 
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    dispose();
-                }
-            });
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        dispose();
+                    }
+                });
 
-            this.getContentPane().add( new JScrollPane(panel));
-            this.getContentPane().add(southPanel,BorderLayout.SOUTH);
-            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-            this.setVisible(true);
+                this.getContentPane().add( new JScrollPane(panel));
+                this.getContentPane().add(southPanel,BorderLayout.SOUTH);
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+                this.setVisible(true);
+            }
         }
     }
     

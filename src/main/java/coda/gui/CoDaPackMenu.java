@@ -100,6 +100,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_CENTER = "Centering";
         public JMenuItem itemClosure;
         public final String ITEM_CLOSURE = "Subcomposition/Closure";
+        public JMenuItem itemCalculateNewVar;
+        public final String ITEM_CALCULATE_NEW_VAR = "Calculate new Variable";
         public JMenuItem itemAmalgamation;
         public final String ITEM_AMALGAM = "Amalgamation";
         public JMenuItem itemPerturbate;
@@ -376,6 +378,7 @@ public class CoDaPackMenu extends JMenuBar{
                 itemTransformILRRaw = new JMenuItem();
             itemCenter = new JMenuItem();
             itemClosure = new JMenuItem();
+            itemCalculateNewVar = new JMenuItem();
             itemAmalgamation = new JMenuItem();
             itemPerturbate = new JMenuItem();
             itemPower = new JMenuItem();
@@ -465,6 +468,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuTransforms, itemTransformILRRaw, ITEM_T_ILR_RAW);
         addJMenuItem(menuData, itemCenter, ITEM_CENTER);
         addJMenuItem(menuData, itemClosure, ITEM_CLOSURE);
+        addJMenuItem(menuData,itemCalculateNewVar,ITEM_CALCULATE_NEW_VAR);
         addJMenuItem(menuData, itemAmalgamation, ITEM_AMALGAM);
         addJMenuItem(menuData, itemPerturbate, ITEM_PERTURBATE);
         addJMenuItem(menuData, itemPower, ITEM_POWER);
