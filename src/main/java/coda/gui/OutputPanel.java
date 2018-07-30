@@ -144,7 +144,7 @@ class Browser extends Region{
 		getStyleClass().add("browser");
 		webEngine.load("file:\\" + System.getProperty("user.dir") + "\\prova.html");
 		getChildren().add(browser);
-		webEngine.setUserStyleSheetLocation("file:\\" + System.getProperty("user.dir") + "\\resources\\style.css".toString());
+		webEngine.setUserStyleSheetLocation(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "style.css").toString());
 	}
 
 	private Node createSpacer(){

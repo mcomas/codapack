@@ -727,8 +727,8 @@ public final class CoDaPackMain extends JFrame{
          */
         CoDaPackMain main = new CoDaPackMain();
         
-        UpdateConnection uc = new UpdateConnection(main);
-        new Thread(uc).start();
+        //UpdateConnection uc = new UpdateConnection(main);
+        //new Thread(uc).start();
         
         main.setVisible(true);
         

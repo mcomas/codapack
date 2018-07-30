@@ -78,7 +78,7 @@ public class S0 extends AbstractMenuDialog{
                     }
                 
                 // executem script d'R
-                String url = System.getProperty("user.dir") + "\\resources\\SumScript.R".toString();
+                String url = getClass().getResource(CoDaPackMain.RESOURCE_PATH + "SumScript.R").toString();
                 url = url.replaceAll("\\\\", "/");
                 re.eval("source(\"" + url + "\")");
         }    
