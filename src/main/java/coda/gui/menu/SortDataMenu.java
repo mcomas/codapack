@@ -1,0 +1,107 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package coda.gui.menu;
+
+import coda.DataFrame;
+import coda.Variable;
+import coda.gui.CoDaPackMain;
+import java.util.Arrays;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import org.rosuda.JRI.Rengine;
+
+/**
+ *
+ * @author Guest2
+ */
+public class SortDataMenu extends AbstractMenuDialog{
+    
+    Rengine re;
+    
+    public static final long serialVersionUID = 1L;
+    
+    public SortDataMenu(final CoDaPackMain mainApp, Rengine r){
+        super(mainApp, "Sort Data Menu", false, false, true);
+        re = r;
+    }
+    
+    @Override
+    public void acceptButtonActionPerformed(){
+        
+        String selectedNames[] = ds.getSelectedData(); // we take the selected data
+        Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
+        DataFrame df = mainApplication.getActiveDataFrame();
+        
+        if(selectedNames.length > 0){
+            
+            // create dataframe on r
+            
+            int auxPos = 0;
+            
+            for(int i=0; i < df.size(); i++){
+                if(vSelectedNames.contains(df.get(i).getName())){
+                    re.eval("x" + String.valueOf(auxPos+1) + " <- NULL");
+                    if(df.get(i).isNumeric()){
+                        for(double j: df.get(i).getNumericalData()){
+                            re.eval("x" + String.valueOf(auxPos+1) + " <- c(x" + String.valueOf(auxPos+1) + "," + String.valueOf(j) + ")");
+                        }
+                    }
+                    else{
+                        for(String j: df.get(i).getTextData()){
+                            re.eval("x" + String.valueOf(auxPos+1) + " <- c(x" + String.valueOf(auxPos+1) + ",'" + j + "')");
+                        }
+                    }
+                    auxPos++;
+                }
+            }
+            
+            String dataFrameString = "mydf <- data.frame(";
+            for(int i=0; i < selectedNames.length; i++){
+                dataFrameString += "x" + String.valueOf(i+1);
+                if(i != selectedNames.length-1) dataFrameString += ",";
+            }
+            
+            dataFrameString += ")";
+            re.eval(dataFrameString); // here we create the dataframe in R
+            
+            // the dataframe was created on R with the name mydf
+            // now we do the sort in R
+            
+            String orderInstruction = "order(";
+            for(int i=0; i < selectedNames.length;i++){
+                orderInstruction += "mydf$x" + String.valueOf(i+1);
+                if(i != selectedNames.length-1) orderInstruction += ",";
+            }
+            
+            orderInstruction += ")";
+            
+            int [] orderSort = re.eval("ord <- " + orderInstruction).asIntArray();
+            
+            // new we create the new dataframe with the new order
+            
+            DataFrame newDf = new DataFrame();
+            
+            // we add the variables ordereds by the orderSort
+            
+            for(int i=0; i < df.size(); i++){
+                newDf.addData(df.get(i).getName(), new Variable(df.get(i),orderSort));
+            }
+            
+            String nameDf = df.getName();
+            mainApplication.removeDataFrame(df);
+            
+            newDf.setName(nameDf);
+            mainApplication.addDataFrame(newDf);
+            
+            this.dispose();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Please select some data");
+        }
+        
+    }
+    
+}

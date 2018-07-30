@@ -589,6 +589,8 @@ public final class CoDaPackMain extends JFrame{
             new ZeroReplacementRMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_LOG_RATIO)){
             new LogRatioEMMenu(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_SORT_DATA)){
+            new SortDataMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_FILTER)){
             new FilterMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ADV_FILTER)){
