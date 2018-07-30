@@ -578,7 +578,7 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_CLOSURE)){
             new ClosureDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CALCULATE_NEW_VAR)){
-            //new CalculateNewVarMenu(this,re).setVisible(true);
+            new CalculateNewVarMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_AMALGAM)){
             new AmalgamationDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PERTURBATE)){
