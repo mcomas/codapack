@@ -59,9 +59,10 @@ public final class OutputPanel extends JFXPanel {
     
         public OutputPanel(){
             try{
-                fileWriter = new OutputStreamWriter(new FileOutputStream("prova.html",true),StandardCharsets.ISO_8859_1);
+                System.out.println(System.getProperty("java.io.tmpdir"));
+                fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "CoDaPack.html",true),StandardCharsets.ISO_8859_1);
             }catch(IOException e){
-                    System.out.println("Problem occurs when deleting the directory : prova.html");
+                    System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
                     e.printStackTrace();
                 }
                 Platform.runLater(new Runnable(){
@@ -124,11 +125,11 @@ public final class OutputPanel extends JFXPanel {
             
             try {
                 fileWriter.close();
-                File htmlFile = new File("prova.html");
+                File htmlFile = new File(System.getProperty("java.io.tmpdir") + "CoDaPack.html");
                 htmlFile.delete();
                 
             } catch (IOException ex) {
-                System.out.println("Problem occurs when deleting the directory : prova.html");
+                System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
                 ex.printStackTrace();
             }
         }
@@ -142,7 +143,7 @@ class Browser extends Region{
 	public Browser(){
 
 		getStyleClass().add("browser");
-		webEngine.load("file:\\" + System.getProperty("user.dir") + "\\prova.html");
+		webEngine.load("file:\\" + System.getProperty("java.io.tempdir") + "CoDaPack.html");
 		getChildren().add(browser);
 		webEngine.setUserStyleSheetLocation(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "style.css").toString());
 	}
@@ -169,14 +170,14 @@ class Browser extends Region{
 
 	public void repaint(String text){
             
-            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream("prova.html",true),StandardCharsets.ISO_8859_1)){
+            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "CoDaPack.html",true),StandardCharsets.ISO_8859_1)){
                 fileWriter.write(text);
             }catch(IOException e){
-                System.out.println("Problem occurs when deleting the directory : prova.html");
+                System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
                 e.printStackTrace();
             }
 
-            webEngine.load("file:\\" + System.getProperty("user.dir") + "\\prova.html");
+            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "CoDaPack.html");
             webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
                 webEngine.executeScript("window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);");
             });
