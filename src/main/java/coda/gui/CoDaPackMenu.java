@@ -186,6 +186,19 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_ABOUT = "About";
         public JMenuItem itemR_Test;
         public final String R_TEST = "Get R status";
+        
+    public JMenu menuDevelopment;
+    public final String ITEM_DEVELOPMENT = "Development";
+        public JMenuItem itemModelS0;
+        public final String ITEM_MODEL_S0 = "Model S0";
+        public JMenuItem itemModelS1;
+        public final String ITEM_MODEL_S1 = "Model S1";
+        public JMenuItem itemModelS2;
+        public final String ITEM_MODEL_S2 = "Model S2";
+        public JMenuItem itemModelS3;
+        public final String ITEM_MODEL_S3 = "Model S3";
+        public JMenuItem itemModelS4;
+        public final String ITEM_MODEL_S4 = "Model S4";
 
     public String active_path = null;
     
@@ -422,7 +435,13 @@ public class CoDaPackMenu extends JMenuBar{
             itemForceUpdate = new JMenuItem();
             itemAbout = new JMenuItem();
             itemR_Test = new JMenuItem();
-        
+            
+        menuDevelopment = new JMenu();
+            itemModelS0 = new JMenuItem();
+            itemModelS1 = new JMenuItem();
+            itemModelS2 = new JMenuItem();
+            itemModelS3 = new JMenuItem();
+            itemModelS4 = new JMenuItem();
         
         menuFile.setText(ITEM_FILE);
         addJMenuItem(menuFile, itemOpen, ITEM_OPEN);
@@ -524,6 +543,14 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
         addJMenuItem(menuHelp,itemR_Test, R_TEST);
         add(menuHelp);
+        
+        menuDevelopment.setText(ITEM_DEVELOPMENT);
+        addJMenuItem(menuDevelopment,itemModelS0, ITEM_MODEL_S0);
+        addJMenuItem(menuDevelopment,itemModelS1, ITEM_MODEL_S1);
+        addJMenuItem(menuDevelopment,itemModelS2, ITEM_MODEL_S2);
+        addJMenuItem(menuDevelopment,itemModelS3, ITEM_MODEL_S3);
+        addJMenuItem(menuDevelopment,itemModelS4, ITEM_MODEL_S4);
+        add(menuDevelopment);
         
     }
 

@@ -655,8 +655,7 @@ public final class CoDaPackMain extends JFrame{
             new Thread(uc).start();
         }else if(title.equals(jMenuBar.ITEM_ABOUT)){
             new CoDaPackAbout(this).setVisible(true);
-        }
-        else if(title.equals(jMenuBar.R_TEST)){
+        }else if(title.equals(jMenuBar.R_TEST)){
             // first we get the session info
             re.eval("a <- capture.output(sessionInfo())");
             OutputElement e = new OutputForR(re.eval("a").asStringArray());
@@ -674,6 +673,16 @@ public final class CoDaPackMain extends JFrame{
             re.eval("a <- capture.output(capabilities())");
             e = new OutputForR(re.eval("a").asStringArray());
             outputPanel.addOutput(e);
+        }else if(title.equals(jMenuBar.ITEM_MODEL_S0)){
+            new S0(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_MODEL_S1)){
+            new S1(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_MODEL_S2)){
+            new S2(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_MODEL_S3)){
+            new S3(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_MODEL_S4)){
+            new S4(this,re).setVisible(true);
         }
     }
     public class DataFrameSelectorListener implements ItemListener{
