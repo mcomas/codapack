@@ -56,6 +56,7 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
     public void acceptButtonActionPerformed(){
         
         String selectedNames1[] = super.ds.getSelectedData1();
+        Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(selectedNames1));
         String selectedNames2[] = super.ds.getSelectedData2();
         Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
         
@@ -66,48 +67,74 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
             
             // Create X matrix
             
-            re.assign("X", numericData[0]);
-            re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
-            for(int i=0; i < numericData.length; i++){
-                re.assign("tmp", numericData[i]);
-                re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
-            }
+            // create dataframe on r
             
-            re.eval("out <- capture.output(X)");
-            String[] out = re.eval("out").asStringArray();
+                        int auxPos = 0;
+                        for(int i=0; i < df.size();i++){ // totes les columnes
+                            if(vSelectedNames1.contains(df.get(i).getName())){
+                                re.eval(vSelectedNames1.elementAt(auxPos) + " <- NULL");
+                                if(df.get(i).isNumeric()){
+                                    for(double j : df.get(i).getNumericalData()){
+                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                    }
+                                }
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +",'" + j + "')");
+                                    }
+                                }
+                                auxPos++;
+                            }
+                        }
+                        
+                        String dataFrameString = "X <- data.frame(";
+                        for(int i=0; i < selectedNames1.length;i++){
+                            dataFrameString += vSelectedNames1.elementAt(i);
+                            if(i != selectedNames1.length-1) dataFrameString += ",";
+                        }
+                        
+                        dataFrameString +=")";
+                        
+                        re.eval(dataFrameString); // we create the dataframe in R
+
+                        
+            // create dataframe on r
             
-            // Create Y matrix
+                        auxPos = 0;
+                        for(int i=0; i < df.size();i++){ // totes les columnes
+                            if(vSelectedNames2.contains(df.get(i).getName())){
+                                re.eval(vSelectedNames2.elementAt(auxPos) + " <- NULL");
+                                if(df.get(i).isNumeric()){
+                                    for(double j : df.get(i).getNumericalData()){
+                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                    }
+                                }
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +",'" + j + "')");
+                                    }
+                                }
+                                auxPos++;
+                            }
+                        }
+                        
+                        dataFrameString = "Y <- data.frame(";
+                        for(int i=0; i < selectedNames2.length;i++){
+                            dataFrameString += vSelectedNames2.elementAt(i);
+                            if(i != selectedNames2.length-1) dataFrameString += ",";
+                        }
+                        
+                        dataFrameString +=")";
+                        
+                        re.eval(dataFrameString); // we create the dataframe in R
             
-            int aux = 0;
-            for(int i=0; i < df.size(); i++){
-                if(vSelectedNames2.contains(df.get(i).getName())){
-                    if(aux == 0){
-                        if(df.get(i).isNumeric()){
-                            re.assign("Y", df.get(i).getNumericalData());
-                            re.eval("Y" + " <- matrix( " + "Y" + " ,nc=1)");
-                        }
-                        else{
-                            re.assign("Y", df.get(i).getTextData());
-                            re.eval("Y" + " <- matrix( " + "Y" + " ,nc=1)");
-                        }
-                    }
-                    else{
-                        if(df.get(i).isNumeric()){
-                            re.assign("tmp", df.get(i).getNumericalData());
-                            re.eval("Y" + " <- cbind(" + "Y" + ",matrix(as.numeric(tmp),nc=1))");
-                        }
-                        else{
-                            re.assign("tmp", df.get(i).getTextData());
-                            re.eval("Y" + " <- cbind(" + "Y" + ",matrix(tmp,nc=1))");
-                        }
-                    }
-                    aux++;
-                }
-            }
-            
+                // executem script d'R
+                
                 String url = getClass().getResource(CoDaPackMain.RESOURCE_PATH + "SumScript.R").toString();
                 url = url.replaceAll("\\\\", "/");
+                url = url.substring(6);
                 re.eval("source(\"" + url + "\")");
+                this.dispose();
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");

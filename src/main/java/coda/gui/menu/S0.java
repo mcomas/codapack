@@ -22,6 +22,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -63,24 +64,48 @@ public class S0 extends AbstractMenuDialog{
     public void acceptButtonActionPerformed(){
         
         String selectedNames[] = super.ds.getSelectedData();
+        Vector<String>vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
         
         if(selectedNames.length > 0){
             
             df = mainApplication.getActiveDataFrame();
-            
-            double[][] data = df.getNumericalData(selectedNames);
 
-                    re.assign("X", data[0]);
-                    re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
-                    for(int i=1; i < data.length; i++){
-                        re.assign("tmp", data[i]);
-                        re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
-                    }
+            // create dataframe on r
+            
+                        int auxPos = 0;
+                        for(int i=0; i < df.size();i++){ // totes les columnes
+                            if(vSelectedNames.contains(df.get(i).getName())){
+                                re.eval(vSelectedNames.elementAt(auxPos) + " <- NULL");
+                                if(df.get(i).isNumeric()){
+                                    for(double j : df.get(i).getNumericalData()){
+                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                    }
+                                }
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +",'" + j + "')");
+                                    }
+                                }
+                                auxPos++;
+                            }
+                        }
+                        
+                        String dataFrameString = "X <- data.frame(";
+                        for(int i=0; i < selectedNames.length;i++){
+                            dataFrameString += vSelectedNames.elementAt(i);
+                            if(i != selectedNames.length-1) dataFrameString += ",";
+                        }
+                        
+                        dataFrameString +=")";
+                        
+                        re.eval(dataFrameString); // we create the dataframe in R
                 
                 // executem script d'R
                 String url = getClass().getResource(CoDaPackMain.RESOURCE_PATH + "SumScript.R").toString();
                 url = url.replaceAll("\\\\", "/");
+                url = url.substring(6);
                 re.eval("source(\"" + url + "\")");
+                this.dispose();
         }    
         else{
             JOptionPane.showMessageDialog(null,"Please select data");

@@ -20,6 +20,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -54,37 +56,81 @@ public class S2 extends AbstractMenuDialog2NumCat{
     public void acceptButtonActionPerformed(){
         
         String selectedNames1[] = ds.getSelectedData1();
+        Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(selectedNames1));
         String selectedNames2[] = ds.getSelectedData2();
+        Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
         
         if(selectedNames1.length > 0 && selectedNames2.length > 0){
             
             df = mainApplication.getActiveDataFrame();
-            double[][] numericData = df.getNumericalData(selectedNames1);
-            String[][] categoricData = df.getCategoricalData(selectedNames2);
             
-            // create X matrix
+            // create dataframe on r
             
-            re.assign("X", numericData[0]);
-            re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
-            for(int i=1; i < numericData.length; i++){
-                re.assign("tmp", numericData[i]);
-                re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
-            }
+                        int auxPos = 0;
+                        for(int i=0; i < df.size();i++){ // totes les columnes
+                            if(vSelectedNames1.contains(df.get(i).getName())){
+                                re.eval(vSelectedNames1.elementAt(auxPos) + " <- NULL");
+                                if(df.get(i).isNumeric()){
+                                    for(double j : df.get(i).getNumericalData()){
+                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                    }
+                                }
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +",'" + j + "')");
+                                    }
+                                }
+                                auxPos++;
+                            }
+                        }
+                        
+                        String dataFrameString = "X <- data.frame(";
+                        for(int i=0; i < selectedNames1.length;i++){
+                            dataFrameString += vSelectedNames1.elementAt(i);
+                            if(i != selectedNames1.length-1) dataFrameString += ",";
+                        }
+                        
+                        dataFrameString +=")";
+                        
+                        re.eval(dataFrameString); // we create the dataframe in R
             
-            // create Y matrix
+            // create dataframe on R
             
-            re.assign("Y", categoricData[0]);
-            re.eval("Y" + " <- matrix( " + "Y" + " ,nc=1)");
-            for(int i=1; i < categoricData.length; i++){
-                re.assign("tmp", categoricData[i]);
-                re.eval("Y" + " <- cbind(" + "Y" + ",matrix(tmp,nc=1))");
-            }
+                        auxPos = 0;
+                        for(int i=0; i < df.size();i++){ // totes les columnes
+                            if(vSelectedNames2.contains(df.get(i).getName())){
+                                re.eval(vSelectedNames2.elementAt(auxPos) + " <- NULL");
+                                if(df.get(i).isNumeric()){
+                                    for(double j : df.get(i).getNumericalData()){
+                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                    }
+                                }
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +",'" + j + "')");
+                                    }
+                                }
+                                auxPos++;
+                            }
+                        }
+                        
+                        dataFrameString = "Y <- data.frame(";
+                        for(int i=0; i < selectedNames2.length;i++){
+                            dataFrameString += vSelectedNames2.elementAt(i);
+                            if(i != selectedNames2.length-1) dataFrameString += ",";
+                        }
+                        
+                        dataFrameString +=")";
+                        
+                        re.eval(dataFrameString); // we create the dataframe in R
             
             // executem script d'R
                 
                 String url = getClass().getResource(CoDaPackMain.RESOURCE_PATH + "SumScript.R").toString();
                 url = url.replaceAll("\\\\", "/");
+                url = url.substring(6);
                 re.eval("source(\"" + url + "\")");
+                this.dispose();
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null,"No data selected in data 1");
