@@ -55,17 +55,17 @@ public class DataFrameCreator extends JFrame{
     
     public DataFrameCreator(final CoDaPackMain mainApp){
                 panel = new JPanel();
-                panel.add(new JLabel("Use the first row to set the variable names"));
+                panel.add(new JLabel("Use first row to set variable names"));
                 panel.add(new JLabel(""));
                 panel.setLayout(new GridLayout(0,2,2,2));
                 JTextField columnsField, rowsField;
                 columnsField = new JTextField(20);
                 rowsField = new JTextField(20);
-                panel.add(new JLabel("Put the number of columns: "));
+                panel.add(new JLabel("Number of columns: "));
                 panel.add(columnsField);
-                panel.add(new JLabel("Put the number of rows: "));
+                panel.add(new JLabel("Number of rows: "));
                 panel.add(rowsField);
-                int answer = JOptionPane.showConfirmDialog(this, panel, "Create new dataframe", JOptionPane.OK_CANCEL_OPTION);
+                int answer = JOptionPane.showConfirmDialog(this, panel, "Create New Table", JOptionPane.OK_CANCEL_OPTION);
         
         if(answer == JOptionPane.OK_OPTION){
             
@@ -81,14 +81,14 @@ public class DataFrameCreator extends JFrame{
                     JOptionPane.showMessageDialog(null, "Pleas put a number bigger than 0");
                 }
 
-                answer = JOptionPane.showConfirmDialog(this, panel, "Create new dataframe", JOptionPane.OK_CANCEL_OPTION);
+                answer = JOptionPane.showConfirmDialog(this, panel, "Create New Table", JOptionPane.OK_CANCEL_OPTION);
             }
             
             if(answer == JOptionPane.OK_OPTION){
             
                 int numberOfColumns = Integer.valueOf(columnsField.getText());
                 int numberOfRows = Integer.valueOf(rowsField.getText());
-                this.setTitle("Create new dataFrame");
+                this.setTitle("Create New Table");
                 panel = new JPanel();
                 this.setSize(800,650);
                 panel.setLayout(new GridBagLayout());
@@ -169,7 +169,7 @@ public class DataFrameCreator extends JFrame{
                 JOptionPane.showMessageDialog(null, "Some cell is empty");
             }
             else if(!varNamesCorrect){
-                JOptionPane.showMessageDialog(null, "Some cell of var names is not correct");
+                JOptionPane.showMessageDialog(null, "Some variable name is not correct");
             }
             else if(!coherentData){
                 JOptionPane.showMessageDialog(null, "Revise some coherent column");
@@ -177,16 +177,16 @@ public class DataFrameCreator extends JFrame{
             else{
                 panel = new JPanel();
                 JTextField dataFrameName = new JTextField(20);
-                panel.add(new JLabel("Put the name of the new dataframe: "));
+                panel.add(new JLabel("Put the name of the new table: "));
                 panel.add(dataFrameName);
                 
-                int answer = JOptionPane.showConfirmDialog(this, panel, "Set the name of the dataframe", JOptionPane.OK_CANCEL_OPTION);
+                int answer = JOptionPane.showConfirmDialog(this, panel, "Set the name of the table", JOptionPane.OK_CANCEL_OPTION);
                 
                 if(answer == JOptionPane.OK_OPTION){
                     while(dataFrameName.getText().length() == 0 || !mainApp.isDataFrameNameAvailable(dataFrameName.getText())){
                         if(dataFrameName.getText().length() == 0) JOptionPane.showMessageDialog(null, "Please put some name");
                         else JOptionPane.showMessageDialog(null, "The name is not available");
-                        answer = JOptionPane.showConfirmDialog(this, panel, "Set the name of the newframe", JOptionPane.OK_CANCEL_OPTION);
+                        answer = JOptionPane.showConfirmDialog(this, panel, "Set the name of the table", JOptionPane.OK_CANCEL_OPTION);
                     }
                     df.setName(dataFrameName.getText());
                     mainApp.addDataFrame(df);

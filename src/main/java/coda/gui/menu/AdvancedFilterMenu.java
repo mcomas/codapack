@@ -53,7 +53,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
             
             DataFrame df = mainApplication.getActiveDataFrame();
             boolean exit = false;
-            JLabel labelMessage = new JLabel("Use x1 to x" + String.valueOf(selectedNames.length) + " names values for variables");
+            JLabel labelMessage = new JLabel("Following selected order, use x1 to x" + String.valueOf(selectedNames.length) + " instead of variable names to build the expression to subset");
             JOptionPane.showMessageDialog(null, labelMessage);
             boolean goodExpression = false, goodName = false;
             String expression = null, dataFrameNewName = null;
@@ -69,10 +69,10 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                 else dataFrameName = new JTextField(20);
                 pane.add(new JLabel("R expression to subset: "));
                 pane.add(expressionField);
-                pane.add(new JLabel("Name of the new dataframe: "));
+                pane.add(new JLabel("New table name: "));
                 pane.add(dataFrameName);
                 
-                int answer = JOptionPane.showConfirmDialog(frame, pane, "Adavanced Filter Menu", JOptionPane.OK_CANCEL_OPTION);
+                int answer = JOptionPane.showConfirmDialog(frame, pane, "Advanced Filter Menu", JOptionPane.OK_CANCEL_OPTION);
 
                 // respostes
 
@@ -161,7 +161,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                                 else{
                                     goodName = false;
                                     goodExpression = true;
-                                    JOptionPane.showMessageDialog(null, "This dataframe name is not available");
+                                    JOptionPane.showMessageDialog(null, "This table name is not available");
                                 }
                             }
                             else{
@@ -184,7 +184,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                         }
                         else{
                             goodExpression = true;
-                            JOptionPane.showMessageDialog(null, "Please put some dataframe name");
+                            JOptionPane.showMessageDialog(null, "Please put some table name");
                         }
                     }
                 }

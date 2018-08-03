@@ -182,7 +182,7 @@ public final class CoDaPackMain extends JFrame{
         JPanel westPanel = new JPanel();
         westPanel.setLayout(new BorderLayout());
         JPanel dfSelect = new JPanel();
-        dfSelect.add(new JLabel("Data Frames"));
+        dfSelect.add(new JLabel("Tables"));
         dfSelect.add(dataFrameSelector);
         westPanel.add(dfSelect, BorderLayout.NORTH);
         westPanel.add(dataList, BorderLayout.CENTER);

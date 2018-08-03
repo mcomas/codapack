@@ -85,7 +85,7 @@ public class CoDaPackMenu extends JMenuBar{
     public JMenu menuData;
     public final String ITEM_DATA = "Data";
         public JMenuItem itemCreateFrame;
-        public final String ITEM_CREATE_FRAME = "Create new Frame";
+        public final String ITEM_CREATE_FRAME = "Create new Table";
         public JMenu menuTransforms;
         public final String ITEM_TRANS = "Transformations";
             public JMenuItem itemTransformALR;

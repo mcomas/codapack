@@ -54,7 +54,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
     JCheckBox performMax;
-    JLabel lmax = new JLabel("Use minimum on detection limit");
+    JLabel lmax = new JLabel("Use minimum positive value observed");
     Rengine re;
 
     /**
@@ -88,7 +88,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         optionsPanel.add(performClosure);
         optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
-        performMax = new JCheckBox("Min result", false);
+        performMax = new JCheckBox("", false);
         performMax.setSelected(true);
         optionsPanel.add(lmax);
         optionsPanel.add(performMax);
