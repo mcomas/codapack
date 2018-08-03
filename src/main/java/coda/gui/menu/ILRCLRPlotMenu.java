@@ -53,7 +53,7 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
     JCheckBox coordinates;
     public ILRCLRPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ILR Plot Menu", true);
+        super(mainApp, "ILR/CLR Plot Menu", true);
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");

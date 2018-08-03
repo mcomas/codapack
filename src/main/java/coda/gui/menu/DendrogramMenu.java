@@ -47,7 +47,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
     JCheckBox balancesCheck;
     JCheckBox statisticsCheck;
     public DendrogramMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Dendrogram Menu", true);
+        super(mainApp, "Balance Dendrogram Menu", true);
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");

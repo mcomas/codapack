@@ -47,7 +47,7 @@ public class Biplot3dMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     JCheckBox coordinates;
     public Biplot3dMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Biplot Menu", true);
+        super(mainApp, " CLR Biplot Menu", true);
         
         coordinates = new JCheckBox("Add coordinates", false);
         optionsPanel.add(coordinates);

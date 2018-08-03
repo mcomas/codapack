@@ -488,7 +488,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuData, itemCenter, ITEM_CENTER);
         addJMenuItem(menuData, itemClosure, ITEM_CLOSURE);
         addJMenuItem(menuData,itemCalculateNewVar,ITEM_CALCULATE_NEW_VAR);
-        addJMenuItem(menuData, itemAmalgamation, ITEM_AMALGAM);
+        //addJMenuItem(menuData, itemAmalgamation, ITEM_AMALGAM);
         addJMenuItem(menuData, itemPerturbate, ITEM_PERTURBATE);
         addJMenuItem(menuData, itemPower, ITEM_POWER);
         addJMenuItem(menuData, itemSetDetectionLimit, ITEM_SETDETECTION); 

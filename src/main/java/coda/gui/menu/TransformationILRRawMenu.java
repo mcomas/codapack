@@ -34,7 +34,7 @@ public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
 
     public TransformationILRRawMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Raw-ILR Transform Menu", false);
+        super(mainApp, "ILR-Raw Transform Menu", false);
 
         JButton defaultPart = new JButton("Default Partition");
         //JButton manuallyPart = new JButton("Define Manually");

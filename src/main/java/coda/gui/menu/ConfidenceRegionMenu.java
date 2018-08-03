@@ -56,7 +56,7 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
     JTextField predLevel;
     JLabel text1 = new JLabel("Confidence level");
     public ConfidenceRegionMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Predictive Region Menu", true);//, false, true, false);
+        super(mainApp, "Center Confidence Region Menu", true);//, false, true, false);
         predLevel =  new JTextField("0.90 0.95 0.99", 14);
 
         optionsPanel.add(text1);
