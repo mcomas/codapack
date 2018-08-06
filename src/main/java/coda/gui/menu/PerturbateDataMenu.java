@@ -64,7 +64,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
             }
         });
         closureTo =  new JTextField(5);
-        closureTo.setText("1.0");
+        closureTo.setText(mainApp.config.getClosureTo());
         
         optionsPanel.add(performClosure);
         optionsPanel.add(lclosure);

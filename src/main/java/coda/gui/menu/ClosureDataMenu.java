@@ -39,7 +39,7 @@ public class ClosureDataMenu extends AbstractMenuDialog{
     public ClosureDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Closure Data Menu", false);
         closureTo =  new JTextField(5);
-        closureTo.setText("1.0");
+        closureTo.setText(mainApp.config.getClosureTo());
         optionsPanel.add(text1);
         optionsPanel.add(closureTo);
     }

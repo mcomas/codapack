@@ -45,6 +45,7 @@ public class ConfigurationMenu extends CoDaPackDialog{
     JTextField output;
     JTextField table;
     JTextField export;
+    JTextField closure;
     public ConfigurationMenu(CoDaPackMain window){
         super(window, "Configuration Menu");
 
@@ -78,6 +79,14 @@ public class ConfigurationMenu extends CoDaPackDialog{
         export.setText(CoDaPackConf.decimalExportFormat);
         add(label4);
         add(export);
+        
+        JLabel label5 = new JLabel("Closure To");
+        closure = new JTextField(10);
+        closure.setText(CoDaPackConf.closureTo);
+        add(label5);
+        add(closure);
+        
+        
 
         panel.add(label1);
         panel.add(decimal);
@@ -87,6 +96,8 @@ public class ConfigurationMenu extends CoDaPackDialog{
         panel.add(table);
         panel.add(label4);
         panel.add(export);
+        panel.add(label5);
+        panel.add(closure);
         
         JPanel south = new JPanel();
         JButton apply = new JButton("Apply");
@@ -96,6 +107,7 @@ public class ConfigurationMenu extends CoDaPackDialog{
                 CoDaPackConf.setDecimalFormat(decimal.getText().charAt(0));
                 CoDaPackConf.setDecimalOutputFormat(output.getText());
                 CoDaPackConf.setDecimalExportFormat(export.getText());
+                CoDaPackConf.setClosureTo(closure.getText());
                 CoDaPackMain.tablePanel.updateUI();
             }
         });

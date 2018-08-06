@@ -169,6 +169,7 @@ public class CoDaPackConf {
     public static String decimalOutputFormat = "0.0000";
     public static String decimalTableFormat = "0.00";
     public static String decimalExportFormat = "0.00########";
+    public static String closureTo = "1.0";
     public static String lastPath = System.getProperty("user.dir");
     public static String refusedVersion = CoDaVersion;
     //private static DecimalFormat decimalOutputFormat = new DecimalFormat("0.0000", decimalFormat);
@@ -176,6 +177,14 @@ public class CoDaPackConf {
     //private static DecimalFormat decimalTableFormat = new DecimalFormat("0.00", decimalFormat);
     //private static DecimalFormat decimalTableFormat = new DecimalFormat("##0.##E0", decimalFormat);
     //private static DecimalFormat decimalExportFormat = new DecimalFormat("0.00########");
+    
+    public static void setClosureTo(String closure){
+        closureTo = closure;
+    }
+    
+    public String getClosureTo(){
+        return closureTo;
+    }
 
     public static void setDecimalFormat(char f){
         decimalFormat = f;
@@ -217,6 +226,7 @@ public class CoDaPackConf {
             configuration.put("decimal-export", decimalExportFormat);
             configuration.put("last-path", lastPath);
             configuration.put("refused-version", refusedVersion);
+            configuration.put("closure-to", closureTo);
 
             PrintWriter printer = new PrintWriter(CoDaPackConf.configurationFile);
 
@@ -236,6 +246,7 @@ public class CoDaPackConf {
             FileReader file = new FileReader(CoDaPackConf.configurationFile);
             JSONObject configuration = new JSONObject(new BufferedReader(file).readLine());
             file.close();
+            closureTo = configuration.getString("closure-to");
             decimalFormat = (char) configuration.getInt("decimal-format");
             decimalOutputFormat = configuration.getString("decimal-output");
             decimalTableFormat = configuration.getString("decimal-table");
