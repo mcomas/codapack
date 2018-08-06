@@ -150,9 +150,9 @@ public class CoDaPackMenu extends JMenuBar{
     public JMenu menuGraphs;
     public final String ITEM_GRAPHS = "Graphs";
         public JMenuItem itemTernaryPlot;
-        public final String ITEM_TERNARY_PLOT = "Ternary plot";
+        public final String ITEM_TERNARY_PLOT = "Ternary/Quaternary plot";
         public JMenuItem itemEmptyTernaryPlot;
-        public final String ITEM_EMPTY_TERNARY_PLOT = "Ternary plot [Empty]";
+        public final String ITEM_EMPTY_TERNARY_PLOT = "Ternary/Quaternary plot [Empty]";
         public JMenuItem itemIlrBiPlot;
         public final String ITEM_ILR_BIPLOT = "ILR/CLR plot";
         public JMenuItem itemBiPlot;
@@ -166,7 +166,7 @@ public class CoDaPackMenu extends JMenuBar{
         public JMenuItem itemILRPlot;
         public final String ITEM_ILR_PLOT = "ILR plot";
         public JMenuItem principalComponentPlot;
-        public final String ITEM_PC_PLOT = "Ternary Principal Components";
+        public final String ITEM_PC_PLOT = "Ternary/Quaternary Principal Components";
         public JMenuItem predictiveRegionPlot;
         public final String ITEM_PRED_REG_PLOT = "Predictive Region";
         public JMenuItem confidenceRegionPlot;

@@ -617,7 +617,7 @@ public final class CoDaPackMain extends JFrame{
             display.addCoDaObject(gridObject);
             double center[] = {1,1,1};
 
-            TernaryPlot2dWindow frame = new TernaryPlot2dWindow(this.getActiveDataFrame(), display, "Ternary Plot -- Testing version");
+            TernaryPlot2dWindow frame = new TernaryPlot2dWindow(this.getActiveDataFrame(), display, "Ternary/Quaternary Plot -- Testing version");
             frame.setLocationRelativeTo(this);
             frame.setCenter(center);
             frame.setVisible(true);

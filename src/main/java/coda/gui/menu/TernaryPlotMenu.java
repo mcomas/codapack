@@ -43,7 +43,7 @@ import javax.swing.JOptionPane;
 public class TernaryPlotMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     public TernaryPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Ternary Plot Menu", true);//, false, true, false);
+        super(mainApp, "Ternary/Quaternary Plot Menu", true);//, false, true, false);
     }
     @Override
     public void acceptButtonActionPerformed() {
