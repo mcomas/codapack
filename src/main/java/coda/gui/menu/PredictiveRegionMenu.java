@@ -56,7 +56,7 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
     JTextField predLevel;
     JLabel text1 = new JLabel("Predictive level");
     public PredictiveRegionMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Predictive Region Menu", false);//, false, true, false);
+        super(mainApp, "Predictive Region Menu", true);//, false, true, false);
         predLevel =  new JTextField("0.90 0.95 0.99", 14);
 
         optionsPanel.add(text1);

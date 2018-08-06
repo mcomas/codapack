@@ -59,7 +59,6 @@ public final class OutputPanel extends JFXPanel {
     
         public OutputPanel(){
             try{
-                System.out.println(System.getProperty("java.io.tmpdir"));
                 fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "CoDaPack.html",true),StandardCharsets.ISO_8859_1);
             }catch(IOException e){
                     System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
