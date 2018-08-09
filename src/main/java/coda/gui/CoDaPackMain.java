@@ -606,19 +606,7 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_CONF_REG_PLOT)){
             new ConfidenceRegionMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_SCATTERPLOT)){
-            System.out.println(re.eval("tempdir()").asString());
-            re.eval("c1 <- c(1,2,3)");
-            re.eval("c2 <- c(1,2,3)");
-            re.eval("c3 <- c(1,2,3)");
-            String tempDirR;
-            re.eval("mypath = tempdir()");
-                tempDirR = re.eval("print(mypath)").asString();
-                tempDirR += "\\out.png";
-                
-                re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
-                re.eval("png(mypath,width=700,height=700");
-                re.eval("scatterplot3d::scatterplot3d(c1,c2,c3, pch=16, highlight.3d=TRUE,type=\"h\", main = \"3D Scatterplot\")");
-                re.eval("dev.off()");
+            new ScatterplotMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZPATTERNS)){
             new ZpatternsMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_EMPTY_TERNARY_PLOT)){

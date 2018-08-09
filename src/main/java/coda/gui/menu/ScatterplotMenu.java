@@ -28,7 +28,25 @@ import coda.DataFrame;
 import javax.swing.JFrame;
 import org.rosuda.JRI.Rengine;
 import coda.gui.CoDaPackMain;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 /**
  *
@@ -42,7 +60,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
     
-    public Scatterplot(final CoDaPackMain mainApp, Rengine r){
+    public ScatterplotMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Scatterplot Menu", false);
         re = r;
     }
@@ -68,7 +86,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             
             re.eval("mypath = tempdir()");
             tempDirR = re.eval("print(mypath)").asString();
-            tempDir += "\\out.png";
+            tempDirR += "\\out.png";
             
             re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
             re.eval("png(mypath,width=700,height=700");
@@ -86,7 +104,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
         
     }
     
-    private void plotZPatterns() {
+    private void plotScatterplot() {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -94,7 +112,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            frameZPatterns = new JFrame();
+            frameScatterplot = new JFrame();
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -114,17 +132,17 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             menuItem.addActionListener(new quitListener());
             menu.add(submenuExport);
             menu.add(menuItem);
-            frameZPatterns.setJMenuBar(menuBar);
+            frameScatterplot.setJMenuBar(menuBar);
             panel.setSize(800,800);
             ImageIcon icon = new ImageIcon(tempDirR);
             JLabel label = new JLabel(icon,JLabel.CENTER);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
             panel.add(label);
-            frameZPatterns.getContentPane().add(panel);
+            frameScatterplot.getContentPane().add(panel);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frameZPatterns.setSize(800,800);
-            frameZPatterns.setLocation(dim.width/2-frameZPatterns.getSize().width/2, dim.height/2-frameZPatterns.getSize().height/2);
+            frameScatterplot.setSize(800,800);
+            frameScatterplot.setLocation(dim.width/2-frameScatterplot.getSize().width/2, dim.height/2-frameScatterplot.getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -132,23 +150,23 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        frameZPatterns.dispose();
+                        frameScatterplot.dispose();
                         File file = new File(tempDirR);
                         file.delete();
                     }
                 }
             };
             
-            frameZPatterns.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            frameZPatterns.addWindowListener(exitListener);
-            frameZPatterns.setVisible(true);
+            frameScatterplot.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            frameScatterplot.addWindowListener(exitListener);
+            frameScatterplot.setVisible(true);
     }
     
     private class quitListener implements ActionListener{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                frameZPatterns.dispose();
+                frameScatterplot.dispose();
                 File file = new File(tempDirR);
                 file.delete();
             }
