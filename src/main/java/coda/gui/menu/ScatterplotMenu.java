@@ -78,24 +78,51 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             DataFrame df = mainApplication.getActiveDataFrame();
             
             for(int i=0; i < selectedNames.length; i++){
-                re.eval("c" + String.valueOf(i+1) + " <- NULL");
+                re.eval(selectedNames[i] + " <- NULL");
                 for(double j: df.get(selectedNames[i]).getNumericalData()){
-                    re.eval("c" + String.valueOf(i+1) + " <- c(c" + String.valueOf(i+1) + "," + String.valueOf(j) + ")");
+                    re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + "," + String.valueOf(j) + ")");
                 }
             }
             
-            re.eval("mypath = tempdir()");
-            tempDirR = re.eval("print(mypath)").asString();
-            tempDirR += "\\out.png";
+            String dataFrameString = "mydf <- data.frame(";
+            for(int i=0; i < selectedNames.length; i++){
+                dataFrameString += selectedNames[i];
+                if(i != selectedNames.length-1) dataFrameString += ",";
+            }
             
-            re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
-            re.eval("png(mypath,width=700,height=700");
-            re.eval("scatterplot3d::scatterplot3d(c1,c2,c3, pch=16, highlight.3d=TRUE,type=\"h\", main = \"3D Scatterplot\")");
-            re.eval("dev.off()");
+            dataFrameString += ")";
+            re.eval(dataFrameString); // creem el dataframe amb R
+            
+            if(selectedNames.length == 2){ // printem el gràfic en 2D
+                
+                if(System.getProperty("os.name").startsWith("Windows")){ // si es amb windows plotly funciona correctament
+                    re.eval("capture.output(plotly::plot_ly(data = mydf, x = ~" + selectedNames[0] + ", y = ~" + selectedNames[1] + "))");
+                }
+                else{ // si no es windows llavors plotly no funciona printem el grafic amb una alternativa
+                    
+                }
+            }
+            else{ // printem el gràfic en 3D
+                
+                if(System.getProperty("os.name").startsWith("Windows")){ // si es windows plotly funciona correctament
+                    re.eval("capture.output(plotly::plot_ly(data = mydf, x = ~" + selectedNames[0] + ", y = ~" + selectedNames[1] + ", z = ~" + selectedNames[2] + "))");
+                }
+                else{ // si no es windows llavors plotly no funciona printem el grafic amb una alternativa
+                    
+                    re.eval("mypath = tempdir()");
+                    tempDirR = re.eval("print(mypath)").asString();
+                    tempDirR += "\\out.png";
+            
+                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
+                    re.eval("png(mypath,width=700,height=700");
+                    re.eval("scatterplot3d::scatterplot3d(c1,c2,c3, pch=16, highlight.3d=TRUE,type=\"h\", main = \"3D Scatterplot\")");
+                    re.eval("dev.off()");
+            
+                    plotScatterplot();
+                }
+            }
             
             this.dispose();
-            
-            plotScatterplot();
             
         }
         else{
