@@ -99,7 +99,18 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                     re.eval("capture.output(plotly::plot_ly(data = mydf, x = ~" + selectedNames[0] + ", y = ~" + selectedNames[1] + "))");
                 }
                 else{ // si no es windows llavors plotly no funciona printem el grafic amb una alternativa
-                    
+                    re.eval("mypath = tempdir()");
+                    tempDirR = re.eval("print(mypath)").asString();
+                    tempDirR += "\\out.png";
+            
+                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
+                    re.eval("png(mypath,width=700,height=700");
+                    re.eval("plot(" + selectedNames[0] + "," + selectedNames[1] + ", main =\"Scatterplot 2D\", pch=19)");
+                    re.eval("abline(lm(" + selectedNames[1] + "~" + selectedNames[0] + "), col=\"red\")");
+                    re.eval("lines(lowess(" + selectedNames[0] + "," + selectedNames[1] + "), col=\"blue\")");
+                    re.eval("dev.off()");
+            
+                    plotScatterplot();
                 }
             }
             else{ // printem el gràfic en 3D
@@ -115,7 +126,9 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             
                     re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
                     re.eval("png(mypath,width=700,height=700");
-                    re.eval("scatterplot3d::scatterplot3d(c1,c2,c3, pch=16, highlight.3d=TRUE,type=\"h\", main = \"3D Scatterplot\")");
+                    re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +", pch=16, highlight.3d=TRUE,type=\"h\", main = \"3D Scatterplot\")");
+                    re.eval("fit <- lm(" + selectedNames[2] + "~ " + selectedNames[0] + "+" + selectedNames[1] + ")");
+                    re.eval("s3d$plane3d(fit)");
                     re.eval("dev.off()");
             
                     plotScatterplot();
