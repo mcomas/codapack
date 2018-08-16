@@ -530,9 +530,9 @@ public class CoDaPackMenu extends JMenuBar{
         menuGraphs.addSeparator();
         addJMenuItem(menuGraphs, zPatternsPlot, ITEM_ZPATTERNS);
         addJMenuItem(menuGraphs, itemScatterplot, ITEM_SCATTERPLOT);
-        addJMenuItem(menuGraphs, itemALRPlot, ITEM_ALR_PLOT);
-        addJMenuItem(menuGraphs, itemCLRPlot, ITEM_CLR_PLOT);
-        addJMenuItem(menuGraphs, itemILRPlot, ITEM_ILR_PLOT);
+        //addJMenuItem(menuGraphs, itemALRPlot, ITEM_ALR_PLOT);
+        //addJMenuItem(menuGraphs, itemCLRPlot, ITEM_CLR_PLOT);
+        //addJMenuItem(menuGraphs, itemILRPlot, ITEM_ILR_PLOT);
         menuGraphs.addSeparator();
         addJMenuItem(menuGraphs, itemBiPlot, ITEM_BIPLOT);
         addJMenuItem(menuGraphs, itemIlrBiPlot, ITEM_ILR_BIPLOT);
