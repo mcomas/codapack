@@ -10,6 +10,7 @@ import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
+import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -51,6 +52,7 @@ public class S0 extends AbstractMenuDialog{
     DataFrame df;
     JFrame frameS0;
     String tempDirR;
+    JFileChooser chooser;
     
     public static final long serialVersionUID = 1L;
     
@@ -100,12 +102,28 @@ public class S0 extends AbstractMenuDialog{
                         
                         re.eval(dataFrameString); // we create the dataframe in R
                 
-                // executem script d'R
-                String url = getClass().getResource(CoDaPackMain.RESOURCE_PATH + "SumScript.R").toString();
-                url = url.replaceAll("\\\\", "/");
-                url = url.substring(6);
-                re.eval("source(\"" + url + "\")");
                 this.dispose();
+                
+                // executem script d'R
+                frameS0 = new JFrame();
+                chooser = new JFileChooser();
+                frameS0.setSize(600,400);
+                chooser.setDialogTitle("Select R script to execute");
+                chooser.setFileFilter(new FileNameExtensionFilter("R data file", "R", "rda"));
+                chooser.setSize(400,400);
+                frameS0.add(chooser);
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                frameS0.setLocation(dim.width/2-frameS0.getSize().width/2, dim.height/2-frameS0.getSize().height/2);
+                
+                if(chooser.showOpenDialog(frameS0) == JFileChooser.APPROVE_OPTION){
+                    String url = chooser.getSelectedFile().getAbsolutePath();
+                    url = url.replaceAll("\\\\", "/");
+                    re.eval("source(\"" + url + "\")");
+                    System.out.println("el resultat es: " + re.eval("res").asDouble());
+                }
+                else{
+                    frameS0.dispose();
+                }
         }    
         else{
             JOptionPane.showMessageDialog(null,"Please select data");
@@ -135,11 +153,11 @@ public class S0 extends AbstractMenuDialog{
         int numberOfGraphics = re.eval("length(grafic)").asInt();
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("grafic[" + String.valueOf(numberOfGraphics+1) + "]").asString();
-            plotZPatterns();
+            plotS0();
         }   
     }
     
-    private void plotZPatterns() {
+    private void plotS0() {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);

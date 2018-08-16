@@ -10,6 +10,7 @@ import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
+import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -43,6 +44,7 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
     Rengine re;
     DataFrame df;
     JFrame frameS3;
+    JFileChooser chooser;
     String tempDirR;
     
     public static final long serialVersionUID = 1L;
@@ -130,11 +132,25 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
             
                 // executem script d'R
                 
-                String url = getClass().getResource(CoDaPackMain.RESOURCE_PATH + "SumScript.R").toString();
-                url = url.replaceAll("\\\\", "/");
-                url = url.substring(6);
-                re.eval("source(\"" + url + "\")");
-                this.dispose();
+                frameS3 = new JFrame();
+                chooser = new JFileChooser();
+                frameS3.setSize(600,400);
+                chooser.setDialogTitle("Select R script to execute");
+                chooser.setFileFilter(new FileNameExtensionFilter("R data file", "R", "rda"));
+                chooser.setSize(400,400);
+                frameS3.add(chooser);
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                frameS3.setLocation(dim.width/2-frameS3.getSize().width/2, dim.height/2-frameS3.getSize().height/2);
+                
+                if(chooser.showOpenDialog(frameS3) == JFileChooser.APPROVE_OPTION){
+                    String url = chooser.getSelectedFile().getAbsolutePath();
+                    url = url.replaceAll("\\\\", "/");
+                    re.eval("source(\"" + url + "\")");
+                    System.out.println("el resultat es: " + re.eval("res").asDouble());
+                }
+                else{
+                    frameS3.dispose();
+                }
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");
@@ -165,11 +181,11 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
         int numberOfGraphics = re.eval("length(grafic)").asInt();
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("grafic[" + String.valueOf(numberOfGraphics+1) + "]").asString();
-            plotZPatterns();
+            plotS3();
         }   
     }
     
-    private void plotZPatterns() {
+    private void plotS3() {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
