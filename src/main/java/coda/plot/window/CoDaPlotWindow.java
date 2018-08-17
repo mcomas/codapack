@@ -39,12 +39,22 @@ import coda.gui.menu.SelectVariableMenu;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.plot.AbstractCoDaDisplay;
 import coda.plot.CoDaDisplayConfiguration;
+import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -75,7 +85,7 @@ import javax.swing.event.ChangeListener;
  *
  * @author marc
  */
-public class CoDaPlotWindow extends javax.swing.JFrame{
+public class CoDaPlotWindow extends javax.swing.JFrame implements KeyListener{
     public static final long serialVersionUID = 1L;
     
     protected AbstractCoDaDisplay display;
@@ -114,7 +124,8 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
             protected JCheckBoxMenuItem itemShowObsName;
     DataFrame dataframe;
     public CoDaPlotWindow(DataFrame dataframe, final AbstractCoDaDisplay plotDisplay, String title) {
-        
+        this.setFocusable(true);
+        this.addKeyListener(this);
         this.dataframe = dataframe;
         jMenuBar = new JMenuBar();
         menuFile = new JMenu();
@@ -299,6 +310,67 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         }
         public String getExtension() {
             return extension;
+        }
+    }
+    
+    public void keyPressed(KeyEvent e){
+                if ((e.getKeyCode() == KeyEvent.VK_C) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+                    try {
+                        Robot robot = new Robot();
+                        Rectangle screen = new Rectangle(this.getX()+10,this.getY()+30, this.getWidth()-20, this.getHeight()-40);
+                        BufferedImage i = robot.createScreenCapture(screen);
+                        TransferableImage trans = new TransferableImage(i);
+                        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+                        c.setContents(trans, null);
+                    } catch (AWTException ex) {
+                        Logger.getLogger(CoDaPlotWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent e){
+        
+    }
+    
+    public void keyReleased(KeyEvent e){
+        
+    }
+    
+    private class TransferableImage implements Transferable {
+
+        Image i;
+
+        public TransferableImage( Image i ) {
+            this.i = i;
+        }
+
+        public Object getTransferData( DataFlavor flavor )
+        throws UnsupportedFlavorException, IOException {
+            if ( flavor.equals( DataFlavor.imageFlavor ) && i != null ) {
+                return i;
+            }
+            else {
+                throw new UnsupportedFlavorException( flavor );
+            }
+        }
+
+        public DataFlavor[] getTransferDataFlavors() {
+            DataFlavor[] flavors = new DataFlavor[ 1 ];
+            flavors[ 0 ] = DataFlavor.imageFlavor;
+            return flavors;
+        }
+
+        public boolean isDataFlavorSupported( DataFlavor flavor ) {
+            DataFlavor[] flavors = getTransferDataFlavors();
+            for ( int i = 0; i < flavors.length; i++ ) {
+                if ( flavor.equals( flavors[ i ] ) ) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
