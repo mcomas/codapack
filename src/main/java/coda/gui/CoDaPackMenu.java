@@ -175,6 +175,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_ZPATTERNS = "ZPatterns plot";
         public JMenuItem itemScatterplot;
         public final String ITEM_SCATTERPLOT = "Scatterplot 2D/3D";
+        public JMenuItem itemGeoMeanPlot;
+        public final String ITEM_GEO_MEAN_PLOT = "Geometric mean barplot";
         public JMenuItem itemHelpGraphs;
         public final String ITEM_HELP_GRAPHS = "Help";
 
@@ -431,6 +433,7 @@ public class CoDaPackMenu extends JMenuBar{
             confidenceRegionPlot = new JMenuItem();
             zPatternsPlot = new JMenuItem();
             itemScatterplot = new JMenuItem();
+            itemGeoMeanPlot = new JMenuItem();
             itemHelpGraphs = new JMenuItem();
 
         menuHelp = new JMenu();
@@ -530,6 +533,7 @@ public class CoDaPackMenu extends JMenuBar{
         menuGraphs.addSeparator();
         addJMenuItem(menuGraphs, zPatternsPlot, ITEM_ZPATTERNS);
         addJMenuItem(menuGraphs, itemScatterplot, ITEM_SCATTERPLOT);
+        addJMenuItem(menuGraphs,itemGeoMeanPlot, ITEM_GEO_MEAN_PLOT);
         //addJMenuItem(menuGraphs, itemALRPlot, ITEM_ALR_PLOT);
         //addJMenuItem(menuGraphs, itemCLRPlot, ITEM_CLR_PLOT);
         //addJMenuItem(menuGraphs, itemILRPlot, ITEM_ILR_PLOT);

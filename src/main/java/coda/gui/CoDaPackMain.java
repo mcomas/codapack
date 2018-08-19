@@ -609,6 +609,8 @@ public final class CoDaPackMain extends JFrame{
             new ScatterplotMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZPATTERNS)){
             new ZpatternsMenu(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_GEO_MEAN_PLOT)){
+            new GeoMeanPlotMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_EMPTY_TERNARY_PLOT)){
             String names[] = {"X", "Y", "Z"};
             TernaryPlot2dDisplay display = new TernaryPlot2dDisplay(names);
