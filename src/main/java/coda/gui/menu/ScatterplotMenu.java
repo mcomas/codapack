@@ -37,7 +37,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -110,7 +115,11 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                     re.eval("lines(lowess(" + selectedNames[0] + "," + selectedNames[1] + "), col=\"blue\")");
                     re.eval("dev.off()");
             
-                    plotScatterplot();
+                    try {
+                        plotScatterplot();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
             else{ // printem el gràfic en 3D
@@ -131,7 +140,11 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                     re.eval("s3d$plane3d(fit)");
                     re.eval("dev.off()");
             
-                    plotScatterplot();
+                    try {
+                        plotScatterplot();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
             
@@ -144,7 +157,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
         
     }
     
-    private void plotScatterplot() {
+    private void plotScatterplot() throws IOException {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -174,8 +187,9 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             menu.add(menuItem);
             frameScatterplot.setJMenuBar(menuBar);
             panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
+            BufferedImage img = ImageIO.read(new File(tempDirR));
+            ImageIcon icon = new ImageIcon(img);
+            JLabel label = new JLabel(icon);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
             panel.add(label);

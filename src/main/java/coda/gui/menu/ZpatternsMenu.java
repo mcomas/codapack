@@ -42,7 +42,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -101,9 +106,13 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 
                 setVisible(false);
                 
+            try {
                 // jframe configuration
                 
                 plotZPatterns();
+            } catch (IOException ex) {
+                Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
                 
                 // we show the output 
                 
@@ -115,7 +124,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         }
     }
 
-    private void plotZPatterns() {
+    private void plotZPatterns() throws IOException {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -145,8 +154,9 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             menu.add(menuItem);
             frameZPatterns.setJMenuBar(menuBar);
             panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
+            BufferedImage img = ImageIO.read(new File(tempDirR));
+            ImageIcon icon = new ImageIcon(img);
+            JLabel label = new JLabel(icon);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
             panel.add(label);
