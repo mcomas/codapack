@@ -71,6 +71,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_EXPORT = "Export";
             public JMenuItem itemExportXLS;
             public final String ITEM_EXPORT_XLS = "Export Data to XLS...";
+            public JMenuItem itemExportCSV;
+            public final String ITEM_EXPORT_CSV = "Export CSV/Text Data...";
             public JMenuItem itemExportR;
             public final String ITEM_EXPORT_R = "Export Data to R Data...";
         public JMenuItem itemdelDataFrame;
@@ -379,6 +381,7 @@ public class CoDaPackMenu extends JMenuBar{
                     itemImportXLS = new JMenuItem();
                     itemImportRDA = new JMenuItem();
                 menuExport = new JMenu();
+                    itemExportCSV = new JMenuItem();
                     itemExportXLS = new JMenuItem();
                     itemExportR = new JMenuItem();
                 itemdelDataFrame = new JMenuItem();
@@ -471,6 +474,7 @@ public class CoDaPackMenu extends JMenuBar{
         
         menuExport.setText(ITEM_EXPORT);
         menuFile.add(menuExport);
+        addJMenuItem(menuExport,itemExportCSV,ITEM_EXPORT_CSV);
         addJMenuItem(menuExport, itemExportXLS, ITEM_EXPORT_XLS);
         addJMenuItem(menuExport, itemExportR, ITEM_EXPORT_R);
         

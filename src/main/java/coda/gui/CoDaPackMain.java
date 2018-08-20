@@ -334,6 +334,53 @@ public final class CoDaPackMain extends JFrame{
                 importMenu.dispose();
                 CoDaPackConf.lastPath = ruta;
             }
+        }else if(title.equals(jMenuBar.ITEM_EXPORT_CSV)){
+            if(this.getActiveDataFrame() != null){
+                chooseFile.resetChoosableFileFilters();
+                chooseFile.setFileFilter(new FileNameExtensionFilter("Text file", "txt"));
+                chooseFile.setFileFilter(new FileNameExtensionFilter("CSV file", "csv"));
+                
+                DataFrame df = this.getActiveDataFrame();
+                
+                for(int i=0; i < df.size(); i++){
+                    re.eval(df.get(i).getName() + " <- NULL");
+                
+                    if(df.get(i).isNumeric()){
+                        for(double j : df.get(i).getNumericalData()){
+                            re.eval(df.get(i).getName() + " <- c(" + df.get(i).getName() +"," + String.valueOf(j) + ")");
+                        }
+                    }
+                    else{
+                        for(String j : df.get(i).getTextData()){
+                            re.eval(df.get(i).getName() + " <- c(" + df.get(i).getName() +",'" + j + "')");
+                        }
+                    }
+                }
+            
+                String dataFrameString = "mydf <- data.frame(";
+                
+                for(int i=0; i < df.size(); i++){
+                    dataFrameString += df.get(i).getName();
+                    if(i != df.size()-1) dataFrameString += ",";
+                }
+            
+                dataFrameString += ")";
+                re.eval(dataFrameString); // creem el dataframe amb R
+
+                if(chooseFile.showOpenDialog(jSplitPane) == JFileChooser.APPROVE_OPTION){
+                    ruta = chooseFile.getCurrentDirectory().getAbsolutePath(); 
+                    if(chooseFile.getFileFilter().getDescription().equals("CSV file")){
+                        re.eval("utils::write.csv(mydf, \"" + ruta.replaceAll("\\\\", "/") + "/" + chooseFile.getSelectedFile().getName() + ".csv\")");
+                    }
+                    else{
+                        re.eval("utils::write.table(mydf, \"" + ruta.replaceAll("\\\\", "/") + "/" + chooseFile.getSelectedFile().getName() + ".txt\")");
+                    }
+                }
+                CoDaPackConf.lastPath = ruta;
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "No data to export");
+            }
         }else if(title.equals(jMenuBar.ITEM_EXPORT_XLS)){
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
