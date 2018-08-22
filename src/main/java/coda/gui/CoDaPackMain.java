@@ -370,10 +370,10 @@ public final class CoDaPackMain extends JFrame{
                 if(chooseFile.showOpenDialog(jSplitPane) == JFileChooser.APPROVE_OPTION){
                     ruta = chooseFile.getCurrentDirectory().getAbsolutePath(); 
                     if(chooseFile.getFileFilter().getDescription().equals("CSV file")){
-                        re.eval("utils::write.csv(mydf, \"" + ruta.replaceAll("\\\\", "/") + "/" + chooseFile.getSelectedFile().getName() + ".csv\")");
+                        re.eval("utils::write.csv(mydf, \"" + ruta.replaceAll("\\\\", "/") + "/" + chooseFile.getSelectedFile().getName() + ".csv\", row.names = FALSE)");
                     }
                     else{
-                        re.eval("utils::write.table(mydf, \"" + ruta.replaceAll("\\\\", "/") + "/" + chooseFile.getSelectedFile().getName() + ".txt\")");
+                        re.eval("utils::write.table(mydf, \"" + ruta.replaceAll("\\\\", "/") + "/" + chooseFile.getSelectedFile().getName() + ".txt\", row.names = FALSE)");
                     }
                 }
                 CoDaPackConf.lastPath = ruta;
