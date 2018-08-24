@@ -98,6 +98,8 @@ public class CoDaPackMenu extends JMenuBar{
             public final String ITEM_T_RAW_ILR = "Raw-ILR";
             public JMenuItem itemTransformILRRaw;
             public final String ITEM_T_ILR_RAW = "ILR-Raw";
+        public JMenuItem itemDiscretize;
+        public final String ITEM_DISCRETIZE = "Discretize/Segment variable";
         public JMenuItem itemCenter;
         public final String ITEM_CENTER = "Centering";
         public JMenuItem itemClosure;
@@ -396,6 +398,7 @@ public class CoDaPackMenu extends JMenuBar{
                 itemTransformCLR = new JMenuItem();
                 itemTransformRawILR = new JMenuItem();
                 itemTransformILRRaw = new JMenuItem();
+            itemDiscretize = new JMenuItem();
             itemCenter = new JMenuItem();
             itemClosure = new JMenuItem();
             itemCalculateNewVar = new JMenuItem();
@@ -495,6 +498,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuTransforms, itemTransformCLR, ITEM_RAW_CLR);
         addJMenuItem(menuTransforms, itemTransformRawILR, ITEM_T_RAW_ILR);
         addJMenuItem(menuTransforms, itemTransformILRRaw, ITEM_T_ILR_RAW);
+        addJMenuItem(menuData,itemDiscretize, ITEM_DISCRETIZE);
         addJMenuItem(menuData, itemCenter, ITEM_CENTER);
         addJMenuItem(menuData, itemClosure, ITEM_CLOSURE);
         addJMenuItem(menuData,itemCalculateNewVar,ITEM_CALCULATE_NEW_VAR);

@@ -610,6 +610,8 @@ public final class CoDaPackMain extends JFrame{
             new TransformationRawILRMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_T_ILR_RAW)) {
             new TransformationILRRawMenu(this).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_DISCRETIZE)){
+            new DiscretizeMenu(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLAS_STATS_SUMMARY)){
             new ClasStatsSummaryMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_COMP_STATS_SUMMARY)){
