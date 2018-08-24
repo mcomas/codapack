@@ -77,9 +77,17 @@ public class DiscretizeMenu extends AbstractMenuDialog{
             double[] res = re.eval("res").asDoubleArray();
             String[] resString = new String[res.length];
             for(int i=0; i < res.length;i++) resString[i] = String.valueOf((int)res[i]);
-            df.addData("discret" + sel_names[0], new Variable("discret" + sel_names[0],resString));
-            this.dispose();
+            String nameOfVar = "discret " + sel_names[0];
+            if(df.getNames().contains(nameOfVar)){
+                int aux = 1;
+                while(df.getNames().contains(nameOfVar + Integer.toString(aux))){
+                    aux++;
+                }
+                nameOfVar = nameOfVar + Integer.toString(aux);
+            }
+            df.addData(nameOfVar, new Variable(nameOfVar,resString));
             mainApplication.updateDataFrame(df);
+            this.dispose();
         }
         else{
             JOptionPane.showMessageDialog(null,"Please selecte one variable");
