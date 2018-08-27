@@ -284,7 +284,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame implements KeyListener{
                     int height = display.getHeight();
                     
                     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-                    com.itextpdf.text.Rectangle one = new com.itextpdf.text.Rectangle(800,600);
+                    com.itextpdf.text.Rectangle one = new com.itextpdf.text.Rectangle(this.getWidth(),this.getHeight());
                     Graphics g = image.getGraphics();
                     Graphics2D graphics = (Graphics2D) g;
                     
