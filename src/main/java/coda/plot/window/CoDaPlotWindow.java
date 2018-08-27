@@ -39,6 +39,10 @@ import coda.gui.menu.SelectVariableMenu;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.plot.AbstractCoDaDisplay;
 import coda.plot.CoDaDisplayConfiguration;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -254,7 +258,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame implements KeyListener{
         menu.setVisible(true);
     }
     public void saveImage(){
-        if( fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+        if( fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
             FileNameExtensionFilter ff = (FileNameExtensionFilter)fc.getFileFilter();
             File file = fc.getSelectedFile();
             String file_name = file.getAbsolutePath();
@@ -274,7 +278,37 @@ public class CoDaPlotWindow extends javax.swing.JFrame implements KeyListener{
                     (OutputStream)(new FileOutputStream(new File(file_name))), 0,0,width ,height , ColorMode.COLOR_RGB);
                     display.paintComponent(g);//, width, height);
                     g.close();
-                }/*else if(extension.equalsIgnoreCase("tex")){
+                }
+                else if(extension.equalsIgnoreCase("pdf")){ // save the plot in pdf extension
+                    int width = display.getWidth();
+                    int height = display.getHeight();
+                    
+                    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                    com.itextpdf.text.Rectangle one = new com.itextpdf.text.Rectangle(800,600);
+                    Graphics g = image.getGraphics();
+                    Graphics2D graphics = (Graphics2D) g;
+                    
+                    Document document = new Document();
+                    document.setPageSize(one);
+                    
+                    try{
+                        PdfWriter writer;
+                        writer = PdfWriter.getInstance(document, new FileOutputStream(file_name));
+                        document.open();
+                        PdfContentByte cb = writer.getDirectContent();
+                        Graphics2D g2 = cb.createGraphics(width, height);
+                        Robot robot = new Robot();
+                        Rectangle screen = new Rectangle(this.getX()+10,this.getY()+50, this.getWidth()-20, this.getHeight()-40);
+                        BufferedImage i = robot.createScreenCapture(screen);
+                        g2.drawImage(i, 0,0, null);
+                        g2.dispose();
+                        document.close();
+                    }catch(Exception e){
+                        System.err.println(e.getMessage());
+                    }
+                    
+                }
+                /*else if(extension.equalsIgnoreCase("tex")){
                     int width = display.getWidth();
                     int height = display.getHeight();
 
