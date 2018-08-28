@@ -45,6 +45,9 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
     JCheckBox performClosure;
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
+    DataFrame dataFrame;
+    
+    
     public PerturbateDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Perturbate Data Menu", false);
         perturbateWith =  new JTextField("1.0 1.0 1.0", 14);
@@ -76,7 +79,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
         //Comprobation that closuredTo is a double value is needed
         try{
             String selectedNames[] = ds.getSelectedData();
-            DataFrame dataFrame = mainApplication.getActiveDataFrame();
+            dataFrame = mainApplication.getActiveDataFrame();
 
             String[] v = perturbateWith.getText().split(" ");
 
@@ -128,6 +131,10 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(this, "Closured value must be a double");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.dataFrame;
     }
 }
 

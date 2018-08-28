@@ -45,6 +45,7 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
     JRadioButton l_takeMinimunColum = new JRadioButton("Take Minimum of Each Column");
     //Creem la opció Global of Selected Columns
     JRadioButton l_globalSelectedColumns = new JRadioButton("Global Minimum of Selected Columns");
+    DataFrame df;
     
     public SetDetectionLimitMenu(CoDaPackMain mainApp) {
         super(mainApp, "Set Detection Limit", false);
@@ -82,7 +83,7 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
         boolean isGlobalMinimumSelected = l_globalSelectedColumns.isSelected();
 
         //Obtenim el DataFrame actiu
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         //Guardem el nom de les columnes seleccionades en una taula d'strings
         String[] sel_names = ds.getSelectedData();
         //Guardem el nùmero de columnes seleccionades en una variable
@@ -179,6 +180,10 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
         mainApplication.updateDataFrame(df);
        
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
     
 }

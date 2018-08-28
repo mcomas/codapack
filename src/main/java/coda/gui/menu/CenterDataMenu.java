@@ -35,6 +35,8 @@ public class CenterDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     String selected[];
     JCheckBox centerCheck;
+    DataFrame dataFrame;
+    
     public CenterDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Center Data Menu", false);
         centerCheck = new JCheckBox("Show Center", true);
@@ -47,7 +49,7 @@ public class CenterDataMenu extends AbstractMenuDialog{
         try{
             
             String selectedNames[] = ds.getSelectedData();
-            DataFrame dataFrame = mainApplication.getActiveDataFrame();
+            dataFrame = mainApplication.getActiveDataFrame();
 
             boolean selection[] = dataFrame.getValidCompositions(selectedNames);
             double[][] data = dataFrame.getNumericalData(selectedNames);
@@ -77,6 +79,10 @@ public class CenterDataMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(this, "Closured value must be a double");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.dataFrame;
     }
 }
 

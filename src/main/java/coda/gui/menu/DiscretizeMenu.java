@@ -50,6 +50,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     JLabel methodLabel = new JLabel("Method :");
     JLabel breaksLabel = new JLabel("Nº breaks: ");
     JTextField breaksField = new JTextField(5);
+    DataFrame df;
     
     public DiscretizeMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Discretize/Segment Menu", false);
@@ -65,7 +66,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed(){
         
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         
         String[] sel_names = ds.getSelectedData();
         
@@ -92,5 +93,9 @@ public class DiscretizeMenu extends AbstractMenuDialog{
         else{
             JOptionPane.showMessageDialog(null,"Please selecte one variable");
         }        
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

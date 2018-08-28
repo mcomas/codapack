@@ -124,4 +124,8 @@ public class FilterMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(frame2, "Please select one variable");
         }
     }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
 }

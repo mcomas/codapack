@@ -36,6 +36,8 @@ public class ClosureDataMenu extends AbstractMenuDialog{
     String selected[];
     JTextField closureTo;
     JLabel text1 = new JLabel("Closure");
+    DataFrame dataFrame;
+    
     public ClosureDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Closure Data Menu", false);
         closureTo =  new JTextField(5);
@@ -50,7 +52,7 @@ public class ClosureDataMenu extends AbstractMenuDialog{
         try{
 
             String selectedNames[] = ds.getSelectedData();
-            DataFrame dataFrame = mainApplication.getActiveDataFrame();
+            dataFrame = mainApplication.getActiveDataFrame();
 
             boolean selection[] = dataFrame.getValidCompositionsWithZeros(selectedNames);
             double dlevel[][] = dataFrame.getDetectionLevel(selectedNames);
@@ -86,6 +88,10 @@ public class ClosureDataMenu extends AbstractMenuDialog{
         }catch(NumberFormatException ex){
             JOptionPane.showMessageDialog(this, "Closure value must be a real number");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.dataFrame;
     }
 }
 

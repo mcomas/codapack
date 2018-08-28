@@ -34,6 +34,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
     Rengine re;
     JFrame frame;
     JPanel pane;
+    DataFrame df;
     
     public static final long serialVersionUID = 1L;
     
@@ -51,7 +52,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
         
         if(selectedNames.length > 0){ // minimum one variable
             
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean exit = false;
             JLabel labelMessage = new JLabel("Following selected order, use x1 to x" + String.valueOf(selectedNames.length) + " instead of variable names to build the expression to subset");
             JOptionPane.showMessageDialog(null, labelMessage);
@@ -197,5 +198,9 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
         else{
             JOptionPane.showMessageDialog(null, "No data available");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

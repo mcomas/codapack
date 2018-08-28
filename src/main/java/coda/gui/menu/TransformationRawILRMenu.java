@@ -32,6 +32,8 @@ import javax.swing.*;
  */
 public class TransformationRawILRMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
+    
+    DataFrame df;
 
     public TransformationRawILRMenu(final CoDaPackMain mainApp){
         super(mainApp, "Raw-ILR Transform Menu", false);
@@ -64,7 +66,7 @@ public class TransformationRawILRMenu extends AbstractMenuDialogWithILR{
     public void acceptButtonActionPerformed() {
         int[][] partition = getPartition();
         if (partition != null) {
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String[] sel_names = ds.getSelectedData();
             int m = sel_names.length-1;
             String[] new_names = new String[m];
@@ -83,5 +85,9 @@ public class TransformationRawILRMenu extends AbstractMenuDialogWithILR{
         }else{
             JOptionPane.showMessageDialog(this, "<html>You must define a partition</html>");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

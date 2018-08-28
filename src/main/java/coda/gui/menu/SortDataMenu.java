@@ -20,6 +20,7 @@ import org.rosuda.JRI.Rengine;
 public class SortDataMenu extends AbstractMenuDialog{
     
     Rengine re;
+    DataFrame df;
     
     public static final long serialVersionUID = 1L;
     
@@ -36,7 +37,7 @@ public class SortDataMenu extends AbstractMenuDialog{
         
         if(selectedNames.length > 0){
             
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             
             // create dataframe on r
             
@@ -103,6 +104,10 @@ public class SortDataMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(null, "Please select some data");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
     
 }

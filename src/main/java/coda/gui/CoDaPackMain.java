@@ -124,7 +124,26 @@ public final class CoDaPackMain extends JFrame{
     private String ITEM_APPLICATION_NAME;
     // Menu
     private CoDaPackMenu jMenuBar;
-
+    
+    // Menus 
+    
+    private TransformationALRMenu transformationALRMenu;
+    private TransformationCLRMenu transformationCLRMenu;
+    private TransformationRawILRMenu transformationRawILRMenu;
+    private TransformationILRRawMenu transformationILRRawMenu;
+    private DiscretizeMenu discretizeMenu;
+    private CenterDataMenu centerDataMenu;
+    private ClosureDataMenu closureDataMenu;
+    private CalculateNewVarMenu calculateNewVarMenu;
+    private PerturbateDataMenu perturbateDataMenu;
+    private PowerDataMenu powerDataMenu;
+    private SetDetectionLimitMenu setDetectionLimitMenu;
+    private ZeroReplacementMenu zeroReplacementMenu;
+    private ZeroReplacementRMenu zeroReplacementRMenu;
+    private LogRatioEMMenu logRatioEMMenu;
+    private SortDataMenu sortDataMenu;
+    private FilterMenu filterMenu;
+    private AdvancedFilterMenu advancedFilterMenu;
 
     public static CoDaPackConf config = new CoDaPackConf();
     
@@ -603,15 +622,20 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_CREATE_FRAME)){
             new DataFrameCreator(this);
         }else if(title.equals(jMenuBar.ITEM_RAW_ALR)){
-            new TransformationALRMenu(this).setVisible(true);
+            if(transformationALRMenu == null || transformationALRMenu.getDataFrame() != this.getActiveDataFrame()) transformationALRMenu = new TransformationALRMenu(this);
+            transformationALRMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_RAW_CLR)){
-            new TransformationCLRMenu(this).setVisible(true);
+            if(transformationCLRMenu == null || transformationCLRMenu.getDataFrame() != this.getActiveDataFrame()) transformationCLRMenu = new TransformationCLRMenu(this);
+            transformationCLRMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_T_RAW_ILR)) {
-            new TransformationRawILRMenu(this).setVisible(true);
+            if(transformationRawILRMenu == null || transformationRawILRMenu.getDataFrame() != this.getActiveDataFrame()) transformationRawILRMenu = new TransformationRawILRMenu(this);
+            transformationRawILRMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_T_ILR_RAW)) {
-            new TransformationILRRawMenu(this).setVisible(true);
+            if(transformationILRRawMenu == null || transformationILRRawMenu.getDataFrame() != this.getActiveDataFrame()) transformationILRRawMenu = new TransformationILRRawMenu(this);
+            transformationILRRawMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DISCRETIZE)){
-            new DiscretizeMenu(this,re).setVisible(true);
+            if(discretizeMenu == null || discretizeMenu.getDataFrame() != this.getActiveDataFrame()) discretizeMenu = new DiscretizeMenu(this,re); 
+            discretizeMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLAS_STATS_SUMMARY)){
             new ClasStatsSummaryMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_COMP_STATS_SUMMARY)){
@@ -623,31 +647,43 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_HELP_STATISTICS)){
             // HELP STATISTICS ACTION
         }else if(title.equals(jMenuBar.ITEM_CENTER)){
-            new CenterDataMenu(this).setVisible(true);
+            if(centerDataMenu == null || centerDataMenu.getDataFrame() != this.getActiveDataFrame()) centerDataMenu = new CenterDataMenu(this); 
+            centerDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLOSURE)){
-            new ClosureDataMenu(this).setVisible(true);
+            if(closureDataMenu == null || closureDataMenu.getDataFrame() != this.getActiveDataFrame()) closureDataMenu = new ClosureDataMenu(this);
+            closureDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CALCULATE_NEW_VAR)){
-            new CalculateNewVarMenu(this,re).setVisible(true);
+            if(calculateNewVarMenu == null || calculateNewVarMenu.getDataFrame() != this.getActiveDataFrame()) calculateNewVarMenu = new CalculateNewVarMenu(this,re);
+            calculateNewVarMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_AMALGAM)){
             new AmalgamationDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PERTURBATE)){
-            new PerturbateDataMenu(this).setVisible(true);
+            if(perturbateDataMenu == null || perturbateDataMenu.getDataFrame() != this.getActiveDataFrame()) perturbateDataMenu = new PerturbateDataMenu(this);
+            perturbateDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_POWER)){
-            new PowerDataMenu(this).setVisible(true);
+            if(powerDataMenu == null || powerDataMenu.getDataFrame() != this.getActiveDataFrame()) powerDataMenu = new PowerDataMenu(this);
+            powerDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZEROS)){
-            new ZeroReplacementMenu(this).setVisible(true);
+            if(zeroReplacementMenu == null || zeroReplacementMenu.getDataFrame() != this.getActiveDataFrame()) zeroReplacementMenu = new ZeroReplacementMenu(this);
+            zeroReplacementMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZEROS_R)){
-            new ZeroReplacementRMenu(this,re).setVisible(true);
+            if(zeroReplacementRMenu == null || zeroReplacementRMenu.getDataFrame() != this.getActiveDataFrame()) zeroReplacementRMenu = new ZeroReplacementRMenu(this,re);
+            zeroReplacementRMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_LOG_RATIO)){
-            new LogRatioEMMenu(this,re).setVisible(true);
+            if(logRatioEMMenu == null || logRatioEMMenu.getDataFrame() != this.getActiveDataFrame()) logRatioEMMenu = new LogRatioEMMenu(this,re);
+            logRatioEMMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_SORT_DATA)){
-            new SortDataMenu(this,re).setVisible(true);
+            if(sortDataMenu == null || sortDataMenu.getDataFrame() != this.getActiveDataFrame()) sortDataMenu = new SortDataMenu(this,re);
+            sortDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_FILTER)){
-            new FilterMenu(this).setVisible(true);
+            if(filterMenu == null || filterMenu.getDataFrame() != this.getActiveDataFrame()) filterMenu = new FilterMenu(this);
+            filterMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ADV_FILTER)){
-            new AdvancedFilterMenu(this,re).setVisible(true);
+            if(advancedFilterMenu == null || advancedFilterMenu.getDataFrame() != this.getActiveDataFrame()) advancedFilterMenu = new AdvancedFilterMenu(this,re);
+            advancedFilterMenu.setVisible(true);
         }else if (title.equals(jMenuBar.ITEM_SETDETECTION)){
-            new SetDetectionLimitMenu(this).setVisible(true);
+            if(setDetectionLimitMenu == null || setDetectionLimitMenu.getDataFrame() != this.getActiveDataFrame()) setDetectionLimitMenu = new SetDetectionLimitMenu(this);  
+            setDetectionLimitMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
             new TernaryPlotMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PRED_REG_PLOT)){

@@ -42,6 +42,8 @@ public class PowerDataMenu extends AbstractMenuDialog{
     JCheckBox performClosure;
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
+    DataFrame dataFrame;
+    
     public PowerDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Power Data Menu", false);
         powerWith =  new JTextField(5);
@@ -74,7 +76,7 @@ public class PowerDataMenu extends AbstractMenuDialog{
         try{
 
             String selectedNames[] = ds.getSelectedData();
-            DataFrame dataFrame = mainApplication.getActiveDataFrame();
+            dataFrame = mainApplication.getActiveDataFrame();
 
             boolean selection[] = dataFrame.getValidCompositionsWithZeros(selectedNames);
             
@@ -125,5 +127,10 @@ public class PowerDataMenu extends AbstractMenuDialog{
         }
         
     }
+    
+    public DataFrame getDataFrame(){
+        return this.dataFrame;
+    }
+    
 }
 

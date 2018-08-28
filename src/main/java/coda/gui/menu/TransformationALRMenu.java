@@ -36,6 +36,7 @@ public class TransformationALRMenu extends AbstractMenuDialog{
     JRadioButton ra;
     JRadioButton ar;
     JTextField closure = new JTextField("1.0");
+    DataFrame df;
 
     public TransformationALRMenu(final CoDaPackMain mainApp){
         super(mainApp, "ALR Transform Menu", false);
@@ -55,7 +56,7 @@ public class TransformationALRMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed() {
         if(ra.isSelected()){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String[] sel_names = ds.getSelectedData();
             int m = sel_names.length-1;
             String[] new_names = new String[m];
@@ -68,7 +69,7 @@ public class TransformationALRMenu extends AbstractMenuDialog{
             df.addData(new_names, coda.Utils.recoverData(alr, selection));
             mainApplication.updateDataFrame(df);
         }else{
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String[] sel_names = ds.getSelectedData();
             int m = sel_names.length+1;
             String[] new_names = new String[m];
@@ -78,6 +79,10 @@ public class TransformationALRMenu extends AbstractMenuDialog{
             mainApplication.updateDataFrame(df);
         }
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return df;
     }
 }
 

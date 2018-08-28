@@ -30,7 +30,7 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     Rengine re;
     JFrame frame;
     JPanel panel;
-    DataFrame df = mainApplication.getActiveDataFrame();
+    DataFrame df;
     double[] dataNewVar;
     
     public static final long serialVersionUID = 1L;
@@ -42,6 +42,8 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     
     @Override
     public void acceptButtonActionPerformed(){
+        
+        df = mainApplication.getActiveDataFrame();
         
         String selectedNames[] = ds.getSelectedData();
         Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
@@ -133,7 +135,7 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
                 }
                 if(answer == JOptionPane.OK_OPTION){
                     this.dispose();
-                    DataFrame df = mainApplication.getActiveDataFrame();
+                    df = mainApplication.getActiveDataFrame();
                     df.addData(nameField.getText(), dataNewVar);
                     mainApplication.updateDataFrame(df);
                 }
@@ -141,5 +143,9 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
         else{
             JOptionPane.showMessageDialog(null,"Please select one variable");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

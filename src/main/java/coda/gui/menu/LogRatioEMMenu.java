@@ -44,6 +44,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
     JLabel l_usedPercentatgeDL = new JLabel("DL proportion");
     JTextField dlProportion;
     Rengine re;
+    DataFrame df;
     
     /**
      * METODES DE CLASSE
@@ -118,7 +119,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
         boolean takeMin = true;
         if(!performMax.isSelected()) takeMin = false;
         
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData();
         int m = sel_names.length;
         
@@ -214,5 +215,9 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(frame,"Please select minimum two variables");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

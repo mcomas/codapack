@@ -41,6 +41,8 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
     JCheckBox performClosure;
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
+    DataFrame df;
+    
     public ZeroReplacementMenu(final CoDaPackMain mainApp){
         super(mainApp, "Zero Replacement Menu", false);
         
@@ -74,7 +76,7 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
         percentatgeDL = Double.parseDouble(usedPercentatgeDL.getText());
         
         
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData();
         int m = sel_names.length;
         String[] new_names = new String[m];
@@ -93,5 +95,10 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
        
         setVisible(false);
     }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
 }
 

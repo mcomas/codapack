@@ -56,6 +56,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
     JCheckBox performMax;
     JLabel lmax = new JLabel("Use minimum positive value observed");
     Rengine re;
+    DataFrame df;
 
     /**
      * *** METODES DE CLASSE ****
@@ -108,7 +109,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         boolean takeMin = true;
         if(!performMax.isSelected()) takeMin = false;
 
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData(); // we get the names of selected variables
         int m = sel_names.length; // number of selected variables
         
@@ -204,5 +205,9 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         else{
             JOptionPane.showMessageDialog(frame, "Please select minimum two variables");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }
