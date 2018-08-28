@@ -44,8 +44,11 @@ import javax.swing.JOptionPane;
  * @author marc
  */
 public class DendrogramMenu extends AbstractMenuDialogWithILR{
+    
     JCheckBox balancesCheck;
     JCheckBox statisticsCheck;
+    DataFrame df;
+    
     public DendrogramMenu(final CoDaPackMain mainApp){
         super(mainApp, "Balance Dendrogram Menu", true);
 
@@ -79,7 +82,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
         int [][] partition = getPartition();
         if(partition != null){
 
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String selectedNames[] = ds.getSelectedData();
 
             int m = selectedNames.length-1;
@@ -141,6 +144,10 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
             JOptionPane.showMessageDialog(this, "<html>You must define a partition</html>");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 
 }

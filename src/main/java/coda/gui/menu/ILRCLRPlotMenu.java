@@ -50,8 +50,11 @@ import javax.swing.JOptionPane;
  * @author mcomas
  */
 public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
+    
     public static final long serialVersionUID = 1L;
     JCheckBox coordinates;
+    DataFrame df;
+    
     public ILRCLRPlotMenu(final CoDaPackMain mainApp){
         super(mainApp, "ILR/CLR Plot Menu", true);
 
@@ -94,7 +97,7 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
                 plotNames[i] = "clr."+ selectedNames[i];
                 
             }
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = df.getNumericalData(selectedNames, mapping);
@@ -208,6 +211,10 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
         }else{
             JOptionPane.showMessageDialog(this, "<html>Select at least <b>three</b> variables</html>");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 
 }

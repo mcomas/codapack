@@ -41,7 +41,10 @@ import javax.swing.JOptionPane;
  * @author mcomas
  */
 public class TernaryPlotMenu extends AbstractMenuDialog{
+    
     public static final long serialVersionUID = 1L;
+    DataFrame df;
+    
     public TernaryPlotMenu(final CoDaPackMain mainApp){
         super(mainApp, "Ternary/Quaternary Plot Menu", true);//, false, true, false);
     }
@@ -50,7 +53,7 @@ public class TernaryPlotMenu extends AbstractMenuDialog{
 
         String selectedNames[] = ds.getSelectedData();
         if(selectedNames.length == 3 || selectedNames.length == 4){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = df.getNumericalData(selectedNames, mapping);
@@ -95,5 +98,9 @@ public class TernaryPlotMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(this, "<html>Select <b>three</b> or <b>four</b> variables</html>");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

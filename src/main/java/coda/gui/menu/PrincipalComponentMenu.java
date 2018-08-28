@@ -43,7 +43,9 @@ import javax.swing.JOptionPane;
  * @author mcomas
  */
 public class PrincipalComponentMenu extends AbstractMenuDialog{
+    
     public static final long serialVersionUID = 1L;
+    DataFrame df;
 
     public PrincipalComponentMenu(final CoDaPackMain mainApp){
         super(mainApp, "Principal Component Menu", true);
@@ -52,7 +54,7 @@ public class PrincipalComponentMenu extends AbstractMenuDialog{
     public void acceptButtonActionPerformed() {
         String selectedNames[] = ds.getSelectedData();
         if(selectedNames.length == 3 || selectedNames.length == 4){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = df.getNumericalData(selectedNames, mapping);
@@ -135,6 +137,10 @@ public class PrincipalComponentMenu extends AbstractMenuDialog{
         }else{
             JOptionPane.showMessageDialog(this, "<html>Select <b>three</b> or <b>four</b> variables</html>");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 
 }

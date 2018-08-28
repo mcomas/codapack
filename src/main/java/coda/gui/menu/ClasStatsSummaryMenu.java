@@ -50,6 +50,8 @@ public class ClasStatsSummaryMenu extends AbstractMenuDialog{
     JCheckBox correlationCheck;
     JTextField  percentileField;
     JCheckBox percentileCheck;
+    DataFrame df;
+    
     public ClasStatsSummaryMenu(final CoDaPackMain mainApp){
         super(mainApp, "Numerical Summary", true);
 
@@ -90,7 +92,7 @@ public class ClasStatsSummaryMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed() {
         String selectedNames[] = ds.getSelectedData();
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         
         boolean[] selection = getValidData(df, selectedNames);
         int sizeBefore = selection.length;
@@ -179,5 +181,9 @@ public class ClasStatsSummaryMenu extends AbstractMenuDialog{
         }
         CoDaPackMain.outputPanel.addOutput(outputs);
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

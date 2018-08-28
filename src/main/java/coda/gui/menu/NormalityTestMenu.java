@@ -37,6 +37,8 @@ import java.util.ArrayList;
  * @author mcomas
  */
 public class NormalityTestMenu extends AbstractMenuDialog{
+    
+    DataFrame df;
 
     public NormalityTestMenu(final CoDaPackMain mainApp){
         super(mainApp, "Additive Logistic Normality Test", false);
@@ -47,7 +49,7 @@ public class NormalityTestMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed() {
         String selectedNames[] = ds.getSelectedData();
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
 
         boolean[] selection = getValidComposition(df, selectedNames);
         int [] mapping = df.getMapingToData(selectedNames, selection);
@@ -78,6 +80,10 @@ public class NormalityTestMenu extends AbstractMenuDialog{
 
         CoDaPackMain.outputPanel.addOutput(outputs);
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 
 }

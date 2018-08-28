@@ -53,6 +53,8 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
     JTextField  percentileField;
     JCheckBox percentileCheck;
     JButton vararrayOptions;
+    DataFrame df;
+    
     public CompStatsSummaryMenu(final CoDaPackMain mainApp){
         super(mainApp, "Numerical Summary", true);
 
@@ -93,7 +95,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed() {
         String selectedNames[] = ds.getSelectedData();
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         
         boolean[] selection = getValidComposition(df, selectedNames);
         int sizeBefore = selection.length;
@@ -198,5 +200,9 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
         }
         CoDaPackMain.outputPanel.addOutput(outputs);
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

@@ -52,9 +52,12 @@ import javax.swing.JTextField;
  * @author mcomas
  */
 public class ConfidenceRegionMenu extends AbstractMenuDialog{
+    
     public static final long serialVersionUID = 1L;
     JTextField predLevel;
     JLabel text1 = new JLabel("Confidence level");
+    DataFrame df;
+    
     public ConfidenceRegionMenu(final CoDaPackMain mainApp){
         super(mainApp, "Center Confidence Region Menu", true);//, false, true, false);
         predLevel =  new JTextField("0.90 0.95 0.99", 14);
@@ -74,7 +77,7 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
         for(int i=0;i<v.length;i++) confidence[i] = Double.parseDouble(v[i]);
 
         if(selectedNames.length == 3){// || selectedNames.length == 4){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = df.getNumericalData(selectedNames, mapping);         
@@ -170,5 +173,9 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(this, "<html>Select <b>three</b> variables</html>");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

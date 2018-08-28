@@ -52,9 +52,12 @@ import javax.swing.JTextField;
  * @author mcomas
  */
 public class PredictiveRegionMenu extends AbstractMenuDialog{
+    
     public static final long serialVersionUID = 1L;
     JTextField predLevel;
     JLabel text1 = new JLabel("Predictive level");
+    DataFrame df;
+    
     public PredictiveRegionMenu(final CoDaPackMain mainApp){
         super(mainApp, "Predictive Region Menu", true);//, false, true, false);
         predLevel =  new JTextField("0.90 0.95 0.99", 14);
@@ -74,7 +77,7 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
         for(int i=0;i<v.length;i++) confidence[i] = Double.parseDouble(v[i]);
 
         if(selectedNames.length == 3 ){//|| selectedNames.length == 4){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = df.getNumericalData(selectedNames, mapping);         
@@ -150,5 +153,9 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(this, "<html>Select <b>three</b> variables</html>");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

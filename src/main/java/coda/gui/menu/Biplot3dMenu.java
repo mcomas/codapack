@@ -44,8 +44,11 @@ import javax.swing.JOptionPane;
  * @author mcomas
  */
 public class Biplot3dMenu extends AbstractMenuDialog{
+    
     public static final long serialVersionUID = 1L;
     JCheckBox coordinates;
+    DataFrame df;
+    
     public Biplot3dMenu(final CoDaPackMain mainApp){
         super(mainApp, " CLR Biplot Menu", true);
         
@@ -65,7 +68,7 @@ public class Biplot3dMenu extends AbstractMenuDialog{
                 plotNames[i] = "clr."+ selectedNames[i];
                 
             }
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = CoDaStats.centerData(df.getNumericalData(selectedNames, mapping));
@@ -162,6 +165,10 @@ public class Biplot3dMenu extends AbstractMenuDialog{
         }else{
             JOptionPane.showMessageDialog(this, "<html>Select at least <b>three</b> variables</html>");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 
 }

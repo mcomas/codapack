@@ -65,6 +65,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     Rengine re;
     JFrame frameZPatterns;
     String tempDirR;
+    DataFrame df;
     
     public static final long serialVersionUID = 1L;
     
@@ -82,7 +83,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         String selectedNames[] = ds.getSelectedData();
         
         if(selectedNames.length > 0){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             double[][] data = df.getNumericalData(selectedNames); // matriu amb les dades corresponents
                 
                 re.assign("X", data[0]);
@@ -237,5 +238,9 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 }
             }
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

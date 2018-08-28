@@ -144,6 +144,20 @@ public final class CoDaPackMain extends JFrame{
     private SortDataMenu sortDataMenu;
     private FilterMenu filterMenu;
     private AdvancedFilterMenu advancedFilterMenu;
+    private CompStatsSummaryMenu compStatsSummaryMenu;
+    private ClasStatsSummaryMenu clasStatsSummaryMenu;
+    private NormalityTestMenu normalityTestMenu;
+    private AtipicalityIndexMenu atipicalityIndexMenu;
+    private TernaryPlotMenu ternaryPlotMenu;
+    private PrincipalComponentMenu principalComponentMenu;
+    private PredictiveRegionMenu predictiveRegionMenu;
+    private ConfidenceRegionMenu confidenceRegionMenu;
+    private ZpatternsMenu zpatternsMenu;
+    private ScatterplotMenu scatterplotMenu;
+    private GeoMeanPlotMenu geoMeanPlotMenu;
+    private Biplot3dMenu biplot3dMenu;
+    private ILRCLRPlotMenu iLRCLRPlotMenu;
+    private DendrogramMenu dendrogramMenu;
 
     public static CoDaPackConf config = new CoDaPackConf();
     
@@ -637,13 +651,17 @@ public final class CoDaPackMain extends JFrame{
             if(discretizeMenu == null || discretizeMenu.getDataFrame() != this.getActiveDataFrame()) discretizeMenu = new DiscretizeMenu(this,re); 
             discretizeMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLAS_STATS_SUMMARY)){
-            new ClasStatsSummaryMenu(this).setVisible(true);
+            if(clasStatsSummaryMenu == null || clasStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame()) clasStatsSummaryMenu = new ClasStatsSummaryMenu(this);
+            clasStatsSummaryMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_COMP_STATS_SUMMARY)){
-            new CompStatsSummaryMenu(this).setVisible(true);
+            if(compStatsSummaryMenu == null || compStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame()) compStatsSummaryMenu = new CompStatsSummaryMenu(this); 
+            compStatsSummaryMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_NORM_TEST)){
-            new NormalityTestMenu(this).setVisible(true);
+            if(normalityTestMenu == null || normalityTestMenu.getDataFrame() != this.getActiveDataFrame()) normalityTestMenu = new NormalityTestMenu(this);
+            normalityTestMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ATIP_INDEX)){
-            new AtipicalityIndexMenu(this).setVisible(true);
+            if(atipicalityIndexMenu == null || atipicalityIndexMenu.getDataFrame() != this.getActiveDataFrame()) atipicalityIndexMenu = new AtipicalityIndexMenu(this);
+            atipicalityIndexMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_HELP_STATISTICS)){
             // HELP STATISTICS ACTION
         }else if(title.equals(jMenuBar.ITEM_CENTER)){
@@ -685,17 +703,23 @@ public final class CoDaPackMain extends JFrame{
             if(setDetectionLimitMenu == null || setDetectionLimitMenu.getDataFrame() != this.getActiveDataFrame()) setDetectionLimitMenu = new SetDetectionLimitMenu(this);  
             setDetectionLimitMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
-            new TernaryPlotMenu(this).setVisible(true);
+            if(ternaryPlotMenu == null || ternaryPlotMenu.getDataFrame() != this.getActiveDataFrame()) ternaryPlotMenu = new TernaryPlotMenu(this);
+            ternaryPlotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PRED_REG_PLOT)){
-            new PredictiveRegionMenu(this).setVisible(true);
+            if(predictiveRegionMenu == null || predictiveRegionMenu.getDataFrame() != this.getActiveDataFrame()) predictiveRegionMenu = new PredictiveRegionMenu(this);
+            predictiveRegionMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CONF_REG_PLOT)){
-            new ConfidenceRegionMenu(this).setVisible(true);
+            if(confidenceRegionMenu == null || confidenceRegionMenu.getDataFrame() != this.getActiveDataFrame()) confidenceRegionMenu = new ConfidenceRegionMenu(this);
+            confidenceRegionMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_SCATTERPLOT)){
-            new ScatterplotMenu(this,re).setVisible(true);
+            if(scatterplotMenu == null || scatterplotMenu.getDataFrame() != this.getActiveDataFrame()) scatterplotMenu = new ScatterplotMenu(this,re);
+            scatterplotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZPATTERNS)){
-            new ZpatternsMenu(this,re).setVisible(true);
+            if(zpatternsMenu == null || zpatternsMenu.getDataFrame() != this.getActiveDataFrame()) zpatternsMenu = new ZpatternsMenu(this,re);
+            zpatternsMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_GEO_MEAN_PLOT)){
-            new GeoMeanPlotMenu(this,re).setVisible(true);
+            if(geoMeanPlotMenu == null || geoMeanPlotMenu.getDataFrame() != this.getActiveDataFrame()) geoMeanPlotMenu = new GeoMeanPlotMenu(this,re);
+            geoMeanPlotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_EMPTY_TERNARY_PLOT)){
             String names[] = {"X", "Y", "Z"};
             TernaryPlot2dDisplay display = new TernaryPlot2dDisplay(names);
@@ -711,11 +735,14 @@ public final class CoDaPackMain extends JFrame{
             frame.setCenter(center);
             frame.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_BIPLOT)){
-            new Biplot3dMenu(this).setVisible(true);
+            if(biplot3dMenu == null || biplot3dMenu.getDataFrame() != this.getActiveDataFrame()) biplot3dMenu = new Biplot3dMenu(this);
+            biplot3dMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ILR_BIPLOT)){
-            new ILRCLRPlotMenu(this).setVisible(true);
+            if(iLRCLRPlotMenu == null || iLRCLRPlotMenu.getDataFrame() != this.getActiveDataFrame()) iLRCLRPlotMenu = new ILRCLRPlotMenu(this);
+            iLRCLRPlotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DENDROGRAM_PLOT)){
-            new DendrogramMenu(this).setVisible(true);
+            if(dendrogramMenu == null || dendrogramMenu.getDataFrame() != this.getActiveDataFrame()) dendrogramMenu = new DendrogramMenu(this); 
+            dendrogramMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_HELP_GRAPHS)){
             // HELP GRAPHS ACTION
         }else if(title.equals(jMenuBar.ITEM_ALR_PLOT)){
@@ -735,7 +762,8 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_NUM_VAR)){
             new Categoric2NumericMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PC_PLOT)){
-            new PrincipalComponentMenu(this).setVisible(true);
+            if(principalComponentMenu == null || principalComponentMenu.getDataFrame() != this.getActiveDataFrame()) principalComponentMenu = new PrincipalComponentMenu(this);
+            principalComponentMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_HELP_HELP)){
             // HELP HELP ACTION
         }else if(title.equals(jMenuBar.ITEM_FORCE_UPDATE)){

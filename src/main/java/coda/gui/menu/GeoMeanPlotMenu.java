@@ -63,6 +63,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
     Rengine re;
     String tempDirR;
     JFrame frameGeoMean;
+    DataFrame df;
     
     public static final long serialVersionUID = 1L;
     
@@ -81,7 +82,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         
         if(selectedNames.length > 0){
             
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             
             double[][] data = df.getNumericalData(selectedNames); // matriu amb les dades corresponents
                 
@@ -271,5 +272,9 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 }
             }
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }

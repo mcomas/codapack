@@ -62,6 +62,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
     Rengine re;
     JFrame frameScatterplot;
     String tempDirR;
+    DataFrame df;
     
     public static final long serialVersionUID = 1L;
     
@@ -80,7 +81,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
         
         if(selectedNames.length == 2 || selectedNames.length == 3){
             
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             
             for(int i=0; i < selectedNames.length; i++){
                 re.eval(selectedNames[i] + " <- NULL");
@@ -270,5 +271,9 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                 }
             }
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }
