@@ -68,7 +68,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBoxMenuItem;
@@ -307,6 +312,23 @@ public class CoDaPlotWindow extends javax.swing.JFrame implements KeyListener{
                         System.err.println(e.getMessage());
                     }
                     
+                }else if(extension.equalsIgnoreCase("jpg")){ // millorem la qualitat de l'exportacio
+                    int width = display.getWidth();
+                    int height = display.getHeight();
+                    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                    Graphics g = image.getGraphics();
+                    Graphics2D graphics = (Graphics2D) g;
+                    display.paintComponent(graphics);//, width, height);
+                    
+                    JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
+                    jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                    jpegParams.setCompressionQuality(1f);
+                    
+                    final ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+                    writer.setOutput(new FileImageOutputStream(new File(file_name)));
+                    writer.write(null, new IIOImage(image,null,null), jpegParams);
+                    graphics.dispose();
+                    image.flush();
                 }
                 /*else if(extension.equalsIgnoreCase("tex")){
                     int width = display.getWidth();
