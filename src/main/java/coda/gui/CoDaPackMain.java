@@ -158,6 +158,7 @@ public final class CoDaPackMain extends JFrame{
     private Biplot3dMenu biplot3dMenu;
     private ILRCLRPlotMenu iLRCLRPlotMenu;
     private DendrogramMenu dendrogramMenu;
+    private ClasUniNormTestMenu clasUniNormTestMenu;
 
     public static CoDaPackConf config = new CoDaPackConf();
     
@@ -659,7 +660,11 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_NORM_TEST)){
             if(normalityTestMenu == null || normalityTestMenu.getDataFrame() != this.getActiveDataFrame()) normalityTestMenu = new NormalityTestMenu(this);
             normalityTestMenu.setVisible(true);
-        }else if(title.equals(jMenuBar.ITEM_ATIP_INDEX)){
+        }else if(title.equals(jMenuBar.ITEM_CLAS_UNI_NORM_TEST)){
+            if(clasUniNormTestMenu == null || clasUniNormTestMenu.getDataFrame() != this.getActiveDataFrame()) clasUniNormTestMenu = new ClasUniNormTestMenu(this,re);
+            clasUniNormTestMenu.setVisible(true);
+        }
+        else if(title.equals(jMenuBar.ITEM_ATIP_INDEX)){
             if(atipicalityIndexMenu == null || atipicalityIndexMenu.getDataFrame() != this.getActiveDataFrame()) atipicalityIndexMenu = new AtipicalityIndexMenu(this);
             atipicalityIndexMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_HELP_STATISTICS)){

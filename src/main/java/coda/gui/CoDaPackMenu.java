@@ -145,6 +145,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_CLAS_STATS_SUMMARY = "Classical statistics summary";
         public JMenuItem itemNormalityTest;
         public final String ITEM_NORM_TEST = "Additive Logistic Normality Tests";
+        public JMenuItem itemClasUniNormTest;
+        public final String ITEM_CLAS_UNI_NORM_TEST = "Classical Univariate Normality test";
         public JMenuItem itemAtipicalityIndex;
         public final String ITEM_ATIP_INDEX = "Atipicality index";
         public JMenuItem itemHelpStatistics;
@@ -422,6 +424,7 @@ public class CoDaPackMenu extends JMenuBar{
             itemCompStatsSummary = new JMenuItem();
             itemClasStatsSummary = new JMenuItem();
             itemNormalityTest = new JMenuItem();
+            itemClasUniNormTest = new JMenuItem();
             itemAtipicalityIndex = new JMenuItem();
             itemHelpStatistics = new JMenuItem();
 
@@ -528,6 +531,7 @@ public class CoDaPackMenu extends JMenuBar{
         add(menuStatistics);
         menuStatistics.addSeparator();
         addJMenuItem(menuStatistics, itemNormalityTest, ITEM_NORM_TEST);
+        addJMenuItem(menuStatistics, itemClasUniNormTest, ITEM_CLAS_UNI_NORM_TEST);
         addJMenuItem(menuStatistics, itemAtipicalityIndex, ITEM_ATIP_INDEX);
         menuStatistics.addSeparator();
         addJMenuItem(menuStatistics,itemHelpStatistics,ITEM_HELP_STATISTICS);
