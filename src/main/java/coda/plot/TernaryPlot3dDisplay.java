@@ -54,6 +54,7 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
     protected boolean[] showZ;
 
     protected boolean isCentered = false;
+    protected boolean showCenter = false;
     protected double[] center;
     
     private final double[] oriV1 = {-0.2886751347, 0.5, -0.2041241452};
@@ -151,6 +152,11 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
             }
         }
     }
+    
+    public void showCenter(boolean center){
+        this.showCenter = center;
+    }
+    
     @Override
     public void transformData(){
         V[0] = transform(oriV1[0], oriV1[1], oriV1[2], V[0]);
@@ -174,8 +180,9 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
                 width/2.3, height/1.9);
 
         drawAreas(g2);
-        drawAxis(g2);        
-        drawData(g2);        
+        drawData(g2);
+        drawCenter(g2);
+        drawAxis(g2);    
         drawLabels(g2);
     }
     private double crossProduct(double x1, double x2, double y1, double y2){
@@ -305,6 +312,18 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
             }
         }
     }
+    
+    private void drawCenter(Graphics2D g2){
+        if(this.showCenter){
+            Point2D o = null;
+            o = defaultTransform.transform(new Point2D.Double((V[0][0]+V[1][0]+V[2][0]+V[3][0])/4,(V[0][1]+V[1][1]+V[2][1]+V[3][1])/4), o);
+            g2.setColor(Color.RED);
+            g2.fill(PlotUtils.drawPoint(o,10.0));
+            g2.setColor(Color.RED);
+            g2.draw(PlotUtils.drawPoint(o, 10.0));
+        }
+    }
+    
     private void drawAreas(Graphics2D g2){
         g2.setPaint( config.getColor("area"));
         Point2D o1 = null, o2 = null, o3 = null, o4 = null;
