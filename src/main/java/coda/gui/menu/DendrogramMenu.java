@@ -127,7 +127,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
 
             if(statisticsCheck.isSelected()){
                 String [] ilrNames = new String[ilr.length];
-                for(int i=0;i<ilr.length;i++) ilrNames[i] = "Balance " + (i+1);
+                for(int i=0;i<ilr.length;i++) ilrNames[i] = "ilr " + (i+1);
 
                 double [] mean = coda.BasicStats.mean(ilr);
                 double [] variance = BasicStats.variance(ilr);
