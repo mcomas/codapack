@@ -59,6 +59,7 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
     protected boolean[] showZ;
 
     protected boolean isCentered = false;
+    protected boolean showCenter = false;
     protected double[] center;
 
     // Simple vertices    
@@ -197,6 +198,11 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
             }
         }
     }
+    
+    public void showCenter(boolean showCenter){
+        this.showCenter = showCenter;
+    }
+    
     @Override
     public void transformData(){
         V[0] = transform(oriV1[0], oriV1[1], V[0]);
@@ -227,6 +233,7 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
         if( showGrid ) drawGrid(g2);
         drawAxis(g2);        
         drawData(g2);
+        drawCenter(g2);
         drawLabels(g2);
     }
     public void drawGrid(Graphics2D g2){
@@ -277,6 +284,18 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
                 }
             }
     }
+    
+    public void drawCenter(Graphics2D g2){
+        if(this.showCenter){
+            Point2D o = null;
+            o = defaultTransform.transform(new Point2D.Double((V[0][0]+V[1][0]+V[2][0])/3,(V[0][1]+V[1][1]+V[2][1])/3),o);
+            g2.setColor(Color.RED);
+            g2.fill(PlotUtils.drawPoint(o,10.0));
+            g2.setColor(Color.RED);
+            g2.draw(PlotUtils.drawPoint(o,10.0));
+        }
+    }
+    
     public void drawAreas(Graphics2D g2){
         g2.setPaint( config.getColor("area"));
         Point2D o1 = null, o2 = null, o3 = null;

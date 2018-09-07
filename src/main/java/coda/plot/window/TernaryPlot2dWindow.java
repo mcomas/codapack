@@ -53,8 +53,7 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
     private TernaryPlot2dDisplay ternaryPlot;
     private JCheckBox checkBoxGridSelector = new JCheckBox();
     private JCheckBox checkBoxCenteredSelector = new JCheckBox();
-    
-    
+    private JCheckBox checkBoxShowCenterSelector = new JCheckBox();
     
     private JButton rotate;
     //private JButton standard;
@@ -78,6 +77,14 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
             
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 checkBoxCenteredSelectorActionPerformed(evt);
+            }
+        });
+        
+        checkBoxShowCenterSelector.setText("Show Center");
+        checkBoxShowCenterSelector.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                checkBoxShowCenterSelectorActionPerformed(evt);
             }
         });
         
@@ -112,6 +119,7 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
         
         controlTernaryPlot.add(checkBoxGridSelector);
         controlTernaryPlot.add(checkBoxCenteredSelector);
+        controlTernaryPlot.add(checkBoxShowCenterSelector);
         particularControls1.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
         particularControls1.add(controlTernaryPlot);
         
@@ -167,5 +175,13 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
         ternaryPlot.repaint();
     }
     
-
+    private void checkBoxShowCenterSelectorActionPerformed(java.awt.event.ActionEvent evt){
+        if(checkBoxShowCenterSelector.isSelected()){
+            ternaryPlot.showCenter(true);
+        }
+        else{
+            ternaryPlot.showCenter(false);
+        }
+        ternaryPlot.repaint();
+    }
 }
