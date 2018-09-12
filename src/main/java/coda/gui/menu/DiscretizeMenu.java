@@ -78,7 +78,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
             double[] res = re.eval("res").asDoubleArray();
             String[] resString = new String[res.length];
             for(int i=0; i < res.length;i++) resString[i] = String.valueOf((int)res[i]);
-            String nameOfVar = "discret " + sel_names[0];
+            String nameOfVar = "d_" + sel_names[0];
             if(df.getNames().contains(nameOfVar)){
                 int aux = 1;
                 while(df.getNames().contains(nameOfVar + Integer.toString(aux))){
