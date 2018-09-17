@@ -48,6 +48,7 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
     protected int[] groups;
     protected String[] gnames;
     protected int[] mapping;
+    protected double[] centerCalculated = new double[2];
 
     protected final double[][] origZ;
     protected double[][] Z;
@@ -155,6 +156,13 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
     
     public void showCenter(boolean center){
         this.showCenter = center;
+        double totalX = 0, totalY = 0;
+        for(int i=0; i < Z.length; i++){
+            totalX += Z[i][0];
+            totalY += Z[i][1];
+        }
+        centerCalculated[0] = totalX/Z.length;
+        centerCalculated[1] = totalY/Z.length;
     }
     
     @Override
@@ -316,11 +324,11 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
     private void drawCenter(Graphics2D g2){
         if(this.showCenter){
             Point2D o = null;
-            o = defaultTransform.transform(new Point2D.Double((V[0][0]+V[1][0]+V[2][0]+V[3][0])/4,(V[0][1]+V[1][1]+V[2][1]+V[3][1])/4), o);
+            o = defaultTransform.transform(new Point2D.Double(centerCalculated[0],centerCalculated[1]), o);
             g2.setColor(Color.RED);
-            g2.fill(PlotUtils.drawPoint(o,10.0));
+            g2.fillRect((int)o.getX(),(int)o.getY(),10,10);
             g2.setColor(Color.RED);
-            g2.draw(PlotUtils.drawPoint(o, 10.0));
+            g2.drawRect((int)o.getX(),(int)o.getY(),10,10);
         }
     }
     

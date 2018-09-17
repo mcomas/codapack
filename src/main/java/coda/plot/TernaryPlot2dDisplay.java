@@ -296,9 +296,7 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
     public void drawCenter(Graphics2D g2){
         if(this.showCenter){
             Point2D o = null;
-            Point2D no = new Point2D.Double(centerCalculated[0],centerCalculated[1]);
             o = defaultTransform.transform(new Point2D.Double(centerCalculated[0],centerCalculated[1]),o);
-            //o = defaultTransform.transform(new Point2D.Double((V[0][0]+V[1][0]+V[2][0])/3,(V[0][1]+V[1][1]+V[2][1])/3),o);
             g2.setColor(Color.RED);
             g2.fillRect((int)o.getX(), (int)o.getY(), 10, 10);
             g2.setColor(Color.RED);
