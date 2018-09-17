@@ -74,11 +74,15 @@ public class DiscretizeMenu extends AbstractMenuDialog{
             
             re.assign("x", df.get(sel_names[0]).getNumericalData());
             
-            re.eval("res <- as.numeric(arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks = " + breaksField.getText() + "))");
-            double[] res = re.eval("res").asDoubleArray();
+            re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks = " + breaksField.getText() + "))");
+            double[] res = re.eval("as.numeric(res)").asDoubleArray();
             String[] resString = new String[res.length];
-            for(int i=0; i < res.length;i++) resString[i] = String.valueOf((int)res[i]);
+            String[] resIntervals = re.eval("as.character(res)").asStringArray();
+            
+            for(int i=0; i < res.length;i++) resString[i] = String.valueOf((int)res[i]) + " " + resIntervals[i];
+            
             String nameOfVar = "d_" + sel_names[0];
+            
             if(df.getNames().contains(nameOfVar)){
                 int aux = 1;
                 while(df.getNames().contains(nameOfVar + Integer.toString(aux))){
