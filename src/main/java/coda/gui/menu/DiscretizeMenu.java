@@ -26,9 +26,12 @@ package coda.gui.menu;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
+import java.awt.GridLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.rosuda.JRI.RList;
 import org.rosuda.JRI.Rengine;
@@ -40,6 +43,7 @@ import org.rosuda.JRI.Rengine;
 public class DiscretizeMenu extends AbstractMenuDialog{
     
     Rengine re;
+    JPanel panel;
     
     public static final long serialVersionUID = 1L;
     
@@ -49,6 +53,8 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     JComboBox optionsList = new JComboBox(options);
     JLabel methodLabel = new JLabel("Method :");
     JLabel breaksLabel = new JLabel("Nº breaks: ");
+    JLabel optionToPutNames = new JLabel("Put the name of the groups: ");
+    JCheckBox namesOptionCheckBox;
     JTextField breaksField = new JTextField(5);
     DataFrame df;
     
@@ -61,6 +67,10 @@ public class DiscretizeMenu extends AbstractMenuDialog{
         optionsPanel.add(breaksLabel);
         breaksField.setText("3");
         optionsPanel.add(breaksField);
+        optionsPanel.add(optionToPutNames);
+        namesOptionCheckBox = new JCheckBox();
+        namesOptionCheckBox.setSelected(false);
+        optionsPanel.add(namesOptionCheckBox);
     }
     
     @Override
@@ -72,14 +82,51 @@ public class DiscretizeMenu extends AbstractMenuDialog{
         
         if(sel_names.length == 1){
             
+            this.dispose();
+            
             re.assign("x", df.get(sel_names[0]).getNumericalData());
             
             re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks = " + breaksField.getText() + "))");
-            double[] res = re.eval("as.numeric(res)").asDoubleArray();
-            String[] resString = new String[res.length];
-            String[] resIntervals = re.eval("as.character(res)").asStringArray();
             
-            for(int i=0; i < res.length;i++) resString[i] = String.valueOf((int)res[i]) + " " + resIntervals[i];
+            double[] res = re.eval("as.numeric(res)").asDoubleArray();
+            
+            String[] resString = new String[df.get(sel_names[0]).size()]; /* creem una variable per guardar els noms */
+            String[] resIntervals = re.eval("as.character(res)").asStringArray();
+            for(int i=0; i < resIntervals.length;i++) resString[i] = resIntervals[i];
+            
+            if(namesOptionCheckBox.isSelected()){
+                String[] names = new String[Integer.valueOf(breaksField.getText())]; /* array to save the names */
+                
+                panel = new JPanel();
+                panel.setLayout(new GridLayout(0,2,2,2));
+                JTextField[] namesField = new JTextField[Integer.valueOf(breaksField.getText())]; /* textFields to read the names */
+                JLabel[] namesLabel = new JLabel[Integer.valueOf(breaksField.getText())]; /* labels for the names */
+                
+                for(int i=0; i < Integer.valueOf(breaksField.getText()); i++){
+                    namesField[i] = new JTextField(20);
+                    namesLabel[i] = new JLabel("Put the group name " + String.valueOf(i+1) + " :");
+                    panel.add(namesLabel[i]);
+                    panel.add(namesField[i]);
+                }
+                
+                boolean exit = false;
+                
+                while(!exit){
+                    
+                    exit = true;
+                
+                    int answer = JOptionPane.showConfirmDialog(null, panel, "Discretize", JOptionPane.OK_CANCEL_OPTION);
+
+                    if(answer == JOptionPane.OK_OPTION){
+                        for(int i = 0; i < Integer.valueOf(breaksField.getText()) && exit;i++){
+                            names[i] = namesField[i].getText();
+                            if(namesField[i].getText().length() == 0) exit = false;
+                        }
+                        if(exit) for(int i = 0; i < resIntervals.length; i++) resString[i] = names[(int)res[i]-1];
+                        else JOptionPane.showMessageDialog(null,"Some field is empty");
+                    }
+                }
+            }
             
             String nameOfVar = "d_" + sel_names[0];
             
