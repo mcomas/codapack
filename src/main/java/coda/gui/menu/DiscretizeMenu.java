@@ -49,7 +49,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     
     /** options var **/
     
-    String[] options = {"interval", "frequency", "cluster"};
+    String[] options = {"interval", "frequency", "cluster","fixed"};
     JComboBox optionsList = new JComboBox(options);
     JLabel methodLabel = new JLabel("Method :");
     JLabel breaksLabel = new JLabel("Nº breaks: ");
@@ -86,7 +86,43 @@ public class DiscretizeMenu extends AbstractMenuDialog{
             
             re.assign("x", df.get(sel_names[0]).getNumericalData());
             
-            re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks = " + breaksField.getText() + "))");
+            if(optionsList.getSelectedItem().toString().equals("fixed")){
+                panel = new JPanel();
+                panel.setLayout(new GridLayout(0,2,2,2));
+                JTextField[] breaksFieldPanel = new JTextField[Integer.valueOf(breaksField.getText())];
+                JLabel[] breaksNamesLabel = new JLabel[Integer.valueOf(breaksField.getText())];
+                for(int i = 0; i < Integer.valueOf(breaksField.getText());i++){
+                    breaksFieldPanel[i] = new JTextField(20);
+                    breaksNamesLabel[i] = new JLabel("Put the break value" + String.valueOf(i+1) + " :");
+                    panel.add(breaksNamesLabel[i]);
+                    panel.add(breaksFieldPanel[i]);
+                }
+                
+                String[] breaksValues = new String[Integer.valueOf(breaksField.getText())];
+                
+                boolean exit = false;
+                
+                while(!exit){
+                    
+                    exit = true;
+                
+                    int answer = JOptionPane.showConfirmDialog(null, panel, "Set breaks values", JOptionPane.OK_CANCEL_OPTION);
+
+                    if(answer == JOptionPane.OK_OPTION){
+                        for(int i = 0; i < Integer.valueOf(breaksField.getText()) && exit;i++){
+                            breaksValues[i] = breaksFieldPanel[i].getText();
+                            if(breaksFieldPanel[i].getText().length() == 0) exit = false;
+                        }
+                        if(!exit) JOptionPane.showMessageDialog(null,"Some field is empty");
+                    }
+                }
+                
+                re.assign("breaks", breaksValues);
+                re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks = breaks))");
+            }
+            else{
+                re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks = " + breaksField.getText() + "))");
+            }
             
             double[] res = re.eval("as.numeric(res)").asDoubleArray();
             
@@ -115,7 +151,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
                     
                     exit = true;
                 
-                    int answer = JOptionPane.showConfirmDialog(null, panel, "Discretize", JOptionPane.OK_CANCEL_OPTION);
+                    int answer = JOptionPane.showConfirmDialog(null, panel, "Set name groups", JOptionPane.OK_CANCEL_OPTION);
 
                     if(answer == JOptionPane.OK_OPTION){
                         for(int i = 0; i < Integer.valueOf(breaksField.getText()) && exit;i++){

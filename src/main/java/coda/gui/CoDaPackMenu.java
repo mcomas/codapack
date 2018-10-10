@@ -124,6 +124,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_FILTER = "Simple filter";
         public final JMenuItem itemAdvFilter;
         public final String ITEM_ADV_FILTER = "Advanced filter";
+        public JMenuItem itemChangeCategoricalNameGroup;
+        public final String ITEM_CHANGE_CAT_NAME_GROUP = "Change categorical name group";
         public JMenuItem itemSetDetectionLimit;
         public final String ITEM_SETDETECTION ="Set detection limit";
         public JMenuItem itemCategorizeVariables;
@@ -413,6 +415,7 @@ public class CoDaPackMenu extends JMenuBar{
             itemSortData = new JMenuItem();
             itemFilter = new JMenuItem();
             itemAdvFilter = new JMenuItem();
+            itemChangeCategoricalNameGroup = new JMenuItem();
             itemSetDetectionLimit = new JMenuItem();
             itemCategorizeVariables = new JMenuItem();
             itemNumerizeVariables = new JMenuItem();
@@ -518,6 +521,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuData,itemAdvFilter,ITEM_ADV_FILTER);
         addJMenuItem(menuData, itemCategorizeVariables, ITEM_CAT_VAR);
         addJMenuItem(menuData, itemNumerizeVariables, ITEM_NUM_VAR);
+        addJMenuItem(menuData,itemChangeCategoricalNameGroup, ITEM_CHANGE_CAT_NAME_GROUP);
         menuData.addSeparator();
         addJMenuItem(menuData, itemAddVariables, ITEM_ADD_VAR);
         addJMenuItem(menuData, itemDeleteVariables, ITEM_DEL_VAR);

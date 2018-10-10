@@ -707,6 +707,8 @@ public final class CoDaPackMain extends JFrame{
         }else if (title.equals(jMenuBar.ITEM_SETDETECTION)){
             if(setDetectionLimitMenu == null || setDetectionLimitMenu.getDataFrame() != this.getActiveDataFrame()) setDetectionLimitMenu = new SetDetectionLimitMenu(this);  
             setDetectionLimitMenu.setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_CHANGE_CAT_NAME_GROUP)){
+            //new ChangeGroupNameMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
             if(ternaryPlotMenu == null || ternaryPlotMenu.getDataFrame() != this.getActiveDataFrame()) ternaryPlotMenu = new TernaryPlotMenu(this);
             ternaryPlotMenu.setVisible(true);
