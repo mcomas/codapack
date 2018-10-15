@@ -55,7 +55,6 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
             df = mainApplication.getActiveDataFrame();
             boolean exit = false;
             JLabel labelMessage = new JLabel("Following selected order, use x1 to x" + String.valueOf(selectedNames.length) + " instead of variable names to build the expression to subset");
-            JOptionPane.showMessageDialog(null, labelMessage);
             boolean goodExpression = false, goodName = false;
             String expression = null, dataFrameNewName = null;
             
@@ -63,6 +62,8 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                 
                 pane = new JPanel();
                 pane.setLayout(new GridLayout(0,2,2,2));
+                pane.add(labelMessage);
+                pane.add(new JLabel(""));
                 JTextField expressionField, dataFrameName;
                 if(goodExpression) expressionField = new JTextField(expression,20);
                 else expressionField = new JTextField(20);
