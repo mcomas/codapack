@@ -10,6 +10,7 @@ import coda.Variable;
 import coda.gui.CoDaPackMain;
 import java.util.Arrays;
 import java.util.Vector;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import org.rosuda.JRI.Rengine;
 
@@ -21,12 +22,15 @@ public class SortDataMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
+    JCheckBox decSort;
     
     public static final long serialVersionUID = 1L;
     
     public SortDataMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Sort Data Menu", false, false, true);
         re = r;
+        decSort = new JCheckBox("Decreasing sort",false);
+        this.optionsPanel.add(decSort);
     }
     
     @Override
@@ -71,11 +75,21 @@ public class SortDataMenu extends AbstractMenuDialog{
             
             // the dataframe was created on R with the name mydf
             // now we do the sort in R
+            String orderInstruction;
             
-            String orderInstruction = "order(";
-            for(int i=0; i < selectedNames.length;i++){
-                orderInstruction += "mydf$x" + String.valueOf(i+1);
-                if(i != selectedNames.length-1) orderInstruction += ",";
+            if(this.decSort.isSelected()){
+                orderInstruction = "order(";
+                for(int i=0; i < selectedNames.length;i++){
+                    orderInstruction += "-mydf$x" + String.valueOf(i+1);
+                    if(i != selectedNames.length-1) orderInstruction += ",";
+                }
+            }
+            else{
+                orderInstruction = "order(";
+                for(int i=0; i < selectedNames.length;i++){
+                    orderInstruction += "mydf$x" + String.valueOf(i+1);
+                    if(i != selectedNames.length-1) orderInstruction += ",";
+                }
             }
             
             orderInstruction += ")";
