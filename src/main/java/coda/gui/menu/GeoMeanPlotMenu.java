@@ -138,7 +138,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 for(int i=0; i < selectedNames.length;i++){
                     re.eval("data <- cbind(data," + selectedNames[i] +")");
                 }
-                re.eval("barplot(data, beside=T,legend=rownames(data),col=rainbow(length(rownames(data))), args.legend=list(cex=0.8,x=\"topright\"))");
+                re.eval("barplot(data,main = \"Geometric Mean Barplot\", beside=T,legend=rownames(data),col=rainbow(length(rownames(data))), args.legend=list(cex=0.8,x=\"topright\"))");
             }
                 
                 re.eval("dev.off()");
