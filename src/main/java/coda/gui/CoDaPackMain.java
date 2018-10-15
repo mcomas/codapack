@@ -159,6 +159,7 @@ public final class CoDaPackMain extends JFrame{
     private ILRCLRPlotMenu iLRCLRPlotMenu;
     private DendrogramMenu dendrogramMenu;
     private ClasUniNormTestMenu clasUniNormTestMenu;
+    private ChangeGroupNameMenu changeGroupNameMenu;
 
     public static CoDaPackConf config = new CoDaPackConf();
     
@@ -708,7 +709,8 @@ public final class CoDaPackMain extends JFrame{
             if(setDetectionLimitMenu == null || setDetectionLimitMenu.getDataFrame() != this.getActiveDataFrame()) setDetectionLimitMenu = new SetDetectionLimitMenu(this);  
             setDetectionLimitMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CHANGE_CAT_NAME_GROUP)){
-            //new ChangeGroupNameMenu(this).setVisible(true);
+            if(changeGroupNameMenu == null || changeGroupNameMenu.getDataFrame() != this.getActiveDataFrame()) changeGroupNameMenu = new ChangeGroupNameMenu(this);
+            changeGroupNameMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
             if(ternaryPlotMenu == null || ternaryPlotMenu.getDataFrame() != this.getActiveDataFrame()) ternaryPlotMenu = new TernaryPlotMenu(this);
             ternaryPlotMenu.setVisible(true);

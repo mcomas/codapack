@@ -51,7 +51,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
      */
     
     public LogRatioEMMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Log-ratio EM Algorithm",false);
+        super(mainApp, "Logratio-EM zero Replacement Menu",false);
         re = r;
         
         optionsPanel.add(robOption);

@@ -117,7 +117,7 @@ public class CoDaPackMenu extends JMenuBar{
         public final JMenuItem itemZerosR;
         public final String ITEM_ZEROS_R = "Rounded zero replacement with R";
         public final JMenuItem itemLogRatio;
-        public final String ITEM_LOG_RATIO = "Log-ratio EM Algorithm";
+        public final String ITEM_LOG_RATIO = "Logratio-EM zero Replacement";
         public final JMenuItem itemSortData;
         public final String ITEM_SORT_DATA = "Sort data";
         public final JMenuItem itemFilter;
