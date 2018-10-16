@@ -25,8 +25,10 @@ import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
 import coda.io.ImportRDA;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
 import java.awt.Point;
 import javax.script.ScriptException;
 import javax.swing.JButton;
@@ -34,6 +36,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import org.renjin.sexp.StringVector;
 /**
  *
@@ -130,6 +133,13 @@ public abstract class AbstractMenuDialog extends JDialog{
             
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dispose();
+            }
+        });
+        JButton helpButton = new JButton("Help");
+        southPanel.add(helpButton);
+        helpButton.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                System.out.println("He apretat el boto help");
             }
         });
         getContentPane().add(southPanel, BorderLayout.SOUTH);
