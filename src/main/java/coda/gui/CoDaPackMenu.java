@@ -115,7 +115,7 @@ public class CoDaPackMenu extends JMenuBar{
         public JMenuItem itemZeros;
         public final String ITEM_ZEROS = "Rounded zero replacement";
         public final JMenuItem itemZerosR;
-        public final String ITEM_ZEROS_R = "Rounded zero replacement with R";
+        public final String ITEM_ZEROS_R = "Rounded zero replacement";
         public final JMenuItem itemLogRatio;
         public final String ITEM_LOG_RATIO = "Logratio-EM zero Replacement";
         public final JMenuItem itemSortData;
@@ -125,7 +125,7 @@ public class CoDaPackMenu extends JMenuBar{
         public final JMenuItem itemAdvFilter;
         public final String ITEM_ADV_FILTER = "Advanced filter";
         public JMenuItem itemChangeCategoricalNameGroup;
-        public final String ITEM_CHANGE_CAT_NAME_GROUP = "Change categorical name group";
+        public final String ITEM_CHANGE_CAT_NAME_GROUP = "Change Categorical label";
         public JMenuItem itemSetDetectionLimit;
         public final String ITEM_SETDETECTION ="Set detection limit";
         public JMenuItem itemCategorizeVariables;
@@ -512,7 +512,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuData, itemPerturbate, ITEM_PERTURBATE);
         addJMenuItem(menuData, itemPower, ITEM_POWER);
         addJMenuItem(menuData, itemSetDetectionLimit, ITEM_SETDETECTION); 
-        addJMenuItem(menuData, itemZeros, ITEM_ZEROS);
+        //addJMenuItem(menuData, itemZeros, ITEM_ZEROS);
         addJMenuItem(menuData, itemZerosR, ITEM_ZEROS_R);
         addJMenuItem(menuData,itemLogRatio,ITEM_LOG_RATIO);
         menuData.addSeparator();
