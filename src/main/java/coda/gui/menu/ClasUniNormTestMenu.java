@@ -58,22 +58,16 @@ public class ClasUniNormTestMenu extends AbstractMenuDialog{
             outputPanel.addOutput(new OutputForR(re.eval("out").asStringArray()));
             this.dispose();
         }
-        else if(normOptionList.getSelectedItem().toString().equals("Kolmogorov-Smirnov Test") && sel_names.length == 2){ // kolmogorov-smirnov test
+        else if(normOptionList.getSelectedItem().toString().equals("Kolmogorov-Smirnov Test") && sel_names.length == 1){ // kolmogorov-smirnov test
             
-            // configurem la primera variable en R
+            // configurem la variable en R
             re.eval(sel_names[0] + " <- NULL");
             for(double j: df.get(sel_names[0]).getNumericalData()){
                 re.eval(sel_names[0] + " <- c(" + sel_names[0] + "," + String.valueOf(j) + ")");
             }
             
-            // configurem la segona variable en R
-            re.eval(sel_names[1] + " <- NULL");
-            for(double j: df.get(sel_names[1]).getNumericalData()){
-                re.eval(sel_names[1] + " <- c(" + sel_names[1] + "," + String.valueOf(j) + ")");
-            }
-            
             // cridem la funcio
-            re.eval("out <- capture.output(stats::ks.test(" + sel_names[0] + "," + sel_names[1] + "))");
+            re.eval("out <- capture.output(stats::ks.test(" + sel_names[0] + ",pnorm,mean=mean("+sel_names[0]+"), sd=sd("+sel_names[0]+")))");
             outputPanel.addOutput(new OutputText("<strong>Kolmogorov-Smirnov Test</strong>"));
             outputPanel.addOutput(new OutputForR(re.eval("out").asStringArray()));
             this.dispose();
@@ -83,7 +77,7 @@ public class ClasUniNormTestMenu extends AbstractMenuDialog{
                 JOptionPane.showMessageDialog(null,"Select one variable for shapiro test");
             }
             else{
-                JOptionPane.showMessageDialog(null, "Select two variables for Kolmogorov test");
+                JOptionPane.showMessageDialog(null, "Select one variables for Kolmogorov test");
             }
         }
     }
