@@ -51,6 +51,7 @@ public abstract class AbstractMenuDialog extends JDialog{
     ImportRDA imp_df;
     boolean allowEmpty = false;
     String variables[];
+    String helpText; // variable que serveix per guardar el text que s'ha de posar al boto help
     int WIDTH = 650;//560;
     int HEIGHT = 500;//430;
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty, boolean categoric){
