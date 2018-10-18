@@ -241,6 +241,7 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
         if( showGrid ) drawGrid(g2);
         drawAxis(g2);        
         drawData(g2);
+        this.showCenter(this.showCenter);
         drawCenter(g2);
         drawLabels(g2);
     }

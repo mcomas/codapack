@@ -189,8 +189,9 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
 
         drawAreas(g2);
         drawData(g2);
+        drawAxis(g2);
+        this.showCenter(this.showCenter);
         drawCenter(g2);
-        drawAxis(g2);    
         drawLabels(g2);
     }
     private double crossProduct(double x1, double x2, double y1, double y2){
