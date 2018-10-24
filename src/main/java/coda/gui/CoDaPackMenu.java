@@ -550,7 +550,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuDevelopment,itemModelS2, ITEM_MODEL_S2);
         addJMenuItem(menuDevelopment,itemModelS3, ITEM_MODEL_S3);
         addJMenuItem(menuDevelopment,itemModelS4, ITEM_MODEL_S4);
-        add(menuDevelopment);
+        //add(menuDevelopment);
         
     }
 
