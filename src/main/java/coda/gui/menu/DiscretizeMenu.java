@@ -52,7 +52,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     String[] options = {"interval", "frequency", "cluster","fixed"};
     JComboBox optionsList = new JComboBox(options);
     JLabel methodLabel = new JLabel("Method :");
-    JLabel breaksLabel = new JLabel("Nº breaks: ");
+    JLabel breaksLabel = new JLabel("Nº levels: ");
     JLabel optionToPutNames = new JLabel("Put the name of the groups: ");
     JCheckBox namesOptionCheckBox;
     JTextField breaksField = new JTextField(5);
@@ -89,36 +89,45 @@ public class DiscretizeMenu extends AbstractMenuDialog{
             if(optionsList.getSelectedItem().toString().equals("fixed")){
                 panel = new JPanel();
                 panel.setLayout(new GridLayout(0,2,2,2));
-                JTextField[] breaksFieldPanel = new JTextField[Integer.valueOf(breaksField.getText())];
-                JLabel[] breaksNamesLabel = new JLabel[Integer.valueOf(breaksField.getText())];
-                for(int i = 0; i < Integer.valueOf(breaksField.getText());i++){
+                JTextField[] breaksFieldPanel = new JTextField[Integer.valueOf(breaksField.getText())-1];
+                JLabel[] breaksNamesLabel = new JLabel[Integer.valueOf(breaksField.getText())-1];
+                for(int i = 0; i < Integer.valueOf(breaksField.getText())-1;i++){
                     breaksFieldPanel[i] = new JTextField(20);
                     breaksNamesLabel[i] = new JLabel("Put the break value" + String.valueOf(i+1) + " :");
                     panel.add(breaksNamesLabel[i]);
                     panel.add(breaksFieldPanel[i]);
                 }
                 
-                String[] breaksValues = new String[Integer.valueOf(breaksField.getText())];
+                String[] breaksValues = new String[Integer.valueOf(breaksField.getText())-1];
                 
-                boolean exit = false;
-                
-                while(!exit){
-                    
-                    exit = true;
-                
-                    int answer = JOptionPane.showConfirmDialog(null, panel, "Set breaks values", JOptionPane.OK_CANCEL_OPTION);
+                if(Integer.valueOf(breaksField.getText()) > 1){
 
-                    if(answer == JOptionPane.OK_OPTION){
-                        for(int i = 0; i < Integer.valueOf(breaksField.getText()) && exit;i++){
-                            breaksValues[i] = breaksFieldPanel[i].getText();
-                            if(breaksFieldPanel[i].getText().length() == 0) exit = false;
+                    boolean exit = false;
+
+                    while(!exit){
+
+                        exit = true;
+
+                        int answer = JOptionPane.showConfirmDialog(null, panel, "Set breaks values", JOptionPane.OK_CANCEL_OPTION);
+
+                        if(answer == JOptionPane.OK_OPTION){
+                            for(int i = 0; i < Integer.valueOf(breaksField.getText())-1 && exit;i++){
+                                breaksValues[i] = breaksFieldPanel[i].getText();
+                                if(breaksFieldPanel[i].getText().length() == 0) exit = false;
+                            }
+                            if(!exit) JOptionPane.showMessageDialog(null,"Some field is empty");
                         }
-                        if(!exit) JOptionPane.showMessageDialog(null,"Some field is empty");
                     }
                 }
                 
-                re.assign("breaks", breaksValues);
-                re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks = breaks))");
+                String breaksStringToR = "c(-Inf,";
+                for(String i: breaksValues){
+                    breaksStringToR += i +",";
+                }
+                
+                breaksStringToR += "Inf)";
+                
+                re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks =" + breaksStringToR + "))");
             }
             else{
                 re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks = " + breaksField.getText() + "))");
