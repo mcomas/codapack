@@ -101,10 +101,10 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             
             if(selectedNames.length == 2){ // printem el gràfic en 2D
                 
-                if(System.getProperty("os.name").startsWith("Windows")){ // si es amb windows plotly funciona correctament
+                /*if(System.getProperty("os.name").startsWith("Windows")){ // si es amb windows plotly funciona correctament
                     re.eval("capture.output(plotly::plot_ly(data = mydf, x = ~" + selectedNames[0] + ", y = ~" + selectedNames[1] + "))");
                 }
-                else{ // si no es windows llavors plotly no funciona printem el grafic amb una alternativa
+                else{ // si no es windows llavors plotly no funciona printem el grafic amb una alternativa*/
                     re.eval("mypath = tempdir()");
                     tempDirR = re.eval("print(mypath)").asString();
                     tempDirR += "\\out.png";
@@ -121,14 +121,14 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                     } catch (IOException ex) {
                         Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+                //}
             }
             else{ // printem el gràfic en 3D
                 
-                if(System.getProperty("os.name").startsWith("Windows")){ // si es windows plotly funciona correctament
+                /*if(System.getProperty("os.name").startsWith("Windows")){ // si es windows plotly funciona correctament
                     re.eval("capture.output(plotly::plot_ly(data = mydf, x = ~" + selectedNames[0] + ", y = ~" + selectedNames[1] + ", z = ~" + selectedNames[2] + "))");
                 }
-                else{ // si no es windows llavors plotly no funciona printem el grafic amb una alternativa
+                else{ // si no es windows llavors plotly no funciona printem el grafic amb una alternativa*/
                     
                     re.eval("mypath = tempdir()");
                     tempDirR = re.eval("print(mypath)").asString();
@@ -146,7 +146,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                     } catch (IOException ex) {
                         Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+                //}
             }
             
             this.dispose();
