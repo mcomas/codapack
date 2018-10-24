@@ -10,12 +10,16 @@ import coda.gui.CoDaPackMain;
 import coda.gui.utils.BoxDataSelector;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -29,6 +33,7 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
     String [] sel_names;
     BoxDataSelector boxDataSel;
     JDialog dialog;
+    JPanel panel;
     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public ChangeGroupNameMenu(final CoDaPackMain mainApp){
@@ -65,13 +70,56 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
            accept.addActionListener(new java.awt.event.ActionListener() {
                @Override
                public void actionPerformed(ActionEvent e) {
-                   // aqui hem de fer la operació necessaria
+                   
+                   String [] selected = boxDataSel.getSelectedData();
+                   int n = selected.length; // numero de variables
+                   if(n > 0){
+                        dialog.setVisible(false);
+
+                        panel = new JPanel();
+                        panel.setLayout(new GridLayout(0,2,2,2));
+                        JTextField[] namesFieldPanel = new JTextField[n];
+                        JLabel[] namesLabel = new JLabel[n];
+                        for(int i= 0; i <n; i++){
+                            namesFieldPanel[i] = new JTextField(20);
+                            namesLabel[i] = new JLabel("Put the break value to replace \"" + selected[i] + "\" :");
+                            panel.add(namesLabel[i]);
+                            panel.add(namesFieldPanel[i]);
+                        }
+
+                        String [] namesValues = new String[n];
+                        boolean exit = false;
+
+                        while(!exit){
+
+                            exit = true;
+                            int answer = JOptionPane.showConfirmDialog(null,panel,"Set names values", JOptionPane.OK_CANCEL_OPTION);
+
+                            if(answer == JOptionPane.OK_OPTION){
+                                for(int i=0; i <n && exit; i++){
+                                    namesValues[i] = namesFieldPanel[i].getText();
+                                    if(namesFieldPanel[i].getText().length() == 0) exit = false;
+                                }
+                                if(!exit) JOptionPane.showMessageDialog(null,"Some field is empty");
+                            }
+                        }
+
+                        // aqui ja tenim els noms q volem canviar
+
+                        for(int i=0; i<n; i++){
+                            for(int j=0; j <df.get(sel_names[0]).size(); j++){
+                                if(df.get(sel_names[0]).get(j).toString().equals(selected[i])) df.get(sel_names[0]).get(j).setValue(namesValues[i]);
+                            }
+                        }
+
+                        mainApplication.updateDataFrame(df);
+                   }
+                   else JOptionPane.showMessageDialog(null, "Please select one name");
                }
            });
            
            setVisible(false);
-           dialog.setVisible(false);
-           
+           dialog.setVisible(true);
        }
        else{
            JOptionPane.showMessageDialog(null, "Please select one variable");
