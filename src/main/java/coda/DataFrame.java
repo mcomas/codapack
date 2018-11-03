@@ -255,14 +255,22 @@ public class DataFrame extends HashMap<String, Variable>{
         return data;
     }
     
-    public int[] getRowsToDelete(String variable, String value){
+    public int[] getRowsToDelete(String variable, String[] value){
         Vector<Integer> aux = new Vector<Integer>();
         Variable var = this.get(variable); // obtenim valors de variables
+        boolean found;
         
         for(int i=0; i < var.size();i++){
-            if(!((Text)var.get(i)).value.equals(value)){
-                aux.add(i);
+            found = false;
+            for(int j=0;(j < value.length) && (!found);j++){
+                if(!((Text)var.get(i)).value.equals(value[j])){
+                    found = false;
+                }
+                else{
+                    found = true;
+                }
             }
+            if(!found) aux.add(i);
         }
     
         int[] res = new int[aux.size()];

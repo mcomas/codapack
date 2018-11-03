@@ -102,17 +102,11 @@ public class FilterMenu extends AbstractMenuDialog{
                 
                 // Creem tots els subframes que ens facin falta
                 
-                DataFrame[] dataframes = new DataFrame[selected.length]; // array de dataframes
-                
-                for(int i=0; i < selected.length;i++){
-                    // cal obtenir les files que hem d'eliminar
-                    int[] rowsToDelete = df.getRowsToDelete(sel_names[0],selected[i]); // obtenim posicions que em de borrar
-                    dataframes[i] = new DataFrame(df);
-                    dataframes[i].subFrame(rowsToDelete);
-                    dataframes[i].setName(df.name + "_" + selected[i]);
-                }
-                
-                for(int i=0; i < dataframes.length;i++) mainApplication.addDataFrame(dataframes[i]);
+                DataFrame newDataFrame = new DataFrame(df); // array de dataframes
+                int [] rowsToDelete = df.getRowsToDelete(sel_names[0], selected);
+                newDataFrame.subFrame(rowsToDelete);
+                newDataFrame.setName(df.name + "_Fil_" + sel_names[0]);
+                mainApplication.addDataFrame(newDataFrame);
             }
             
             });
