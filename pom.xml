@@ -161,6 +161,11 @@
             <version>5.5.8</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.jzy3d</groupId>
+            <artifactId>jzy3d-api</artifactId>
+            <version>1.0.2</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -172,6 +177,11 @@
             <id>WSO2</id>
             <name>WSO2 Repository</name>
             <url>http://dist.wso2.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>jzy3d-releases</id>
+            <name>Jzy3d Releases</name>
+            <url>http://maven.jzy3d.org/releases</url>
         </repository>
     </repositories>
 </project>

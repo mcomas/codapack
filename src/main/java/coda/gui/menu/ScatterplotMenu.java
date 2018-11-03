@@ -52,6 +52,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AnalysisLauncher;
 
 /**
  *
@@ -101,52 +103,8 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             
             if(selectedNames.length == 2){ // printem el gràfic en 2D
                 
-                /*if(System.getProperty("os.name").startsWith("Windows")){ // si es amb windows plotly funciona correctament
-                    re.eval("capture.output(plotly::plot_ly(data = mydf, x = ~" + selectedNames[0] + ", y = ~" + selectedNames[1] + "))");
-                }
-                else{ // si no es windows llavors plotly no funciona printem el grafic amb una alternativa*/
-                    re.eval("mypath = tempdir()");
-                    tempDirR = re.eval("print(mypath)").asString();
-                    tempDirR += "\\out.png";
-            
-                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
-                    re.eval("png(mypath,width=700,height=700");
-                    re.eval("plot(" + selectedNames[0] + "," + selectedNames[1] + ", main =\"Scatterplot 2D\", pch=19)");
-                    re.eval("abline(lm(" + selectedNames[1] + "~" + selectedNames[0] + "), col=\"red\")");
-                    re.eval("lines(lowess(" + selectedNames[0] + "," + selectedNames[1] + "), col=\"blue\")");
-                    re.eval("dev.off()");
-            
-                    try {
-                        plotScatterplot();
-                    } catch (IOException ex) {
-                        Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                //}
             }
             else{ // printem el gràfic en 3D
-                
-                /*if(System.getProperty("os.name").startsWith("Windows")){ // si es windows plotly funciona correctament
-                    re.eval("capture.output(plotly::plot_ly(data = mydf, x = ~" + selectedNames[0] + ", y = ~" + selectedNames[1] + ", z = ~" + selectedNames[2] + "))");
-                }
-                else{ // si no es windows llavors plotly no funciona printem el grafic amb una alternativa*/
-                    
-                    re.eval("mypath = tempdir()");
-                    tempDirR = re.eval("print(mypath)").asString();
-                    tempDirR += "\\out.png";
-            
-                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
-                    re.eval("png(mypath,width=700,height=700");
-                    re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +", pch=16, highlight.3d=TRUE,type=\"h\", main = \"3D Scatterplot\")");
-                    re.eval("fit <- lm(" + selectedNames[2] + "~ " + selectedNames[0] + "+" + selectedNames[1] + ")");
-                    re.eval("s3d$plane3d(fit)");
-                    re.eval("dev.off()");
-            
-                    try {
-                        plotScatterplot();
-                    } catch (IOException ex) {
-                        Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                //}
             }
             
             this.dispose();
@@ -155,122 +113,27 @@ public class ScatterplotMenu extends AbstractMenuDialog{
         else{
             JOptionPane.showMessageDialog(frame,"Please select two or three variables");
         }
+    }
+    
+    private class ScatterPlot extends AbstractAnalysis{
         
-    }
-    
-    private void plotScatterplot() throws IOException {
-            Font f = new Font("Arial", Font.PLAIN,12);
-            UIManager.put("Menu.font", f);
-            UIManager.put("MenuItem.font",f);
-            JMenuBar menuBar = new JMenuBar();
-            JMenu menu = new JMenu("File");
-            JMenuItem menuItem = new JMenuItem("Open");
-            menuBar.add(menu);
-            frameScatterplot = new JFrame();
-            JPanel panel = new JPanel();
-            menu.add(menuItem);
-            menuItem = new JMenuItem("Export");
-            JMenu submenuExport = new JMenu("Export");
-            menuItem = new JMenuItem("Export As PNG");
-            menuItem.addActionListener(new FileChooserAction());
-            submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Export As JPEG");
-            submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Export As PDF");
-            submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Export As WMF");
-            submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Export As Postscripts");
-            submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Quit");
-            menuItem.addActionListener(new quitListener());
-            menu.add(submenuExport);
-            menu.add(menuItem);
-            frameScatterplot.setJMenuBar(menuBar);
-            panel.setSize(800,800);
-            BufferedImage img = ImageIO.read(new File(tempDirR));
-            ImageIcon icon = new ImageIcon(img);
-            JLabel label = new JLabel(icon);
-            label.setSize(700, 700);
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            frameScatterplot.getContentPane().add(panel);
-            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frameScatterplot.setSize(800,800);
-            frameScatterplot.setLocation(dim.width/2-frameScatterplot.getSize().width/2, dim.height/2-frameScatterplot.getSize().height/2);
-            
-            WindowListener exitListener = new WindowAdapter(){
-                
-                @Override
-                public void windowClosing(WindowEvent e){
-                    int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
-                    if(confirm == 0){
-                        frameScatterplot.dispose();
-                        File file = new File(tempDirR);
-                        file.delete();
-                    }
-                }
-            };
-            
-            frameScatterplot.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            frameScatterplot.addWindowListener(exitListener);
-            frameScatterplot.setVisible(true);
-    }
-    
-    private class quitListener implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-            int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
-            if(confirm == 0){
-                frameScatterplot.dispose();
-                File file = new File(tempDirR);
-                file.delete();
-            }
-        }
-    }
-    
-    private class FileChooserAction implements ActionListener{
+        int size;
+        double[][] data;
         
-        public void actionPerformed(ActionEvent e){
-            JFrame frame = new JFrame();
-            JFileChooser jf = new JFileChooser();
-            frame.setSize(400,400);
-            jf.setDialogTitle("Select the folder to save the file");
-            jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
-            jf.setSize(400,400);
-            frame.add(jf);
-            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-            boolean canExit = false;
-            while(! canExit){
-                int result = jf.showSaveDialog(frame);
-                if(JFileChooser.CANCEL_OPTION == result){
-                    frame.dispose();
-                    canExit = true;
-                }
-                if(JFileChooser.APPROVE_OPTION == result){ // guardem arxiu en el path
-                    File f = new File(tempDirR);
-                    f.deleteOnExit();
-                    String path = jf.getSelectedFile().getAbsolutePath();
-                    File f2 = new File(path);
-                    if(f2.exists()){
-                        int response = JOptionPane.showConfirmDialog(null, "Do you want to replace the existing file?", 
-                                "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                        if(response != JOptionPane.YES_OPTION) canExit = false;
-                        else{
-                            f.renameTo(f2);
-                            frame.dispose();
-                            canExit = true;
-                        }
-                    }
-                    else{
-                        f.renameTo(f2);
-                        frame.dispose();
-                        canExit = true;
-                    }
-                }
-            }
+        public ScatterPlot(int size, double data[][]){
+            this.size = size;
+            this.data = data;
         }
+        
+        public void plot() throws Exception{
+            AnalysisLauncher.open(this);
+        }
+        
+        @Override
+        public void init(){
+            
+        }
+        
     }
     
     public DataFrame getDataFrame(){
