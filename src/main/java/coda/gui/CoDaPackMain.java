@@ -123,7 +123,7 @@ public final class CoDaPackMain extends JFrame{
     
     private String ITEM_APPLICATION_NAME;
     // Menu
-    private CoDaPackMenu jMenuBar;
+    public static CoDaPackMenu jMenuBar;
     
     // Menus 
     

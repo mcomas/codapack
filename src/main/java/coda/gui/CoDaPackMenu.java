@@ -23,6 +23,8 @@
  */
 package coda.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.*;
 import java.util.ArrayList;
@@ -550,8 +552,6 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuDevelopment,itemModelS2, ITEM_MODEL_S2);
         addJMenuItem(menuDevelopment,itemModelS3, ITEM_MODEL_S3);
         addJMenuItem(menuDevelopment,itemModelS4, ITEM_MODEL_S4);
-        //add(menuDevelopment);
-        
     }
 
     public void addDataFrame(){
@@ -567,5 +567,17 @@ public class CoDaPackMenu extends JMenuBar{
     }
     public interface CoDaPackMenuListener{
         public void menuItemClicked(String label);
+    }
+    
+    public void activeDevMenu(){
+        add(menuDevelopment);
+        this.repaint();
+        super.updateUI();
+    }
+    
+    public void disableDevMenu(){
+        remove(menuDevelopment);
+        this.repaint();
+        super.updateUI();
     }
 }

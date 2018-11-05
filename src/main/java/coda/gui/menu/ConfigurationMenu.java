@@ -31,6 +31,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -46,6 +47,8 @@ public class ConfigurationMenu extends CoDaPackDialog{
     JTextField table;
     JTextField export;
     JTextField closure;
+    JCheckBox menuDevelopment;
+    
     public ConfigurationMenu(CoDaPackMain window){
         super(window, "Configuration Menu");
 
@@ -86,6 +89,11 @@ public class ConfigurationMenu extends CoDaPackDialog{
         add(label5);
         add(closure);
         
+        JLabel label6 = new JLabel("Show Dev Menu");
+        menuDevelopment = new JCheckBox();
+        menuDevelopment.setSelected(CoDaPackConf.showDev);
+        add(label6);
+        add(menuDevelopment);
         
 
         panel.add(label1);
@@ -98,6 +106,8 @@ public class ConfigurationMenu extends CoDaPackDialog{
         panel.add(export);
         panel.add(label5);
         panel.add(closure);
+        panel.add(label6);
+        panel.add(menuDevelopment);
         
         JPanel south = new JPanel();
         JButton apply = new JButton("Apply");
@@ -108,6 +118,9 @@ public class ConfigurationMenu extends CoDaPackDialog{
                 CoDaPackConf.setDecimalOutputFormat(output.getText());
                 CoDaPackConf.setDecimalExportFormat(export.getText());
                 CoDaPackConf.setClosureTo(closure.getText());
+                CoDaPackConf.setShowDev(menuDevelopment.isSelected());
+                if(CoDaPackConf.showDev) CoDaPackMain.jMenuBar.activeDevMenu();
+                else CoDaPackMain.jMenuBar.disableDevMenu();
                 CoDaPackMain.tablePanel.updateUI();
             }
         });
