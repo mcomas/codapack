@@ -160,6 +160,7 @@ public final class CoDaPackMain extends JFrame{
     private DendrogramMenu dendrogramMenu;
     private ClasUniNormTestMenu clasUniNormTestMenu;
     private ChangeGroupNameMenu changeGroupNameMenu;
+    private ConfigurationMenu configurationMenu;
 
     public static CoDaPackConf config = new CoDaPackConf();
     
@@ -632,7 +633,8 @@ public final class CoDaPackMain extends JFrame{
                 }
             }
         }else if(title.equals(jMenuBar.ITEM_CONF)){
-            new ConfigurationMenu(this).setVisible(true);
+            if(configurationMenu == null) configurationMenu = new ConfigurationMenu(this);
+            configurationMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CREATE_FRAME)){
             new DataFrameCreator(this);
         }else if(title.equals(jMenuBar.ITEM_RAW_ALR)){

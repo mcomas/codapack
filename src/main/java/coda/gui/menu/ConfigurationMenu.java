@@ -91,7 +91,7 @@ public class ConfigurationMenu extends CoDaPackDialog{
         
         JLabel label6 = new JLabel("Show Dev Menu");
         menuDevelopment = new JCheckBox();
-        menuDevelopment.setSelected(CoDaPackConf.showDev);
+        menuDevelopment.setSelected(false);
         add(label6);
         add(menuDevelopment);
         
