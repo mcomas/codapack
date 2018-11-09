@@ -119,7 +119,7 @@ public class S0 extends AbstractMenuDialog{
                     String url = chooser.getSelectedFile().getAbsolutePath();
                     url = url.replaceAll("\\\\", "/");
                     re.eval("source(\"" + url + "\")");
-                    System.out.println("el resultat es: " + re.eval("res").asDouble());
+                    showText();
                 }
                 else{
                     frameS0.dispose();
@@ -132,29 +132,43 @@ public class S0 extends AbstractMenuDialog{
     
     void showText(){
         
-        re.eval("out <- capture.output(text)");
+        re.eval("out <- capture.output(cdp_res$text)");
         OutputElement e = new OutputForR(re.eval("out").asStringArray());
         outputPanel.addOutput(e);
     }
     
     void createDataFrame(){
         
-        re.eval("mymatrix <- data.matrix(df)");
+        re.eval("mymatrix <- data.matrix(cdp_res$dataframe)");
         double[][] resultsData = re.eval("mymatrix").asMatrix();
         DataFrame resultDataFrame = new DataFrame();
         String[]names = new String[df.getNames().size()];
         for(int i=0; i < names.length;i++) names[i] = df.getNames().get(i);
         resultDataFrame.addData(names, resultsData);
+        resultDataFrame.setName("S0DF");
         mainApplication.addDataFrame(resultDataFrame);
     }
     
     void showGraphics(){
         
-        int numberOfGraphics = re.eval("length(grafic)").asInt();
+        int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
         for(int i=0; i < numberOfGraphics; i++){
-            tempDirR = re.eval("grafic[" + String.valueOf(numberOfGraphics+1) + "]").asString();
+            tempDirR = re.eval("cdp_res$graph[" + String.valueOf(i+1) + "]").asString();
             plotS0();
         }   
+    }
+    
+    void createVariables(){
+        int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt(); /* numero de noves variables*/
+        for(int i=0; i < numberOfNewVar; i++){
+            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString(); /* guardem el nom de la variable */
+            if(re.eval("is.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]]").asString().equals("TRUE")){ /* creem variable numerica */
+                double[] data;
+            }
+            else{ /* crear variable categorica */
+                
+            }
+        }
     }
     
     private void plotS0() {
