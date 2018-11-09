@@ -59,6 +59,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
+import org.jzy3d.plot3d.primitives.Sphere;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**
@@ -282,12 +283,14 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                 a = 0.25f;
                 z = (float) this.data[2][j];
                 points[j] = new Coord3d(x,y,z);
-                colors[j] = new Color(x,y,z,a);
+                colors[j] = new Color(0,0,0);
             }
             
             Scatter scatter = new Scatter(points,colors);
-            scatter.setWidth(10);
-            chart = AWTChartComponentFactory.chart(Quality.Advanced, "newt");
+            scatter.setWidth(7);
+            Quality q = Quality.Advanced;
+            q.setSmoothPoint(true);
+            chart = AWTChartComponentFactory.chart(q,"newt");
             chart.getScene().add(scatter);
         }
     }
