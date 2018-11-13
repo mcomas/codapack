@@ -6,6 +6,7 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.Variable;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
@@ -119,7 +120,10 @@ public class S0 extends AbstractMenuDialog{
                     String url = chooser.getSelectedFile().getAbsolutePath();
                     url = url.replaceAll("\\\\", "/");
                     re.eval("source(\"" + url + "\")");
-                    showText();
+                    showText(); /* mostrem el text */
+                    createDataFrame();
+                    showGraphics();
+                    createVariables();
                 }
                 else{
                     frameS0.dispose();
@@ -131,29 +135,33 @@ public class S0 extends AbstractMenuDialog{
     }
     
     void showText(){
-        
-        re.eval("out <- capture.output(cdp_res$text)");
-        OutputElement e = new OutputForR(re.eval("out").asStringArray());
-        outputPanel.addOutput(e);
+        int midaText = re.eval("length(cdp_res$text)").asInt();
+        for(int i=0; i < midaText; i++){
+            re.eval("out <- capture.output(cdp_res$text[[" + String.valueOf(i+1) + "]])");
+            OutputElement e = new OutputForR(re.eval("out").asStringArray());
+            outputPanel.addOutput(e);
+        }
     }
     
     void createDataFrame(){
-        
-        re.eval("mymatrix <- data.matrix(cdp_res$dataframe)");
-        double[][] resultsData = re.eval("mymatrix").asMatrix();
-        DataFrame resultDataFrame = new DataFrame();
-        String[]names = new String[df.getNames().size()];
-        for(int i=0; i < names.length;i++) names[i] = df.getNames().get(i);
-        resultDataFrame.addData(names, resultsData);
-        resultDataFrame.setName("S0DF");
-        mainApplication.addDataFrame(resultDataFrame);
+        int nDataFrames = re.eval("length(cdp_res$dataframe)").asInt();
+        for(int i=0; i < nDataFrames; i++){
+            re.eval("mymatrix <- data.matrix(cdp_res$dataframe[[" + String.valueOf(i+1) + "]])");
+            double [][] resultsData = re.eval("mymatrix").asMatrix();
+            DataFrame resultDataFrame = new DataFrame();
+            String[] names = new String[df.getNames().size()];
+            for(int j=0; j < names.length; j++) names[j] = df.getNames().get(i);
+            resultDataFrame.addData(names,resultsData);
+            resultDataFrame.setName(re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString());
+            mainApplication.addDataFrame(resultDataFrame);
+        }
     }
     
     void showGraphics(){
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
         for(int i=0; i < numberOfGraphics; i++){
-            tempDirR = re.eval("cdp_res$graph[" + String.valueOf(i+1) + "]").asString();
+            tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
             plotS0();
         }   
     }
@@ -162,12 +170,16 @@ public class S0 extends AbstractMenuDialog{
         int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt(); /* numero de noves variables*/
         for(int i=0; i < numberOfNewVar; i++){
             String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString(); /* guardem el nom de la variable */
-            if(re.eval("is.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]]").asString().equals("TRUE")){ /* creem variable numerica */
-                double[] data;
+            String isNumeric = re.eval("toString(is.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
+            if(isNumeric.equals("TRUE")){ /* creem variable numerica */
+                double[] data = re.eval("cdp_res$new_data[[" + String.valueOf(i+1) + "]]").asDoubleArray();
+                df.addData(varName,data);
             }
             else{ /* crear variable categorica */
-                
+                String[] data = re.eval("cdp_res$new_data[[" + String.valueOf(i+1) + "]]").asStringArray();
+                df.addData(varName, new Variable(varName,data));
             }
+            mainApplication.updateDataFrame(df);
         }
     }
     
