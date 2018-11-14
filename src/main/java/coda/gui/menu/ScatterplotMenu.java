@@ -1,5 +1,5 @@
 /** 
- *  Copyright 2011-2016 Marc Comas - Santiago Thió
+ *  Copyright 2011-2016 Marc Comas - Santiago Thiï¿½
  *
  *  This file is part of CoDaPack.
  *
@@ -108,7 +108,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             dataFrameString += ")";
             re.eval(dataFrameString); // creem el dataframe amb R
             
-            if(selectedNames.length == 2){ // printem el gràfic en 2D
+            if(selectedNames.length == 2){ // printem el grï¿½fic en 2D
                 re.eval("mypath = tempdir()");	
                     tempDirR = re.eval("print(mypath)").asString();	
                     tempDirR += "\\out.png";	
@@ -124,14 +124,30 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                         Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);	
                     }
             }
-            else{ // printem el gràfic en 3D
-                ScatterPlot s = new ScatterPlot(df.get(selectedNames[0]).size(), df.getNumericalData(selectedNames));
+            else{ // printem el grï¿½fic en 3D
+                /*ScatterPlot s = new ScatterPlot(df.get(selectedNames[0]).size(), df.getNumericalData(selectedNames));
                             
                 try {
                     s.plot();
                 } catch (Exception ex) {
                     Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                }*/
+                re.eval("mypath = tempdir()");
+                    tempDirR = re.eval("print(mypath)").asString();
+                    tempDirR += "\\out.png";
+            
+                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
+                    re.eval("png(mypath,width=700,height=700");
+                    re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +", pch=16, highlight.3d=TRUE,type=\"h\", main = \"3D Scatterplot\")");
+                    re.eval("fit <- lm(" + selectedNames[2] + "~ " + selectedNames[0] + "+" + selectedNames[1] + ")");
+                    re.eval("s3d$plane3d(fit)");
+                    re.eval("dev.off()");
+            
+                    try {
+                        plotScatterplot();
+                    } catch (IOException ex) {
+                        Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
             }
             
             this.dispose();
@@ -290,7 +306,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             scatter.setWidth(7);
             Quality q = Quality.Advanced;
             q.setSmoothPoint(true);
-            chart = AWTChartComponentFactory.chart(q,"newt");
+            chart = AWTChartComponentFactory.chart(q,"swing");
             chart.getScene().add(scatter);
         }
     }
