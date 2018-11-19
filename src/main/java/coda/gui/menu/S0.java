@@ -51,7 +51,9 @@ public class S0 extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
+    JFrame [] framesS0;
     JFrame frameS0;
+    String[] tempsDirR;
     String tempDirR;
     JFileChooser chooser;
     
@@ -120,10 +122,12 @@ public class S0 extends AbstractMenuDialog{
                     String url = chooser.getSelectedFile().getAbsolutePath();
                     url = url.replaceAll("\\\\", "/");
                     re.eval("source(\"" + url + "\")");
+                    /* posar les comandes que es volen aqui */
                     showText(); /* mostrem el text */
                     createDataFrame();
                     showGraphics();
                     createVariables();
+                    /* aqui s'acaba les comandes que es volen */
                 }
                 else{
                     frameS0.dispose();
@@ -160,9 +164,12 @@ public class S0 extends AbstractMenuDialog{
     void showGraphics(){
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
+        this.framesS0 = new JFrame[numberOfGraphics];
+        this.tempsDirR = new String[numberOfGraphics];
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            plotS0();
+            tempsDirR[i] = tempDirR;
+            plotS0(i);
         }   
     }
     
@@ -183,7 +190,7 @@ public class S0 extends AbstractMenuDialog{
         }
     }
     
-    private void plotS0() {
+    private void plotS0(int position) {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -191,7 +198,7 @@ public class S0 extends AbstractMenuDialog{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            frameS0 = new JFrame();
+            framesS0[position] = new JFrame();
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -208,20 +215,20 @@ public class S0 extends AbstractMenuDialog{
             menuItem = new JMenuItem("Export As Postscripts");
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Quit");
-            menuItem.addActionListener(new quitListener());
+            menuItem.addActionListener(new quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            frameS0.setJMenuBar(menuBar);
+            framesS0[position].setJMenuBar(menuBar);
             panel.setSize(800,800);
             ImageIcon icon = new ImageIcon(tempDirR);
             JLabel label = new JLabel(icon,JLabel.CENTER);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
             panel.add(label);
-            frameS0.getContentPane().add(panel);
+            framesS0[position].getContentPane().add(panel);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frameS0.setSize(800,800);
-            frameS0.setLocation(dim.width/2-frameS0.getSize().width/2, dim.height/2-frameS0.getSize().height/2);
+            framesS0[position].setSize(800,800);
+            framesS0[position].setLocation(dim.width/2-framesS0[position].getSize().width/2, dim.height/2-framesS0[position].getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -229,23 +236,30 @@ public class S0 extends AbstractMenuDialog{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        frameS0.dispose();
-                        File file = new File(tempDirR);
+                        framesS0[position].dispose();
+                        File file = new File(tempsDirR[position]);
                         file.delete();
                     }
                 }
             };
             
-            frameS0.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            frameS0.addWindowListener(exitListener);
-            frameS0.setVisible(true);
+            framesS0[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesS0[position].addWindowListener(exitListener);
+            framesS0[position].setVisible(true);
     }
     
     private class quitListener implements ActionListener{
+        
+        int position;
+        
+        public quitListener(int position){
+            this.position = position;
+        }
+        
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                frameS0.dispose();
+                framesS0[this.position].dispose();
                 File file = new File(tempDirR);
                 file.delete();
             }
