@@ -151,6 +151,8 @@ public class S1 extends AbstractMenuDialog{
     
                 }
                 
+                this.dispose();
+                
                 // executem script d'R
                 
                 frameS1 = new JFrame();
