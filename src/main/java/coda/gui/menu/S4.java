@@ -6,6 +6,7 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.Variable;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
@@ -44,8 +45,10 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
     Rengine re;
     DataFrame df;
     JFrame frameS4;
+    JFrame[] framesS4;
     JFileChooser chooser;
     String tempDirR;
+    String[] tempsDirR;
     
     public static final long serialVersionUID = 1L;
     
@@ -126,6 +129,8 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
                         
                         re.eval(dataFrameString); // we create the dataframe in R
             
+                this.dispose();
+                
                 // executem script d'R
                 
                 frameS4 = new JFrame();
@@ -142,7 +147,12 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
                     String url = chooser.getSelectedFile().getAbsolutePath();
                     url = url.replaceAll("\\\\", "/");
                     re.eval("source(\"" + url + "\")");
-                    System.out.println("el resultat es: " + re.eval("res").asDouble());
+                    /* posar les comandes que es volen aqui */
+                    showText();
+                    createDataFrame();
+                    showGraphics();
+                    createVariables();
+                    /* aqui s'acaba les comandes que es volen */
                 }
                 else{
                     frameS4.dispose();
@@ -156,32 +166,59 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
     
     void showText(){
         
-        re.eval("out <- capture.output(text)");
-        OutputElement e = new OutputForR(re.eval("out").asStringArray());
-        outputPanel.addOutput(e);
+        int midaText = re.eval("length(cdp_res$text)").asInt();
+        for(int i=0; i < midaText; i++){
+            re.eval("out <- capture.output(cdp_res$text[[" + String.valueOf(i+1) + "]])");
+            OutputElement e = new OutputForR(re.eval("out").asStringArray());
+            outputPanel.addOutput(e);
+        }
     }
     
     void createDataFrame(){
         
-        re.eval("mymatrix <- data.matrix(df)");
-        double[][] resultsData = re.eval("mymatrix").asMatrix();
-        DataFrame resultDataFrame = new DataFrame();
-        String[]names = new String[df.getNames().size()];
-        for(int i=0; i < names.length;i++) names[i] = df.getNames().get(i);
-        resultDataFrame.addData(names, resultsData);
-        mainApplication.addDataFrame(resultDataFrame);
+        int nDataFrames = re.eval("length(cdp_res$dataframe)").asInt();
+        for(int i=0; i < nDataFrames; i++){
+            re.eval("mymatrix <- data.matrix(cdp_res$dataframe[[" + String.valueOf(i+1) + "]])");
+            double [][] resultsData = re.eval("mymatrix").asMatrix();
+            DataFrame resultDataFrame = new DataFrame();
+            String[] names = new String[df.getNames().size()];
+            for(int j=0; j < names.length; j++) names[j] = df.getNames().get(i);
+            resultDataFrame.addData(names,resultsData);
+            resultDataFrame.setName(re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString());
+            mainApplication.addDataFrame(resultDataFrame);
+        }
     }
     
     void showGraphics(){
         
-        int numberOfGraphics = re.eval("length(grafic)").asInt();
+        int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
+        this.framesS4 = new JFrame[numberOfGraphics];
+        this.tempsDirR = new String[numberOfGraphics];
         for(int i=0; i < numberOfGraphics; i++){
-            tempDirR = re.eval("grafic[" + String.valueOf(numberOfGraphics+1) + "]").asString();
-            plotS4();
+            tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
+            tempsDirR[i] = tempDirR;
+            plotS4(i);
         }   
     }
     
-    private void plotS4() {
+    void createVariables(){
+        int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt(); /* numero de noves variables*/
+        for(int i=0; i < numberOfNewVar; i++){
+            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString(); /* guardem el nom de la variable */
+            String isNumeric = re.eval("toString(is.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
+            if(isNumeric.equals("TRUE")){ /* creem variable numerica */
+                double[] data = re.eval("cdp_res$new_data[[" + String.valueOf(i+1) + "]]").asDoubleArray();
+                df.addData(varName,data);
+            }
+            else{ /* crear variable categorica */
+                String[] data = re.eval("cdp_res$new_data[[" + String.valueOf(i+1) + "]]").asStringArray();
+                df.addData(varName, new Variable(varName,data));
+            }
+            mainApplication.updateDataFrame(df);
+        }
+    }
+    
+    private void plotS4(int position) {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -189,7 +226,7 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            frameS4 = new JFrame();
+            framesS4[position] = new JFrame();
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -206,20 +243,20 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
             menuItem = new JMenuItem("Export As Postscripts");
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Quit");
-            menuItem.addActionListener(new quitListener());
+            menuItem.addActionListener(new quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            frameS4.setJMenuBar(menuBar);
+            framesS4[position].setJMenuBar(menuBar);
             panel.setSize(800,800);
             ImageIcon icon = new ImageIcon(tempDirR);
             JLabel label = new JLabel(icon,JLabel.CENTER);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
             panel.add(label);
-            frameS4.getContentPane().add(panel);
+            framesS4[position].getContentPane().add(panel);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frameS4.setSize(800,800);
-            frameS4.setLocation(dim.width/2-frameS4.getSize().width/2, dim.height/2-frameS4.getSize().height/2);
+            framesS4[position].setSize(800,800);
+            framesS4[position].setLocation(dim.width/2-framesS4[position].getSize().width/2, dim.height/2-framesS4[position].getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -227,24 +264,31 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        frameS4.dispose();
-                        File file = new File(tempDirR);
+                        framesS4[position].dispose();
+                        File file = new File(tempsDirR[position]);
                         file.delete();
                     }
                 }
             };
             
-            frameS4.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            frameS4.addWindowListener(exitListener);
-            frameS4.setVisible(true);
+            framesS4[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesS4[position].addWindowListener(exitListener);
+            framesS4[position].setVisible(true);
     }
     
     private class quitListener implements ActionListener{
+        
+        int position;
+        
+        public quitListener(int position){
+            this.position = position;
+        }
+        
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                frameS4.dispose();
-                File file = new File(tempDirR);
+                framesS4[position].dispose();
+                File file = new File(tempsDirR[position]);
                 file.delete();
             }
         }

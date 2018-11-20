@@ -6,6 +6,7 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.Variable;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
