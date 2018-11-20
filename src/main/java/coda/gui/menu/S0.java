@@ -260,7 +260,7 @@ public class S0 extends AbstractMenuDialog{
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
                 framesS0[this.position].dispose();
-                File file = new File(tempDirR);
+                File file = new File(tempsDirR[position]);
                 file.delete();
             }
         }
