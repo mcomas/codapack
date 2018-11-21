@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -57,12 +58,39 @@ public class S0 extends AbstractMenuDialog{
     String tempDirR;
     JFileChooser chooser;
     
+    /* options var */
+    
+    JCheckBox textCheck;
+    JCheckBox dataFrameCheck;
+    JCheckBox graphicsCheck;
+    JCheckBox addVarCheck;
+    
     public static final long serialVersionUID = 1L;
     
     public S0(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "S"
                 + "S0 menu", false);
         re = r;
+        
+        /* options configuration */
+        
+        JLabel labelText = new JLabel("Show Text: ");
+        textCheck = new JCheckBox("",false);
+        JLabel labelDataFrame = new JLabel("Create a new table: ");
+        dataFrameCheck = new JCheckBox("",false);
+        JLabel labelGraphics = new JLabel("Display graphics: ");
+        graphicsCheck = new JCheckBox("",false);
+        JLabel labelAddVar = new JLabel("Add variables: ");
+        addVarCheck = new JCheckBox("",false);
+        
+        this.optionsPanel.add(labelText);
+        this.optionsPanel.add(textCheck);
+        this.optionsPanel.add(labelDataFrame);
+        this.optionsPanel.add(dataFrameCheck);
+        this.optionsPanel.add(labelGraphics);
+        this.optionsPanel.add(graphicsCheck);
+        this.optionsPanel.add(labelAddVar);
+        this.optionsPanel.add(addVarCheck);
     }
     
     @Override
@@ -123,10 +151,10 @@ public class S0 extends AbstractMenuDialog{
                     url = url.replaceAll("\\\\", "/");
                     re.eval("source(\"" + url + "\")");
                     /* posar les comandes que es volen aqui */
-                    showText(); /* mostrem el text */
-                    createDataFrame();
-                    showGraphics();
-                    createVariables();
+                    if(this.textCheck.isSelected()) showText(); /* mostrem el text */
+                    if(this.addVarCheck.isSelected()) createVariables(); /* afegim variables al dataframe */
+                    if(this.dataFrameCheck.isSelected()) createDataFrame(); /* creem un dataFrame */
+                    if(this.graphicsCheck.isSelected()) showGraphics(); /* mostrem grafics */
                     /* aqui s'acaba les comandes que es volen */
                 }
                 else{
