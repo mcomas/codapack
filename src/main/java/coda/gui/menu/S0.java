@@ -44,7 +44,7 @@ import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
 /**
- * S0 -> X numerica amb opció de retornar text, crear dataframe i  mostrar grafics
+ * S0 -> X numerica amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class S0 extends AbstractMenuDialog{

@@ -39,7 +39,7 @@ import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
 /**
- * S1 -> X numerica i positiva amb opció de retornar text, crear dataframe i  mostrar grafics
+ * S1 -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class S1 extends AbstractMenuDialog{
@@ -199,17 +199,25 @@ public class S1 extends AbstractMenuDialog{
     }
     
     void createDataFrame(){
-        
         int nDataFrames = re.eval("length(cdp_res$dataframe)").asInt();
         for(int i=0; i < nDataFrames; i++){
-            re.eval("mymatrix <- data.matrix(cdp_res$dataframe[[" + String.valueOf(i+1) + "]])");
-            double [][] resultsData = re.eval("mymatrix").asMatrix();
-            DataFrame resultDataFrame = new DataFrame();
-            String[] names = new String[df.getNames().size()];
-            for(int j=0; j < names.length; j++) names[j] = df.getNames().get(i);
-            resultDataFrame.addData(names,resultsData);
-            resultDataFrame.setName(re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString());
-            mainApplication.addDataFrame(resultDataFrame);
+            int nVariables = re.eval("length(cdp_res$dataframe[[" + String.valueOf(i+1) + "]])").asInt();
+            DataFrame newDataFrame = new DataFrame();
+            for(int j=0; j < nVariables; j++){
+                String varName = re.eval("names(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "])").asString();
+                String isNumeric = re.eval("class(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asString();
+                if(isNumeric.equals("numeric")){ /* crear una variable numerica */
+                    double[] data = re.eval("as.numeric(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asDoubleArray();
+                    newDataFrame.addData(varName, data);
+                }
+                else{ /* crear una variable categorica */
+                    String[] data = re.eval("as.character(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asStringArray();
+                    newDataFrame.addData(varName, new Variable(varName,data));
+                }
+            }
+            
+            newDataFrame.setName(re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString());
+            mainApplication.addDataFrame(newDataFrame);
         }
     }
     
@@ -229,13 +237,13 @@ public class S1 extends AbstractMenuDialog{
         int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt(); /* numero de noves variables*/
         for(int i=0; i < numberOfNewVar; i++){
             String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString(); /* guardem el nom de la variable */
-            String isNumeric = re.eval("toString(is.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
-            if(isNumeric.equals("TRUE")){ /* creem variable numerica */
-                double[] data = re.eval("cdp_res$new_data[[" + String.valueOf(i+1) + "]]").asDoubleArray();
+            String isNumeric = re.eval("class(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
+            if(isNumeric.equals("numeric")){ /* creem variable numerica */
+                double[] data = re.eval("as.numeric(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asDoubleArray();
                 df.addData(varName,data);
             }
             else{ /* crear variable categorica */
-                String[] data = re.eval("cdp_res$new_data[[" + String.valueOf(i+1) + "]]").asStringArray();
+                String[] data = re.eval("as.character(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asStringArray();
                 df.addData(varName, new Variable(varName,data));
             }
             mainApplication.updateDataFrame(df);
