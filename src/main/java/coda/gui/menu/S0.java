@@ -17,6 +17,7 @@ import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,6 +45,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
@@ -63,10 +66,15 @@ public class S0 extends AbstractMenuDialogWithILR{
     
     /* options var */
     
-    JCheckBox textCheck;
-    JCheckBox dataFrameCheck;
-    JCheckBox graphicsCheck;
-    JCheckBox addVarCheck;
+    JRadioButton B1 = new JRadioButton("B1");
+    JRadioButton B2 = new JRadioButton("B2");
+    JRadioButton B3 = new JRadioButton("B3");
+    JRadioButton B4 = new JRadioButton("B4");
+    JRadioButton B5 = new JRadioButton("B5");
+    JRadioButton B6 = new JRadioButton("B6");
+    JTextField P1 = new JTextField(20);
+    JTextField P2 = new JTextField(20);
+    JTextField P3 = new JTextField(20);
     
     public static final long serialVersionUID = 1L;
     
@@ -95,7 +103,7 @@ public class S0 extends AbstractMenuDialogWithILR{
             }
         });
         
-        JLabel labelText = new JLabel("Show Text: ");
+        /*JLabel labelText = new JLabel("Show Text: ");
         textCheck = new JCheckBox("",false);
         JLabel labelDataFrame = new JLabel("Create a new table: ");
         dataFrameCheck = new JCheckBox("",false);
@@ -111,7 +119,19 @@ public class S0 extends AbstractMenuDialogWithILR{
         this.optionsPanel.add(labelGraphics);
         this.optionsPanel.add(graphicsCheck);
         this.optionsPanel.add(labelAddVar);
-        this.optionsPanel.add(addVarCheck);
+        this.optionsPanel.add(addVarCheck);*/
+        this.optionsPanel.add(new JLabel("      P1:"));
+        this.optionsPanel.add(P1);
+        this.optionsPanel.add(new JLabel("      P2:"));
+        this.optionsPanel.add(P2);
+        this.optionsPanel.add(new JLabel("      P3:"));
+        this.optionsPanel.add(P3);
+        this.optionsPanel.add(B1);
+        this.optionsPanel.add(B2);
+        this.optionsPanel.add(B3);
+        this.optionsPanel.add(B4);
+        this.optionsPanel.add(B5);
+        this.optionsPanel.add(B6);
     }
     
     public void initiatePartitionMenu(){
@@ -177,10 +197,10 @@ public class S0 extends AbstractMenuDialogWithILR{
                     url = url.replaceAll("\\\\", "/");
                     re.eval("source(\"" + url + "\")");
                     /* posar les comandes que es volen aqui */
-                    if(this.textCheck.isSelected()) showText(); /* mostrem el text */
-                    if(this.addVarCheck.isSelected()) createVariables(); /* afegim variables al dataframe */
-                    if(this.dataFrameCheck.isSelected()) createDataFrame(); /* creem un dataFrame */
-                    if(this.graphicsCheck.isSelected()) showGraphics(); /* mostrem grafics */
+                    //if(this.textCheck.isSelected()) showText(); /* mostrem el text */
+                    //if(this.addVarCheck.isSelected()) createVariables(); /* afegim variables al dataframe */
+                    //if(this.dataFrameCheck.isSelected()) createDataFrame(); /* creem un dataFrame */
+                    //if(this.graphicsCheck.isSelected()) showGraphics(); /* mostrem grafics */
                     /* aqui s'acaba les comandes que es volen */
                 }
                 else{
