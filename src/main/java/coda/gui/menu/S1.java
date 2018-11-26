@@ -5,12 +5,14 @@
  */
 package coda.gui.menu;
 
+import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
+import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -27,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -43,7 +46,7 @@ import org.rosuda.JRI.Rengine;
  * S1 -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class S1 extends AbstractMenuDialog{
+public class S1 extends AbstractMenuDialogWithILR{
     
     Rengine re;
     DataFrame df;
@@ -68,6 +71,24 @@ public class S1 extends AbstractMenuDialog{
         
         /* options configuration */
         
+        JButton defaultPart = new JButton("Default Partition");
+        optionsPanel.add(defaultPart);
+        defaultPart.addActionListener(new java.awt.event.ActionListener() {
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
+            }
+        });
+
+        JButton manuallyPart = new JButton("Define Manually");
+        optionsPanel.add(manuallyPart);
+        manuallyPart.addActionListener(new java.awt.event.ActionListener() {
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                initiatePartitionMenu();
+            }
+        });
+        
         JLabel labelText = new JLabel("Show Text: ");
         textCheck = new JCheckBox("",false);
         JLabel labelDataFrame = new JLabel("Create a new table: ");
@@ -85,6 +106,11 @@ public class S1 extends AbstractMenuDialog{
         this.optionsPanel.add(graphicsCheck);
         this.optionsPanel.add(labelAddVar);
         this.optionsPanel.add(addVarCheck);
+    }
+
+    public void initiatePartitionMenu(){
+        BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData() );
+        binaryMenu.setVisible(true);
     }
     
     @Override
