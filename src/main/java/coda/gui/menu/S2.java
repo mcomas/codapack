@@ -201,7 +201,8 @@ public class S2 extends AbstractMenuDialog2NumCatWithILR{
                         dataFrameString +=")";
                         
                         re.eval(dataFrameString); // we create the dataframe in R
-                        
+                   
+                constructParametersToR();
                 this.dispose();
                 
                 // executem script d'R
@@ -234,6 +235,42 @@ public class S2 extends AbstractMenuDialog2NumCatWithILR{
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null,"No data selected in data 1");
             else JOptionPane.showMessageDialog(null,"No data selected in data 2");
+        }
+    }
+    
+    void constructParametersToR(){
+        /* construim parametres string */
+        
+        if(this.P1.getText().length() > 0) re.eval("P1 <- \"" + this.P1.getText() + "\"");
+        else re.eval("P1 <- \"\"");
+        if(this.P2.getText().length() > 0) re.eval("P2 <- \"" + this.P2.getText() + "\"");
+        else re.eval("P2 <- \"\"");
+        if(this.P3.getText().length() > 0) re.eval("P3 <- \"" + this.P3.getText() + "\"");
+        else re.eval("P3 <- \"\"");
+        
+        /* construim parametres logics */
+        
+        if(this.B1.isSelected()) re.eval("B1 <- TRUE");
+        else re.eval("B1 <- FALSE");
+        if(this.B2.isSelected()) re.eval("B2 <- TRUE");
+        else re.eval("B2 <- FALSE");
+        if(this.B3.isSelected()) re.eval("B3 <- TRUE");
+        else re.eval("B3 <- FALSE");
+        if(this.B4.isSelected()) re.eval("B4 <- TRUE");
+        else re.eval("B4 <- FALSE");
+        if(this.B5.isSelected()) re.eval("B5 <- TRUE");
+        else re.eval("B5 <- FALSE");
+        if(this.B6.isSelected()) re.eval("B6 <- TRUE");
+        else re.eval("B6 <- FALSE");
+        
+        /* construim la matriu BaseX */
+        
+        double[][] baseX = super.getBasis();
+        re.assign("BaseX", baseX[0]);
+        re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
+        for(int i=1; i < baseX.length; i++){
+            re.assign("tmp", baseX[i]);
+            re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
         }
     }
     
