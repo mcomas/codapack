@@ -115,7 +115,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             	
                     re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");	
                     re.eval("png(mypath,width=700,height=700");	
-                    re.eval("plot(" + selectedNames[0] + "," + selectedNames[1] + ", main =\"Scatterplot 2D\", pch=19)");	
+                    re.eval("plot(" + selectedNames[0] + "," + selectedNames[1] + ", main =\"Scatterplot 2D\", pch=16)");	
                     re.eval("dev.off()");	
             	
                     try {	
@@ -138,9 +138,9 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             
                     re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
                     re.eval("png(mypath,width=700,height=700");
-                    re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +", pch=16, highlight.3d=TRUE,type=\"h\", main = \"3D Scatterplot\")");
-                    re.eval("fit <- lm(" + selectedNames[2] + "~ " + selectedNames[0] + "+" + selectedNames[1] + ")");
-                    re.eval("s3d$plane3d(fit)");
+                    re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +",pch = 16, cex.symbols = 1.5, color=\"black\",main = \"3D Scatterplot\")");
+                    //re.eval("fit <- lm(" + selectedNames[2] + "~ " + selectedNames[0] + "+" + selectedNames[1] + ")");
+                    //re.eval("s3d$plane3d(fit)");
                     re.eval("dev.off()");
             
                     try {
