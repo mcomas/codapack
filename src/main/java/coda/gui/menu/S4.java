@@ -46,7 +46,7 @@ import org.rosuda.JRI.Rengine;
  * S4 -> X numerica o categorica i Y numerica o categorica amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class S4 extends AbstractMenuDialog2NumOCatNumOCatWithILR{
+public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
     
     Rengine re;
     DataFrame df;
@@ -55,6 +55,8 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCatWithILR{
     JFileChooser chooser;
     String tempDirR;
     String[] tempsDirR;
+    ILRMenu ilrX;
+    ILRMenu ilrY;
     
     /* options var */
     
@@ -76,41 +78,24 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCatWithILR{
         
         /* options configuration */
         
-        JButton defaultPart = new JButton("Default Partition");
-        optionsPanel.add(defaultPart);
-        defaultPart.addActionListener(new java.awt.event.ActionListener() {
-            
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setPartition(CoDaStats.defaultPartition(ds.getSelectedData1().length));
+        JButton xILR = new JButton("Set X partition");
+        this.optionsPanel.add(xILR);
+        xILR.addActionListener(new java.awt.event.ActionListener(){
+        
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+               configureILRX();
             }
         });
         
-        JButton manuallyPart = new JButton("Define Manually");
-        optionsPanel.add(manuallyPart);
-        manuallyPart.addActionListener(new java.awt.event.ActionListener() {
-            
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                initiatePartitionMenu();
+        JButton yILR = new JButton("Set Y parition");
+        this.optionsPanel.add(yILR);
+        yILR.addActionListener(new java.awt.event.ActionListener(){
+        
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+               configureILRY();
             }
         });
         
-        /*JLabel labelText = new JLabel("Show Text: ");
-        textCheck = new JCheckBox("",false);
-        JLabel labelDataFrame = new JLabel("Create a new table: ");
-        dataFrameCheck = new JCheckBox("",false);
-        JLabel labelGraphics = new JLabel("Display graphics: ");
-        graphicsCheck = new JCheckBox("",false);
-        JLabel labelAddVar = new JLabel("Add variables: ");
-        addVarCheck = new JCheckBox("",false);
-        
-        this.optionsPanel.add(labelText);
-        this.optionsPanel.add(textCheck);
-        this.optionsPanel.add(labelDataFrame);
-        this.optionsPanel.add(dataFrameCheck);
-        this.optionsPanel.add(labelGraphics);
-        this.optionsPanel.add(graphicsCheck);
-        this.optionsPanel.add(labelAddVar);
-        this.optionsPanel.add(addVarCheck);*/
         this.optionsPanel.add(new JLabel("      P1:"));
         this.optionsPanel.add(P1);
         this.optionsPanel.add(new JLabel("      P2:"));
@@ -125,9 +110,14 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCatWithILR{
         this.optionsPanel.add(B6);
     }
     
-    public void initiatePartitionMenu(){
-        BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData1() );
-        binaryMenu.setVisible(true);
+    public void configureILRX(){
+        if(this.ilrX == null || this.ilrX.getDsLength() != ds.getSelectedData1().length) this.ilrX = new ILRMenu(this.getSelectedData1());
+        this.ilrX.setVisible(true);
+    }
+    
+    public void configureILRY(){
+        if(this.ilrY == null || this.ilrY.getDsLength() != ds.getSelectedData2().length) this.ilrY = new ILRMenu(this.getSelectedData2());
+        this.ilrY.setVisible(true);
     }
     
     @Override
@@ -265,12 +255,22 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCatWithILR{
         
         /* construim la matriu BaseX */
         
-        double[][] baseX = super.getBasis();
+        int[][] baseX = this.ilrX.getPartition();
         re.assign("BaseX", baseX[0]);
         re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
         for(int i=1; i < baseX.length; i++){
             re.assign("tmp", baseX[i]);
             re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
+        }
+        
+        /* construim la matriu BaseY */
+        
+        int[][] baseY = this.ilrY.getPartition();
+        re.assign("BaseY", baseY[0]);
+        re.eval("BaseY" + " <- matrix( " + "BaseY" + " ,nc=1)");
+        for(int i=1; i < baseY.length; i++){
+            re.assign("tmp", baseY[i]);
+            re.eval("BaseY" + " <- cbind(" + "BaseY" + ",matrix(tmp,nc=1))");
         }
     }
     

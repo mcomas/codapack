@@ -103,23 +103,6 @@ public class S0 extends AbstractMenuDialogWithILR{
             }
         });
         
-        /*JLabel labelText = new JLabel("Show Text: ");
-        textCheck = new JCheckBox("",false);
-        JLabel labelDataFrame = new JLabel("Create a new table: ");
-        dataFrameCheck = new JCheckBox("",false);
-        JLabel labelGraphics = new JLabel("Display graphics: ");
-        graphicsCheck = new JCheckBox("",false);
-        JLabel labelAddVar = new JLabel("Add variables: ");
-        addVarCheck = new JCheckBox("",false);
-        
-        this.optionsPanel.add(labelText);
-        this.optionsPanel.add(textCheck);
-        this.optionsPanel.add(labelDataFrame);
-        this.optionsPanel.add(dataFrameCheck);
-        this.optionsPanel.add(labelGraphics);
-        this.optionsPanel.add(graphicsCheck);
-        this.optionsPanel.add(labelAddVar);
-        this.optionsPanel.add(addVarCheck);*/
         this.optionsPanel.add(new JLabel("      P1:"));
         this.optionsPanel.add(P1);
         this.optionsPanel.add(new JLabel("      P2:"));
@@ -241,7 +224,7 @@ public class S0 extends AbstractMenuDialogWithILR{
         
         /* construim la matriu BaseX */
         
-        double[][] baseX = super.getBasis();
+        int[][] baseX = super.getPartition();
         re.assign("BaseX", baseX[0]);
         re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
         for(int i=1; i < baseX.length; i++){
