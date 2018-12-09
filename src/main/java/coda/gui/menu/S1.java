@@ -227,12 +227,12 @@ public class S1 extends AbstractMenuDialogWithILR{
                     String url = chooser.getSelectedFile().getAbsolutePath();
                     url = url.replaceAll("\\\\", "/");
                     re.eval("source(\"" + url + "\")");
-                    /* posar les comandes que es volen aqui */
-                    //this.textCheck.isSelected()) showText(); /* mostrem el text */
-                    //if(this.addVarCheck.isSelected()) createVariables(); /* afegim variables al dataframe */
-                    //if(this.dataFrameCheck.isSelected()) createDataFrame(); /* creem un dataFrame */
-                    //if(this.graphicsCheck.isSelected()) showGraphics(); /* mostrem grafics */
-                    /* aqui s'acaba les comandes que es volen */
+                                        
+                    /* executem totes les accions possibles */
+                    showText();
+                    createVariables();
+                    createDataFrame();
+                    showGraphics();
                 }
                 else{
                     frameS1.dispose();
