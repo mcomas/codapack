@@ -5,14 +5,12 @@
  */
 package coda.gui.menu;
 
-import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
-import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -28,7 +26,6 @@ import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -262,21 +259,31 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
         /* construim la matriu BaseX */
         
         int[][] baseX = this.ilrX.getPartition();
-        re.assign("BaseX", baseX[0]);
-        re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
-        for(int i=1; i < baseX.length; i++){
-            re.assign("tmp", baseX[i]);
-            re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
+        if(baseX.length == 0){
+            re.eval("BaseX <- NULL");
+        }
+        else{
+            re.assign("BaseX", baseX[0]);
+            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
+            for(int i=1; i < baseX.length; i++){
+                re.assign("tmp", baseX[i]);
+                re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
+            }
         }
         
         /* construim la matriu BaseY */
         
         int[][] baseY = this.ilrY.getPartition();
-        re.assign("BaseY", baseY[0]);
-        re.eval("BaseY" + " <- matrix( " + "BaseY" + " ,nc=1)");
-        for(int i=1; i < baseY.length; i++){
-            re.assign("tmp", baseY[i]);
-            re.eval("BaseY" + " <- cbind(" + "BaseY" + ",matrix(tmp,nc=1))");
+        if(baseY.length == 0){
+            re.eval("BaseY <- NULL");
+        }
+        else{
+            re.assign("BaseY", baseY[0]);
+            re.eval("BaseY" + " <- matrix( " + "BaseY" + " ,nc=1)");
+            for(int i=1; i < baseY.length; i++){
+                re.assign("tmp", baseY[i]);
+                re.eval("BaseY" + " <- cbind(" + "BaseY" + ",matrix(tmp,nc=1))");
+            }
         }
     }
     

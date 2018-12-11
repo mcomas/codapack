@@ -17,7 +17,6 @@ import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,18 +24,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import javafx.application.Platform;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -225,11 +216,16 @@ public class S0 extends AbstractMenuDialogWithILR{
         /* construim la matriu BaseX */
         
         int[][] baseX = super.getPartition();
-        re.assign("BaseX", baseX[0]);
-        re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
-        for(int i=1; i < baseX.length; i++){
-            re.assign("tmp", baseX[i]);
-            re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
+        if(baseX.length == 0){
+            re.eval("BaseX <- NULL");
+        }
+        else{
+            re.assign("BaseX", baseX[0]);
+            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
+            for(int i=1; i < baseX.length; i++){
+                re.assign("tmp", baseX[i]);
+                re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
+            }
         }
     }
     
