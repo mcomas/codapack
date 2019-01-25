@@ -252,31 +252,31 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
         
         /* construim la matriu BaseX */
         
-        int[][] baseX = this.ilrX.getPartition();
-        if(baseX.length == 0){
+        if(this.ilrX == null || this.ilrX.getPartition().length == 0){
             re.eval("BaseX <- NULL");
         }
         else{
+            int[][] baseX = this.ilrX.getPartition();
             re.assign("BaseX", baseX[0]);
-            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
+            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nr=1)");
             for(int i=1; i < baseX.length; i++){
                 re.assign("tmp", baseX[i]);
-                re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
+                re.eval("BaseX" + " <- rbind(" + "BaseX" + ",matrix(tmp,nr=1))");
             }
         }
         
         /* construim la matriu BaseY */
         
-        int[][] baseY = this.ilrY.getPartition();
-        if(baseY.length == 0){
+        if(this.ilrY == null || this.ilrY.getPartition().length == 0){
             re.eval("BaseY <- NULL");
         }
         else{
+            int[][] baseY = this.ilrY.getPartition();
             re.assign("BaseY", baseY[0]);
-            re.eval("BaseY" + " <- matrix( " + "BaseY" + " ,nc=1)");
+            re.eval("BaseY" + " <- matrix( " + "BaseY" + " ,nr=1)");
             for(int i=1; i < baseY.length; i++){
                 re.assign("tmp", baseY[i]);
-                re.eval("BaseY" + " <- cbind(" + "BaseY" + ",matrix(tmp,nc=1))");
+                re.eval("BaseY" + " <- rbind(" + "BaseY" + ",matrix(tmp,nr=1))");
             }
         }
     }
