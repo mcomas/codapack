@@ -8,6 +8,10 @@ package coda.gui.menu;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
+import static coda.gui.CoDaPackMain.outputPanel;
+import coda.gui.output.OutputElement;
+import coda.gui.output.OutputForR;
+import coda.gui.output.OutputText;
 import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.JCheckBox;
@@ -75,42 +79,51 @@ public class SortDataMenu extends AbstractMenuDialog{
             
             // the dataframe was created on R with the name mydf
             // now we do the sort in R
-            String orderInstruction;
+            String orderInstruction = "tryCatch({error <- \"NULL\";order(";
             
             if(this.decSort.isSelected()){
-                orderInstruction = "order(";
                 for(int i=0; i < selectedNames.length;i++){
                     orderInstruction += "-mydf$x" + String.valueOf(i+1);
                     if(i != selectedNames.length-1) orderInstruction += ",";
                 }
             }
             else{
-                orderInstruction = "order(";
                 for(int i=0; i < selectedNames.length;i++){
                     orderInstruction += "mydf$x" + String.valueOf(i+1);
                     if(i != selectedNames.length-1) orderInstruction += ",";
                 }
             }
             
-            orderInstruction += ")";
+            orderInstruction += ")}, error = function(e){error <<- e$message})";
             
-            int [] orderSort = re.eval("ord <- " + orderInstruction).asIntArray();
+            int [] orderSort = re.eval(orderInstruction).asIntArray();
+            
+            String[] errorMessage = re.eval("error").asStringArray();
             
             // new we create the new dataframe with the new order
             
-            DataFrame newDf = new DataFrame();
+            if(errorMessage[0].equals("NULL")){
             
-            // we add the variables ordereds by the orderSort
-            
-            for(int i=0; i < df.size(); i++){
-                newDf.addData(df.get(i).getName(), new Variable(df.get(i),orderSort));
+                DataFrame newDf = new DataFrame();
+
+                // we add the variables ordereds by the orderSort
+
+                for(int i=0; i < df.size(); i++){
+                    newDf.addData(df.get(i).getName(), new Variable(df.get(i),orderSort));
+                }
+
+                String nameDf = df.getName();
+                mainApplication.removeDataFrame(df);
+
+                newDf.setName(nameDf);
+                mainApplication.addDataFrame(newDf);
             }
-            
-            String nameDf = df.getName();
-            mainApplication.removeDataFrame(df);
-            
-            newDf.setName(nameDf);
-            mainApplication.addDataFrame(newDf);
+            else{ // s'ha produit un error
+                OutputElement type = new OutputText("Error in R:");
+                outputPanel.addOutput(type);
+                OutputElement outElement = new OutputForR(errorMessage);
+                outputPanel.addOutput(outElement);
+            }
             
             this.dispose();
         }
