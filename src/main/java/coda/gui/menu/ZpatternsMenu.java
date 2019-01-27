@@ -32,6 +32,7 @@ import coda.gui.output.OutputForR;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -39,6 +40,8 @@ import org.rosuda.JRI.Rengine;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -157,11 +160,39 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             panel.setSize(800,800);
             BufferedImage img = ImageIO.read(new File(tempDirR));
             ImageIcon icon = new ImageIcon(img);
-            JLabel label = new JLabel(icon);
-            label.setSize(700, 700);
+            Image image = icon.getImage();
+            Image newImg = image.getScaledInstance(panel.getWidth()-100, panel.getHeight()-100, Image.SCALE_SMOOTH);
+            ImageIcon imageFinal = new ImageIcon(newImg);
+            JLabel label = new JLabel(imageFinal);
+            label.addComponentListener(new ComponentAdapter(){
+                public void componentResized(ComponentEvent e){
+                    JLabel label = (JLabel) e.getComponent();
+                    Dimension size = label.getSize();
+                    re.eval("mypath = tempdir()");
+                    tempDirR = re.eval("print(mypath)").asString();
+                    tempDirR += "\\out.png";
+                
+                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width="+String.valueOf(size.width-100)+",height=" + String.valueOf(size.height-100) +")");
+                    re.eval("png(mypath,width="+String.valueOf(size.width-100)+",height="+String.valueOf(size.height-100)+")");
+                    re.eval("zCompositions::zPatterns(X,label=0)");
+                    re.eval("out <- capture.output(zCompositions::zPatterns(X,label=0))");
+                    re.eval("dev.off()");
+                    BufferedImage img = null;
+                    try {
+                        img = ImageIO.read(new File(tempDirR));
+                    } catch (IOException ex) {
+                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    ImageIcon icon = new ImageIcon(img);
+                    Image image = icon.getImage();
+                    Image newImg = image.getScaledInstance(size.width-100, size.height-100, Image.SCALE_SMOOTH);
+                    ImageIcon imageFinal = new ImageIcon(newImg);
+                    label.setIcon(imageFinal);
+                }
+            });
             panel.setLayout(new GridBagLayout());
             panel.add(label);
-            frameZPatterns.getContentPane().add(panel);
+            frameZPatterns.getContentPane().add(label);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             frameZPatterns.setSize(800,800);
             frameZPatterns.setLocation(dim.width/2-frameZPatterns.getSize().width/2, dim.height/2-frameZPatterns.getSize().height/2);
