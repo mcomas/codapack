@@ -12,6 +12,7 @@ import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
+import coda.gui.output.OutputText;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
@@ -171,13 +172,23 @@ public class S0 extends AbstractMenuDialogWithILR{
                 if(chooser.showOpenDialog(frameS0) == JFileChooser.APPROVE_OPTION){
                     String url = chooser.getSelectedFile().getAbsolutePath();
                     url = url.replaceAll("\\\\", "/");
-                    re.eval("source(\"" + url + "\")");
-                                        
-                    /* executem totes les accions possibles */
-                    showText();
-                    createVariables();
-                    createDataFrame();
-                    showGraphics();
+                    re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
+                    
+                    String[] errorMessage = re.eval("error").asStringArray();
+                    
+                    if(errorMessage[0].equals("NULL")){ // not error
+                        /* executem totes les accions possibles */
+                        showText();
+                        createVariables();
+                        createDataFrame();
+                        showGraphics();
+                    }
+                    else{ // error
+                        OutputElement type = new OutputText("Error in R:");
+                        outputPanel.addOutput(type);
+                        OutputElement outElement = new OutputForR(errorMessage);
+                        outputPanel.addOutput(outElement);
+                    }                
                 }
                 else{
                     frameS0.dispose();
@@ -274,20 +285,39 @@ public class S0 extends AbstractMenuDialogWithILR{
     }
     
     void createVariables(){
-        int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt(); /* numero de noves variables*/
+        
+        int numberOfNewVar = re.eval("length(colnames(cdp_res$new_data))").asInt(); /* numero de columnes nomes*/
+        
         for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString(); /* guardem el nom de la variable */
+            String varName = re.eval("colnames(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
+            String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
+            
+            if(isNumeric.equals("TRUE")){
+                double[] data = re.eval("as.numeric(cdp_res$new_data[," + String.valueOf(i+1) + "])").asDoubleArray();
+                df.addData(varName,data);
+            }
+            else{
+                String[] data = re.eval("as.character(cdp_res$new_data[," + String.valueOf(i+1) + "])").asStringArray();
+                df.addData(varName, new Variable(varName,data));
+            }
+            
+            mainApplication.updateDataFrame(df);
+        }
+        
+        /*int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt();  numero de noves variables
+        for(int i=0; i < numberOfNewVar; i++){
+            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();  guardem el nom de la variable 
             String isNumeric = re.eval("class(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
-            if(isNumeric.equals("numeric")){ /* creem variable numerica */
+            if(isNumeric.equals("numeric")){  creem variable numerica 
                 double[] data = re.eval("as.numeric(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asDoubleArray();
                 df.addData(varName,data);
             }
-            else{ /* crear variable categorica */
+            else{  crear variable categorica 
                 String[] data = re.eval("as.character(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asStringArray();
                 df.addData(varName, new Variable(varName,data));
             }
             mainApplication.updateDataFrame(df);
-        }
+        }*/
     }
     
     private void plotS0(int position) {
