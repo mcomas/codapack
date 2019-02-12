@@ -136,40 +136,7 @@ public class S1 extends AbstractMenuDialogWithILR{
             if(rowsToDeleteVect.size() == df.getMaxVariableLength()) JOptionPane.showMessageDialog(null,"No positive data to analize");
             else{
                 if(rowsToDeleteVect.size() > 0){ // if some row to ignore we transform the dataFrame
-                    JOptionPane.showMessageDialog(null, "Some data will be ignored in the calcs");
-                    int[] rowsToDelete = new int[rowsToDeleteVect.size()];
-                    for(int i=0; i < rowsToDeleteVect.size();i++) rowsToDelete[i] = rowsToDeleteVect.elementAt(i);
-                    transformedDataFrame.subFrame(rowsToDelete);
-                        
-                    // Create dataframe on R
-                    
-                        int auxPos = 0;
-                        for(int i=0; i < transformedDataFrame.size();i++){ // totes les columnes
-                            if(vSelectedNames.contains(transformedDataFrame.get(i).getName())){
-                                re.eval(vSelectedNames.elementAt(auxPos) + " <- NULL");
-                                if(transformedDataFrame.get(i).isNumeric()){
-                                    for(double j : transformedDataFrame.get(i).getNumericalData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +"," + String.valueOf(j) + ")");
-                                    }
-                                }
-                                else{
-                                    for(String j : transformedDataFrame.get(i).getTextData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +",'" + j + "')");
-                                    }
-                                }
-                                auxPos++;
-                            }
-                        }
-                        
-                        String dataFrameString = "X <- data.frame(";
-                        for(int i=0; i < selectedNames.length;i++){
-                            dataFrameString += vSelectedNames.elementAt(i);
-                            if(i != selectedNames.length-1) dataFrameString += ",";
-                        }
-                        
-                        dataFrameString +=")";
-                        
-                        re.eval(dataFrameString); // we create the dataframe in R
+                    JOptionPane.showMessageDialog(null,"Some Data is negative into a var selected");
                 }
                 else{
                     
@@ -202,48 +169,48 @@ public class S1 extends AbstractMenuDialogWithILR{
                         dataFrameString +=")";
                         
                         re.eval(dataFrameString); // we create the dataframe in R
-    
-                }
+                        
+                        constructParametersToR();
                 
-                constructParametersToR();
-                
-                this.dispose();
-                
-                // executem script d'R
-                
-                frameS1 = new JFrame();
-                chooser = new JFileChooser();
-                frameS1.setSize(600,400);
-                chooser.setDialogTitle("Select R script to execute");
-                chooser.setFileFilter(new FileNameExtensionFilter("R data file", "R", "rda"));
-                chooser.setSize(400,400);
-                frameS1.add(chooser);
-                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                frameS1.setLocation(dim.width/2-frameS1.getSize().width/2, dim.height/2-frameS1.getSize().height/2);
-                
-                if(chooser.showOpenDialog(frameS1) == JFileChooser.APPROVE_OPTION){
-                    String url = chooser.getSelectedFile().getAbsolutePath();
-                    url = url.replaceAll("\\\\", "/");
-                    re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
-                    
-                    String[] errorMessage = re.eval("error").asStringArray();
+                    this.dispose();
 
-                    if(errorMessage[0].equals("NULL")){
-                        /* executem totes les accions possibles */
-                        showText();
-                        createVariables();
-                        createDataFrame();
-                        showGraphics();
+                    // executem script d'R
+
+                    frameS1 = new JFrame();
+                    chooser = new JFileChooser();
+                    frameS1.setSize(600,400);
+                    chooser.setDialogTitle("Select R script to execute");
+                    chooser.setFileFilter(new FileNameExtensionFilter("R data file", "R", "rda"));
+                    chooser.setSize(400,400);
+                    frameS1.add(chooser);
+                    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                    frameS1.setLocation(dim.width/2-frameS1.getSize().width/2, dim.height/2-frameS1.getSize().height/2);
+
+                    if(chooser.showOpenDialog(frameS1) == JFileChooser.APPROVE_OPTION){
+                        String url = chooser.getSelectedFile().getAbsolutePath();
+                        url = url.replaceAll("\\\\", "/");
+                        re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
+
+                        String[] errorMessage = re.eval("error").asStringArray();
+
+                        if(errorMessage[0].equals("NULL")){
+                            /* executem totes les accions possibles */
+                            showText();
+                            createVariables();
+                            createDataFrame();
+                            showGraphics();
+                        }
+                        else{
+                            OutputElement type = new OutputText("Error in R:");
+                            outputPanel.addOutput(type);
+                            OutputElement outElement = new OutputForR(errorMessage);
+                            outputPanel.addOutput(outElement);
+                           }
                     }
                     else{
-                        OutputElement type = new OutputText("Error in R:");
-                        outputPanel.addOutput(type);
-                        OutputElement outElement = new OutputForR(errorMessage);
-                        outputPanel.addOutput(outElement);
-                       }
-                }
-                else{
-                    frameS1.dispose();
+                        frameS1.dispose();
+                    }
+
                 }
                 
             }
