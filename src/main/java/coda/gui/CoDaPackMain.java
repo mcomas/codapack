@@ -147,7 +147,8 @@ public final class CoDaPackMain extends JFrame{
     private CompStatsSummaryMenu compStatsSummaryMenu;
     private ClasStatsSummaryMenu clasStatsSummaryMenu;
     private NormalityTestMenu normalityTestMenu;
-    private AtipicalityIndexMenu atipicalityIndexMenu;
+    //private AtipicalityIndexMenu atipicalityIndexMenu;
+    private AtypMenu atypMenu;
     private TernaryPlotMenu ternaryPlotMenu;
     private PrincipalComponentMenu principalComponentMenu;
     private PredictiveRegionMenu predictiveRegionMenu;
@@ -666,8 +667,8 @@ public final class CoDaPackMain extends JFrame{
             clasUniNormTestMenu.setVisible(true);
         }
         else if(title.equals(jMenuBar.ITEM_ATIP_INDEX)){
-            if(atipicalityIndexMenu == null || atipicalityIndexMenu.getDataFrame() != this.getActiveDataFrame()) atipicalityIndexMenu = new AtipicalityIndexMenu(this);
-            atipicalityIndexMenu.setVisible(true);
+            if(atypMenu == null || atypMenu.getDataFrame() != this.getActiveDataFrame()) atypMenu = new AtypMenu(this,re);
+            atypMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CENTER)){
             if(centerDataMenu == null || centerDataMenu.getDataFrame() != this.getActiveDataFrame()) centerDataMenu = new CenterDataMenu(this); 
             centerDataMenu.setVisible(true);
