@@ -274,10 +274,10 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
         else{
             int[][] baseX = this.ilrX.getPartition();
             re.assign("BaseX", baseX[0]);
-            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nr=1)");
+            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
             for(int i=1; i < baseX.length; i++){
                 re.assign("tmp", baseX[i]);
-                re.eval("BaseX" + " <- rbind(" + "BaseX" + ",matrix(tmp,nr=1))");
+                re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
             }
         }
         
@@ -289,10 +289,10 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
         else{
             int[][] baseY = this.ilrY.getPartition();
             re.assign("BaseY", baseY[0]);
-            re.eval("BaseY" + " <- matrix( " + "BaseY" + " ,nr=1)");
+            re.eval("BaseY" + " <- matrix( " + "BaseY" + " ,nc=1)");
             for(int i=1; i < baseY.length; i++){
                 re.assign("tmp", baseY[i]);
-                re.eval("BaseY" + " <- rbind(" + "BaseY" + ",matrix(tmp,nr=1))");
+                re.eval("BaseY" + " <- cbind(" + "BaseY" + ",matrix(tmp,nc=1))");
             }
         }
     }

@@ -254,10 +254,10 @@ public class S1 extends AbstractMenuDialogWithILR{
         else{
             int[][] baseX = super.getPartition();
             re.assign("BaseX", baseX[0]);
-            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nr=1)");
+            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
             for(int i=1; i < baseX.length; i++){
                 re.assign("tmp", baseX[i]);
-                re.eval("BaseX" + " <- rbind(" + "BaseX" + ",matrix(tmp,nr=1))");
+                re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
             }
         }
     }
