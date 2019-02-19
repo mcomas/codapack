@@ -100,9 +100,35 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
         });
         
         this.optionsPanel.add(numClusters);
+        numClusters.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                if(numClusters.isSelected()){
+                    numClustersTF.setEnabled(true);
+                    searchOpt.setSelected(false);
+                    searchOptTF.setEnabled(false);
+                }else{
+                    numClustersTF.setEnabled(false);
+                    searchOpt.setSelected(true);
+                    searchOptTF.setEnabled(true);
+                }
+            }
+        });
         this.optionsPanel.add(numClustersTF);
         this.optionsPanel.add(new JLabel(">=2"));
         this.optionsPanel.add(searchOpt);
+        searchOpt.addActionListener( new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                if(searchOpt.isSelected()){
+                    searchOptTF.setEnabled(true);
+                    numClusters.setSelected(false);
+                    numClustersTF.setEnabled(false);
+                }else{
+                    searchOptTF.setEnabled(false);
+                    numClusters.setSelected(true);
+                    numClustersTF.setEnabled(true);
+                }
+            }
+        });
         this.optionsPanel.add(new JLabel("2 and "));
         this.optionsPanel.add(searchOptTF);
         this.optionsPanel.add(new JLabel(">2"));
