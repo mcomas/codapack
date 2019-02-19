@@ -146,6 +146,7 @@ public final class CoDaPackMain extends JFrame{
     private AdvancedFilterMenu advancedFilterMenu;
     private CompStatsSummaryMenu compStatsSummaryMenu;
     private ClasStatsSummaryMenu clasStatsSummaryMenu;
+    private ClusterMenu clusterMenu;
     private NormalityTestMenu normalityTestMenu;
     //private AtipicalityIndexMenu atipicalityIndexMenu;
     private AtypMenu atypMenu;
@@ -656,6 +657,9 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_CLAS_STATS_SUMMARY)){
             if(clasStatsSummaryMenu == null || clasStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame()) clasStatsSummaryMenu = new ClasStatsSummaryMenu(this);
             clasStatsSummaryMenu.setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_CLUST_KMEANS)){
+            if(clusterMenu == null || clusterMenu.getDataFrame() != this.getActiveDataFrame()) clusterMenu = new ClusterMenu(this,re);
+            clusterMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_COMP_STATS_SUMMARY)){
             if(compStatsSummaryMenu == null || compStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame()) compStatsSummaryMenu = new CompStatsSummaryMenu(this); 
             compStatsSummaryMenu.setVisible(true);
