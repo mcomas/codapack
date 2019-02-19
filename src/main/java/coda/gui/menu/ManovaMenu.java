@@ -5,7 +5,6 @@
  */
 package coda.gui.menu;
 
-import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
@@ -13,7 +12,6 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -43,25 +41,25 @@ import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
 /**
- * ClusterMenu -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * ManovaMenu -> X numerica i Y numerica o categorica amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class ClusterMenu extends AbstractMenuDialogWithILR{
+public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
     
     Rengine re;
     DataFrame df;
-    JFrame frameClusterMenu;
-    JFrame[] framesClusterMenu;
+    JFrame frameManovaMenu;
+    JFrame[] framesManovaMenu;
     JFileChooser chooser;
     String tempDirR;
     String[] tempsDirR;
+    ILRMenu ilrX;
+    ILRMenu ilrY;
     
     /* options var */
     
-    JRadioButton numClusters = new JRadioButton("Number of Clusters");
-    JTextField numClustersTF = new JTextField(7);
-    JRadioButton searchOpt = new JRadioButton("Search optimal number of clusters between");
-    JTextField searchOptTF = new JTextField(7);
+    JRadioButton residuals = new JRadioButton("Residuals");
+    JRadioButton analyzeDiff = new JRadioButton("Analyze differences between pairs of groups");
     
     /*JRadioButton B1 = new JRadioButton("B1");
     JRadioButton B2 = new JRadioButton("B2");
@@ -75,63 +73,32 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
     
     public static final long serialVersionUID = 1L;
     
-    public ClusterMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Cluster Menu menu", false);
+    public ManovaMenu(final CoDaPackMain mainApp, Rengine r){
+        super(mainApp,"Manova Menu menu",false,false,true);
         re = r;
         
         /* options configuration */
         
-        JButton defaultPart = new JButton("Default Partition");
-        optionsPanel.add(defaultPart);
-        defaultPart.addActionListener(new java.awt.event.ActionListener() {
-            
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
-            }
-        });
-
-        JButton manuallyPart = new JButton("Define Manually");
-        optionsPanel.add(manuallyPart);
-        manuallyPart.addActionListener(new java.awt.event.ActionListener() {
-            
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                initiatePartitionMenu();
+        JButton xILR = new JButton("Set X partition");
+        this.optionsPanel.add(xILR);
+        xILR.addActionListener(new java.awt.event.ActionListener(){
+        
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+               configureILRX();
             }
         });
         
-        this.optionsPanel.add(numClusters);
-        numClusters.addActionListener( new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                if(numClusters.isSelected()){
-                    numClustersTF.setEnabled(true);
-                    searchOpt.setSelected(false);
-                    searchOptTF.setEnabled(false);
-                }else{
-                    numClustersTF.setEnabled(false);
-                    searchOpt.setSelected(true);
-                    searchOptTF.setEnabled(true);
-                }
+        JButton yILR = new JButton("Set Y parition");
+        //this.optionsPanel.add(yILR);
+        yILR.addActionListener(new java.awt.event.ActionListener(){
+        
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+               configureILRY();
             }
         });
-        this.optionsPanel.add(numClustersTF);
-        this.optionsPanel.add(new JLabel(">=2"));
-        this.optionsPanel.add(searchOpt);
-        searchOpt.addActionListener( new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                if(searchOpt.isSelected()){
-                    searchOptTF.setEnabled(true);
-                    numClusters.setSelected(false);
-                    numClustersTF.setEnabled(false);
-                }else{
-                    searchOptTF.setEnabled(false);
-                    numClusters.setSelected(true);
-                    numClustersTF.setEnabled(true);
-                }
-            }
-        });
-        this.optionsPanel.add(new JLabel("2 and "));
-        this.optionsPanel.add(searchOptTF);
-        this.optionsPanel.add(new JLabel(">2"));
+        
+        this.optionsPanel.add(residuals);
+        this.optionsPanel.add(analyzeDiff);
         /*this.optionsPanel.add(new JLabel("      P1:"));
         this.optionsPanel.add(P1);
         this.optionsPanel.add(new JLabel("      P2:"));
@@ -145,53 +112,46 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
         this.optionsPanel.add(B5);
         this.optionsPanel.add(B6);*/
     }
-
-    public void initiatePartitionMenu(){
-        BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData() );
-        binaryMenu.setVisible(true);
+    
+    public void configureILRX(){
+        if(this.ilrX == null || this.ilrX.getDsLength() != ds.getSelectedData1().length) this.ilrX = new ILRMenu(this.getSelectedData1());
+        this.ilrX.setVisible(true);
+    }
+    
+    public void configureILRY(){
+        if(this.ilrY == null || this.ilrY.getDsLength() != ds.getSelectedData2().length) this.ilrY = new ILRMenu(this.getSelectedData2());
+        this.ilrY.setVisible(true);
     }
     
     @Override
     public void acceptButtonActionPerformed(){
         
-        String selectedNames[] = super.ds.getSelectedData();
-        Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
+        String selectedNames1[] = super.ds.getSelectedData1();
+        Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(selectedNames1));
+        String selectedNames2[] = super.ds.getSelectedData2();
+        Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
         
-        if(selectedNames.length > 0){
+        if(selectedNames1.length > 0 && selectedNames2.length > 0){
             
             df = mainApplication.getActiveDataFrame();
-            DataFrame transformedDataFrame = new DataFrame(df);
+            double[][] numericData = df.getNumericalData(selectedNames1);
             
-            double[][] data = df.getNumericalData(selectedNames);
-            Vector<Integer> rowsToDeleteVect = new Vector<Integer>();
+            // Create X matrix
             
-            for(int i=0; i < data.length; i++){
-                for(int j = 0; j < data[i].length;j++){
-                    if(data[i][j] <= 0.0) rowsToDeleteVect.add(j);
-                }
-            }
-            
-            if(rowsToDeleteVect.size() == df.getMaxVariableLength()) JOptionPane.showMessageDialog(null,"No positive data to analize");
-            else{
-                if(rowsToDeleteVect.size() > 0){ // if some row to ignore we transform the dataFrame
-                    JOptionPane.showMessageDialog(null,"Some Data is negative into a var selected");
-                }
-                else{
-                    
-                    // create dataframe on r
+            // create dataframe on r
             
                         int auxPos = 0;
                         for(int i=0; i < df.size();i++){ // totes les columnes
-                            if(vSelectedNames.contains(df.get(i).getName())){
-                                re.eval(vSelectedNames.elementAt(auxPos) + " <- NULL");
+                            if(vSelectedNames1.contains(df.get(i).getName())){
+                                re.eval(vSelectedNames1.elementAt(auxPos) + " <- NULL");
                                 if(df.get(i).isNumeric()){
                                     for(double j : df.get(i).getNumericalData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +"," + String.valueOf(j) + ")");
                                     }
                                 }
                                 else{
                                     for(String j : df.get(i).getTextData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +",'" + j + "')");
+                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +",'" + j + "')");
                                     }
                                 }
                                 auxPos++;
@@ -199,77 +159,95 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
                         }
                         
                         String dataFrameString = "X <- data.frame(";
-                        for(int i=0; i < selectedNames.length;i++){
-                            dataFrameString += vSelectedNames.elementAt(i);
-                            if(i != selectedNames.length-1) dataFrameString += ",";
+                        for(int i=0; i < selectedNames1.length;i++){
+                            dataFrameString += vSelectedNames1.elementAt(i);
+                            if(i != selectedNames1.length-1) dataFrameString += ",";
                         }
                         
                         dataFrameString +=")";
                         
                         re.eval(dataFrameString); // we create the dataframe in R
+
                         
-                        constructParametersToR();
-                
-                    this.dispose();
-
-                    // executem script d'R
-
-                    frameClusterMenu = new JFrame();
-                    chooser = new JFileChooser();
-                    frameClusterMenu.setSize(600,400);
-                    chooser.setDialogTitle("Select R script to execute");
-                    chooser.setFileFilter(new FileNameExtensionFilter("R data file", "R", "rda"));
-                    chooser.setSize(400,400);
-                    frameClusterMenu.add(chooser);
-                    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                    frameClusterMenu.setLocation(dim.width/2-frameClusterMenu.getSize().width/2, dim.height/2-frameClusterMenu.getSize().height/2);
-
-                    if(chooser.showOpenDialog(frameClusterMenu) == JFileChooser.APPROVE_OPTION){
-                        String url = chooser.getSelectedFile().getAbsolutePath();
-                        url = url.replaceAll("\\\\", "/");
-                        re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
-
-                        String[] errorMessage = re.eval("error").asStringArray();
-
-                        if(errorMessage[0].equals("NULL")){
-                            /* executem totes les accions possibles */
-                            showText();
-                            createVariables();
-                            createDataFrame();
-                            showGraphics();
+            // create dataframe on r
+            
+                        auxPos = 0;
+                        for(int i=0; i < df.size();i++){ // totes les columnes
+                            if(vSelectedNames2.contains(df.get(i).getName())){
+                                re.eval(vSelectedNames2.elementAt(auxPos) + " <- NULL");
+                                if(df.get(i).isNumeric()){
+                                    for(double j : df.get(i).getNumericalData()){
+                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                    }
+                                }
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +",'" + j + "')");
+                                    }
+                                }
+                                auxPos++;
+                            }
                         }
-                        else{
-                            OutputElement type = new OutputText("Error in R:");
-                            outputPanel.addOutput(type);
-                            OutputElement outElement = new OutputForR(errorMessage);
-                            outputPanel.addOutput(outElement);
-                           }
+                        
+                        dataFrameString = "Y <- data.frame(";
+                        for(int i=0; i < selectedNames2.length;i++){
+                            dataFrameString += vSelectedNames2.elementAt(i);
+                            if(i != selectedNames2.length-1) dataFrameString += ",";
+                        }
+                        
+                        dataFrameString +=")";
+                        
+                        re.eval(dataFrameString); // we create the dataframe in R
+            
+                
+                constructParametersToR();        
+                this.dispose();
+                
+                // executem script d'R
+                
+                frameManovaMenu = new JFrame();
+                chooser = new JFileChooser();
+                frameManovaMenu.setSize(600,400);
+                chooser.setDialogTitle("Select R script to execute");
+                chooser.setFileFilter(new FileNameExtensionFilter("R data file", "R", "rda"));
+                chooser.setSize(400,400);
+                frameManovaMenu.add(chooser);
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                frameManovaMenu.setLocation(dim.width/2-frameManovaMenu.getSize().width/2, dim.height/2-frameManovaMenu.getSize().height/2);
+                
+                if(chooser.showOpenDialog(frameManovaMenu) == JFileChooser.APPROVE_OPTION){
+                    String url = chooser.getSelectedFile().getAbsolutePath();
+                    url = url.replaceAll("\\\\", "/");
+                    re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
+                    
+                    String[] errorMessage = re.eval("error").asStringArray();
+
+                    if(errorMessage[0].equals("NULL")){
+                        /* executem totes les accions possibles */
+                        showText();
+                        createVariables();
+                        createDataFrame();
+                        showGraphics();
                     }
                     else{
-                        frameClusterMenu.dispose();
+                        OutputElement type = new OutputText("Error in R:");
+                        outputPanel.addOutput(type);
+                        OutputElement outElement = new OutputForR(errorMessage);
+                        outputPanel.addOutput(outElement);
                     }
-
                 }
-                
-            }
-            
+                else{
+                    frameManovaMenu.dispose();
+                }
         }
         else{
-            JOptionPane.showMessageDialog(null,"Please select data");
+            if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");
+            else JOptionPane.showMessageDialog(null, "No data selected in data 2");
         }
     }
     
     void constructParametersToR(){
         /* construim parametres string */
-        
-        if(this.numClusters.isSelected()){
-            re.eval("B1 <- TRUE");
-            re.eval("P1 <- \"" + this.numClustersTF.getText() + "\"");
-        }
-        else{
-            re.eval("B1 <- FALSE");
-            re.eval("P1 <- \"" + this.searchOptTF.getText() + "\"");
-        }
         
         /*if(this.P1.getText().length() > 0) re.eval("P1 <- \"" + this.P1.getText() + "\"");
         else re.eval("P1 <- \"\"");
@@ -280,11 +258,12 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
         
         /* construim parametres logics */
         
-        /*if(this.B1.isSelected()) re.eval("B1 <- TRUE");
+        if(this.residuals.isSelected()) re.eval("B1 <- TRUE");
         else re.eval("B1 <- FALSE");
-        if(this.B2.isSelected()) re.eval("B2 <- TRUE");
+        if(this.analyzeDiff.isSelected()) re.eval("B2 <- TRUE");
         else re.eval("B2 <- FALSE");
-        if(this.B3.isSelected()) re.eval("B3 <- TRUE");
+        
+        /*if(this.B3.isSelected()) re.eval("B3 <- TRUE");
         else re.eval("B3 <- FALSE");
         if(this.B4.isSelected()) re.eval("B4 <- TRUE");
         else re.eval("B4 <- FALSE");
@@ -295,16 +274,31 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
         
         /* construim la matriu BaseX */
         
-        if(super.partitionILR == null || super.getPartition().length == 0){
+        if(this.ilrX == null || this.ilrX.getPartition().length == 0){
             re.eval("BaseX <- NULL");
         }
         else{
-            int[][] baseX = super.getPartition();
+            int[][] baseX = this.ilrX.getPartition();
             re.assign("BaseX", baseX[0]);
             re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
             for(int i=1; i < baseX.length; i++){
                 re.assign("tmp", baseX[i]);
                 re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
+            }
+        }
+        
+        /* construim la matriu BaseY */
+        
+        if(this.ilrY == null || this.ilrY.getPartition().length == 0){
+            re.eval("BaseY <- NULL");
+        }
+        else{
+            int[][] baseY = this.ilrY.getPartition();
+            re.assign("BaseY", baseY[0]);
+            re.eval("BaseY" + " <- matrix( " + "BaseY" + " ,nc=1)");
+            for(int i=1; i < baseY.length; i++){
+                re.assign("tmp", baseY[i]);
+                re.eval("BaseY" + " <- cbind(" + "BaseY" + ",matrix(tmp,nc=1))");
             }
         }
     }
@@ -345,13 +339,13 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
     void showGraphics(){
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesClusterMenu = new JFrame[numberOfGraphics];
+        this.framesManovaMenu = new JFrame[numberOfGraphics];
         this.tempsDirR = new String[numberOfGraphics];
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
             tempsDirR[i] = tempDirR;
-            plotClusterMenu(i);
-        }     
+            plotManovaMenu(i);
+        }  
     }
     
     void createVariables(){
@@ -372,7 +366,8 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
             mainApplication.updateDataFrame(df);
         }
         
-        /*int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt();  numero de noves variables
+        /*
+        int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt();  numero de noves variables
         for(int i=0; i < numberOfNewVar; i++){
             String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();  guardem el nom de la variable 
             String isNumeric = re.eval("class(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
@@ -385,10 +380,11 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
                 df.addData(varName, new Variable(varName,data));
             }
             mainApplication.updateDataFrame(df);
-        }*/
+        }
+        */
     }
     
-    private void plotClusterMenu(int position) {
+    private void plotManovaMenu(int position) {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -396,7 +392,7 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            framesClusterMenu[position] = new JFrame();
+            framesManovaMenu[position] = new JFrame();
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -416,17 +412,17 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
             menuItem.addActionListener(new quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            framesClusterMenu[position].setJMenuBar(menuBar);
+            framesManovaMenu[position].setJMenuBar(menuBar);
             panel.setSize(800,800);
             ImageIcon icon = new ImageIcon(tempDirR);
             JLabel label = new JLabel(icon,JLabel.CENTER);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
             panel.add(label);
-            framesClusterMenu[position].getContentPane().add(panel);
+            framesManovaMenu[position].getContentPane().add(panel);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesClusterMenu[position].setSize(800,800);
-            framesClusterMenu[position].setLocation(dim.width/2-framesClusterMenu[position].getSize().width/2, dim.height/2-framesClusterMenu[position].getSize().height/2);
+            framesManovaMenu[position].setSize(800,800);
+            framesManovaMenu[position].setLocation(dim.width/2-framesManovaMenu[position].getSize().width/2, dim.height/2-framesManovaMenu[position].getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -434,16 +430,16 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        framesClusterMenu[position].dispose();
+                        framesManovaMenu[position].dispose();
                         File file = new File(tempsDirR[position]);
                         file.delete();
                     }
                 }
             };
             
-            framesClusterMenu[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            framesClusterMenu[position].addWindowListener(exitListener);
-            framesClusterMenu[position].setVisible(true);
+            framesManovaMenu[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesManovaMenu[position].addWindowListener(exitListener);
+            framesManovaMenu[position].setVisible(true);
     }
 
     public DataFrame getDataFrame() {
@@ -461,7 +457,7 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                framesClusterMenu[position].dispose();
+                framesManovaMenu[position].dispose();
                 File file = new File(tempsDirR[position]);
                 file.delete();
             }
@@ -512,4 +508,5 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
             }
         }
     }
+    
 }
