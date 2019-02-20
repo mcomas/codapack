@@ -183,7 +183,7 @@ public class AtypMenu extends AbstractMenuDialog{
     void constructParametersToR(){
         /* construim parametres string */
         
-        if(this.lConf.getText().length() > 0) re.eval("P1 <- \"" + this.lConf.getText() + "\"");
+        if(this.lConf.getText().length() > 0) re.eval("P1 <- " + this.lConf.getText());
         else re.eval("P1 <- \"\"");
     }
     

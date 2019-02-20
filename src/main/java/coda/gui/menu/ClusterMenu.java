@@ -264,11 +264,11 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
         
         if(this.numClusters.isSelected()){
             re.eval("B1 <- TRUE");
-            re.eval("P1 <- \"" + this.numClustersTF.getText() + "\"");
+            re.eval("P1 <- " + this.numClustersTF.getText());
         }
         else{
             re.eval("B1 <- FALSE");
-            re.eval("P1 <- \"" + this.searchOptTF.getText() + "\"");
+            re.eval("P1 <- " + this.searchOptTF.getText());
         }
         
         /*if(this.P1.getText().length() > 0) re.eval("P1 <- \"" + this.P1.getText() + "\"");
