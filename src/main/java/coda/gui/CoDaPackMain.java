@@ -148,6 +148,7 @@ public final class CoDaPackMain extends JFrame{
     private ClasStatsSummaryMenu clasStatsSummaryMenu;
     private ClusterMenu clusterMenu;
     private ManovaMenu manovaMenu;
+    private DiscriminantMenu discriminantMenu;
     private NormalityTestMenu normalityTestMenu;
     //private AtipicalityIndexMenu atipicalityIndexMenu;
     private AtypMenu atypMenu;
@@ -664,6 +665,9 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_MANOVA)){
             if(manovaMenu == null || manovaMenu.getDataFrame() != this.getActiveDataFrame()) manovaMenu = new ManovaMenu(this,re);
             manovaMenu.setVisible(true);
+        }else if(title.contains(jMenuBar.ITEM_DISC_ANALYSIS)){
+            if(discriminantMenu == null || discriminantMenu.getDataFrame() != this.getActiveDataFrame()) discriminantMenu = new DiscriminantMenu(this,re);
+            discriminantMenu.setVisible(true);        
         }else if(title.equals(jMenuBar.ITEM_COMP_STATS_SUMMARY)){
             if(compStatsSummaryMenu == null || compStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame()) compStatsSummaryMenu = new CompStatsSummaryMenu(this); 
             compStatsSummaryMenu.setVisible(true);
