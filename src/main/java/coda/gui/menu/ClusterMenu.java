@@ -46,7 +46,7 @@ import org.rosuda.JRI.Rengine;
  * ClusterMenu -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class ClusterMenu extends AbstractMenuDialogWithILR{
+public class ClusterMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
@@ -81,23 +81,23 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
         
         /* options configuration */
         
-        JButton defaultPart = new JButton("Default Partition");
+        /*JButton defaultPart = new JButton("Default Partition");
         optionsPanel.add(defaultPart);
         defaultPart.addActionListener(new java.awt.event.ActionListener() {
             
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
             }
-        });
+        });*/
 
-        JButton manuallyPart = new JButton("Define Manually");
+        /*JButton manuallyPart = new JButton("Define Manually");
         optionsPanel.add(manuallyPart);
         manuallyPart.addActionListener(new java.awt.event.ActionListener() {
             
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 initiatePartitionMenu();
             }
-        });
+        });*/
         
         this.optionsPanel.add(numClusters);
         numClusters.addActionListener( new ActionListener(){
@@ -146,10 +146,10 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
         this.optionsPanel.add(B6);*/
     }
 
-    public void initiatePartitionMenu(){
+    /*public void initiatePartitionMenu(){
         BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData() );
         binaryMenu.setVisible(true);
-    }
+    }*/
     
     @Override
     public void acceptButtonActionPerformed(){
@@ -295,7 +295,7 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
         
         /* construim la matriu BaseX */
         
-        if(super.partitionILR == null || super.getPartition().length == 0){
+        /*if(super.partitionILR == null || super.getPartition().length == 0){
             re.eval("BaseX <- NULL");
         }
         else{
@@ -306,7 +306,7 @@ public class ClusterMenu extends AbstractMenuDialogWithILR{
                 re.assign("tmp", baseX[i]);
                 re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
             }
-        }
+        }*/
     }
     
     void showText(){

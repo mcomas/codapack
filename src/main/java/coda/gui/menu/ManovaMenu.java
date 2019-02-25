@@ -79,7 +79,7 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
         
         /* options configuration */
         
-        JButton xILR = new JButton("Set X partition");
+        /*JButton xILR = new JButton("Set X partition");
         this.optionsPanel.add(xILR);
         xILR.addActionListener(new java.awt.event.ActionListener(){
         
@@ -95,7 +95,7 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
             public void actionPerformed(java.awt.event.ActionEvent evt){
                configureILRY();
             }
-        });
+        });*/
         
         this.optionsPanel.add(residuals);
         this.optionsPanel.add(analyzeDiff);
@@ -274,7 +274,7 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
         
         /* construim la matriu BaseX */
         
-        if(this.ilrX == null || this.ilrX.getPartition().length == 0){
+        /*if(this.ilrX == null || this.ilrX.getPartition().length == 0){
             re.eval("BaseX <- NULL");
         }
         else{
@@ -285,11 +285,11 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
                 re.assign("tmp", baseX[i]);
                 re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
             }
-        }
+        }*/
         
         /* construim la matriu BaseY */
         
-        if(this.ilrY == null || this.ilrY.getPartition().length == 0){
+        /*if(this.ilrY == null || this.ilrY.getPartition().length == 0){
             re.eval("BaseY <- NULL");
         }
         else{
@@ -300,7 +300,7 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
                 re.assign("tmp", baseY[i]);
                 re.eval("BaseY" + " <- cbind(" + "BaseY" + ",matrix(tmp,nc=1))");
             }
-        }
+        }*/
     }
     
     void showText(){
