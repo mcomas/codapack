@@ -128,13 +128,17 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
     public void acceptButtonActionPerformed(){
         
         String selectedNames1[] = super.ds.getSelectedData1();
+        boolean allYNumeric = true;
         Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(selectedNames1));
         String selectedNames2[] = super.ds.getSelectedData2();
         Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
+        df = mainApplication.getActiveDataFrame();
+        for(int i=0; i < vSelectedNames2.size() && allYNumeric;i++){
+            if(df.get(vSelectedNames2.get(i)).isText()) allYNumeric = false;
+        }
         
-        if(selectedNames1.length > 0 && selectedNames2.length > 0){
+        if(selectedNames1.length > 0 && selectedNames2.length > 0 && allYNumeric){
             
-            df = mainApplication.getActiveDataFrame();
             double[][] numericData = df.getNumericalData(selectedNames1);
             
             // Create X matrix
@@ -242,8 +246,15 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
                 }
         }
         else{
-            if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");
-            else JOptionPane.showMessageDialog(null, "No data selected in data 2");
+            if(selectedNames1.length == 0){
+                JOptionPane.showMessageDialog(null, "No data selected in data 1");
+            }
+            else if(!allYNumeric){
+                JOptionPane.showMessageDialog(null, "Some data in Y is not numeric");
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "No data selected in data 2");
+            }
         }
     }
     
