@@ -128,13 +128,32 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
     public void acceptButtonActionPerformed(){
         
         String selectedNames1[] = super.ds.getSelectedData1();
+        boolean allXpositive = true;
+        boolean allYNumeric = true;
+        df = mainApplication.getActiveDataFrame();
         Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(selectedNames1));
         String selectedNames2[] = super.ds.getSelectedData2();
         Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
         
-        if(selectedNames1.length > 0 && selectedNames2.length > 0){
+        /* comprovar que les dades de X són positives */
+        double[][] data = df.getNumericalData(selectedNames1);
+        
+        for(int i=0; i < data.length && allXpositive;i++){
+            for(int j=0; j < data[i].length && allXpositive;j++){
+                if(data[i][j] <= 0.0) allXpositive = false; 
+            }
+        }
+        
+       /* comprovar que les dades de X siguin numeriques */
+       
+       if(allXpositive){
+            for(int i=0; i < vSelectedNames2.size() && allYNumeric;i++){
+                if(df.get(vSelectedNames2.get(i)).isText()) allYNumeric = false;
+            }
+       }
+        
+        if(selectedNames1.length > 0 && selectedNames2.length > 0 && allXpositive && allYNumeric){
             
-            df = mainApplication.getActiveDataFrame();
             double[][] numericData = df.getNumericalData(selectedNames1);
             
             // Create X matrix
@@ -243,6 +262,8 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");
+            else if(!allXpositive) JOptionPane.showMessageDialog(null, "Some data in X is not positive");
+            else if(!allYNumeric) JOptionPane.showMessageDialog(null, "Some data in Y is not numeric");
             else JOptionPane.showMessageDialog(null, "No data selected in data 2");
         }
     }
