@@ -16,15 +16,23 @@ import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -244,7 +252,11 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
                         showText();
                         createVariables();
                         createDataFrame();
-                        showGraphics();
+                        try {
+                            showGraphics();
+                        } catch (IOException ex) {
+                            Logger.getLogger(LM1.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     else{
                         OutputElement type = new OutputText("Error in R:");
@@ -362,7 +374,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
         }
     }
     
-    void showGraphics(){
+    void showGraphics() throws IOException{
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
         this.framesLM1 = new JFrame[numberOfGraphics];
@@ -410,7 +422,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
         */
     }
     
-    private void plotLM1(int position) {
+    private void plotLM1(int position) throws IOException {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -440,7 +452,21 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             menu.add(menuItem);
             framesLM1[position].setJMenuBar(menuBar);
             panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
+            /* new code to resize the image */
+            BufferedImage img =  ImageIO.read(new File(tempDirR));
+            ImageIcon icon = new ImageIcon(img);
+            Image image = icon.getImage();
+            Image newImg = image.getScaledInstance(panel.getWidth()-100, panel.getHeight()-100, Image.SCALE_SMOOTH);
+            ImageIcon imageFinal = new ImageIcon(newImg);
+            JLabel label = new JLabel(imageFinal);
+            label.addComponentListener(new ComponentAdapter(){
+                public void componentResized(ComponentEvent e){
+                    JLabel label = (JLabel) e.getComponent();
+                    Dimension size = label.getSize();
+                    // tornar a printar el gràfic
+                }
+            });
+            /*ImageIcon icon = new ImageIcon(tempDirR);
             JLabel label = new JLabel(icon,JLabel.CENTER);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
@@ -448,7 +474,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             framesLM1[position].getContentPane().add(panel);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             framesLM1[position].setSize(800,800);
-            framesLM1[position].setLocation(dim.width/2-framesLM1[position].getSize().width/2, dim.height/2-framesLM1[position].getSize().height/2);
+            framesLM1[position].setLocation(dim.width/2-framesLM1[position].getSize().width/2, dim.height/2-framesLM1[position].getSize().height/2);*/
             
             WindowListener exitListener = new WindowAdapter(){
                 
