@@ -41,7 +41,7 @@ import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
 /**
- * LM1 -> X numerica i Y positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * LM1 -> X numerica i Y numerica positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class LM1 extends AbstractMenuDialog2NumCatONum{
@@ -129,6 +129,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
         
         String selectedNames1[] = super.ds.getSelectedData1();
         boolean allYNumeric = true;
+        boolean allYPositive = true;
         Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(selectedNames1));
         String selectedNames2[] = super.ds.getSelectedData2();
         Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
@@ -137,7 +138,18 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             if(df.get(vSelectedNames2.get(i)).isText()) allYNumeric = false;
         }
         
-        if(selectedNames1.length > 0 && selectedNames2.length > 0 && allYNumeric){
+        if(allYNumeric){
+            double[][] data = df.getNumericalData(selectedNames2);
+            
+            for(int i=0; i < data.length && allYPositive; i++){
+                for(int j = 0; j < data[i].length && allYPositive;j++){
+                    if(data[i][j] <= 0.0) allYPositive = false;
+                }
+            }
+        }
+            
+        
+        if(selectedNames1.length > 0 && selectedNames2.length > 0 && allYNumeric && allYPositive){
             
             double[][] numericData = df.getNumericalData(selectedNames1);
             
@@ -251,6 +263,9 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             }
             else if(!allYNumeric){
                 JOptionPane.showMessageDialog(null, "Some data in Y is not numeric");
+            }
+            else if(!allYPositive){
+                JOptionPane.showMessageDialog(null, "Some data in Y is not positive");
             }
             else{
                 JOptionPane.showMessageDialog(null, "No data selected in data 2");
