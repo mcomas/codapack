@@ -57,6 +57,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButton;
 import javax.swing.UIManager;
 
 /**
@@ -70,11 +71,23 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     String tempDirR;
     DataFrame df;
     
+    /* options var */
+   
+    JRadioButton B1 = new JRadioButton("Show means");
+    JRadioButton B2 = new JRadioButton("Show percentages");
+    String showMeans = "show.means = " ;
+    String barLabels = "bar.labels = ";
+    
     public static final long serialVersionUID = 1L;
     
     public ZpatternsMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "ZPatterns Plot Menu", false);
         re = r;
+        
+        /* options configuration */
+        
+        this.optionsPanel.add(B1);
+        this.optionsPanel.add(B2);
     }
     
     @Override
@@ -96,6 +109,14 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                     re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
                 }
                 
+                /* OPTIONS CONFIGURATION */
+                
+                if(B1.isSelected()) showMeans += "TRUE";
+                else showMeans += "FALSE";
+                
+                if(B2.isSelected()) barLabels += "TRUE";
+                else barLabels += "FALSE";
+               
                 //String OS = System.getProperty("os.name").toLowerCase();
                 //String tempDir = System.getProperty("java.io.tmpdir");
                 re.eval("mypath = tempdir()");
@@ -104,8 +125,8 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 
                 re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
                 re.eval("png(mypath,width=700,height=700");
-                re.eval("zCompositions::zPatterns(X,label=0)");
-                re.eval("out <- capture.output(zCompositions::zPatterns(X,label=0))");
+                re.eval("zCompositions::zPatterns(X,label=0," + showMeans + "," + barLabels + ")");
+                re.eval("out <- capture.output(zCompositions::zPatterns(X,label=0," + showMeans + "," + barLabels + "))");
                 re.eval("dev.off()");
                 
                 setVisible(false);
@@ -174,8 +195,8 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 
                     re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width="+String.valueOf(size.width-100)+",height=" + String.valueOf(size.height-100) +")");
                     re.eval("png(mypath,width="+String.valueOf(size.width-100)+",height="+String.valueOf(size.height-100)+")");
-                    re.eval("zCompositions::zPatterns(X,label=0)");
-                    re.eval("out <- capture.output(zCompositions::zPatterns(X,label=0))");
+                    re.eval("zCompositions::zPatterns(X,label=0," + showMeans + "," + barLabels + ")");
+                    re.eval("out <- capture.output(zCompositions::zPatterns(X,label=0," + showMeans + "," + barLabels + "))");
                     re.eval("dev.off()");
                     BufferedImage img = null;
                     try {
