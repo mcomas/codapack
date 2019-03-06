@@ -141,6 +141,8 @@ public final class CoDaPackMain extends JFrame{
     private ZeroReplacementMenu zeroReplacementMenu;
     private ZeroReplacementRMenu zeroReplacementRMenu;
     private LogRatioEMMenu logRatioEMMenu;
+    private EM_MissingMenu EM_MissingMenu;
+    private EM_ZeroMissingMenu EM_ZeroMissingMenu;
     private SortDataMenu sortDataMenu;
     private FilterMenu filterMenu;
     private AdvancedFilterMenu advancedFilterMenu;
@@ -715,6 +717,9 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_LOG_RATIO)){
             if(logRatioEMMenu == null || logRatioEMMenu.getDataFrame() != this.getActiveDataFrame()) logRatioEMMenu = new LogRatioEMMenu(this,re);
             logRatioEMMenu.setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_EM_MISSING)){
+            if(EM_MissingMenu == null || EM_MissingMenu.getDataFrame() != this.getActiveDataFrame()) EM_MissingMenu = new EM_MissingMenu(this,re);
+            EM_MissingMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_SORT_DATA)){
             if(sortDataMenu == null || sortDataMenu.getDataFrame() != this.getActiveDataFrame()) sortDataMenu = new SortDataMenu(this,re);
             sortDataMenu.setVisible(true);

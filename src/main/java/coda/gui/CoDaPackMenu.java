@@ -110,10 +110,14 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_ZEROSMENU = "Zeros";
             public JMenuItem itemSetDetectionLimit;
             public final String ITEM_SETDETECTION ="Set detection limit";
-            public final JMenuItem itemZerosR;
+            public JMenuItem itemZerosR;
             public final String ITEM_ZEROS_R = "Rounded zero replacement";
-            public final JMenuItem itemLogRatio;
+            public JMenuItem itemLogRatio;
             public final String ITEM_LOG_RATIO = "Logratio-EM zero Replacement";
+            public JMenuItem itemEM_Missing;
+            public final String ITEM_EM_MISSING = "Logratio-EM missing replacement";
+            public JMenuItem itemEM_Zero_Missing;
+            public final String ITEM_EM_ZERO_MISSING = "Logratio-EM Zero & missing replacement";
         public JMenu menuManipulate;
         public final String ITEM_MANI = "Manipulate";
             public JMenuItem itemDiscretize;
@@ -427,6 +431,8 @@ public class CoDaPackMenu extends JMenuBar{
                 itemSetDetectionLimit = new JMenuItem();
                 itemZerosR = new JMenuItem();
                 itemLogRatio = new JMenuItem();
+                itemEM_Missing = new JMenuItem();
+                itemEM_Zero_Missing = new JMenuItem();
             menuManipulate = new JMenu();
                 itemDiscretize = new JMenuItem();
                 itemCalculateNewVar = new JMenuItem();
@@ -540,6 +546,8 @@ public class CoDaPackMenu extends JMenuBar{
             addJMenuItem(menuZeros,itemSetDetectionLimit,ITEM_SETDETECTION);
             addJMenuItem(menuZeros, itemZerosR, ITEM_ZEROS_R);
             addJMenuItem(menuZeros, itemLogRatio, ITEM_LOG_RATIO);
+            addJMenuItem(menuZeros, itemEM_Missing, ITEM_EM_MISSING);
+            addJMenuItem(menuZeros,itemEM_Zero_Missing, ITEM_EM_ZERO_MISSING);
         menuData.addSeparator();
         menuManipulate.setText(ITEM_MANI);
         menuData.add(menuManipulate);
