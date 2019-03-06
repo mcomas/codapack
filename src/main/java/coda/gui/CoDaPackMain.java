@@ -720,6 +720,9 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_EM_MISSING)){
             if(EM_MissingMenu == null || EM_MissingMenu.getDataFrame() != this.getActiveDataFrame()) EM_MissingMenu = new EM_MissingMenu(this,re);
             EM_MissingMenu.setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_EM_ZERO_MISSING)){
+            if(EM_ZeroMissingMenu == null || EM_ZeroMissingMenu.getDataFrame() != this.getActiveDataFrame()) EM_ZeroMissingMenu = new EM_ZeroMissingMenu(this,re);
+            EM_ZeroMissingMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_SORT_DATA)){
             if(sortDataMenu == null || sortDataMenu.getDataFrame() != this.getActiveDataFrame()) sortDataMenu = new SortDataMenu(this,re);
             sortDataMenu.setVisible(true);
