@@ -46,7 +46,7 @@ import org.rosuda.JRI.Rengine;
  * EM_MissingMenu -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class EM_MissingMenu extends AbstractMenuDialogWithILR{
+public class EM_MissingMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
@@ -79,24 +79,6 @@ public class EM_MissingMenu extends AbstractMenuDialogWithILR{
         
         /* options configuration */
         
-        JButton defaultPart = new JButton("Default Partition");
-        optionsPanel.add(defaultPart);
-        defaultPart.addActionListener(new java.awt.event.ActionListener() {
-            
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
-            }
-        });
-
-        JButton manuallyPart = new JButton("Define Manually");
-        optionsPanel.add(manuallyPart);
-        manuallyPart.addActionListener(new java.awt.event.ActionListener() {
-            
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                initiatePartitionMenu();
-            }
-        });
-        
         this.optionsPanel.add(B1);
         this.optionsPanel.add(new JLabel("          "));
         this.optionsPanel.add(new JLabel("Label for missing values "));
@@ -113,11 +95,6 @@ public class EM_MissingMenu extends AbstractMenuDialogWithILR{
         this.optionsPanel.add(B4);
         this.optionsPanel.add(B5);
         this.optionsPanel.add(B6);*/
-    }
-
-    public void initiatePartitionMenu(){
-        BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData() );
-        binaryMenu.setVisible(true);
     }
     
     @Override
@@ -260,19 +237,6 @@ public class EM_MissingMenu extends AbstractMenuDialogWithILR{
         else re.eval("B6 <- FALSE");*/
         
         /* construim la matriu BaseX */
-        
-        if(super.partitionILR == null || super.getPartition().length == 0){
-            re.eval("BaseX <- NULL");
-        }
-        else{
-            int[][] baseX = super.getPartition();
-            re.assign("BaseX", baseX[0]);
-            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
-            for(int i=1; i < baseX.length; i++){
-                re.assign("tmp", baseX[i]);
-                re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
-            }
-        }
     }
     
     void showText(){
