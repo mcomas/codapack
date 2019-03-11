@@ -16,15 +16,23 @@ import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -235,7 +243,11 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
                         showText();
                         createVariables();
                         createDataFrame();
-                        showGraphics();
+                        try {
+                            showGraphics();
+                        } catch (IOException ex) {
+                            Logger.getLogger(DiscriminantMenu.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     else{
                         OutputElement type = new OutputText("Error in R:");
@@ -343,7 +355,7 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
         }
     }
     
-    void showGraphics(){
+    void showGraphics() throws IOException{
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
         this.framesDiscriminantMenu = new JFrame[numberOfGraphics];
@@ -391,7 +403,7 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
         */
     }
     
-    private void plotDiscriminantMenu(int position) {
+    private void plotDiscriminantMenu(int position) throws IOException {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -421,7 +433,47 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
             menu.add(menuItem);
             framesDiscriminantMenu[position].setJMenuBar(menuBar);
             panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
+            BufferedImage img = ImageIO.read(new File(tempsDirR[position]));
+            ImageIcon icon = new ImageIcon(img);
+            Image image = icon.getImage();
+            Image newImg = image.getScaledInstance(panel.getWidth()-100, panel.getHeight()-100, Image.SCALE_SMOOTH);
+            ImageIcon imageFinal = new ImageIcon(newImg);
+            JLabel label = new JLabel(imageFinal);
+            label.addComponentListener(new ComponentAdapter(){
+                public void componentResized(ComponentEvent e){
+                    JLabel label = (JLabel) e.getComponent();
+                    Dimension size = label.getSize();
+                    if(position==0){
+                        re.eval("png(graphnames[1],width="+String.valueOf(size.width-100)+",height=" + String.valueOf(size.height-100) +")");
+                        re.eval("plot(lda1,dimen=1,type=\"both\")");
+                        re.eval("dev.off()");
+                    }
+                    else{
+                        re.eval("png(graphnames[2],width="+String.valueOf(size.width-100)+",height=" + String.valueOf(size.height-100) +")");
+                        re.eval("plot(density(plda1$x[plda1$class==nam[1]]), xlim=c(-7,7),ylim=c(0,0.5),main=\"lda\",xlab=\"discriminant index\")");
+                        re.eval("lines(density(plda1$x[plda1$class==nam[2]]),lty=2)");
+                        re.eval("dev.off()");
+                    }
+                    BufferedImage img = null;
+                    try {
+                        img = ImageIO.read(new File(tempsDirR[position]));
+                    } catch (IOException ex) {
+                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    ImageIcon icon = new ImageIcon(img);
+                    Image image = icon.getImage();
+                    Image newImg = image.getScaledInstance(size.width-100, size.height-100, Image.SCALE_SMOOTH);
+                    ImageIcon imageFinal = new ImageIcon(newImg);
+                    label.setIcon(imageFinal);
+                }
+            });
+            panel.setLayout(new GridBagLayout());
+            panel.add(label);
+            framesDiscriminantMenu[position].getContentPane().add(label);
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            framesDiscriminantMenu[position].setSize(800,800);
+            framesDiscriminantMenu[position].setLocation(dim.width/2-framesDiscriminantMenu[position].getSize().width/2, dim.height/2-framesDiscriminantMenu[position].getSize().height/2);
+            /*ImageIcon icon = new ImageIcon(tempDirR);
             JLabel label = new JLabel(icon,JLabel.CENTER);
             label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
@@ -429,7 +481,7 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
             framesDiscriminantMenu[position].getContentPane().add(panel);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             framesDiscriminantMenu[position].setSize(800,800);
-            framesDiscriminantMenu[position].setLocation(dim.width/2-framesDiscriminantMenu[position].getSize().width/2, dim.height/2-framesDiscriminantMenu[position].getSize().height/2);
+            framesDiscriminantMenu[position].setLocation(dim.width/2-framesDiscriminantMenu[position].getSize().width/2, dim.height/2-framesDiscriminantMenu[position].getSize().height/2);*/
             
             WindowListener exitListener = new WindowAdapter(){
                 
