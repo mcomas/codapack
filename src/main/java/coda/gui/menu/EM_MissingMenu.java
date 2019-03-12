@@ -80,9 +80,9 @@ public class EM_MissingMenu extends AbstractMenuDialog{
         /* options configuration */
         
         this.optionsPanel.add(B1);
-        this.optionsPanel.add(new JLabel("          "));
-        this.optionsPanel.add(new JLabel("Label for missing values "));
-        this.optionsPanel.add(P1);
+        //this.optionsPanel.add(new JLabel("          "));
+        //this.optionsPanel.add(new JLabel("Label for missing values "));
+        //this.optionsPanel.add(P1);
         /*this.optionsPanel.add(new JLabel("      P1:"));
         this.optionsPanel.add(P1);
         this.optionsPanel.add(new JLabel("      P2:"));
@@ -153,6 +153,12 @@ public class EM_MissingMenu extends AbstractMenuDialog{
                         dataFrameString +=")";
                         
                         re.eval(dataFrameString); // we create the dataframe in R
+                        
+                        /*re.eval("out <- capture.output(X)");
+                        String[] output = re.eval("out").asStringArray();
+                        
+                        OutputElement e = new OutputForR(output);
+                        outputPanel.addOutput(e);*/
                         
                         constructParametersToR();
                 
