@@ -44,7 +44,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
@@ -62,7 +61,6 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
     String tempDirR;
     String[] tempsDirR;
     ILRMenu ilrX;
-    //ILRMenu ilrY;
     
     /* options var */
     
@@ -71,16 +69,6 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
     JRadioButton B3 = new JRadioButton("Discriminant scores");
     JRadioButton B4 = new JRadioButton("Maximum a posteriori probability classification");
     JRadioButton B5 = new JRadioButton("Posterior probabilities for the classes");
-    
-    /*JRadioButton B1 = new JRadioButton("B1");
-    JRadioButton B2 = new JRadioButton("B2");
-    JRadioButton B3 = new JRadioButton("B3");
-    JRadioButton B4 = new JRadioButton("B4");
-    JRadioButton B5 = new JRadioButton("B5");
-    JRadioButton B6 = new JRadioButton("B6");
-    JTextField P1 = new JTextField(20);
-    JTextField P2 = new JTextField(20);
-    JTextField P3 = new JTextField(20);*/
     
     public static final long serialVersionUID = 1L;
     
@@ -99,29 +87,6 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
             }
         });
         
-        /*JButton yILR = new JButton("Set Y parition");
-        this.optionsPanel.add(yILR);
-        yILR.addActionListener(new java.awt.event.ActionListener(){
-        
-            public void actionPerformed(java.awt.event.ActionEvent evt){
-               configureILRY();
-            }
-        });
-        
-        
-        this.optionsPanel.add(new JLabel("      P1:"));
-        this.optionsPanel.add(P1);
-        this.optionsPanel.add(new JLabel("      P2:"));
-        this.optionsPanel.add(P2);
-        this.optionsPanel.add(new JLabel("      P3:"));
-        this.optionsPanel.add(P3);
-        this.optionsPanel.add(B1);
-        this.optionsPanel.add(B2);
-        this.optionsPanel.add(B3);
-        this.optionsPanel.add(B4);
-        this.optionsPanel.add(B5);
-        this.optionsPanel.add(B6);*/
-        
         this.optionsPanel.add(B1);
         this.optionsPanel.add(B2);
         this.optionsPanel.add(B3);
@@ -133,11 +98,6 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
         if(this.ilrX == null || this.ilrX.getDsLength() != ds.getSelectedData1().length) this.ilrX = new ILRMenu(this.getSelectedData1());
         this.ilrX.setVisible(true);
     }
-    
-    /*public void configureILRY(){
-        if(this.ilrY == null || this.ilrY.getDsLength() != ds.getSelectedData2().length) this.ilrY = new ILRMenu(this.getSelectedData2());
-        this.ilrY.setVisible(true);
-    }*/
     
     @Override
     public void acceptButtonActionPerformed(){
@@ -267,14 +227,6 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
     }
     
     void constructParametersToR(){
-        /* construim parametres string */
-        
-        /*if(this.P1.getText().length() > 0) re.eval("P1 <- \"" + this.P1.getText() + "\"");
-        else re.eval("P1 <- \"\"");
-        if(this.P2.getText().length() > 0) re.eval("P2 <- \"" + this.P2.getText() + "\"");
-        else re.eval("P2 <- \"\"");
-        if(this.P3.getText().length() > 0) re.eval("P3 <- \"" + this.P3.getText() + "\"");
-        else re.eval("P3 <- \"\"");*/
         
         /* construim parametres logics */
         
@@ -288,8 +240,6 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
         else re.eval("B4 <- FALSE");
         if(this.B5.isSelected()) re.eval("B5 <- TRUE");
         else re.eval("B5 <- FALSE");
-        /*if(this.B6.isSelected()) re.eval("B6 <- TRUE");
-        else re.eval("B6 <- FALSE");*/
         
         /* construim la matriu BaseX */
         
@@ -305,21 +255,6 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
                 re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
             }
         }
-        
-        /* construim la matriu BaseY */
-        
-        /*if(this.ilrY == null || this.ilrY.getPartition().length == 0){
-            re.eval("BaseY <- NULL");
-        }
-        else{
-            int[][] baseY = this.ilrY.getPartition();
-            re.assign("BaseY", baseY[0]);
-            re.eval("BaseY" + " <- matrix( " + "BaseY" + " ,nc=1)");
-            for(int i=1; i < baseY.length; i++){
-                re.assign("tmp", baseY[i]);
-                re.eval("BaseY" + " <- cbind(" + "BaseY" + ",matrix(tmp,nc=1))");
-            }
-        }*/
     }
     
     void showText(){
@@ -384,23 +319,6 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
             }
             mainApplication.updateDataFrame(df);
         }
-        
-        /*
-        int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt();  numero de noves variables
-        for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();  guardem el nom de la variable 
-            String isNumeric = re.eval("class(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
-            if(isNumeric.equals("numeric")){  creem variable numerica 
-                double[] data = re.eval("as.numeric(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asDoubleArray();
-                df.addData(varName,data);
-            }
-            else{  crear variable categorica 
-                String[] data = re.eval("as.character(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asStringArray();
-                df.addData(varName, new Variable(varName,data));
-            }
-            mainApplication.updateDataFrame(df);
-        }
-        */
     }
     
     private void plotDiscriminantMenu(int position) throws IOException {
@@ -473,15 +391,6 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             framesDiscriminantMenu[position].setSize(800,800);
             framesDiscriminantMenu[position].setLocation(dim.width/2-framesDiscriminantMenu[position].getSize().width/2, dim.height/2-framesDiscriminantMenu[position].getSize().height/2);
-            /*ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
-            label.setSize(700, 700);
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            framesDiscriminantMenu[position].getContentPane().add(panel);
-            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesDiscriminantMenu[position].setSize(800,800);
-            framesDiscriminantMenu[position].setLocation(dim.width/2-framesDiscriminantMenu[position].getSize().width/2, dim.height/2-framesDiscriminantMenu[position].getSize().height/2);*/
             
             WindowListener exitListener = new WindowAdapter(){
                 
