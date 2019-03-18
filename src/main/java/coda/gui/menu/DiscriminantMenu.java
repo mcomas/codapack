@@ -12,7 +12,9 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import coda.gui.utils.BoxDataSelector;
 import coda.gui.utils.FileNameExtensionFilter;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -35,6 +37,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -87,6 +90,21 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
             }
         });
         
+        B2.addActionListener(new java.awt.event.ActionListener(){
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                if(B2.isSelected()){
+                    if(ds.getSelectedData1().length == 0){
+                        JOptionPane.showMessageDialog(null, "Please select first the variables");
+                        B2.setSelected(false);
+                    }
+                    else{
+                        configureSampleZ(ds.getSelectedData1());
+                    }
+                }
+            }
+        });
+        
         this.optionsPanel.add(B1);
         this.optionsPanel.add(B2);
         this.optionsPanel.add(B3);
@@ -102,12 +120,18 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
     @Override
     public void acceptButtonActionPerformed(){
         
+        boolean sampleZ = true;
+        
+        if(B2.isSelected()){
+            if(re.eval("is.null(Z)").asBool().isTRUE()) sampleZ = false;
+        }
+        
         String selectedNames1[] = super.ds.getSelectedData1();
         Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(selectedNames1));
         String selectedNames2[] = super.ds.getSelectedData2();
         Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
         
-        if(selectedNames1.length > 0 && selectedNames2.length > 0){
+        if(selectedNames1.length > 0 && selectedNames2.length > 0 && sampleZ){
             
             df = mainApplication.getActiveDataFrame();
             double[][] numericData = df.getNumericalData(selectedNames1);
@@ -222,7 +246,11 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");
-            else JOptionPane.showMessageDialog(null, "No data selected in data 2");
+            else if(selectedNames2.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 2");
+            else {
+                JOptionPane.showMessageDialog(null,"Please configure the Z sample with correct variables");
+                B2.setSelected(false);
+            }
         }
     }
     
@@ -255,6 +283,84 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
                 re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
             }
         }
+    }
+    
+    void configureSampleZ(String[] nomVars){
+        boolean allRight = true;
+        Vector<String> dataFrameNames = new Vector<String>();
+        // obtenim els noms de les taules que hi han carregades
+        
+        for(int i=0; i < mainApplication.getAllDataFrames().size(); i++){
+            dataFrameNames.add(mainApplication.getAllDataFrames().get(i).name);
+        }
+        
+        BoxDataSelector bds = new BoxDataSelector(dataFrameNames.toArray(new String[dataFrameNames.size()]));
+        JDialog jd = new JDialog();
+        jd.add(bds);
+        jd.setSize(190,370);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        jd.setLocation(dim.width/2-jd.getSize().width/2, dim.height/2-jd.getSize().height/2);
+        JButton accept = new JButton("Accept");
+        jd.add(accept, BorderLayout.SOUTH);
+        accept.addActionListener(new java.awt.event.ActionListener() {
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                String selected[] = bds.getSelectedData();
+                int n = selected.length;
+                if(n == 1){
+                    int pos =0;
+                    for(int i=0; i < dataFrameNames.size(); i++){
+                        if(dataFrameNames.get(i).equals(selected[0])) pos = i;
+                    }
+                    DataFrame sampleZDf = mainApplication.getAllDataFrames().get(pos);
+                    boolean found = false; boolean foundall = true;
+                    for(int i=0; i < nomVars.length  && foundall; i++){
+                        found = false;
+                        for(int j=0; j < sampleZDf.size() && !found;j++){
+                            if(sampleZDf.get(j).getName().equals(nomVars[i])) found = true;
+                        }
+                        if(found == false) foundall = false;
+                    }
+                    
+                    if(foundall){ // creem Z SAMPLE
+                        Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(nomVars));
+                        int auxPos = 0;
+                        for(int i=0; i < sampleZDf.size();i++){ // totes les columnes
+                            if(vSelectedNames1.contains(sampleZDf.get(i).getName())){
+                                re.eval(vSelectedNames1.elementAt(auxPos) + " <- NULL");
+                                if(sampleZDf.get(i).isNumeric()){
+                                    for(double j : sampleZDf.get(i).getNumericalData()){
+                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                    }
+                                }
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +",'" + j + "')");
+                                    }
+                                }
+                                auxPos++;
+                            }
+                        }
+                        
+                        String dataFrameString = "Z <- data.frame(";
+                        for(int i=0; i < nomVars.length;i++){
+                            dataFrameString += vSelectedNames1.elementAt(i);
+                            if(i != nomVars.length-1) dataFrameString += ",";
+                        }
+                        
+                        dataFrameString +=")";
+                        
+                        re.eval(dataFrameString); // we create the dataframe in R
+                    }
+                    else{
+                        re.eval("Z <- NULL");
+                    }
+                }
+                jd.setVisible(false);
+            }
+            
+        });
+        jd.setVisible(true);
     }
     
     void showText(){
