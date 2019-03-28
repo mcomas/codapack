@@ -63,6 +63,7 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
     JFileChooser chooser;
     String tempDirR;
     String[] tempsDirR;
+    DataFrame dfZ = null;
     ILRMenu ilrX;
     
     /* options var */
@@ -351,6 +352,7 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
                         dataFrameString +=")";
                         
                         re.eval(dataFrameString); // we create the dataframe in R
+                        dfZ = sampleZDf; // ens guardem la taula 
                     }
                     else{
                         re.eval("Z <- NULL");
@@ -424,6 +426,21 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
                 df.addData(varName, new Variable(varName,data));
             }
             mainApplication.updateDataFrame(df);
+        }
+        
+        numberOfNewVar = re.eval("length(colnames(cdp_res$new_data2))").asInt(); /* numero de columnes nomes*/
+        
+        for(int i=0; i < numberOfNewVar; i++){
+            String varName = re.eval("colnames(cdp_res$new_data2)[" + String.valueOf(i+1) + "]").asString();
+            String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data2[["+ String.valueOf(i+1) +"]]))").asString();
+            if(isNumeric.equals("TRUE")){
+                double[] data = re.eval("as.numeric(cdp_res$new_data2[," + String.valueOf(i+1) + "])").asDoubleArray();
+                dfZ.addData(varName,data);
+            }
+            else{ // categoric
+                String[] data = re.eval("as.character(cdp_res$new_data2[," + String.valueOf(i+1) + "])").asStringArray();
+                dfZ.addData(varName, new Variable(varName,data));
+            }
         }
     }
     
