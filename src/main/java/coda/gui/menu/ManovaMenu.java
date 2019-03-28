@@ -16,15 +16,23 @@ import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -183,7 +191,11 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
                         showText();
                         createVariables();
                         createDataFrame();
-                        showGraphics();
+                        try {
+                            showGraphics();
+                        } catch (IOException ex) {
+                            Logger.getLogger(ManovaMenu.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     else{
                         OutputElement type = new OutputText("Error in R:");
@@ -245,7 +257,7 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
         }
     }
     
-    void showGraphics(){
+    void showGraphics() throws IOException{
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
         this.framesManovaMenu = new JFrame[numberOfGraphics];
@@ -276,8 +288,8 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
         }
     }
     
-    private void plotManovaMenu(int position) {
-            Font f = new Font("Arial", Font.PLAIN,12);
+    private void plotManovaMenu(int position) throws IOException, IOException {
+           Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
             JMenuBar menuBar = new JMenuBar();
@@ -306,12 +318,33 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
             menu.add(menuItem);
             framesManovaMenu[position].setJMenuBar(menuBar);
             panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
-            label.setSize(700, 700);
+            BufferedImage img = ImageIO.read(new File(tempsDirR[position]));
+            ImageIcon icon = new ImageIcon(img);
+            Image image = icon.getImage();
+            Image newImg = image.getScaledInstance(panel.getWidth()-100, panel.getHeight()-100, Image.SCALE_SMOOTH);
+            ImageIcon imageFinal = new ImageIcon(newImg);
+            JLabel label = new JLabel(imageFinal);
+            label.addComponentListener(new ComponentAdapter(){
+                public void componentResized(ComponentEvent e){
+                    JLabel label = (JLabel) e.getComponent();
+                    Dimension size = label.getSize();
+                    re.eval("printGraphics(" + String.valueOf(position+1) +"," + String.valueOf(size.width-100) + "," + String.valueOf(size.height-100) + ")");
+                    BufferedImage img = null;
+                    try {
+                        img = ImageIO.read(new File(tempsDirR[position]));
+                    } catch (IOException ex) {
+                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    ImageIcon icon = new ImageIcon(img);
+                    Image image = icon.getImage();
+                    Image newImg = image.getScaledInstance(size.width-100, size.height-100, Image.SCALE_SMOOTH);
+                    ImageIcon imageFinal = new ImageIcon(newImg);
+                    label.setIcon(imageFinal);
+                }
+            });
             panel.setLayout(new GridBagLayout());
             panel.add(label);
-            framesManovaMenu[position].getContentPane().add(panel);
+            framesManovaMenu[position].getContentPane().add(label);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             framesManovaMenu[position].setSize(800,800);
             framesManovaMenu[position].setLocation(dim.width/2-framesManovaMenu[position].getSize().width/2, dim.height/2-framesManovaMenu[position].getSize().height/2);
