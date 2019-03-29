@@ -423,6 +423,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
     }
     
     private void plotLM1(int position) throws IOException {
+
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -452,8 +453,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             menu.add(menuItem);
             framesLM1[position].setJMenuBar(menuBar);
             panel.setSize(800,800);
-            /* new code to resize the image */
-            BufferedImage img =  ImageIO.read(new File(tempDirR));
+            BufferedImage img = ImageIO.read(new File(tempsDirR[position]));
             ImageIcon icon = new ImageIcon(img);
             Image image = icon.getImage();
             Image newImg = image.getScaledInstance(panel.getWidth()-100, panel.getHeight()-100, Image.SCALE_SMOOTH);
@@ -463,18 +463,26 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
                 public void componentResized(ComponentEvent e){
                     JLabel label = (JLabel) e.getComponent();
                     Dimension size = label.getSize();
-                    // tornar a printar el gràfic
+                    re.eval("printGraphics(" + String.valueOf(position+1) +"," + String.valueOf(size.width-100) + "," + String.valueOf(size.height-100) + ")");
+                    BufferedImage img = null;
+                    try {
+                        img = ImageIO.read(new File(tempsDirR[position]));
+                    } catch (IOException ex) {
+                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    ImageIcon icon = new ImageIcon(img);
+                    Image image = icon.getImage();
+                    Image newImg = image.getScaledInstance(size.width-100, size.height-100, Image.SCALE_SMOOTH);
+                    ImageIcon imageFinal = new ImageIcon(newImg);
+                    label.setIcon(imageFinal);
                 }
             });
-            /*ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
-            label.setSize(700, 700);
             panel.setLayout(new GridBagLayout());
             panel.add(label);
-            framesLM1[position].getContentPane().add(panel);
+            framesLM1[position].getContentPane().add(label);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             framesLM1[position].setSize(800,800);
-            framesLM1[position].setLocation(dim.width/2-framesLM1[position].getSize().width/2, dim.height/2-framesLM1[position].getSize().height/2);*/
+            framesLM1[position].setLocation(dim.width/2-framesLM1[position].getSize().width/2, dim.height/2-framesLM1[position].getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -492,6 +500,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             framesLM1[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             framesLM1[position].addWindowListener(exitListener);
             framesLM1[position].setVisible(true);
+
     }
 
     public DataFrame getDataFrame() {
