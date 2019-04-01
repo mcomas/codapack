@@ -194,19 +194,7 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
                 
                 // executem script d'R
                 
-                frameLM2 = new JFrame();
-                chooser = new JFileChooser();
-                frameLM2.setSize(600,400);
-                chooser.setDialogTitle("Select R script to execute");
-                chooser.setFileFilter(new FileNameExtensionFilter("R data file", "R", "rda"));
-                chooser.setSize(400,400);
-                frameLM2.add(chooser);
-                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                frameLM2.setLocation(dim.width/2-frameLM2.getSize().width/2, dim.height/2-frameLM2.getSize().height/2);
-                
-                if(chooser.showOpenDialog(frameLM2) == JFileChooser.APPROVE_OPTION){
-                    String url = chooser.getSelectedFile().getAbsolutePath();
-                    url = url.replaceAll("\\\\", "/");
+                    String url = "Scripts_Amb_Base/scripLM.2 (FET).R";
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     
                     String[] errorMessage = re.eval("error").asStringArray();
@@ -228,10 +216,6 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
                         OutputElement outElement = new OutputForR(errorMessage);
                         outputPanel.addOutput(outElement);
                     }
-                }
-                else{
-                    frameLM2.dispose();
-                }
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");

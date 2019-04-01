@@ -168,20 +168,8 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
                 this.dispose();
                 
                 // executem script d'R
-                
-                frameManovaMenu = new JFrame();
-                chooser = new JFileChooser();
-                frameManovaMenu.setSize(600,400);
-                chooser.setDialogTitle("Select R script to execute");
-                chooser.setFileFilter(new FileNameExtensionFilter("R data file", "R", "rda"));
-                chooser.setSize(400,400);
-                frameManovaMenu.add(chooser);
-                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                frameManovaMenu.setLocation(dim.width/2-frameManovaMenu.getSize().width/2, dim.height/2-frameManovaMenu.getSize().height/2);
-                
-                if(chooser.showOpenDialog(frameManovaMenu) == JFileChooser.APPROVE_OPTION){
-                    String url = chooser.getSelectedFile().getAbsolutePath();
-                    url = url.replaceAll("\\\\", "/");
+
+                    String url = "Scripts_Amb_Base/scripManova versio 0 (FET).R";
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     
                     String[] errorMessage = re.eval("error").asStringArray();
@@ -203,10 +191,6 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
                         OutputElement outElement = new OutputForR(errorMessage);
                         outputPanel.addOutput(outElement);
                     }
-                }
-                else{
-                    frameManovaMenu.dispose();
-                }
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");

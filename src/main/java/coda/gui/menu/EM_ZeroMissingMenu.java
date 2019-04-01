@@ -225,19 +225,7 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
 
                     // executem script d'R
 
-                    frameEM_ZeroMissingMenu = new JFrame();
-                    chooser = new JFileChooser();
-                    frameEM_ZeroMissingMenu.setSize(600,400);
-                    chooser.setDialogTitle("Select R script to execute");
-                    chooser.setFileFilter(new FileNameExtensionFilter("R data file", "R", "rda"));
-                    chooser.setSize(400,400);
-                    frameEM_ZeroMissingMenu.add(chooser);
-                    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                    frameEM_ZeroMissingMenu.setLocation(dim.width/2-frameEM_ZeroMissingMenu.getSize().width/2, dim.height/2-frameEM_ZeroMissingMenu.getSize().height/2);
-
-                    if(chooser.showOpenDialog(frameEM_ZeroMissingMenu) == JFileChooser.APPROVE_OPTION){
-                        String url = chooser.getSelectedFile().getAbsolutePath();
-                        url = url.replaceAll("\\\\", "/");
+                        String  url = "Scripts_Amb_Base/scriptilr-EM_Missing_Zero (FET).R";
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 
                         String[] errorMessage = re.eval("error").asStringArray();
@@ -255,10 +243,6 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
                             OutputElement outElement = new OutputForR(errorMessage);
                             outputPanel.addOutput(outElement);
                            }
-                    }
-                    else{
-                        frameEM_ZeroMissingMenu.dispose();
-                    }
 
                 }
                 
