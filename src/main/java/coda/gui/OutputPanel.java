@@ -19,6 +19,7 @@
 
 package coda.gui;
 
+import static coda.gui.CoDaPackConf.CoDaVersion;
 import coda.gui.output.OutputElement;
 import java.awt.Rectangle;
 import javafx.scene.paint.Color;
@@ -101,6 +102,20 @@ public final class OutputPanel extends JFXPanel {
                         }
                 });
 	}
+        
+        public void clearOutput(){
+            
+            String aux = "<b>CoDaPack</b> - Version " + CoDaVersion
+                + "<br>This software is being developed by the "
+                + "Research Group in Statistics and Compositional Data Analysis "
+                + "at University of Girona<br><br>";
+            
+            Platform.runLater(new Runnable(){
+                public void run(){
+                    ((Browser)scene.getRoot()).clean(aux);
+                }
+            });
+        }
 
 	public void addOutput(ArrayList<OutputElement> outputs){
 
@@ -170,6 +185,21 @@ class Browser extends Region{
 	public void repaint(String text){
             
             try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "CoDaPack.html",true),StandardCharsets.ISO_8859_1)){
+                fileWriter.write(text);
+            }catch(IOException e){
+                System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
+                e.printStackTrace();
+            }
+
+            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "CoDaPack.html");
+            webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
+                webEngine.executeScript("window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);");
+            });
+        }
+        
+        public void clean(String text){
+            
+            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "CoDaPack.html",false),StandardCharsets.ISO_8859_1)){
                 fileWriter.write(text);
             }catch(IOException e){
                 System.out.println("Problem occurs when deleting the directory : CoDaPack.html");

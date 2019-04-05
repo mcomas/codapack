@@ -820,6 +820,14 @@ public final class CoDaPackMain extends JFrame{
             re.eval("a <- capture.output(capabilities())");
             e = new OutputForR(re.eval("a").asStringArray());
             outputPanel.addOutput(e);
+        }else if(title.equals(jMenuBar.ITEM_DELETE_ALL_TABLES)){
+            
+            while(dataFrame.size() > 0){
+                DataFrame aux = dataFrame.get(0);
+                this.removeDataFrame(aux);
+            }
+        }else if(title.equals(jMenuBar.ITEM_CLEAR_OUTPUTS)){
+            outputPanel.clearOutput();
         }else if(title.equals(jMenuBar.ITEM_MODEL_S0)){
             new S0(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_S1)){
