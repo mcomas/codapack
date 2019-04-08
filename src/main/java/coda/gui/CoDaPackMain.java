@@ -608,6 +608,20 @@ public final class CoDaPackMain extends JFrame{
             }else{
                 JOptionPane.showMessageDialog(this, "No table available");
             }
+        }else if(title.equals(jMenuBar.ITEM_DELETE_ALL_TABLES)){
+            int responseDeleteAllTables = JOptionPane.showConfirmDialog(null, "Are you sure to delete all the tables?","Delete All Tables", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            
+            if(responseDeleteAllTables == JOptionPane.YES_OPTION){
+                while(dataFrame.size() > 0){
+                    DataFrame aux = dataFrame.get(0);
+                    this.removeDataFrame(aux);
+                }
+            }
+        }else if(title.equals(jMenuBar.ITEM_CLEAR_OUTPUTS)){
+            int responseCleanOutput = JOptionPane.showConfirmDialog(null, "Are you sure to clean the output?","Clean the output", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(responseCleanOutput == JOptionPane.YES_OPTION){
+                outputPanel.clearOutput();
+            }
         }else if(title.equals(jMenuBar.ITEM_QUIT)){
             jMenuBar.copyRecentFiles();
             //Comprovar si hi ha canvis. si n'hi ha finestra
@@ -820,14 +834,6 @@ public final class CoDaPackMain extends JFrame{
             re.eval("a <- capture.output(capabilities())");
             e = new OutputForR(re.eval("a").asStringArray());
             outputPanel.addOutput(e);
-        }else if(title.equals(jMenuBar.ITEM_DELETE_ALL_TABLES)){
-            
-            while(dataFrame.size() > 0){
-                DataFrame aux = dataFrame.get(0);
-                this.removeDataFrame(aux);
-            }
-        }else if(title.equals(jMenuBar.ITEM_CLEAR_OUTPUTS)){
-            outputPanel.clearOutput();
         }else if(title.equals(jMenuBar.ITEM_MODEL_S0)){
             new S0(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_S1)){

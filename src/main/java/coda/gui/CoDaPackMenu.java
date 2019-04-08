@@ -79,6 +79,11 @@ public class CoDaPackMenu extends JMenuBar{
             public final String ITEM_EXPORT_R = "Export Data to R Data...";
         public JMenuItem itemdelDataFrame;
         public final String ITEM_DEL_DATAFRAME = "Delete Table";
+        public JMenuItem itemDeleteAllTables;
+        public final String ITEM_DELETE_ALL_TABLES = "Delete All Tables";
+        public JMenuItem itemClearOutputs;
+        public final String ITEM_CLEAR_OUTPUTS = "Clear the output";
+        
         public JMenuItem itemConfiguration;
         public final String ITEM_CONF = "Configuration";
         public JMenuItem itemQuit;
@@ -220,10 +225,6 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_ABOUT = "About";
         public JMenuItem itemR_Test;
         public final String R_TEST = "Get R status";
-        public JMenuItem itemDeleteAllTables;
-        public final String ITEM_DELETE_ALL_TABLES = "Delete All Tables";
-        public JMenuItem itemClearOutputs;
-        public final String ITEM_CLEAR_OUTPUTS = "Clear the output";
         
     public JMenu menuDevelopment;
     public final String ITEM_DEVELOPMENT = "Development";
@@ -417,6 +418,8 @@ public class CoDaPackMenu extends JMenuBar{
                     itemExportXLS = new JMenuItem();
                     itemExportR = new JMenuItem();
                 itemdelDataFrame = new JMenuItem();
+                itemDeleteAllTables = new JMenuItem();
+                itemClearOutputs = new JMenuItem();
                 itemConfiguration = new JMenuItem();
                 itemQuit = new JMenuItem();
 
@@ -489,8 +492,6 @@ public class CoDaPackMenu extends JMenuBar{
             itemForceUpdate = new JMenuItem();
             itemAbout = new JMenuItem();
             itemR_Test = new JMenuItem();
-            itemDeleteAllTables = new JMenuItem();
-            itemClearOutputs = new JMenuItem();
             
         menuDevelopment = new JMenu();
             itemModelS0 = new JMenuItem();
@@ -511,6 +512,8 @@ public class CoDaPackMenu extends JMenuBar{
         
         menuFile.addSeparator();        
         addJMenuItem(menuFile, itemdelDataFrame, ITEM_DEL_DATAFRAME);
+        addJMenuItem(menuFile,itemDeleteAllTables, ITEM_DELETE_ALL_TABLES);
+        addJMenuItem(menuFile, itemClearOutputs, ITEM_CLEAR_OUTPUTS);
         
         menuFile.addSeparator();
         menuImport.setText(ITEM_IMPORT);
@@ -621,8 +624,6 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
         addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
         addJMenuItem(menuHelp,itemR_Test, R_TEST);
-        addJMenuItem(menuHelp,itemDeleteAllTables,ITEM_DELETE_ALL_TABLES);
-        addJMenuItem(menuHelp,itemClearOutputs,ITEM_CLEAR_OUTPUTS);
         add(menuHelp);
         
         menuDevelopment.setText(ITEM_DEVELOPMENT);
