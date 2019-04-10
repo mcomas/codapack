@@ -47,7 +47,7 @@ import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
 /**
- * ManovaMenu -> X numerica i Y numerica o categorica amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * ManovaMenu -> X numerica i Y numerica o categorica amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
@@ -65,7 +65,7 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
     /* options var */
     
     JRadioButton residuals = new JRadioButton("Residuals");
-    JRadioButton analyzeDiff = new JRadioButton("Analyze differences between pairs of groups");
+    JRadioButton analyzeDiff = new JRadioButton("Dif. between pairs of groups");
     
     public static final long serialVersionUID = 1L;
     

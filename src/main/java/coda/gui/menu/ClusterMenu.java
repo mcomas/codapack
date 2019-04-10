@@ -43,7 +43,7 @@ import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
 /**
- * ClusterMenu -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * ClusterMenu -> X numerica i positiva amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class ClusterMenu extends AbstractMenuDialog{
@@ -60,7 +60,7 @@ public class ClusterMenu extends AbstractMenuDialog{
     
     JRadioButton numClusters = new JRadioButton("Number of Clusters");
     JTextField numClustersTF = new JTextField(7);
-    JRadioButton searchOpt = new JRadioButton("Search optimal number of clusters between");
+    JRadioButton searchOpt = new JRadioButton("Optimal nÂº of clusters between");
     JTextField searchOptTF = new JTextField(7);
     
     /*JRadioButton B1 = new JRadioButton("B1");

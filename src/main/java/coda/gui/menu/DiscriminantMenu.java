@@ -51,7 +51,7 @@ import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
 /**
- * DiscriminantMenu -> X numerica i Y numerica o categorica amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * DiscriminantMenu -> X numerica i Y numerica o categorica amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
@@ -71,8 +71,8 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
     JRadioButton B1 = new JRadioButton("Use of uniform prior");
     JRadioButton B2 = new JRadioButton("Predicting for a new sample Z");
     JRadioButton B3 = new JRadioButton("Discriminant scores");
-    JRadioButton B4 = new JRadioButton("Maximum a posteriori probability classification");
-    JRadioButton B5 = new JRadioButton("Posterior probabilities for the classes");
+    JRadioButton B4 = new JRadioButton("Max. posteriori prob. classification");
+    JRadioButton B5 = new JRadioButton("Posterior prob. for the classes");
     
     public static final long serialVersionUID = 1L;
     
