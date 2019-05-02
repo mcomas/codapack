@@ -14,7 +14,7 @@
 #B1 <- as.logical(TRUE)
 #B2 <- as.logical(TRUE)
 #BaseX = matrix(c(1, 1, -1, 1, -1, 0), ncol = 2)
-library(coda.base)
+#library(coda.base)
 
 if (is.factor(Y) == FALSE) {
     Y <- as.factor(as.matrix(Y))
@@ -76,14 +76,15 @@ sortida <- list(sortida,paste(capture.output(cT)))
 # a bar plot to compare all the centers with the whole center
 
 #rm(graphnames)
-graphnames <- list()
-#name <- paste("Bar_plot_comparing_all_the_centers_with_the_whole_center.png",sep="")
-name <- paste(tempdir(),"Bar_plot_comparing_all_the_centers_with_the_whole_center.png",sep="\\")
-png(name)
-barplot(log(Num/Den),
-        beside=TRUE,col=c(1:nCat))
-dev.off()
-graphnames[1] <- name
+#graphnames <- list()
+#name [1]<- paste("Bar_plot_comparing_all_the_centers_with_the_whole_center.png",sep="")
+name <- list()
+name[1] <- "Nom columna 1" # PREGUNTAR NOM DE LES COLUMNES A EN SANTI!!!! (Residuals?)
+name[2] <- "Nom columna 2" # PREGUNTAR ELS NOMS DE LES COLUMNES A EN SANTI!!!! (Dif. between...?)
+#png(name)
+#barplot(log(Num/Den), beside=TRUE,col=c(1:nCat))
+#dev.off()
+#graphnames[1] <- name
 
 
 ################################
@@ -98,7 +99,6 @@ sortida <- list(sortida,paste(capture.output(cov(Xt[,1:nparts])*(nobs-1))))
 ################################
 
 #take the residuals of the model and add them to the data set
-DF <- NULL
 
 if (B2 == TRUE) {
   DF <- data.frame()
@@ -128,41 +128,13 @@ if (B2 == TRUE) {
       mva2<-manova(as.matrix(Xt)~Y,subset=(int %in% c(i,j)))
       sortida <- list(sortida,paste("comparison between ",i," and ",j))
       sortida <- list(sortida,paste(capture.output(summary(mva2,test="Wilks"))))
-      name <- paste(tempdir(),paste("Bar_plot_comparing_pairs_of_centers_",i, "_and_",j,".png",sep=""),sep="\\")
-      png(name)
-      barplot(log(cmat[i,]/cmat[j,]))
-      dev.off()
-      graphnames[n] <- name
+#      name <- paste("Bar_plot_comparing_pairs_of_centers_",i, "_and_",j,".png",sep="")
+#      png(name)
+#      barplot(log(cmat[i,]/cmat[j,]))
+#      dev.off()
+#      graphnames[n] <- name
       n <- n+1
     }
-}
-
-# FUNCTIONS TO REPAINT THE GRAPHS
-
-printGraphics <- function(position, width, height){
-
-  if(position == 1){
-    png(graphnames[1],width,height)
-    barplot(log(Num/Den),
-            beside=TRUE,col=c(1:nCat))
-    dev.off()
-  }
-  else{
-
-    n <- 2
-
-    for (i in 1:(nCat-1)) 
-      for (j in (i+1):nCat)
-      {
-        if(n == position){
-          png(graphnames[position], width,height)
-          barplot(log(cmat[i,]/cmat[j,]))
-          dev.off()
-        }
-      n <- n+1
-    }
-  }
-
 }
 
 # Output
@@ -170,7 +142,8 @@ printGraphics <- function(position, width, height){
 cdp_res = list(
   'text' = sortida,
   'dataframe' = list(),
-  'graph' = graphnames,
+#  'graph' = graphnames,
+  'graph' = list(),
   'new_data' = DF
 )
 
