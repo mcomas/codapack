@@ -34,8 +34,9 @@ df <- cbind.data.frame(chsq,c.atyp)
 names(df) <- c("Chisq","Atyp")
 index <- c(1:nr)
 #rm(sortida)
-sortida <- list(paste("DISCRIMINANT ANALYSIS"))
-sortida <- list(sortida,paste("atypical observations ",capture.output(which(atyp %in% 1))))
+sortida <- list()
+sortida[1] <- paste("DISCRIMINANT ANALYSIS")
+sortida[2] <- paste("atypical observations ",capture.output(which(atyp %in% 1)))
 
 #codi de debugg
 #

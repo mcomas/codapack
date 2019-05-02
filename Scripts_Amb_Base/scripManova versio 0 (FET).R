@@ -140,7 +140,7 @@ if (B2 == TRUE) {
 # Output
 #rm(cdp_res)
 cdp_res = list(
-  'text' = sortida,
+  'text' = unlist(sortida),
   'dataframe' = list(),
 #  'graph' = graphnames,
   'graph' = list(),
