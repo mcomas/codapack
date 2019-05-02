@@ -92,7 +92,7 @@ public final class OutputPanel extends JFXPanel {
 
 	public void addOutput(OutputElement oe){
 		String windowText = "";
-		windowText = oe.printHTML(windowText) + "<br>";
+		windowText = oe.printHTML(windowText) + "";
                 
                 final String aux = windowText;
                 

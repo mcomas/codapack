@@ -104,7 +104,7 @@ if (B2 == TRUE) {
   DF <- data.frame()
   for (n in 1:nparts)
   {
-    colnames(mva$residuals)[n] <- paste(name[n],".r",sep="")
+    colnames(mva$residuals)[n] <- paste(names(Xt[n]),".r",sep="")
   }
   DF <- as.data.frame(mva$residuals)
 }
