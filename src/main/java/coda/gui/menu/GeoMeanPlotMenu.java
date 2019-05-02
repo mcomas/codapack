@@ -1,165 +1,260 @@
-/** 
- *  Copyright 2011-2016 Marc Comas - Santiago Thió
- *
- *  This file is part of CoDaPack.
- *
- *  CoDaPack is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  CoDaPack is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with CoDaPack.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package coda.gui.menu;
 
-import javax.swing.JFrame;
 import coda.DataFrame;
-import org.rosuda.JRI.Rengine;
+import coda.Variable;
 import coda.gui.CoDaPackMain;
+import static coda.gui.CoDaPackMain.outputPanel;
+import coda.gui.output.OutputElement;
+import coda.gui.output.OutputForR;
+import coda.gui.output.OutputText;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import org.rosuda.JRI.Rengine;
 
 /**
- *
+ * GeoMeanPlotMenu -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class GeoMeanPlotMenu extends AbstractMenuDialog{
     
     Rengine re;
-    String tempDirR;
-    JFrame frameGeoMean;
     DataFrame df;
+    JFrame frameGeoMeanPlotMenu;
+    JFrame[] framesGeoMeanPlotMenu;
+    JFileChooser chooser;
+    String tempDirR;
+    String[] tempsDirR;
     
     public static final long serialVersionUID = 1L;
     
     public GeoMeanPlotMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Geometric Mean Barplot Menu", true);
+        super(mainApp, "GeoMeanPlotMenu menu", true);
         re = r;
+        
     }
     
     @Override
     public void acceptButtonActionPerformed(){
         
-        JFrame frame = new JFrame();
-        frame.setTitle("Message");
-        
-        String selectedNames[] = ds.getSelectedData();
+        String selectedNames[] = super.ds.getSelectedData();
+        Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
+        String selectedNames2[] = {super.ds.getSelectedGroup()};
+        Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
         
         if(selectedNames.length > 0){
             
             df = mainApplication.getActiveDataFrame();
+            DataFrame transformedDataFrame = new DataFrame(df);
             
-            double[][] data = df.getNumericalData(selectedNames); // matriu amb les dades corresponents
-                
-            for(int i=0; i < df.size(); i++){
-                re.eval(df.get(i).getName() + " <- NULL");
-                
-                if(df.get(i).isNumeric()){
-                    for(double j : df.get(i).getNumericalData()){
-                        re.eval(df.get(i).getName() + " <- c(" + df.get(i).getName() +"," + String.valueOf(j) + ")");
-                    }
+            double[][] data = df.getNumericalData(selectedNames);
+            Vector<Integer> rowsToDeleteVect = new Vector<Integer>();
+            
+            for(int i=0; i < data.length; i++){
+                for(int j = 0; j < data[i].length;j++){
+                    if(data[i][j] <= 0.0) rowsToDeleteVect.add(j);
+                }
+            }
+            
+            if(rowsToDeleteVect.size() == df.getMaxVariableLength()) JOptionPane.showMessageDialog(null,"No positive data to analize");
+            else{
+                if(rowsToDeleteVect.size() > 0){ // if some row to ignore we transform the dataFrame
+                    JOptionPane.showMessageDialog(null,"Some Data is negative into a var selected");
                 }
                 else{
-                    for(String j : df.get(i).getTextData()){
-                        re.eval(df.get(i).getName() + " <- c(" + df.get(i).getName() +",'" + j + "')");
-                    }
+                    
+                    // create dataframe on r
+            
+                        int auxPos = 0;
+                        for(int i=0; i < df.size();i++){ // totes les columnes
+                            if(vSelectedNames.contains(df.get(i).getName())){
+                                re.eval(vSelectedNames.elementAt(auxPos) + " <- NULL");
+                                if(df.get(i).isNumeric()){
+                                    for(double j : df.get(i).getNumericalData()){
+                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                    }
+                                }
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +",'" + j + "')");
+                                    }
+                                }
+                                auxPos++;
+                            }
+                        }
+                        
+                        String dataFrameString = "X <- data.frame(";
+                        for(int i=0; i < selectedNames.length;i++){
+                            dataFrameString += vSelectedNames.elementAt(i);
+                            if(i != selectedNames.length-1) dataFrameString += ",";
+                        }
+                        
+                        dataFrameString +=")";
+                        
+                        re.eval(dataFrameString); // we create the dataframe in R
+                        
+                        // create dataframe on R
+            
+                        auxPos = 0;
+                        for(int i=0; i < df.size();i++){ // totes les columnes
+                            if(vSelectedNames2.contains(df.get(i).getName())){
+                                re.eval(vSelectedNames2.elementAt(auxPos) + " <- NULL");
+                                if(df.get(i).isNumeric()){
+                                    for(double j : df.get(i).getNumericalData()){
+                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                                    }
+                                }
+                                else{
+                                    for(String j : df.get(i).getTextData()){
+                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +",'" + j + "')");
+                                    }
+                                }
+                                auxPos++;
+                            }
+                        }
+                        
+                        dataFrameString = "Y <- data.frame(";
+                        for(int i=0; i < selectedNames2.length;i++){
+                            dataFrameString += vSelectedNames2.elementAt(i);
+                            if(i != selectedNames2.length-1) dataFrameString += ",";
+                        }
+                        
+                        dataFrameString +=")";
+                        
+                        re.eval(dataFrameString); // we create the dataframe in R
+                
+                    this.dispose();
+                    
+                        String url = "Scripts_Amb_Base/scripGeometricMeanBarplot (FET).R";
+                        re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
+
+                        String[] errorMessage = re.eval("error").asStringArray();
+
+                        if(errorMessage[0].equals("NULL")){
+                            /* executem totes les accions possibles */
+                            showText();
+                            createVariables();
+                            createDataFrame();
+                            try {
+                                showGraphics();
+                            } catch (IOException ex) {
+                                Logger.getLogger(GeoMeanPlotMenu.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        else{
+                            OutputElement type = new OutputText("Error in R:");
+                            outputPanel.addOutput(type);
+                            OutputElement outElement = new OutputForR(errorMessage);
+                            outputPanel.addOutput(outElement);
+                           }
+
                 }
+                
             }
             
-            String dataFrameString = "mydf <- data.frame(";
-                
-            for(int i=0; i < df.size(); i++){
-                dataFrameString += df.get(i).getName();
-                if(i != df.size()-1) dataFrameString += ",";
-            }
-            
-            dataFrameString += ")";
-            re.eval(dataFrameString); // creem el dataframe amb R
-            
-            re.eval("out <- capture.output(mydf)");
-            String[] out = re.eval("out").asStringArray();
-            
-            re.eval("mypath = tempdir()");
-            tempDirR = re.eval("print(mypath)").asString();
-            tempDirR += "\\out.png";
-                
-            re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
-            //re.eval("png(mypath,width=700,height=700");
-            
-            if(ds.getSelectedGroup() == null){ // fem el grafic per components
-                re.eval("means <- NULL");
-                re.eval("names <- NULL");
-                for(int i=0; i < selectedNames.length; i++){
-                    re.eval("means" + " <- c(means, EnvStats::geoMean(mydf$" + selectedNames[i] + "))");
-                    re.eval("names" + " <- c(names, \"" + selectedNames[i] + "\")");
-                }
-                re.eval("barplot(means, main = \"Geometric Mean Barplot\", names.arg=names,col=rainbow(length(means)))");
-            }
-            else{
-                for(int i=0; i < selectedNames.length; i++){
-                    re.eval(selectedNames[i] + " <- tapply(mydf$" + selectedNames[i] + ",mydf$" + ds.getSelectedGroup() + ",EnvStats::geoMean)");
-                }
-                re.eval("data <- NULL");
-                for(int i=0; i < selectedNames.length;i++){
-                    re.eval("data <- cbind(data," + selectedNames[i] +")");
-                }
-                re.eval("barplot(data,main = \"Geometric Mean Barplot\", beside=T,legend=rownames(data),col=rainbow(length(rownames(data))), args.legend=list(cex=0.8,x=\"topright\"))");
-            }
-                
-                re.eval("dev.off()");
-                
-                setVisible(false);
-                
-            try {
-                // jframe configuration
-                
-                plotGeoMean();
-            } catch (IOException ex) {
-                Logger.getLogger(GeoMeanPlotMenu.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
-        else{ // no data selected
-            JOptionPane.showMessageDialog(frame, "Please select data");
+        else{
+            JOptionPane.showMessageDialog(null,"Please select data");
         }
-        
     }
     
-    private void plotGeoMean() throws IOException {
+    void showText(){
+        
+        int midaText = re.eval("length(cdp_res$text)").asInt();
+        for(int i=0; i < midaText; i++){
+            re.eval("out <- capture.output(cdp_res$text[[" + String.valueOf(i+1) + "]])");
+            OutputElement e = new OutputForR(re.eval("out").asStringArray());
+            outputPanel.addOutput(e);
+        }
+    }
+    
+    void createDataFrame(){
+        int nDataFrames = re.eval("length(cdp_res$dataframe)").asInt();
+        for(int i=0; i < nDataFrames; i++){
+            int nVariables = re.eval("length(cdp_res$dataframe[[" + String.valueOf(i+1) + "]])").asInt();
+            DataFrame newDataFrame = new DataFrame();
+            for(int j=0; j < nVariables; j++){
+                String varName = re.eval("names(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "])").asString();
+                String isNumeric = re.eval("class(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asString();
+                if(isNumeric.equals("numeric")){ /* crear una variable numerica */
+                    double[] data = re.eval("as.numeric(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asDoubleArray();
+                    newDataFrame.addData(varName, data);
+                }
+                else{ /* crear una variable categorica */
+                    String[] data = re.eval("as.character(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asStringArray();
+                    newDataFrame.addData(varName, new Variable(varName,data));
+                }
+            }
+            
+            newDataFrame.setName(re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString());
+            mainApplication.addDataFrame(newDataFrame);
+        }
+    }
+    
+    void showGraphics() throws IOException{
+        
+        int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
+        this.framesGeoMeanPlotMenu = new JFrame[numberOfGraphics];
+        this.tempsDirR = new String[numberOfGraphics];
+        for(int i=0; i < numberOfGraphics; i++){
+            tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
+            tempsDirR[i] = tempDirR;
+            plotGeoMeanPlotMenu();
+        }     
+    }
+    
+    void createVariables(){
+        
+        int numberOfNewVar = re.eval("length(colnames(cdp_res$new_data))").asInt(); /* numero de columnes nomes*/
+        
+        for(int i=0; i < numberOfNewVar; i++){
+            String varName = re.eval("colnames(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
+            String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[["+ String.valueOf(i+1) +"]]))").asString();
+            if(isNumeric.equals("TRUE")){
+                double[] data = re.eval("as.numeric(cdp_res$new_data[," + String.valueOf(i+1) + "])").asDoubleArray();
+                df.addData(varName,data);
+            }
+            else{ // categoric
+                String[] data = re.eval("as.character(cdp_res$new_data[," + String.valueOf(i+1) + "])").asStringArray();
+                df.addData(varName, new Variable(varName,data));
+            }
+            mainApplication.updateDataFrame(df);
+        }
+    }
+    
+    private void plotGeoMeanPlotMenu() throws IOException {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -167,7 +262,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            frameGeoMean = new JFrame();
+            frameGeoMeanPlotMenu = new JFrame();
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -187,18 +282,45 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
             menuItem.addActionListener(new quitListener());
             menu.add(submenuExport);
             menu.add(menuItem);
-            frameGeoMean.setJMenuBar(menuBar);
+            frameGeoMeanPlotMenu.setJMenuBar(menuBar);
             panel.setSize(800,800);
             BufferedImage img = ImageIO.read(new File(tempDirR));
             ImageIcon icon = new ImageIcon(img);
-            JLabel label = new JLabel(icon);
-            label.setSize(700, 700);
+            Image image = icon.getImage();
+            Image newImg = image.getScaledInstance(panel.getWidth()-100, panel.getHeight()-100, Image.SCALE_SMOOTH);
+            ImageIcon imageFinal = new ImageIcon(newImg);
+            JLabel label = new JLabel(imageFinal);
+            label.addComponentListener(new ComponentAdapter(){
+                public void componentResized(ComponentEvent e){
+                    JLabel label = (JLabel) e.getComponent();
+                    Dimension size = label.getSize();
+                    re.eval("mypath = tempdir()");
+                    tempDirR = re.eval("print(mypath)").asString();
+                    tempDirR += "\\out.png";
+                
+                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width="+String.valueOf(size.width-100)+",height=" + String.valueOf(size.height-100) +")");
+                    re.eval("png(mypath,width="+String.valueOf(size.width-100)+",height="+String.valueOf(size.height-100)+")");
+                    re.eval("barplot(log(Num/Den), beside=TRUE,col=c(1:nCat))");
+                    re.eval("dev.off()");
+                    BufferedImage img = null;
+                    try {
+                        img = ImageIO.read(new File(tempDirR));
+                    } catch (IOException ex) {
+                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    ImageIcon icon = new ImageIcon(img);
+                    Image image = icon.getImage();
+                    Image newImg = image.getScaledInstance(size.width-100, size.height-100, Image.SCALE_SMOOTH);
+                    ImageIcon imageFinal = new ImageIcon(newImg);
+                    label.setIcon(imageFinal);
+                }
+            });
             panel.setLayout(new GridBagLayout());
             panel.add(label);
-            frameGeoMean.getContentPane().add(panel);
+            frameGeoMeanPlotMenu.getContentPane().add(label);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frameGeoMean.setSize(800,800);
-            frameGeoMean.setLocation(dim.width/2-frameGeoMean.getSize().width/2, dim.height/2-frameGeoMean.getSize().height/2);
+            frameGeoMeanPlotMenu.setSize(800,800);
+            frameGeoMeanPlotMenu.setLocation(dim.width/2-frameGeoMeanPlotMenu.getSize().width/2, dim.height/2-frameGeoMeanPlotMenu.getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -206,23 +328,27 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        frameGeoMean.dispose();
+                        frameGeoMeanPlotMenu.dispose();
                         File file = new File(tempDirR);
                         file.delete();
                     }
                 }
             };
             
-            frameGeoMean.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            frameGeoMean.addWindowListener(exitListener);
-            frameGeoMean.setVisible(true);
+            frameGeoMeanPlotMenu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            frameGeoMeanPlotMenu.addWindowListener(exitListener);
+            frameGeoMeanPlotMenu.setVisible(true);
+    }
+
+    public DataFrame getDataFrame() {
+        return this.df;
     }
     
     private class quitListener implements ActionListener{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                frameGeoMean.dispose();
+                frameGeoMeanPlotMenu.dispose();
                 File file = new File(tempDirR);
                 file.delete();
             }
@@ -272,9 +398,5 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 }
             }
         }
-    }
-    
-    public DataFrame getDataFrame(){
-        return this.df;
     }
 }
