@@ -5,7 +5,6 @@
  */
 package coda.gui.menu;
 
-import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
@@ -13,8 +12,6 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.BinaryPartitionSelect;
-import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -28,7 +25,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -61,15 +57,6 @@ public class EM_MissingMenu extends AbstractMenuDialog{
     JRadioButton B1 = new JRadioButton("Rob Option");
     JTextField P1 = new JTextField(10);
     
-    /*JRadioButton B1 = new JRadioButton("B1");
-    JRadioButton B2 = new JRadioButton("B2");
-    JRadioButton B3 = new JRadioButton("B3");
-    JRadioButton B4 = new JRadioButton("B4");
-    JRadioButton B5 = new JRadioButton("B5");
-    JRadioButton B6 = new JRadioButton("B6");
-    JTextField P1 = new JTextField(20);
-    JTextField P2 = new JTextField(20);
-    JTextField P3 = new JTextField(20);*/
     
     public static final long serialVersionUID = 1L;
     
@@ -80,21 +67,6 @@ public class EM_MissingMenu extends AbstractMenuDialog{
         /* options configuration */
         
         this.optionsPanel.add(B1);
-        //this.optionsPanel.add(new JLabel("          "));
-        //this.optionsPanel.add(new JLabel("Label for missing values "));
-        //this.optionsPanel.add(P1);
-        /*this.optionsPanel.add(new JLabel("      P1:"));
-        this.optionsPanel.add(P1);
-        this.optionsPanel.add(new JLabel("      P2:"));
-        this.optionsPanel.add(P2);
-        this.optionsPanel.add(new JLabel("      P3:"));
-        this.optionsPanel.add(P3);
-        this.optionsPanel.add(B1);
-        this.optionsPanel.add(B2);
-        this.optionsPanel.add(B3);
-        this.optionsPanel.add(B4);
-        this.optionsPanel.add(B5);
-        this.optionsPanel.add(B6);*/
     }
     
     @Override
@@ -154,19 +126,20 @@ public class EM_MissingMenu extends AbstractMenuDialog{
                         
                         re.eval(dataFrameString); // we create the dataframe in R
                         
-                        /*re.eval("out <- capture.output(X)");
-                        String[] output = re.eval("out").asStringArray();
-                        
-                        OutputElement e = new OutputForR(output);
-                        outputPanel.addOutput(e);*/
-                        
                         constructParametersToR();
                 
                     this.dispose();
 
                     // executem script d'R
 
-                        String url = "Scripts_Amb_Base/scriptilr-EM_Missing (FET).R";
+                        String url;
+                        if(System.getProperty("os.name").startsWith("Windows")){
+                            url = "Scripts_Amb_Base/scriptilr-EM_Missing (FET).R";
+                        }
+                        else{
+                            url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scriptilr-EM_Missing (FET).R";
+                        }
+                    
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 
                         String[] errorMessage = re.eval("error").asStringArray();
@@ -201,32 +174,11 @@ public class EM_MissingMenu extends AbstractMenuDialog{
         if(this.P1.getText().length() > 0) re.eval("P1 <- " + this.P1.getText());
         else re.eval("P1 <- NA");
         
-        /*if(this.P1.getText().length() > 0) re.eval("P1 <- \"" + this.P1.getText() + "\"");
-        else re.eval("P1 <- \"\"");
-        if(this.P2.getText().length() > 0) re.eval("P2 <- \"" + this.P2.getText() + "\"");
-        else re.eval("P2 <- \"\"");
-        if(this.P3.getText().length() > 0) re.eval("P3 <- \"" + this.P3.getText() + "\"");
-        else re.eval("P3 <- \"\"");*/
         
         /* construim parametres logics */
         
         if(this.B1.isSelected()) re.eval("B1 <- TRUE");
         else re.eval("B1 <- FALSE");
-        
-        /*if(this.B1.isSelected()) re.eval("B1 <- TRUE");
-        else re.eval("B1 <- FALSE");
-        if(this.B2.isSelected()) re.eval("B2 <- TRUE");
-        else re.eval("B2 <- FALSE");
-        if(this.B3.isSelected()) re.eval("B3 <- TRUE");
-        else re.eval("B3 <- FALSE");
-        if(this.B4.isSelected()) re.eval("B4 <- TRUE");
-        else re.eval("B4 <- FALSE");
-        if(this.B5.isSelected()) re.eval("B5 <- TRUE");
-        else re.eval("B5 <- FALSE");
-        if(this.B6.isSelected()) re.eval("B6 <- TRUE");
-        else re.eval("B6 <- FALSE");*/
-        
-        /* construim la matriu BaseX */
     }
     
     void showText(){
@@ -291,21 +243,7 @@ public class EM_MissingMenu extends AbstractMenuDialog{
             }
             mainApplication.updateDataFrame(df);
         }
-        
-        /*int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt();  numero de noves variables
-        for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();  guardem el nom de la variable 
-            String isNumeric = re.eval("class(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
-            if(isNumeric.equals("numeric")){  creem variable numerica 
-                double[] data = re.eval("as.numeric(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asDoubleArray();
-                df.addData(varName,data);
-            }
-            else{  crear variable categorica 
-                String[] data = re.eval("as.character(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asStringArray();
-                df.addData(varName, new Variable(varName,data));
-            }
-            mainApplication.updateDataFrame(df);
-        }*/
+       
     }
     
     private void plotEM_MissingMenu(int position) {

@@ -40,7 +40,7 @@ for(i in 2:nCat) {
 
 graphnames <- list()
 #name <- paste("Bar_plot_comparing_all_the_centers_with_the_whole_center.png",sep="")
-name <- "Geometric mean barplot.png"
+name <- paste(tempdir(),"Geometric mean barplot.png", sep="\\")
 png(name)
 barplot(log(Num/Den), beside=TRUE,col=c(1:nCat))
 dev.off()

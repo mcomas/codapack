@@ -12,7 +12,6 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -194,7 +193,14 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
                 
                 // executem script d'R
                 
-                    String url = "Scripts_Amb_Base/scripLM.2 (FET).R";
+                    String url;
+                    if(System.getProperty("os.name").startsWith("Windows")){
+                        url = "Scripts_Amb_Base/scripLM.2 (FET).R";
+                    }
+                    else{
+                        url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripLM.2 (FET).R";
+                    }
+                    
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     
                     String[] errorMessage = re.eval("error").asStringArray();

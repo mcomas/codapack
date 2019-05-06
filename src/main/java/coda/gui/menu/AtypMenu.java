@@ -134,8 +134,16 @@ public class AtypMenu extends AbstractMenuDialog{
                     this.dispose();
 
                     // executem script d'R
+                    
+                        String url;
+                        
+                        if(System.getProperty("os.name").startsWith("Windows")){
+                            url = "Scripts_Amb_Base/scripAtyp versio 0 (FET).R";
+                        }
+                        else{
+                            url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripAtyp versio 0 (FET).R";
+                        }
 
-                        String url = "Scripts_Amb_Base/scripAtyp versio 0 (FET).R";
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 
                         String[] errorMessage = re.eval("error").asStringArray();
@@ -233,21 +241,6 @@ public class AtypMenu extends AbstractMenuDialog{
             }
             mainApplication.updateDataFrame(df);
         }
-        
-        /*int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt();  numero de noves variables
-        for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();  guardem el nom de la variable 
-            String isNumeric = re.eval("class(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
-            if(isNumeric.equals("numeric")){  creem variable numerica 
-                double[] data = re.eval("as.numeric(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asDoubleArray();
-                df.addData(varName,data);
-            }
-            else{  crear variable categorica 
-                String[] data = re.eval("as.character(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asStringArray();
-                df.addData(varName, new Variable(varName,data));
-            }
-            mainApplication.updateDataFrame(df);
-        }*/
     }
     
     private void plotAtypMenu(int position) {

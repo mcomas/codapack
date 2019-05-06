@@ -15,7 +15,7 @@
 
 #rm(graphnames)
 graphnames <- list()
-name <- paste("Zero_Pattern.png",sep="")
+name <- paste(tempdir(),"Zero_Pattern.png",sep="\\")
 png(name)
 zCompositions::zPatterns(X,label=P1,show.means=B1,suppress.print=TRUE,bar.labels=B2)
 dev.off()

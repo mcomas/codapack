@@ -157,7 +157,14 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 
                     this.dispose();
                     
-                        String url = "Scripts_Amb_Base/scripGeometricMeanBarplot (FET).R";
+                        String url;
+                        if(System.getProperty("os.name").startsWith("Windows")){
+                            url = "Scripts_Amb_Base/scripGeometricMeanBarplot (FET).R";
+                        }
+                        else{
+                            url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripGeometricMeanBarplot (FET).R";
+                        }
+                        
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 
                         String[] errorMessage = re.eval("error").asStringArray();

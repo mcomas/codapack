@@ -5,7 +5,6 @@
  */
 package coda.gui.menu;
 
-import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
@@ -13,8 +12,6 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.BinaryPartitionSelect;
-import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -28,7 +25,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -63,41 +59,11 @@ public class ClusterMenu extends AbstractMenuDialog{
     JRadioButton searchOpt = new JRadioButton("Optimal nº of clusters between");
     JTextField searchOptTF = new JTextField(7);
     
-    /*JRadioButton B1 = new JRadioButton("B1");
-    JRadioButton B2 = new JRadioButton("B2");
-    JRadioButton B3 = new JRadioButton("B3");
-    JRadioButton B4 = new JRadioButton("B4");
-    JRadioButton B5 = new JRadioButton("B5");
-    JRadioButton B6 = new JRadioButton("B6");
-    JTextField P1 = new JTextField(20);
-    JTextField P2 = new JTextField(20);
-    JTextField P3 = new JTextField(20);*/
-    
     public static final long serialVersionUID = 1L;
     
     public ClusterMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Cluster Menu menu", false);
         re = r;
-        
-        /* options configuration */
-        
-        /*JButton defaultPart = new JButton("Default Partition");
-        optionsPanel.add(defaultPart);
-        defaultPart.addActionListener(new java.awt.event.ActionListener() {
-            
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
-            }
-        });*/
-
-        /*JButton manuallyPart = new JButton("Define Manually");
-        optionsPanel.add(manuallyPart);
-        manuallyPart.addActionListener(new java.awt.event.ActionListener() {
-            
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                initiatePartitionMenu();
-            }
-        });*/
         
         this.optionsPanel.add(numClusters);
         numClusters.addActionListener( new ActionListener(){
@@ -132,24 +98,7 @@ public class ClusterMenu extends AbstractMenuDialog{
         this.optionsPanel.add(new JLabel("2 and "));
         this.optionsPanel.add(searchOptTF);
         this.optionsPanel.add(new JLabel(">2"));
-        /*this.optionsPanel.add(new JLabel("      P1:"));
-        this.optionsPanel.add(P1);
-        this.optionsPanel.add(new JLabel("      P2:"));
-        this.optionsPanel.add(P2);
-        this.optionsPanel.add(new JLabel("      P3:"));
-        this.optionsPanel.add(P3);
-        this.optionsPanel.add(B1);
-        this.optionsPanel.add(B2);
-        this.optionsPanel.add(B3);
-        this.optionsPanel.add(B4);
-        this.optionsPanel.add(B5);
-        this.optionsPanel.add(B6);*/
     }
-
-    /*public void initiatePartitionMenu(){
-        BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData() );
-        binaryMenu.setVisible(true);
-    }*/
     
     @Override
     public void acceptButtonActionPerformed(){
@@ -213,8 +162,15 @@ public class ClusterMenu extends AbstractMenuDialog{
                     this.dispose();
 
                     // executem script d'R
+                    
+                        String url;
+                        if(System.getProperty("os.name").startsWith("Windows")){
+                            url = "Scripts_Amb_Base/scripCluster K-means versio 0 (FET).R";
+                        }
+                        else{
+                            url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripCluster K-means versio 0 (FET).R";
+                        }
 
-                        String url = "Scripts_Amb_Base/scripCluster K-means versio 0 (FET).R";
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 
                         String[] errorMessage = re.eval("error").asStringArray();
@@ -255,42 +211,6 @@ public class ClusterMenu extends AbstractMenuDialog{
             re.eval("P1 <- " + this.searchOptTF.getText());
         }
         
-        /*if(this.P1.getText().length() > 0) re.eval("P1 <- \"" + this.P1.getText() + "\"");
-        else re.eval("P1 <- \"\"");
-        if(this.P2.getText().length() > 0) re.eval("P2 <- \"" + this.P2.getText() + "\"");
-        else re.eval("P2 <- \"\"");
-        if(this.P3.getText().length() > 0) re.eval("P3 <- \"" + this.P3.getText() + "\"");
-        else re.eval("P3 <- \"\"");*/
-        
-        /* construim parametres logics */
-        
-        /*if(this.B1.isSelected()) re.eval("B1 <- TRUE");
-        else re.eval("B1 <- FALSE");
-        if(this.B2.isSelected()) re.eval("B2 <- TRUE");
-        else re.eval("B2 <- FALSE");
-        if(this.B3.isSelected()) re.eval("B3 <- TRUE");
-        else re.eval("B3 <- FALSE");
-        if(this.B4.isSelected()) re.eval("B4 <- TRUE");
-        else re.eval("B4 <- FALSE");
-        if(this.B5.isSelected()) re.eval("B5 <- TRUE");
-        else re.eval("B5 <- FALSE");
-        if(this.B6.isSelected()) re.eval("B6 <- TRUE");
-        else re.eval("B6 <- FALSE");*/
-        
-        /* construim la matriu BaseX */
-        
-        /*if(super.partitionILR == null || super.getPartition().length == 0){
-            re.eval("BaseX <- NULL");
-        }
-        else{
-            int[][] baseX = super.getPartition();
-            re.assign("BaseX", baseX[0]);
-            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
-            for(int i=1; i < baseX.length; i++){
-                re.assign("tmp", baseX[i]);
-                re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
-            }
-        }*/
     }
     
     void showText(){
@@ -356,20 +276,6 @@ public class ClusterMenu extends AbstractMenuDialog{
             mainApplication.updateDataFrame(df);
         }
         
-        /*int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt();  numero de noves variables
-        for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();  guardem el nom de la variable 
-            String isNumeric = re.eval("class(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
-            if(isNumeric.equals("numeric")){  creem variable numerica 
-                double[] data = re.eval("as.numeric(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asDoubleArray();
-                df.addData(varName,data);
-            }
-            else{  crear variable categorica 
-                String[] data = re.eval("as.character(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asStringArray();
-                df.addData(varName, new Variable(varName,data));
-            }
-            mainApplication.updateDataFrame(df);
-        }*/
     }
     
     private void plotClusterMenu(int position) {

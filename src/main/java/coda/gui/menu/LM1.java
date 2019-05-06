@@ -12,7 +12,6 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -44,7 +43,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
@@ -69,32 +67,11 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
     JRadioButton B1 = new JRadioButton("Residuals");
     JRadioButton B2 = new JRadioButton("Fitted");
     
-    /*JRadioButton B1 = new JRadioButton("B1");
-    JRadioButton B2 = new JRadioButton("B2");
-    JRadioButton B3 = new JRadioButton("B3");
-    JRadioButton B4 = new JRadioButton("B4");
-    JRadioButton B5 = new JRadioButton("B5");
-    JRadioButton B6 = new JRadioButton("B6");
-    JTextField P1 = new JTextField(20);
-    JTextField P2 = new JTextField(20);
-    JTextField P3 = new JTextField(20);*/
-    
     public static final long serialVersionUID = 1L;
     
     public LM1(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"LM1 menu",false,false,true);
         re = r;
-        
-        /* options configuration */
-        
-        /*JButton xILR = new JButton("Set X partition");
-        this.optionsPanel.add(xILR);
-        xILR.addActionListener(new java.awt.event.ActionListener(){
-        
-            public void actionPerformed(java.awt.event.ActionEvent evt){
-               configureILRX();
-            }
-        });*/
         
         JButton yILR = new JButton("Set Y parition");
         this.optionsPanel.add(yILR);
@@ -105,27 +82,9 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             }
         });
         
-        /*this.optionsPanel.add(new JLabel("      P1:"));
-        this.optionsPanel.add(P1);
-        this.optionsPanel.add(new JLabel("      P2:"));
-        this.optionsPanel.add(P2);
-        this.optionsPanel.add(new JLabel("      P3:"));
-        this.optionsPanel.add(P3);
-        this.optionsPanel.add(B1);
-        this.optionsPanel.add(B2);
-        this.optionsPanel.add(B3);
-        this.optionsPanel.add(B4);
-        this.optionsPanel.add(B5);
-        this.optionsPanel.add(B6);*/
-        
         this.optionsPanel.add(B1);
         this.optionsPanel.add(B2);
     }
-    
-    /*public void configureILRX(){
-        if(this.ilrX == null || this.ilrX.getDsLength() != ds.getSelectedData1().length) this.ilrX = new ILRMenu(this.getSelectedData1());
-        this.ilrX.setVisible(true);
-    }*/
     
     public void configureILRY(){
         if(this.ilrY == null || this.ilrY.getDsLength() != ds.getSelectedData2().length) this.ilrY = new ILRMenu(this.getSelectedData2());
@@ -230,7 +189,14 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
                 
                 // executem script d'R
                 
-                    String url = "Scripts_Amb_Base/scripLM.1 (FET).R";
+                    String url;
+                    if(System.getProperty("os.name").startsWith("Windows")){
+                        url = "Scripts_Amb_Base/scripLM.1 (FET).R";
+                    }
+                    else{
+                        url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripLM.1 (FET).R";
+                    }
+
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     
                     String[] errorMessage = re.eval("error").asStringArray();
@@ -272,42 +238,12 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
     void constructParametersToR(){
         /* construim parametres string */
         
-        /*if(this.P1.getText().length() > 0) re.eval("P1 <- \"" + this.P1.getText() + "\"");
-        else re.eval("P1 <- \"\"");
-        if(this.P2.getText().length() > 0) re.eval("P2 <- \"" + this.P2.getText() + "\"");
-        else re.eval("P2 <- \"\"");
-        if(this.P3.getText().length() > 0) re.eval("P3 <- \"" + this.P3.getText() + "\"");
-        else re.eval("P3 <- \"\"");*/
-        
         /* construim parametres logics */
         
         if(this.B1.isSelected()) re.eval("B1 <- TRUE");
         else re.eval("B1 <- FALSE");
         if(this.B2.isSelected()) re.eval("B2 <- TRUE");
         else re.eval("B2 <- FALSE");
-        /*if(this.B3.isSelected()) re.eval("B3 <- TRUE");
-        else re.eval("B3 <- FALSE");
-        if(this.B4.isSelected()) re.eval("B4 <- TRUE");
-        else re.eval("B4 <- FALSE");
-        if(this.B5.isSelected()) re.eval("B5 <- TRUE");
-        else re.eval("B5 <- FALSE");
-        if(this.B6.isSelected()) re.eval("B6 <- TRUE");
-        else re.eval("B6 <- FALSE");*/
-        
-        /* construim la matriu BaseX */
-        
-        /*if(this.ilrX == null || this.ilrX.getPartition().length == 0){
-            re.eval("BaseX <- NULL");
-        }
-        else{
-            int[][] baseX = this.ilrX.getPartition();
-            re.assign("BaseX", baseX[0]);
-            re.eval("BaseX" + " <- matrix( " + "BaseX" + " ,nc=1)");
-            for(int i=1; i < baseX.length; i++){
-                re.assign("tmp", baseX[i]);
-                re.eval("BaseX" + " <- cbind(" + "BaseX" + ",matrix(tmp,nc=1))");
-            }
-        }*/
         
         /* construim la matriu BaseY */
         
@@ -387,23 +323,6 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             }
             mainApplication.updateDataFrame(df);
         }
-        
-        /*
-        int numberOfNewVar = re.eval("length(names(cdp_res$new_data))").asInt();  numero de noves variables
-        for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();  guardem el nom de la variable 
-            String isNumeric = re.eval("class(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asString();
-            if(isNumeric.equals("numeric")){  creem variable numerica 
-                double[] data = re.eval("as.numeric(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asDoubleArray();
-                df.addData(varName,data);
-            }
-            else{  crear variable categorica 
-                String[] data = re.eval("as.character(unlist(cdp_res$new_data[[" + String.valueOf(i+1) + "]]))").asStringArray();
-                df.addData(varName, new Variable(varName,data));
-            }
-            mainApplication.updateDataFrame(df);
-        }
-        */
     }
     
     private void plotLM1(int position) throws IOException {
