@@ -157,6 +157,21 @@ if (B2 == TRUE) {
 
 ################################
 
+printGraphics <- function(position, width, height){
+
+	if(position == 0){
+		png(graphnames[1], width, height)
+		plot(lda1, dimen=1, type="both")
+		dev.off()
+	}	
+	else{
+		png(graphnames[2], width, height)
+		plot(density(plda1$x[plda1$class==nam[1]]),
+     		xlim=c(-7,7),ylim=c(0,0.5),main="lda",xlab="discriminant index")
+		lines(density(plda1$x[plda1$class==nam[2]]),lty=2)
+		dev.off()
+	}
+}
 
 # Output
 rm(cdp_res)

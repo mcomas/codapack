@@ -75,6 +75,16 @@ if (B2 == TRUE) {
   }
 }
 
+printGraphics <- function(width, height){
+
+	png(graphnames[1], width, height)
+	oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
+	plot(LM,sub.caption=formul) # Plot the model information
+	par(oldpar)
+	dev.off()
+}
+
+
 # Ooutput
 cdp_res = list(
   'text' = list(paste("LINEAR REGRESSION"),

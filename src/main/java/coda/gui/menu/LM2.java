@@ -360,11 +360,7 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
                 public void componentResized(ComponentEvent e){
                     JLabel label = (JLabel) e.getComponent();
                     Dimension size = label.getSize();
-                    re.eval("png(graphnames[1],width="+String.valueOf(size.width-100)+",height=" + String.valueOf(size.height-100) +")");
-                    re.eval("oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))");
-                    re.eval("plot(LM,sub.caption=formul)");
-                    re.eval("par(oldpar)");
-                    re.eval("dev.off()");
+                    re.eval("printGraphics(" + String.valueOf(size.width-100) + "," + String.valueOf(size.height-100) + ")");
                     BufferedImage img = null;
                     try {
                         img = ImageIO.read(new File(tempsDirR[position]));

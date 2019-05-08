@@ -474,17 +474,7 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
                 public void componentResized(ComponentEvent e){
                     JLabel label = (JLabel) e.getComponent();
                     Dimension size = label.getSize();
-                    if(position==0){
-                        re.eval("png(graphnames[1],width="+String.valueOf(size.width-100)+",height=" + String.valueOf(size.height-100) +")");
-                        re.eval("plot(lda1,dimen=1,type=\"both\")");
-                        re.eval("dev.off()");
-                    }
-                    else{
-                        re.eval("png(graphnames[2],width="+String.valueOf(size.width-100)+",height=" + String.valueOf(size.height-100) +")");
-                        re.eval("plot(density(plda1$x[plda1$class==nam[1]]), xlim=c(-7,7),ylim=c(0,0.5),main=\"lda\",xlab=\"discriminant index\")");
-                        re.eval("lines(density(plda1$x[plda1$class==nam[2]]),lty=2)");
-                        re.eval("dev.off()");
-                    }
+                    re.eval("printGraphics(" + String.valueOf(position) +"," + String.valueOf(size.width-100) + "," + String.valueOf(size.height-100) + ")");
                     BufferedImage img = null;
                     try {
                         img = ImageIO.read(new File(tempsDirR[position]));
