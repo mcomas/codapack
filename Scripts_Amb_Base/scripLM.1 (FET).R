@@ -58,10 +58,9 @@ r2 <- (sum(FitCen^2)/sum(YCen^2))*100
 
 # Create graphs
 graphnames <- list()
-name <- list()
 for (n in 1:nparts)
 {
-  name[n] <- paste(tempdir(),paste("Plots_of_residuals_",names(Yt[n]),".png",sep=""),sep="\\")
+  name <- paste(tempdir(),paste("Plots_of_residuals_",names(Yt[n]),".png",sep=""),sep="\\")
   png(name)
   LM.temp <- lm(as.matrix(Yt[n])~as.matrix(X))
   oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
