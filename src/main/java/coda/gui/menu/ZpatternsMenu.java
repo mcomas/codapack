@@ -166,13 +166,13 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             menuItem.addActionListener(new FileChooserAction());
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
-            submenuExport.add(menuItem);
+            //submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As PDF");
-            submenuExport.add(menuItem);
+            //submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As WMF");
-            submenuExport.add(menuItem);
+            //submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As Postscripts");
-            submenuExport.add(menuItem);
+            //submenuExport.add(menuItem);
             menuItem = new JMenuItem("Quit");
             menuItem.addActionListener(new quitListener());
             menu.add(submenuExport);
