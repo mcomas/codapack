@@ -140,9 +140,9 @@ public class CoDaPackMenu extends JMenuBar{
         public JMenu menuFilters;
         public final String ITEM_FILT = "Filters";
             public final JMenuItem itemFilter;
-            public final String ITEM_FILTER = "Simple filter";
+            public final String ITEM_FILTER = "Categorical filter";
             public final JMenuItem itemAdvFilter;
-            public final String ITEM_ADV_FILTER = "Advanced filter";
+            public final String ITEM_ADV_FILTER = "Numerical filter";
         public JMenuItem itemAmalgamation;
         public final String ITEM_AMALGAM = "Amalgamation";
         public JMenuItem itemZeros;
