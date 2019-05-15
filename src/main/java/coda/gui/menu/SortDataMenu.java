@@ -43,7 +43,7 @@ public class SortDataMenu extends AbstractMenuDialog{
         String selectedNames[] = ds.getSelectedData(); // we take the selected data
         Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
         
-        if(selectedNames.length > 0){
+        if(selectedNames.length == 1){
             
             df = mainApplication.getActiveDataFrame();
             
@@ -128,7 +128,8 @@ public class SortDataMenu extends AbstractMenuDialog{
             this.dispose();
         }
         else{
-            JOptionPane.showMessageDialog(null, "Please select some data");
+            if(selectedNames.length == 0) JOptionPane.showMessageDialog(null, "Please select some data");
+            else JOptionPane.showMessageDialog(null, "Please select only one variable");
         }
         
     }
