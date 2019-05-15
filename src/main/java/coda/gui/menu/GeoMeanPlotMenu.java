@@ -74,7 +74,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         String selectedNames2[] = {super.ds.getSelectedGroup()};
         Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
         
-        if(selectedNames.length > 0){
+        if(selectedNames.length > 0 && selectedNames2[0] != null){
             
             df = mainApplication.getActiveDataFrame();
             DataFrame transformedDataFrame = new DataFrame(df);
@@ -193,7 +193,8 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
             
         }
         else{
-            JOptionPane.showMessageDialog(null,"Please select data");
+            if(selectedNames.length == 0) JOptionPane.showMessageDialog(null,"Please select data");
+            else JOptionPane.showMessageDialog(null,"Please select categorical data");
         }
     }
     
