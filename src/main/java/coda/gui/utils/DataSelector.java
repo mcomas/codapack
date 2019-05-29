@@ -443,4 +443,8 @@ public final class DataSelector extends JPanel {
     private javax.swing.JScrollPane selectedScrollPane;
     // End of variables declaration
 
+    public void setSelectedName(String data1) {
+        this.labSelected.setText(data1);
+    }
+
 }

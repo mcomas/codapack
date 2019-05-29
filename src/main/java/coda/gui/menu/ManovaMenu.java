@@ -69,7 +69,7 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
     public static final long serialVersionUID = 1L;
     
     public ManovaMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Manova Menu menu",false,false,true);
+        super(mainApp,"Manova Menu",false,false,true);
         re = r;
         
         this.optionsPanel.add(residuals);

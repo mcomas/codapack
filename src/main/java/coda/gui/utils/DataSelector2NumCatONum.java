@@ -637,5 +637,10 @@ public final class DataSelector2NumCatONum extends JPanel {
     private javax.swing.JScrollPane selectedScrollPane2;
     // End of variables declaration
 
+    public void setSelectedNames(String data1, String data2) {
+        this.labSelected1.setText(data1);
+        this.labSelected2.setText(data2);
+    }
+
 }
 

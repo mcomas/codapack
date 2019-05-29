@@ -52,9 +52,9 @@ public class CoDaPackMenu extends JMenuBar{
         public JMenuItem itemAdd;
         public final String ITEM_ADD = "Add Workspace...";
         public JMenuItem itemSave;
-        public final String ITEM_SAV = "Save as...";
+        public final String ITEM_SAV = "Save Workspace...";
         public JMenuItem itemSaveWork;
-        public final String ITEM_SAVE = "Save Workspace...";
+        public final String ITEM_SAVE = "Save as...";
         public JMenu menuRecent;
         public final String ITEM_RECENT = "Recent Workspace";
             public JMenuItem itemClearRecent;
@@ -142,7 +142,7 @@ public class CoDaPackMenu extends JMenuBar{
             public final JMenuItem itemFilter;
             public final String ITEM_FILTER = "Categorical filter";
             public final JMenuItem itemAdvFilter;
-            public final String ITEM_ADV_FILTER = "Numerical filter";
+            public final String ITEM_ADV_FILTER = "Advanced filter";
         public JMenuItem itemAmalgamation;
         public final String ITEM_AMALGAM = "Amalgamation";
         public JMenuItem itemZeros;
@@ -589,7 +589,7 @@ public class CoDaPackMenu extends JMenuBar{
             menuMultiAnalysis.add(menuRegression);
                 addJMenuItem(menuRegression,item_Reg_XReal_YComp,ITEM_REG_XREAL_YCOMP);
                 addJMenuItem(menuRegression,item_Reg_XComp_YReal,ITEM_REG_XCOMP_YREAL);
-                addJMenuItem(menuRegression,item_Reg_XComp_YComp,ITEM_REG_XCOMP_YCOMP);
+                //addJMenuItem(menuRegression,item_Reg_XComp_YComp,ITEM_REG_XCOMP_YCOMP);
             menuCluster.setText(ITEM_CLUSTER);
             menuMultiAnalysis.add(menuCluster);
                 addJMenuItem(menuCluster,item_Clust_Kmeans,ITEM_CLUST_KMEANS);

@@ -70,7 +70,8 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
     public static final long serialVersionUID = 1L;
     
     public LM1(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"LM1 menu",false,false,true);
+        super(mainApp,"X real Y composition regression Menu",false,false,true);
+        super.setSelectedDataNames("Selected X:", "Selected Y:");
         re = r;
         
         JButton yILR = new JButton("Set Y parition");

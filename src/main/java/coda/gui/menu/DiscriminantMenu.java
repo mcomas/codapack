@@ -76,7 +76,7 @@ public class DiscriminantMenu extends AbstractMenuDialog2NumCatONum{
     public static final long serialVersionUID = 1L;
     
     public DiscriminantMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"DiscriminantMenu menu",false,false,true);
+        super(mainApp,"Discriminant Menu",false,false,true);
         re = r;
         
         /* options configuration */

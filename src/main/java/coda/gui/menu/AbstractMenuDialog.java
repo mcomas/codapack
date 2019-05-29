@@ -162,6 +162,10 @@ public abstract class AbstractMenuDialog extends JDialog{
     public DataFrameSelector getDFS() {
         return dfs;
     }
+    
+    public void setSelectedDataName(String data1){
+        ds.setSelectedName(data1);
+    }
 
     public boolean[] getValidComposition(DataFrame df, String[] selectedNames){
         boolean selection[] = df.getValidCompositions(selectedNames);

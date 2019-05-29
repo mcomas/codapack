@@ -56,13 +56,14 @@ public class ClusterMenu extends AbstractMenuDialog{
     
     JRadioButton numClusters = new JRadioButton("Number of Clusters");
     JTextField numClustersTF = new JTextField(7);
-    JRadioButton searchOpt = new JRadioButton("Optimal nº of clusters between");
+    JRadioButton searchOpt = new JRadioButton("Find optimal number of clusters between");
     JTextField searchOptTF = new JTextField(7);
     
     public static final long serialVersionUID = 1L;
     
     public ClusterMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Cluster Menu menu", false);
+        super(mainApp, "Cluster Menu", false);
+        super.setSelectedDataName("Select Composition:");
         re = r;
         
         this.optionsPanel.add(numClusters);
