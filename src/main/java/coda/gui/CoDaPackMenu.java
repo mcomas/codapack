@@ -111,18 +111,6 @@ public class CoDaPackMenu extends JMenuBar{
             public final String ITEM_PERTURBATE = "Perturbation";
             public JMenuItem itemPower;
             public final String ITEM_POWER = "Power transformation";
-        public JMenu menuZeros;
-        public final String ITEM_ZEROSMENU = "Zeros";
-            public JMenuItem itemSetDetectionLimit;
-            public final String ITEM_SETDETECTION ="Set detection limit";
-            public JMenuItem itemZerosR;
-            public final String ITEM_ZEROS_R = "Rounded zero replacement";
-            public JMenuItem itemLogRatio;
-            public final String ITEM_LOG_RATIO = "Logratio-EM zero Replacement";
-            public JMenuItem itemEM_Missing;
-            public final String ITEM_EM_MISSING = "Logratio-EM missing replacement";
-            public JMenuItem itemEM_Zero_Missing;
-            public final String ITEM_EM_ZERO_MISSING = "Logratio-EM Zero & missing replacement";
         public JMenu menuManipulate;
         public final String ITEM_MANI = "Manipulate";
             public JMenuItem itemDiscretize;
@@ -153,6 +141,23 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_ADD_VAR = "Add Numeric Variables";
         public JMenuItem itemDeleteVariables;
         public final String ITEM_DEL_VAR = "Delete variables";
+        
+    public JMenu menuIrregularData;
+    public final String ITEM_IRREG_DATA = "Irregular data";
+        public JMenuItem zPatternsPlot;
+        public final String ITEM_ZPATTERNS = "ZPatterns plot";
+        public JMenuItem itemSetDetectionLimit;
+        public final String ITEM_SETDETECTION ="Set detection limit";
+        public JMenuItem itemZerosR;
+        public final String ITEM_ZEROS_R = "Rounded zero replacement";
+        public JMenuItem itemLogRatio;
+        public final String ITEM_LOG_RATIO = "Logratio-EM zero Replacement";
+        public JMenuItem itemEM_Missing;
+        public final String ITEM_EM_MISSING = "Logratio-EM missing replacement";
+        public JMenuItem itemEM_Zero_Missing;
+        public final String ITEM_EM_ZERO_MISSING = "Logratio-EM Zero & missing replacement";
+        public JMenuItem itemAtipicalityIndex;
+        public final String ITEM_ATIP_INDEX = "Atipicality index";
 
     public JMenu menuStatistics;
     public final String ITEM_STATS = "Statistics";
@@ -182,8 +187,6 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_NORM_TEST = "Additive Logistic Normality Tests";
         public JMenuItem itemClasUniNormTest;
         public final String ITEM_CLAS_UNI_NORM_TEST = "Classical Univariate Normality test";
-        public JMenuItem itemAtipicalityIndex;
-        public final String ITEM_ATIP_INDEX = "Atipicality index";
 
 
     public JMenu menuGraphs;
@@ -210,8 +213,6 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_PRED_REG_PLOT = "Predictive Region";
         public JMenuItem confidenceRegionPlot;
         public final String ITEM_CONF_REG_PLOT = "Center Confidence Region";
-        public JMenuItem zPatternsPlot;
-        public final String ITEM_ZPATTERNS = "ZPatterns plot";
         public JMenuItem itemScatterplot;
         public final String ITEM_SCATTERPLOT = "Scatterplot 2D/3D";
         public JMenuItem itemGeoMeanPlot;
@@ -434,12 +435,6 @@ public class CoDaPackMenu extends JMenuBar{
                 itemClosure = new JMenuItem();
                 itemPerturbate = new JMenuItem();
                 itemPower = new JMenuItem();
-            menuZeros = new JMenu();
-                itemSetDetectionLimit = new JMenuItem();
-                itemZerosR = new JMenuItem();
-                itemLogRatio = new JMenuItem();
-                itemEM_Missing = new JMenuItem();
-                itemEM_Zero_Missing = new JMenuItem();
             menuManipulate = new JMenu();
                 itemDiscretize = new JMenuItem();
                 itemCalculateNewVar = new JMenuItem();
@@ -455,6 +450,15 @@ public class CoDaPackMenu extends JMenuBar{
             itemCreateFrame = new JMenuItem();
             itemAddVariables = new JMenuItem();
             itemDeleteVariables = new JMenuItem();
+            
+        menuIrregularData = new JMenu();
+            zPatternsPlot = new JMenuItem();
+            itemSetDetectionLimit = new JMenuItem();
+            itemZerosR = new JMenuItem();
+            itemLogRatio = new JMenuItem();
+            itemEM_Missing = new JMenuItem();
+            itemEM_Zero_Missing = new JMenuItem();
+            itemAtipicalityIndex = new JMenuItem();
 
         menuStatistics = new JMenu();
             itemCompStatsSummary = new JMenuItem();
@@ -470,7 +474,6 @@ public class CoDaPackMenu extends JMenuBar{
                 item_Disc_Analysis = new JMenuItem();
             itemNormalityTest = new JMenuItem();
             itemClasUniNormTest = new JMenuItem();
-            itemAtipicalityIndex = new JMenuItem();
 
         menuGraphs = new JMenu();
             itemTernaryPlot = new JMenuItem();
@@ -484,7 +487,6 @@ public class CoDaPackMenu extends JMenuBar{
             principalComponentPlot = new JMenuItem();
             predictiveRegionPlot = new JMenuItem();
             confidenceRegionPlot = new JMenuItem();
-            zPatternsPlot = new JMenuItem();
             itemScatterplot = new JMenuItem();
             itemGeoMeanPlot = new JMenuItem();
 
@@ -550,14 +552,6 @@ public class CoDaPackMenu extends JMenuBar{
             addJMenuItem(menuOperations,itemPerturbate,ITEM_PERTURBATE);
             addJMenuItem(menuOperations,itemPower, ITEM_POWER);
         menuData.addSeparator();
-        menuZeros.setText(ITEM_ZEROSMENU);
-        menuData.add(menuZeros);
-            addJMenuItem(menuZeros,itemSetDetectionLimit,ITEM_SETDETECTION);
-            addJMenuItem(menuZeros, itemZerosR, ITEM_ZEROS_R);
-            addJMenuItem(menuZeros, itemLogRatio, ITEM_LOG_RATIO);
-            addJMenuItem(menuZeros, itemEM_Missing, ITEM_EM_MISSING);
-            addJMenuItem(menuZeros,itemEM_Zero_Missing, ITEM_EM_ZERO_MISSING);
-        menuData.addSeparator();
         menuManipulate.setText(ITEM_MANI);
         menuData.add(menuManipulate);
             addJMenuItem(menuManipulate,itemDiscretize,ITEM_DISCRETIZE);
@@ -579,6 +573,19 @@ public class CoDaPackMenu extends JMenuBar{
         //addJMenuItem(menuData, itemZeros, ITEM_ZEROS);
 
         add(menuData);
+        
+        menuIrregularData.setText(ITEM_IRREG_DATA);
+            addJMenuItem(menuIrregularData, zPatternsPlot, ITEM_ZPATTERNS);
+            addJMenuItem(menuIrregularData, itemSetDetectionLimit, ITEM_SETDETECTION);
+            addJMenuItem(menuIrregularData, itemZerosR, ITEM_ZEROS_R);
+            addJMenuItem(menuIrregularData, itemLogRatio, ITEM_LOG_RATIO);
+            menuIrregularData.addSeparator();
+            addJMenuItem(menuIrregularData, itemEM_Missing, ITEM_EM_MISSING);
+            addJMenuItem(menuIrregularData, itemEM_Zero_Missing, ITEM_EM_ZERO_MISSING);
+            menuIrregularData.addSeparator();
+            addJMenuItem(menuIrregularData, itemAtipicalityIndex, ITEM_ATIP_INDEX);
+            
+        add(menuIrregularData);
 
         menuStatistics.setText(ITEM_STATS);
         addJMenuItem(menuStatistics, itemCompStatsSummary, ITEM_COMP_STATS_SUMMARY);        
@@ -598,7 +605,6 @@ public class CoDaPackMenu extends JMenuBar{
         menuStatistics.addSeparator();
         addJMenuItem(menuStatistics, itemNormalityTest, ITEM_NORM_TEST);
         addJMenuItem(menuStatistics, itemClasUniNormTest, ITEM_CLAS_UNI_NORM_TEST);
-        addJMenuItem(menuStatistics, itemAtipicalityIndex, ITEM_ATIP_INDEX);
         add(menuStatistics);
 
         menuGraphs.setText(ITEM_GRAPHS);
@@ -608,7 +614,6 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuGraphs, predictiveRegionPlot, ITEM_PRED_REG_PLOT);
         addJMenuItem(menuGraphs, confidenceRegionPlot, ITEM_CONF_REG_PLOT);
         menuGraphs.addSeparator();
-        addJMenuItem(menuGraphs, zPatternsPlot, ITEM_ZPATTERNS);
         addJMenuItem(menuGraphs, itemScatterplot, ITEM_SCATTERPLOT);
         addJMenuItem(menuGraphs,itemGeoMeanPlot, ITEM_GEO_MEAN_PLOT);
         //addJMenuItem(menuGraphs, itemALRPlot, ITEM_ALR_PLOT);
