@@ -35,7 +35,7 @@ names(df) <- c("Chisq","Atyp")
 index <- c(1:nr)
 #rm(sortida)
 sortida <- list()
-sortida[1] <- paste("DISCRIMINANT ANALYSIS")
+sortida[1] <- paste("POTENTIAL OUTLIERS")
 sortida[2] <- paste("atypical observations ",capture.output(which(atyp %in% 1)))
 
 #codi de debugg
@@ -74,4 +74,5 @@ cdp_res = list(
   'graph' = list(),
   'new_data' = df
 )
+
 

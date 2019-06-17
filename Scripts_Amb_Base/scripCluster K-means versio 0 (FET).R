@@ -20,7 +20,7 @@
 #B1 <- as.logical(FALSE)
 #P1 <- 10
 
-library(coda.base)
+#library(coda.base)
 
 #average silhouette width or the Pearson version of Hubert's gamma
 
@@ -34,8 +34,9 @@ library(coda.base)
 # We choose the best cluster according calinski index with number of clusters between 2 and 10
 
 #rm(km)
+
 Xt <- coda.base::coordinates(X, basis = "ilr", label = "ilr.", sparse_basis = FALSE)
-#Xt <- coda.base::coordinates(X, basis = sbp_basis(BaseX))
+#Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
 nparts=length(Xt)
 for (n in 1:nparts)
 {
@@ -47,6 +48,7 @@ N <- nrow(Xt)
 if (B1 == TRUE) 
   {
     k <- P1
+    set.seed(123456789)
     km <- kmeans(Xt, k, nstart = 25)
     calinski <- (km$betweenss/(k-1))/(km$tot.withinss/(N-k))
   } else
@@ -55,6 +57,7 @@ if (B1 == TRUE)
       ngroups <- 2
       for(k in 2:P1)
       {
+        set.seed(123456789)
         cl <- kmeans(Xt, k, nstart = 25)
         cnt <- (cl$betweenss/(k-1))/(cl$tot.withinss/(N-k))
         if (cnt > calinski) 
@@ -79,4 +82,6 @@ cdp_res = list(
   'graph' = list(),
   'new_data' = df
 )
+
+
 

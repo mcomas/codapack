@@ -14,9 +14,15 @@ library(coda.base)
 #head(Y)
 #X <- as.data.frame(darctic[,2:4])
 #head(X)
+#BaseX = matrix(c(1, 1, -1, 1, -1, 0), ncol = 2)
+#load("L:/CoDaCourse/CoDaCourse 17/Material/LABS 2017/Scripts 2018/CoDaLabs/Scripts CoDaPack/Alimentation.RData")
+#Y <- as.data.frame(dalim[,7])
+#head(Y)
+#X <- as.data.frame(dalim[,2:6])
+#head(X)
 #B1 <- as.logical(TRUE)
 #B2 <- as.logical(TRUE)
-#BaseX = matrix(c(1, 1, -1, 1, -1, 0), ncol = 2)
+#BaseX = matrix(c(1, 1, 1, -1, -1, 1, 1, -1, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 1, -1), ncol = 4)
 
 Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
 nparts=length(Xt)
@@ -32,9 +38,10 @@ nparts <- length(Xt)
 # Linear model
 #rm(formul)
 formul <- paste(colnames(df[nparts+1]),"~",colnames(df[1]),"+",sep="")
-for(n in 2:nparts) {
-  formul <- paste(formul,colnames(df[n]), collapse= "+",sep="")
+for(n in 2:nparts-1) {
+  formul <- paste(formul,colnames(df[n]), "+",sep="")
 }
+formul <- paste(formul,colnames(df[nparts]), sep="")
 #rm(LM)
 LM <- lm(as.formula(formul),data=df)
 
@@ -62,8 +69,8 @@ DF  <-  data.frame()
 #  }
 #}
 if (B1 == TRUE) {
-    DF <- as.data.frame(LM$residuals)
-    names(DF) <-("residuals")
+  DF <- as.data.frame(LM$residuals)
+  names(DF) <-("residuals")
 }
 if (B2 == TRUE) {
   if(plyr::empty(DF)){
@@ -76,12 +83,12 @@ if (B2 == TRUE) {
 }
 
 printGraphics <- function(width, height){
-
-	png(graphnames[1], width, height)
-	oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
-	plot(LM,sub.caption=formul) # Plot the model information
-	par(oldpar)
-	dev.off()
+  
+  png(graphnames[1], width, height)
+  oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
+  plot(LM,sub.caption=formul) # Plot the model information
+  par(oldpar)
+  dev.off()
 }
 
 
@@ -93,5 +100,4 @@ cdp_res = list(
   'graph' = graphnames,
   'new_data' = DF
 )
-
 

@@ -14,20 +14,22 @@
 
 #load("L:/CoDaCourse/CoDaCourse 17/Material/LABS 2017/Scripts 2018/CoDaLabs/Scripts CoDaPack/activzero.RData")
 #X <- as.data.frame(dzeros[,2:5])
+#load("L:/CoDaCourse/CoDaCourse 17/Material/LABS 2017/Scripts 2018/CoDaLabs/Scripts CoDaPack/fglass.rda")
+#X <- as.data.frame(glass[,1:9])
 #head(X)
 #B1 <- as.logical(FALSE)
 #P1 <- 0
 #B2 <- as.logical(FALSE)
 #P2 <- 0.65
 #B3 <- as.logical(FALSE)
-#P3 <- rep(0.01,4)
+#P3 <- rep(0.01,9)
 
 
 #library(zCompositions)
 nparts <- length(X)
 if (B2 == TRUE) 
 {Ximp <- zCompositions::lrEM(X,label=P1,dl=P3,rob=B1,ini.cov="complete.obs",imp.missing=B3)
-  } else {Ximp <- zCompositions::lrEM(X,label=P1,dl=P3,rob=B1,ini.cov="multRepl",delta=P2,imp.missing=B3)}
+} else {Ximp <- zCompositions::lrEM(X,label=P1,dl=P3,rob=B1,ini.cov="multRepl",delta=P2,imp.missing=B3)}
 
 
 for(k in 1:nparts)
@@ -42,4 +44,5 @@ cdp_res = list(
   'graph' = list(),
   'new_data' = data.frame(Ximp)
 )
+
 

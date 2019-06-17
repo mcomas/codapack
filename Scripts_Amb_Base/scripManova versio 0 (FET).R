@@ -8,7 +8,6 @@
 # Menu S3
 
 #load("L:/CoDaCourse/CoDaCourse 17/Material/LABS 2017/Scripts 2018/CoDaLabs/Scripts CoDaPack/activManova.RData") #name = nom de l'arxiu de dades
-
 #X <- as.data.frame(dpolen[,1:3])
 #Y <- as.data.frame(dpolen[,4])
 #B1 <- as.logical(TRUE)
@@ -17,7 +16,7 @@
 #library(coda.base)
 
 if (is.factor(Y) == FALSE) {
-    Y <- as.factor(as.matrix(Y))
+  Y <- as.factor(as.matrix(Y))
 }
 
 nOrig <- length(X)
@@ -47,29 +46,23 @@ sortida <- list(paste("MANOVA ANALYSIS"),
 
 # centers of each group ci and whole center 
 
-int = as.integer(Y)
-Mat = cbind.data.frame(X,int)
-nCat = nlevels(as.factor(Y)) 
+#int = as.integer(Y)
+#nCat = nlevels(as.factor(Y)) 
+#Num <- matrix(nrow = nCat, ncol = ncol(X))
+#Den <- matrix(nrow = nCat, ncol = ncol(X))
+#colnames(Num)<-colnames(X)
+#colnames(Den)<-colnames(X)
+#rownames(Num)<-levels(Y)
+#rownames(Den)<-levels(Y)
+#for(i in 1:nCat) {
+#  Num[i,]<-exp(colMeans(log(X[int==i,])))/sum(exp(colMeans(log(X[int==i,]))))
+#  Den[i,]<-exp(colMeans(log(X)))/sum(exp(colMeans(log(X))))
+#}
 
-nRow <- choose(nCat,2)
-nCol <- nCat
-rm(cmat)
-cmat <- matrix(, nrow = choose(nCat,2), ncol = nCat)
-
-cmat[1,]=exp(apply(log(Mat[Mat[,nOrig+1]==1,1:nOrig]),2,mean))
-sortida <- list(sortida,paste("Centers of each group"))
-sortida <- list(sortida,paste(capture.output(cmat[1,])))
-Num <- rbind(cmat[1,])
-cT <- exp(apply(log(Mat[,1:nOrig]),2,mean))
-Den <- rbind(cT)
-for(i in 2:nCat) {
-  cmat[i,]=exp(apply(log(Mat[Mat[,nOrig+1]==i,1:nOrig]),2,mean))
-  sortida <- list(sortida,paste(capture.output(cmat[i,])))
-  Num <- rbind(Num,cmat[i,])
-  Den <- rbind(Den,cT)
-}
-sortida <- list(sortida,paste("Whole center"))
-sortida <- list(sortida,paste(capture.output(cT)))
+#sortida <- list(sortida,paste("Centers of each group"))
+#sortida <- list(sortida,paste(capture.output(Num)))
+#sortida <- list(sortida,paste("Whole center"))
+#sortida <- list(sortida,paste(capture.output(Den[1,])))
 
 ################################
 
@@ -100,6 +93,10 @@ sortida <- list(sortida,paste(capture.output(cov(Xt[,1:nparts])*(nobs-1))))
 
 #take the residuals of the model and add them to the data set
 
+######### PART NOVA
+DF  <-  data.frame()
+######### FI PART NOVA
+
 if (B2 == TRUE) {
   DF <- data.frame()
   for (n in 1:nparts)
@@ -122,17 +119,17 @@ if (B2 == TRUE) {
   int <- as.integer(Y)
   Mat <- cbind.data.frame(Xt,int)
   n <- 2
-    for (i in 1:(nCat-1)) 
-      for (j in (i+1):nCat)
-      {
+  for (i in 1:(nCat-1)) 
+    for (j in (i+1):nCat)
+    {
       mva2<-manova(as.matrix(Xt)~Y,subset=(int %in% c(i,j)))
       sortida <- list(sortida,paste("comparison between ",i," and ",j))
       sortida <- list(sortida,paste(capture.output(summary(mva2,test="Wilks"))))
-#      name <- paste("Bar_plot_comparing_pairs_of_centers_",i, "_and_",j,".png",sep="")
-#      png(name)
-#      barplot(log(cmat[i,]/cmat[j,]))
-#      dev.off()
-#      graphnames[n] <- name
+      #      name <- paste("Bar_plot_comparing_pairs_of_centers_",i, "_and_",j,".png",sep="")
+      #      png(name)
+      #      barplot(log(cmat[i,]/cmat[j,]))
+      #      dev.off()
+      #      graphnames[n] <- name
       n <- n+1
     }
 }
@@ -142,9 +139,8 @@ if (B2 == TRUE) {
 cdp_res = list(
   'text' = unlist(sortida),
   'dataframe' = list(),
-#  'graph' = graphnames,
+  #  'graph' = graphnames,
   'graph' = list(),
   'new_data' = DF
 )
-
 
