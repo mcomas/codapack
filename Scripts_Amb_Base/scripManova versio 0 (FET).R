@@ -47,7 +47,7 @@ sortida <- list(paste("MANOVA ANALYSIS"),
 # centers of each group ci and whole center 
 
 #int = as.integer(Y)
-#nCat = nlevels(as.factor(Y)) 
+nCat = nlevels(as.factor(Y)) 
 #Num <- matrix(nrow = nCat, ncol = ncol(X))
 #Den <- matrix(nrow = nCat, ncol = ncol(X))
 #colnames(Num)<-colnames(X)
