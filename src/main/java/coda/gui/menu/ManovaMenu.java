@@ -49,7 +49,7 @@ import org.rosuda.JRI.Rengine;
  * ManovaMenu -> X numerica i Y numerica o categorica amb opci� de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
+public class ManovaMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
@@ -58,8 +58,6 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
     JFileChooser chooser;
     String tempDirR;
     String[] tempsDirR;
-    ILRMenu ilrX;
-    ILRMenu ilrY;
     
     /* options var */
     
@@ -69,32 +67,23 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
     public static final long serialVersionUID = 1L;
     
     public ManovaMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Manova Menu",false,false,true);
+        super(mainApp,"Manova Menu",true);
         re = r;
+        super.setSelectedDataName("Selected composition");
         
         this.optionsPanel.add(residuals);
         this.optionsPanel.add(analyzeDiff);
     }
     
-    public void configureILRX(){
-        if(this.ilrX == null || this.ilrX.getDsLength() != ds.getSelectedData1().length) this.ilrX = new ILRMenu(this.getSelectedData1());
-        this.ilrX.setVisible(true);
-    }
-    
-    public void configureILRY(){
-        if(this.ilrY == null || this.ilrY.getDsLength() != ds.getSelectedData2().length) this.ilrY = new ILRMenu(this.getSelectedData2());
-        this.ilrY.setVisible(true);
-    }
-    
     @Override
     public void acceptButtonActionPerformed(){
         
-        String selectedNames1[] = super.ds.getSelectedData1();
+        String selectedNames1[] = super.ds.getSelectedData();
         Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(selectedNames1));
-        String selectedNames2[] = super.ds.getSelectedData2();
+        String selectedNames2[] = {super.ds.getSelectedGroup()};
         Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
         
-        if(selectedNames1.length > 0 && selectedNames2.length > 0){
+        if(selectedNames1.length > 0 && selectedNames2[0] != null){
             
             df = mainApplication.getActiveDataFrame();
             double[][] numericData = df.getNumericalData(selectedNames1);
@@ -200,7 +189,7 @@ public class ManovaMenu extends AbstractMenuDialog2NumCatONum{
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");
-            else JOptionPane.showMessageDialog(null, "No data selected in data 2");
+            else JOptionPane.showMessageDialog(null, "No group selected");
         }
     }
     

@@ -69,8 +69,9 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
     public static final long serialVersionUID = 1L;
     
     public LM2(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"LM2 menu",false,false,true);
+        super(mainApp,"X composition Y real regression Menu",false,false,true);
         re = r;
+        super.setSelectedDataNames("Selected X", "Selected Y");
         
         /* options configuration */
         
