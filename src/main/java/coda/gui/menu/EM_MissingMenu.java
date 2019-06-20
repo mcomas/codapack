@@ -61,7 +61,7 @@ public class EM_MissingMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     
     public EM_MissingMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "EM_MissingMenu menu", false);
+        super(mainApp, "Logratio-EM missing replacement Menu", false);
         re = r;
         
         /* options configuration */
