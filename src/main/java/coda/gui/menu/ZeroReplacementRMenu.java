@@ -53,8 +53,8 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
     JCheckBox performClosure;
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
-    JCheckBox performMax;
-    JLabel lmax = new JLabel("Use minimum positive value observed");
+    //JCheckBox performMax;
+    //JLabel lmax = new JLabel("Use minimum positive value observed");
     Rengine re;
     DataFrame df;
 
@@ -89,10 +89,10 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         optionsPanel.add(performClosure);
         optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
-        performMax = new JCheckBox("", false);
-        performMax.setSelected(true);
-        optionsPanel.add(lmax);
-        optionsPanel.add(performMax);
+        //performMax = new JCheckBox("", false);
+        //performMax.setSelected(true);
+        //optionsPanel.add(lmax);
+        //optionsPanel.add(performMax);
     }
 
     @Override
@@ -106,8 +106,8 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         
         // configurem si és vol agafara els maxims de les columnes
         
-        boolean takeMin = true;
-        if(!performMax.isSelected()) takeMin = false;
+        //boolean takeMin = true;
+        //if(!performMax.isSelected()) takeMin = false;
 
         df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData(); // we get the names of selected variables
@@ -122,22 +122,22 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                 new_names[i] = "z_" + sel_names[i];
             }
             
-            boolean containsZero = false;
+            int numZeros = 0;
 
             double data[][] = df.getNumericalData(sel_names);
-            double minimumsOfColumns[] = new double[m]; double minimumOfColumn;
+            //double minimumsOfColumns[] = new double[m]; double minimumOfColumn;
             
             // we search the minimum number diferent of 0 for each column
             for(int i =0; i < data.length;i++){
-                minimumOfColumn = 0.0;
+                //minimumOfColumn = 0.0;
                 for(int j=0;j < data[i].length;j++){
-                    if(data[i][j] == 0) containsZero = true;
-                    if((data[i][j] != 0 && data[i][j] < minimumOfColumn) || minimumOfColumn == 0) minimumOfColumn = data[i][j];
+                    if(data[i][j] == 0) numZeros++;
+                    //if((data[i][j] != 0 && data[i][j] < minimumOfColumn) || minimumOfColumn == 0) minimumOfColumn = data[i][j];
                 }
-                minimumsOfColumns[i] = minimumOfColumn;
+                //minimumsOfColumns[i] = minimumOfColumn;
             }
             
-            if(containsZero){ // if contains zero then we do something
+            if(numZeros > 0){ // if contains zero then we do something
                 
                 re.assign("X", data[0]);
                 re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
@@ -147,59 +147,72 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                 }
                 
                 double dlevel[][] = df.getDetectionLevel(sel_names);
+                int numDlevel = 0;
+                
+                for(int i=0; i < dlevel.length; i++){
+                    for(int j=0; j < dlevel[i].length; j++){
+                        if(dlevel[i][j] > 0) numDlevel++;
+                    }
+                }
+                
+                if(numZeros == numDlevel){ // si tenim detection limit per tots els zeros llavors tot be
                 
                 // modificació en el cas de que no tingui level detector agafant minim columna
                 
-                if(takeMin){
+                //if(takeMin){
                     
-                    for(int i = 0; i < data.length;i++){
-                        for(int j = 0; j < data[i].length;j++){ // no data level 
-                            if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
+                //    for(int i = 0; i < data.length;i++){
+                //        for(int j = 0; j < data[i].length;j++){ // no data level 
+                //            if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
+                //        }
+                //    }
+                //}                
+                
+                    re.assign("DL", dlevel[0]);
+                    re.eval("DL" + " <- matrix( " + "DL" + " ,nc=1)");
+                    for(int i=1; i < dlevel.length; i++){
+                        re.assign("tmp", dlevel[i]);
+                        re.eval("DL" + " <- cbind(" + "DL" + ",matrix(tmp,nc=1))");
+                    }
+
+                    re.eval("out <- capture.output(zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + "))");
+
+                    String[] out = re.eval("out").asStringArray();
+
+                    // extract the numbers of out
+                    double resultat[][] = new double[data.length][data[0].length];
+                    int aux = 0; // y
+                    Pattern p = Pattern.compile("(\\d+(?:\\.\\d+))");
+                    char coma = ',';
+                    for (int i = 1; i < out.length; i++) {
+                        Matcher match = p.matcher(out[i].replace(coma,'.'));
+                        int aux2 = 0; //x
+                        while (match.find()) {
+                            double d = Double.parseDouble(match.group(1));
+                            resultat[aux2][aux] = d;
+                            aux2++;
                         }
+                        aux++;
                     }
-                }                
-                
-                re.assign("DL", dlevel[0]);
-                re.eval("DL" + " <- matrix( " + "DL" + " ,nc=1)");
-                for(int i=1; i < dlevel.length; i++){
-                    re.assign("tmp", dlevel[i]);
-                    re.eval("DL" + " <- cbind(" + "DL" + ",matrix(tmp,nc=1))");
-                }
-                
-                re.eval("out <- capture.output(zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + "))");
-                
-                String[] out = re.eval("out").asStringArray();
-                
-                // extract the numbers of out
-                double resultat[][] = new double[data.length][data[0].length];
-                int aux = 0; // y
-                Pattern p = Pattern.compile("(\\d+(?:\\.\\d+))");
-                char coma = ',';
-                for (int i = 1; i < out.length; i++) {
-                    Matcher match = p.matcher(out[i].replace(coma,'.'));
-                    int aux2 = 0; //x
-                    while (match.find()) {
-                        double d = Double.parseDouble(match.group(1));
-                        resultat[aux2][aux] = d;
-                        aux2++;
+
+                    // put the output on dataframe
+                    if (performClosure.isSelected()) {
+                        double vclosureTo = Double.parseDouble(closureTo.getText());
+                        df.addData(new_names, CoDaStats.closure(resultat, vclosureTo));
+                    } else {
+                        df.addData(new_names, resultat);
                     }
-                    aux++;
-                }
-                
-                // put the output on dataframe
-                if (performClosure.isSelected()) {
-                    double vclosureTo = Double.parseDouble(closureTo.getText());
-                    df.addData(new_names, CoDaStats.closure(resultat, vclosureTo));
-                } else {
-                    df.addData(new_names, resultat);
-                }
 
-                mainApplication.updateDataFrame(df);
+                    mainApplication.updateDataFrame(df);
 
-                setVisible(false);
+                    setVisible(false);
+                }
+                else{
+                    JOptionPane.showMessageDialog(frame, "Please set detection limit for all zeros");
+                }
             }
             else{
-                JOptionPane.showMessageDialog(frame, "Please select a variable that contains some 0");
+                JOptionPane.showMessageDialog(frame, "No data with zeros");
             }
         }
         else{
