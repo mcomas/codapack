@@ -64,8 +64,8 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
     JComboBox iniCovList = new JComboBox(iniCovOptions);
     JLabel robOption = new JLabel("Rob Option");
     JLabel iniCovOption = new JLabel("IniCov Option");
-    JCheckBox performMax;
-    JLabel lmax = new JLabel("Use minimum on detection limit");
+    //JCheckBox performMax;
+    //JLabel lmax = new JLabel("Use minimum on detection limit");
     JLabel l_usedPercentatgeDL = new JLabel("DL proportion");
     JTextField dlProportion;
     
@@ -107,10 +107,10 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
         optionsPanel.add(dlProportion);
         optionsPanel.add(Box.createVerticalStrut(25));
         optionsPanel.add(Box.createHorizontalStrut(50));
-        performMax = new JCheckBox("Min result", false);
-        performMax.setSelected(true);
-        optionsPanel.add(lmax);
-        optionsPanel.add(performMax);
+        //performMax = new JCheckBox("Min result", false);
+        //performMax.setSelected(true);
+        //optionsPanel.add(lmax);
+        //optionsPanel.add(performMax);
     }
     
     @Override
@@ -172,69 +172,85 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
                         
                     // configurem la matriu DL
                     boolean takeMin = true;
-                    if(!performMax.isSelected()) takeMin = false;
+                    //if(!performMax.isSelected()) takeMin = false;
                     int m = selectedNames.length;
                     
-                    double minimumsOfColumns[] = new double[m]; double minimumOfColumn;
+                    //double minimumsOfColumns[] = new double[m]; double minimumOfColumn;
+                    int numZeros = 0;
             
                     // we search the maximum number for each column
             
                     for(int i =0; i < data.length;i++){
-                        minimumOfColumn = 0.0;
+                        //minimumOfColumn = 0.0;
                         for(int j=0;j < data[i].length;j++){
-                            if((data[i][j] != 0 && data[i][j] < minimumOfColumn) || minimumOfColumn == 0) minimumOfColumn = data[i][j];
+                            if(data[i][j] == 0) numZeros ++;
+                            //if((data[i][j] != 0 && data[i][j] < minimumOfColumn) || minimumOfColumn == 0) minimumOfColumn = data[i][j];
                         }
-                        minimumsOfColumns[i] = minimumOfColumn;
+                        //minimumsOfColumns[i] = minimumOfColumn;
                     }
                     
                     double dlevel[][] = df.getDetectionLevel(selectedNames);
-
-                    if(takeMin){ // si s'ha seleccionat la opció d'agafar el màxim
-                        for(int i =0; i < data.length;i++){
-                            for(int j=0; j < data[i].length;j++){
-                                if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
-                            }
-                        }
-                    }
-
-                    re.assign("DL", dlevel[0]);
-                    re.eval("DL" + " <- matrix( " + "DL" + " ,nc=1");
-                    for(int i=1; i < dlevel.length;i++){
-                        re.assign("tmp", dlevel[i]);
-                        re.eval("DL" + " <- cbind(" + "DL" + ",matrix(tmp,nc=1))");
-                    }
-                        
-                        constructParametersToR();
-                
-                    this.dispose();
-
-                    // executem script d'R
                     
-                        String url;
-                        if(System.getProperty("os.name").startsWith("Windows")){
-                            url = "Scripts_Amb_Base/scriptilr-EM_Missing_Zero (FET).R";
+                    int numDlevel = 0;
+                    
+                    for(int i=0; i < dlevel.length; i++){
+                        for(int j=0; j < dlevel[i].length; j++){
+                            if(dlevel[i][j] > 0) numDlevel++;
                         }
-                        else{
-                            url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scriptilr-EM_Missing_Zero (FET).R";
+                    }
+
+                    //if(takeMin){ // si s'ha seleccionat la opció d'agafar el màxim
+                    //    for(int i =0; i < data.length;i++){
+                    //        for(int j=0; j < data[i].length;j++){
+                    //            if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
+                    //        }
+                    //    }
+                    //}
+                    
+                    if(numZeros == numDlevel){
+
+                        re.assign("DL", dlevel[0]);
+                        re.eval("DL" + " <- matrix( " + "DL" + " ,nc=1");
+                        for(int i=1; i < dlevel.length;i++){
+                            re.assign("tmp", dlevel[i]);
+                            re.eval("DL" + " <- cbind(" + "DL" + ",matrix(tmp,nc=1))");
                         }
 
-                        re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
+                            constructParametersToR();
 
-                        String[] errorMessage = re.eval("error").asStringArray();
+                        this.dispose();
 
-                        if(errorMessage[0].equals("NULL")){
-                            /* executem totes les accions possibles */
-                            showText();
-                            createVariables();
-                            createDataFrame();
-                            showGraphics();
-                        }
-                        else{
-                            OutputElement type = new OutputText("Error in R:");
-                            outputPanel.addOutput(type);
-                            OutputElement outElement = new OutputForR(errorMessage);
-                            outputPanel.addOutput(outElement);
-                           }
+                        // executem script d'R
+
+                            String url;
+                            if(System.getProperty("os.name").startsWith("Windows")){
+                                url = "Scripts_Amb_Base/scriptilr-EM_Missing_Zero (FET).R";
+                            }
+                            else{
+                                url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scriptilr-EM_Missing_Zero (FET).R";
+                            }
+
+                            re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
+
+                            String[] errorMessage = re.eval("error").asStringArray();
+
+                            if(errorMessage[0].equals("NULL")){
+                                /* executem totes les accions possibles */
+                                showText();
+                                createVariables();
+                                createDataFrame();
+                                showGraphics();
+                            }
+                            else{
+                                OutputElement type = new OutputText("Error in R:");
+                                outputPanel.addOutput(type);
+                                OutputElement outElement = new OutputForR(errorMessage);
+                                outputPanel.addOutput(outElement);
+                               }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Please set detection limit for all zeros");
+                    }
 
                 }
                 
