@@ -12,7 +12,9 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -35,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import org.rosuda.JRI.Rengine;
 
@@ -56,8 +59,9 @@ public class ClusterMenu extends AbstractMenuDialog{
     
     JRadioButton numClusters = new JRadioButton("Number of Clusters");
     JTextField numClustersTF = new JTextField(7);
-    JRadioButton searchOpt = new JRadioButton("Find optimal number of clusters between");
+    JRadioButton searchOpt = new JRadioButton("Find optimal number between 2 and");
     JTextField searchOptTF = new JTextField(7);
+    JTextField nameOfColumn = new JTextField(10);
     
     public static final long serialVersionUID = 1L;
     
@@ -96,9 +100,12 @@ public class ClusterMenu extends AbstractMenuDialog{
                 }
             }
         });
-        this.optionsPanel.add(new JLabel("2 and "));
         this.optionsPanel.add(searchOptTF);
         this.optionsPanel.add(new JLabel(">2"));
+        this.optionsPanel.add(new JLabel("         "));
+        this.optionsPanel.add(new JLabel("Name of column of groups"));
+        nameOfColumn.setText("Group");
+        this.optionsPanel.add(nameOfColumn);
     }
     
     @Override
@@ -129,7 +136,7 @@ public class ClusterMenu extends AbstractMenuDialog{
                 else{
                     
                     // create dataframe on r
-            
+                        
                         int auxPos = 0;
                         for(int i=0; i < df.size();i++){ // totes les columnes
                             if(vSelectedNames.contains(df.get(i).getName())){
@@ -263,8 +270,10 @@ public class ClusterMenu extends AbstractMenuDialog{
         
         int numberOfNewVar = re.eval("length(colnames(cdp_res$new_data))").asInt(); /* numero de columnes nomes*/
         
+        if(nameOfColumn.getText().length() == 0) nameOfColumn.setText("Group"); /* si esta buit posem per defecte Group */
+        
         for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("colnames(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
+            String varName = nameOfColumn.getText();
             String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[["+ String.valueOf(i+1) +"]]))").asString();
             if(isNumeric.equals("TRUE")){
                 double[] data = re.eval("as.numeric(cdp_res$new_data[," + String.valueOf(i+1) + "])").asDoubleArray();

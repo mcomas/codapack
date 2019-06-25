@@ -408,7 +408,8 @@ public class DataFrame extends HashMap<String, Variable>{
         change = true;
         int m = varnames.size();
         if(varnames.contains(name)){
-            return addData(name+"c",data);
+            data.setName(name+".c");
+            return addData(name+".c",data);
         }
         varnames.add(m, name);
         return this.put(name, data);
@@ -417,7 +418,7 @@ public class DataFrame extends HashMap<String, Variable>{
         change = true;
         int n = varnames.size();
         if(varnames.contains(name)){
-            return addData(name+"c",data);
+            return addData(name+".c",data);
         }
         varnames.add(n, name);
         return this.put(name, new Variable(name, data));
