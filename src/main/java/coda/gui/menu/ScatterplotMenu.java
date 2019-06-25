@@ -28,6 +28,11 @@ import coda.DataFrame;
 import javax.swing.JFrame;
 import org.rosuda.JRI.Rengine;
 import coda.gui.CoDaPackMain;
+import static coda.gui.CoDaPackMain.outputPanel;
+import static coda.gui.CoDaPackMain.re;
+import coda.gui.output.OutputElement;
+import coda.gui.output.OutputForR;
+import coda.gui.output.OutputText;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -76,7 +81,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     
     public ScatterplotMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Scatterplot Menu", false);
+        super(mainApp, "Scatterplot Menu", true);
         re = r;
     }
     
@@ -87,6 +92,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
         frame.setTitle("Message");
         
         String selectedNames[] = ds.getSelectedData();
+        String selectedGroup = ds.getSelectedGroup();
         
         if(selectedNames.length == 2 || selectedNames.length == 3){
             
@@ -99,10 +105,21 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                 }
             }
             
+            if(selectedGroup != null){ // si em seleccionat grup
+                re.eval(selectedGroup + " <- NULL");
+                for(String j: df.get(selectedGroup).getTextData()){
+                    re.eval(selectedGroup + " <- c(" + selectedGroup + ",'" + j + "')");
+                }
+            }
+            
             String dataFrameString = "mydf <- data.frame(";
             for(int i=0; i < selectedNames.length; i++){
                 dataFrameString += selectedNames[i];
-                if(i != selectedNames.length-1) dataFrameString += ",";
+                if(i != selectedNames.length-1 || selectedGroup != null) dataFrameString += ",";
+            }
+            
+            if(selectedGroup != null){
+                dataFrameString += selectedGroup;
             }
             
             dataFrameString += ")";
@@ -115,7 +132,13 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             	
                     re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");	
                     re.eval("png(mypath,width=700,height=700");	
-                    re.eval("plot(" + selectedNames[0] + "," + selectedNames[1] + ", main =\"Scatterplot 2D\", pch=16)");	
+                    if(selectedGroup != null){
+                        re.eval("plot(mydf$" + selectedNames[0] + ", mydf$" + selectedNames[1] + ", col = mydf$" + selectedGroup + ")");
+                        re.eval("legend(\"topright\", levels(mydf$" + selectedGroup + "), fill = mydf$" + selectedGroup + ")");
+                    }
+                    else{
+                        re.eval("plot(" + selectedNames[0] + "," + selectedNames[1] + ")");
+                    }
                     re.eval("dev.off()");	
             	
                     try {	
@@ -125,22 +148,21 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                     }
             }
             else{ // printem el gr�fic en 3D
-                /*ScatterPlot s = new ScatterPlot(df.get(selectedNames[0]).size(), df.getNumericalData(selectedNames));
-                            
-                try {
-                    s.plot();
-                } catch (Exception ex) {
-                    Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
+                
                 re.eval("mypath = tempdir()");
                     tempDirR = re.eval("print(mypath)").asString();
                     tempDirR += "\\out.png";
             
                     re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
                     re.eval("png(mypath,width=700,height=700");
-                    re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +",pch = 16, cex.symbols = 1.5, color=\"black\",main = \"3D Scatterplot\")");
-                    //re.eval("fit <- lm(" + selectedNames[2] + "~ " + selectedNames[0] + "+" + selectedNames[1] + ")");
-                    //re.eval("s3d$plane3d(fit)");
+                    if(selectedGroup != null){
+                        re.eval("colors <- mydf$" + selectedGroup);
+                        re.eval("scatterplot3d::scatterplot3d(mydf$" + selectedNames[0] + ",mydf$" + selectedNames[1] + ",mydf$" + selectedNames[2] +", color=as.numeric(mydf$" + selectedGroup + "), pch = 19)");
+                        re.eval("legend(\"topright\", levels(mydf$" + selectedGroup + "), fill = mydf$" + selectedGroup + ")");
+                    }
+                    else{
+                        re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +",pch = 16, cex.symbols = 1.5, color=\"black\")");
+                    }
                     re.eval("dev.off()");
             
                     try {
