@@ -21,6 +21,13 @@ zCompositions::zPatterns(X,label=P1,show.means=B1,suppress.print=TRUE,bar.labels
 dev.off()
 graphnames[1] <- name
 
+printGraphics <- function(width, height){
+
+    png(graphnames[1], width, height)
+    zCompositions::zPatterns(X,label=P1,show.means=B1,suppress.print=TRUE,bar.labels=B2)
+    dev.off()
+}
+
 # Ooutput
 cdp_res = list(
   'text' = list(paste("ZERO PATTERNS"),
