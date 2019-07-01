@@ -47,6 +47,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
+import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -358,11 +359,14 @@ public class DiscriminantMenu extends AbstractMenuDialog{
     
     void showText(){
         
+        REXP result;
+        String[] sortida;
+        
         int midaText = re.eval("length(cdp_res$text)").asInt();
         for(int i=0; i < midaText; i++){
-            re.eval("out <- capture.output(cdp_res$text[[" + String.valueOf(i+1) + "]])");
-            OutputElement e = new OutputForR(re.eval("out").asStringArray());
-            outputPanel.addOutput(e);
+            result = re.eval("cdp_res$text[[" + String.valueOf(i+1) + "]]");
+            sortida = result.asStringArray();
+            outputPanel.addOutput(new OutputForR(sortida));
         }
     }
     
