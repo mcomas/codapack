@@ -197,7 +197,7 @@ public final class CoDaPackMain extends JFrame{
     private void initComponents() {
         ITEM_APPLICATION_NAME = "CoDaPack v" + CoDaPackConf.getVersion();
         outputPanel = new OutputPanel();
-        tablePanel = new TablePanel();
+        tablePanel = new TablePanel(this);
         
         //Panel with the active variable
         dataList = new DataList();

@@ -33,12 +33,16 @@ import coda.gui.table.ExcelAdapter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -46,10 +50,14 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -63,6 +71,12 @@ public final class TablePanel extends JPanel{
      */
     DataFrame df = new DataFrame();
     public JTable table;
+    
+    private JTableHeader header;
+    private JPopupMenu renamePopup;
+    private JTextField text;
+    private TableColumn column;
+    
     //private JTable rowTable;
     JScrollPane scrollPane1 = new JScrollPane();
     JPopupMenu pm = new JPopupMenu();
@@ -71,7 +85,7 @@ public final class TablePanel extends JPanel{
      *
      */
     
-    public TablePanel(){
+    public TablePanel(CoDaPackMain main){
         
         setLayout(new BorderLayout());
         this.main = main;
@@ -108,12 +122,79 @@ public final class TablePanel extends JPanel{
          */
         JMenuBar actions = new JMenuBar();
 
- 
+        // HEADER EDITABLE
+        
+        header = table.getTableHeader();
+        header.addMouseListener(new MouseAdapter(){
+          @Override
+          public void mouseClicked(MouseEvent event)
+          {
+            if (event.getClickCount() == 2)
+            {
+              editColumnAt(event.getPoint());
+            }
+          }
+        });
+
+        text = new JTextField();
+        text.setBorder(null);
+        text.addActionListener(new ActionListener(){
+          public void actionPerformed(ActionEvent e)
+          {
+            renameColumn();
+              try {
+                  changeNameDataFrame();
+              } catch (DataFrameException ex) {
+                  Logger.getLogger(TablePanel.class.getName()).log(Level.SEVERE, null, ex);
+              }
+          }
+        });
+
+        renamePopup = new JPopupMenu();
+        renamePopup.setBorder(new MatteBorder(0, 1, 1, 1, Color.DARK_GRAY));
+        renamePopup.add(text);
+        
 
         // MENU ACCIONS OUTPUTS!!!!!!!
         this.add(actions, java.awt.BorderLayout.NORTH);
         
     }
+    
+    private void changeNameDataFrame() throws DataFrameException{
+        int index = column.getModelIndex();
+        String oldName = main.getActiveDataFrame().get(index).getName();
+        String newName = text.getText();
+
+        main.getActiveDataFrame().rename(oldName, newName);
+        main.updateDataFrame(main.getActiveDataFrame());
+    }
+    
+    private void editColumnAt(Point p){
+        
+        int columnIndex = header.columnAtPoint(p);
+
+        if (columnIndex != -1){
+
+          column = header.getColumnModel().getColumn(columnIndex);
+          Rectangle columnRectangle = header.getHeaderRect(columnIndex);
+
+          text.setText(column.getHeaderValue().toString());
+          renamePopup.setPreferredSize(
+              new Dimension(columnRectangle.width, columnRectangle.height - 1));
+          renamePopup.show(header, columnRectangle.x, 0);
+
+          text.requestFocusInWindow();
+          text.selectAll();
+        }
+    }
+
+  private void renameColumn(){
+    column.setHeaderValue(text.getText());
+    //int index = column.getModelIndex();
+    //df.get(column.getModelIndex()).setName(text.getText());
+    renamePopup.setVisible(false);
+    header.repaint();
+  }
    
     public void clearData(){
         table.setModel(new DataTableModel(new DataFrame()));
@@ -275,6 +356,7 @@ public final class TablePanel extends JPanel{
                 ROWSIZE = Math.max(ROWSIZE, dataFrame.get(i).size());
             }
         }
+        
         @Override
         public int getRowCount() {
             return ROWSIZE;
