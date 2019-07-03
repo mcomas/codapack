@@ -140,7 +140,7 @@ public abstract class AbstractMenuDialog extends JDialog{
         southPanel.add(helpButton);
         helpButton.addActionListener(new java.awt.event.ActionListener(){
             public void actionPerformed(java.awt.event.ActionEvent evt){
-                System.out.println("He apretat el boto help");
+                new HelpMenu(mainApplication).setVisible(true);
             }
         });
         getContentPane().add(southPanel, BorderLayout.SOUTH);
