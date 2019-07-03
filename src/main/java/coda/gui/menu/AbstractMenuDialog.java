@@ -30,6 +30,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Point;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.script.ScriptException;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -140,7 +143,11 @@ public abstract class AbstractMenuDialog extends JDialog{
         southPanel.add(helpButton);
         helpButton.addActionListener(new java.awt.event.ActionListener(){
             public void actionPerformed(java.awt.event.ActionEvent evt){
-                new HelpMenu(mainApplication).setVisible(true);
+                try {
+                    new HelpMenu(mainApplication, "Help/prova.html").setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(AbstractMenuDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         getContentPane().add(southPanel, BorderLayout.SOUTH);

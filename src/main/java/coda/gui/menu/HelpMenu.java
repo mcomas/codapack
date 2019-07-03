@@ -27,10 +27,19 @@ package coda.gui.menu;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -38,7 +47,7 @@ import javax.swing.JPanel;
  */
 public class HelpMenu extends JDialog{
     
-    public HelpMenu(JFrame mainApplication){
+    public HelpMenu(JFrame mainApplication, String url) throws MalformedURLException, IOException{
         super(mainApplication, "Help");
         Point p = mainApplication.getLocation();
         p.x = p.x + (mainApplication.getWidth()-400)/2;
@@ -63,10 +72,16 @@ public class HelpMenu extends JDialog{
                 "<b>Marc Comas-Cuf&iacute;</b>: mcomas@imae.udg.edu,<br>" +
                 "<b>Santiago Thi&oacute;-Henestrosa</b>: thio@imae.udg.edu";
 
-        text.setText("<html><center>" + aboutText + "</center></html>");
-        about.add(text, BorderLayout.CENTER);
-
-
-        this.setContentPane(about);
+        try {
+            
+            InputStream input = new FileInputStream(url);
+            String aux = IOUtils.toString(input);
+            text.setText(aux);
+            about.add(text, BorderLayout.CENTER);
+            this.setContentPane(about);
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(HelpMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
