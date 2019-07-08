@@ -27,6 +27,7 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -67,17 +68,32 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         
     }
     
+    private Vector<String> sortSelectedNames(String[] selectedNames){
+        
+        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> res = new Vector<String>();
+        
+        ArrayList<String> sortedNames = df.getNames();
+        
+        for(String s : sortedNames){
+            if(aux.contains(s)) res.add(s);
+        }
+        
+        return res;
+    }
+    
     @Override
     public void acceptButtonActionPerformed(){
         
+        df = mainApplication.getActiveDataFrame();
+        
         String selectedNames[] = super.ds.getSelectedData();
-        Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> vSelectedNames = sortSelectedNames(selectedNames);
         String selectedNames2[] = {super.ds.getSelectedGroup()};
-        Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
+        Vector<String> vSelectedNames2 = sortSelectedNames(selectedNames2);
         
         if(selectedNames.length > 0 && selectedNames2[0] != null){
             
-            df = mainApplication.getActiveDataFrame();
             DataFrame transformedDataFrame = new DataFrame(df);
             
             double[][] data = df.getNumericalData(selectedNames);
