@@ -17,7 +17,7 @@
 graphnames <- list()
 name <- paste(tempdir(),"Zero_Pattern.png",sep="\\")
 png(name)
-zCompositions::zPatterns(X,label=P1,show.means=B1,suppress.print=TRUE,bar.labels=B2)
+sortida <- capture.output(zCompositions::zPatterns(X,label=P1,show.means=B1,bar.labels=B2))
 dev.off()
 graphnames[1] <- name
 
@@ -30,8 +30,7 @@ printGraphics <- function(width, height){
 
 # Ooutput
 cdp_res = list(
-  'text' = list(paste("ZERO PATTERNS"),
-                paste(zCompositions::zPatterns(X,label=P1,show.means=B1,plot=FALSE))),
+  'text' = list(paste("ZERO PATTERNS"),sortida),
   'dataframe' = list(),
   'graph' = graphnames,
   'new_data' = list()
