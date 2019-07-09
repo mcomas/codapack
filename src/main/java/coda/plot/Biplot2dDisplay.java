@@ -81,8 +81,8 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
 
         int s = config.getSize("label").intValue();
         textLabel = new String[2];
-        textLabel[0] = "1st";
-        textLabel[1] = "2nd";
+        textLabel[0] = "ilr.1";
+        textLabel[1] = "ilr.2";
         /*iconLabel = new TeXIcon[2];
         iconLabel[0] = new TeXFormula("1st").
                     createTeXIcon(TeXConstants.STYLE_DISPLAY, s);
