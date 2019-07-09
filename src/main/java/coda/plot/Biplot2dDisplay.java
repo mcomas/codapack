@@ -177,7 +177,7 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
     public void paintComponent(Graphics2D g2, double width, double height){
         super.paintComponent(g2,width,height);
         drawVectors(g2);
-        drawDecomposition(g2);
+        //drawDecomposition(g2);
     }
     public void drawDecomposition(Graphics2D g2){
         decomposition.paintIcon(null, g2, getWidth()-200, getHeight()-50);

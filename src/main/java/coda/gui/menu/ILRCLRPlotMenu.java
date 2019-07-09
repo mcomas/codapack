@@ -193,14 +193,14 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
             }else{
 
                 Biplot2dDisplay.Biplot2dBuilder builder =
-                        new Biplot2dDisplay.Biplot2dBuilder(plotNames, data, vdata).mapping(mapping);
+                        new Biplot2dDisplay.Biplot2dBuilder(plotNames, data, vdata).mapping(mapping);             
                 if(groupedBy != null){
                     builder.groups(coda.Utils.reduceData(
                             df.getDefinedGroup(groupedBy),
                             selection), coda.Utils.getCategories(
                             df.getCategoricalData(groupedBy),selection));
                 }
-
+                
                 biplotWindow =
                         new RealPlot2dWindow(df, builder.build(), "ILR/CLR plot");
                                
