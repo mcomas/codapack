@@ -41,6 +41,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuBar;
@@ -161,12 +162,21 @@ public final class TablePanel extends JPanel{
     }
     
     private void changeNameDataFrame() throws DataFrameException{
+        
+        ArrayList<String> namesActualDataFrame = main.getActiveDataFrame().getNames();
         int index = column.getModelIndex();
         String oldName = main.getActiveDataFrame().get(index).getName();
         String newName = text.getText();
-
-        main.getActiveDataFrame().rename(oldName, newName);
-        main.updateDataFrame(main.getActiveDataFrame());
+        
+        if(! namesActualDataFrame.contains(newName)){
+            main.getActiveDataFrame().rename(oldName, newName);
+            main.updateDataFrame(main.getActiveDataFrame());
+        }
+        else{
+            text.setText(oldName);
+            main.updateDataFrame(main.getActiveDataFrame());
+            JOptionPane.showMessageDialog(null,"Name already used");
+        }
     }
     
     private void editColumnAt(Point p){
