@@ -27,6 +27,7 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -76,14 +77,27 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         this.optionsPanel.add(B2);
     }
     
+    private Vector<String> sortSelectedNames(String[] selectedNames){
+        
+        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> res = new Vector<String>();
+        
+        ArrayList<String> sortedNames = df.getNames();
+        
+        for(String s : sortedNames){
+            if(aux.contains(s)) res.add(s);
+        }
+        
+        return res;
+    }
+    
     @Override
     public void acceptButtonActionPerformed(){
         
-        String selectedNames[] = super.ds.getSelectedData();
-        Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
-
         df = mainApplication.getActiveDataFrame();
-            
+        
+        String selectedNames[] = super.ds.getSelectedData();
+        Vector<String> vSelectedNames = sortSelectedNames(selectedNames);  
         
         if(selectedNames.length > 0){
             

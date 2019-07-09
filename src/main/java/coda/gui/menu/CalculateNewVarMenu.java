@@ -9,6 +9,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -40,13 +41,27 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
         re = r;
     }
     
+    private Vector<String> sortSelectedNames(String[] selectedNames){
+        
+        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> res = new Vector<String>();
+        
+        ArrayList<String> sortedNames = df.getNames();
+        
+        for(String s : sortedNames){
+            if(aux.contains(s)) res.add(s);
+        }
+        
+        return res;
+    }
+    
     @Override
     public void acceptButtonActionPerformed(){
         
         df = mainApplication.getActiveDataFrame();
         
         String selectedNames[] = ds.getSelectedData();
-        Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> vSelectedNames = sortSelectedNames(selectedNames);
         
         if(selectedNames.length > 0){
             

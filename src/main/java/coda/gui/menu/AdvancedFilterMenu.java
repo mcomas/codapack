@@ -10,6 +10,7 @@ import coda.gui.CoDaPackMain;
 import coda.io.ImportRDA;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -44,15 +45,30 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
         re = r;
     }
     
+    private Vector<String> sortSelectedNames(String[] selectedNames){
+        
+        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> res = new Vector<String>();
+        
+        ArrayList<String> sortedNames = df.getNames();
+        
+        for(String s : sortedNames){
+            if(aux.contains(s)) res.add(s);
+        }
+        
+        return res;
+    }
+    
     @Override
     public void acceptButtonActionPerformed(){
         
+        df = mainApplication.getActiveDataFrame();
+        
         String selectedNames[] = ds.getSelectedData();
-        Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> vSelectedNames = sortSelectedNames(selectedNames);
         
         if(selectedNames.length > 0){ // minimum one variable
             
-            df = mainApplication.getActiveDataFrame();
             boolean exit = false;
             JLabel labelMessage = new JLabel("Following selected order, use x1 to x" + String.valueOf(selectedNames.length) + " instead of variable names to build the expression to subset");
             boolean goodExpression = false, goodName = false;

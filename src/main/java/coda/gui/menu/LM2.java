@@ -27,6 +27,7 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -94,6 +95,20 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
         this.ilrX.setVisible(true);
     }
     
+    private Vector<String> sortSelectedNames(String[] selectedNames){
+        
+        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> res = new Vector<String>();
+        
+        ArrayList<String> sortedNames = df.getNames();
+        
+        for(String s : sortedNames){
+            if(aux.contains(s)) res.add(s);
+        }
+        
+        return res;
+    }
+    
     @Override
     public void acceptButtonActionPerformed(){
         
@@ -101,9 +116,9 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
         boolean allXpositive = true;
         boolean allYNumeric = true;
         df = mainApplication.getActiveDataFrame();
-        Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(selectedNames1));
+        Vector<String> vSelectedNames1 = sortSelectedNames(selectedNames1);
         String selectedNames2[] = super.ds.getSelectedData2();
-        Vector<String> vSelectedNames2 = new Vector<String>(Arrays.asList(selectedNames2));
+        Vector<String> vSelectedNames2 = sortSelectedNames(selectedNames2);
         
         /* comprovar que les dades de X són positives */
         double[][] data = df.getNumericalData(selectedNames1);

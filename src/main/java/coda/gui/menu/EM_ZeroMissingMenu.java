@@ -22,6 +22,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.Box;
@@ -114,15 +115,30 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
         //optionsPanel.add(performMax);
     }
     
+    private Vector<String> sortSelectedNames(String[] selectedNames){
+        
+        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> res = new Vector<String>();
+        
+        ArrayList<String> sortedNames = df.getNames();
+        
+        for(String s : sortedNames){
+            if(aux.contains(s)) res.add(s);
+        }
+        
+        return res;
+    }
+    
     @Override
     public void acceptButtonActionPerformed(){
         
+        df = mainApplication.getActiveDataFrame();
+        
         String selectedNames[] = super.ds.getSelectedData();
-        Vector<String> vSelectedNames = new Vector<String>(Arrays.asList(selectedNames));
+        Vector<String> vSelectedNames = sortSelectedNames(selectedNames);
         
         if(selectedNames.length > 0){
             
-            df = mainApplication.getActiveDataFrame();
             DataFrame transformedDataFrame = new DataFrame(df);
             
             double[][] data = df.getNumericalData(selectedNames);
