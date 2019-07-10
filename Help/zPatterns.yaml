@@ -1,0 +1,7 @@
+---
+name: Zpatterns Help Menu
+description: This function summarises the patterns of zero and/or missing values in a data set and returns a vector of pattern numbers.
+options:
+  - Show means: Logical value indicating if mean values by pattern are shown on the graphical summary
+  - Show percentages: Logical value indicating if labels showing percentages must be added to the margin barplots
+references: Palarea-Albaladejo J. and Martin-Fernandez JA. zCompositions -- R package for multivariate imputation of left-censored data under a compositional approach. Chemometrics and Intelligence Laboratory Systems 2015

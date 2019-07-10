@@ -27,25 +27,28 @@ package coda.gui.menu;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import org.apache.commons.io.IOUtils;
+import org.ho.yaml.Yaml;
 
 /**
  *
  * @author mcomas
  */
 public class HelpMenu extends JDialog{
+    
+    private String name;
+    private String description;
+    private ArrayList<Map<String, Object>> options;
+    private String references;
     
     public HelpMenu(JFrame mainApplication, String url) throws MalformedURLException, IOException{
         super(mainApplication, "Help");
@@ -54,7 +57,7 @@ public class HelpMenu extends JDialog{
         p.y = p.y + (mainApplication.getHeight()-320)/2;
         setLocation(p);
 
-        setSize(400,320);
+        setSize(500,400);
 
         JPanel about = new JPanel();        
         about.setLayout(new BorderLayout());
@@ -62,26 +65,59 @@ public class HelpMenu extends JDialog{
         JLabel text = new JLabel();
         about.setBackground(new Color(200,200,200));
         
-        //text.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        //text.setAlignmentY(TOP_ALIGNMENT);
-        String aboutText = "<h2>CoDaPack Team</h2>";
-        aboutText += "<p>CoDaPack is being developed at <a href='http://imae.udg.edu'>Deptartment of Computer Science " +
-                ", Applied Mathematics and Statistics</a> in the University of Girona</p><br>";
-
-        aboutText += "<p>Please, if you detect some bug or if you think in new features send us an e-mail at:</p><br>" +
-                "<b>Marc Comas-Cuf&iacute;</b>: mcomas@imae.udg.edu,<br>" +
-                "<b>Santiago Thi&oacute;-Henestrosa</b>: thio@imae.udg.edu";
-
-        try {
-            
-            InputStream input = new FileInputStream(url);
-            String aux = IOUtils.toString(input);
-            text.setText(aux);
-            about.add(text, BorderLayout.CENTER);
-            this.setContentPane(about);
-            
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(HelpMenu.class.getName()).log(Level.SEVERE, null, ex);
+        Map<String, Object> map = Yaml.loadType(new File("Help/zPatterns.yaml"), HashMap.class); // guardem els atributs en un Map
+        
+        inicialitzateAtributes(map); // guardem els atributs
+        
+        String helpText;
+        
+        /* name */
+        
+        helpText = "<html><center><h2>" + this.name + "</h2></center>";
+        
+        /* description */
+        
+        helpText += "<h2>Description:</h2>" + this.description;
+        
+        /* options */
+        
+        helpText += "<h2>Options:</h2>";
+        
+        for(Map<String, Object> m: this.options){
+            for(Map.Entry<String, Object> entry: m.entrySet()){
+                helpText += "<b>" + entry.getKey() + ":</b> " + (String) entry.getValue() + "<br>";
+            }
         }
+        
+        /* references */
+        
+        helpText += "<h2>References</h2>" + this.references + "</html>";
+        
+        about.add(new JLabel(helpText), BorderLayout.CENTER);
+        this.setContentPane(about);
+    }
+    
+    private void inicialitzateAtributes(Map<String,Object> map){
+        
+        /* name */
+        
+        if(map.containsKey("name")) this.name = (String) map.get("name");
+        else this.name = null;
+        
+        /* description */
+        
+        if(map.containsKey("description")) this.description = (String) map.get("description");
+        else this.description = null;
+        
+        /* options */
+        
+        if(map.containsKey("options")) this.options = (ArrayList<Map<String, Object>>) map.get("options");
+        else this.options = null;
+        
+        /* references */
+        
+        if(map.containsKey("references")) this.references = (String) map.get("references");
+        else this.references = null;
+        
     }
 }
