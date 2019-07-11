@@ -49,7 +49,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * ZpatternsMenu -> X numerica i Y numerica positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * ZpatternsMenu -> X numerica i Y numerica positiva amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class ZpatternsMenu extends AbstractMenuDialog{
@@ -141,14 +141,8 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 
                 // executem script d'R
                 
-                    String url;
+                    String url = CoDaPackConf.rScriptPath + "scripZeroPatterns (FET).R";
                     
-                    if(System.getProperty("os.name").startsWith("Windows")){
-                        url = "Scripts_Amb_Base/scripZeroPatterns (FET).R";
-                    }
-                    else{
-                        url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripZeroPatterns (FET).R";
-                    }
 
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     

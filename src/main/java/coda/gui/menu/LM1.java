@@ -7,6 +7,7 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.Variable;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
@@ -49,7 +50,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * LM1 -> X numerica i Y numerica positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * LM1 -> X numerica i Y numerica positiva amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class LM1 extends AbstractMenuDialog2NumCatONum{
@@ -208,13 +209,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
                 
                 // executem script d'R
                 
-                    String url;
-                    if(System.getProperty("os.name").startsWith("Windows")){
-                        url = "Scripts_Amb_Base/scripLM.1 (FET).R";
-                    }
-                    else{
-                        url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripLM.1 (FET).R";
-                    }
+                    String url = CoDaPackConf.rScriptPath + "scripLM.1 (FET).R";
 
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     

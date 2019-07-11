@@ -7,6 +7,7 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.Variable;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
@@ -41,7 +42,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * EM_MissingMenu -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * EM_MissingMenu -> X numerica i positiva amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class EM_MissingMenu extends AbstractMenuDialog{
@@ -149,13 +150,7 @@ public class EM_MissingMenu extends AbstractMenuDialog{
 
                     // executem script d'R
 
-                        String url;
-                        if(System.getProperty("os.name").startsWith("Windows")){
-                            url = "Scripts_Amb_Base/scriptilr-EM_Missing (FET).R";
-                        }
-                        else{
-                            url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scriptilr-EM_Missing (FET).R";
-                        }
+                        String url = CoDaPackConf.rScriptPath + "scriptilr-EM_Missing (FET).R";
                     
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 

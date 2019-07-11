@@ -7,6 +7,7 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.Variable;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
@@ -47,7 +48,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * GeoMeanPlotMenu -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * GeoMeanPlotMenu -> X numerica i positiva amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class GeoMeanPlotMenu extends AbstractMenuDialog{
@@ -174,13 +175,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 
                     this.dispose();
                     
-                        String url;
-                        if(System.getProperty("os.name").startsWith("Windows")){
-                            url = "Scripts_Amb_Base/scripGeometricMeanBarplot (FET).R";
-                        }
-                        else{
-                            url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripGeometricMeanBarplot (FET).R";
-                        }
+                        String url = CoDaPackConf.rScriptPath + "scripGeometricMeanBarplot (FET).R";
                         
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 

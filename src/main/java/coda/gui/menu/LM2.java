@@ -7,6 +7,7 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.Variable;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
@@ -49,7 +50,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * LM2 -> X numerica i positiva i Y numerica amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * LM2 -> X numerica i positiva i Y numerica amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class LM2 extends AbstractMenuDialog2NumCatONum{
@@ -120,7 +121,7 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
         String selectedNames2[] = super.ds.getSelectedData2();
         Vector<String> vSelectedNames2 = sortSelectedNames(selectedNames2);
         
-        /* comprovar que les dades de X són positives */
+        /* comprovar que les dades de X sï¿½n positives */
         double[][] data = df.getNumericalData(selectedNames1);
         
         for(int i=0; i < data.length && allXpositive;i++){
@@ -210,13 +211,7 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
                 
                 // executem script d'R
                 
-                    String url;
-                    if(System.getProperty("os.name").startsWith("Windows")){
-                        url = "Scripts_Amb_Base/scripLM.2 (FET).R";
-                    }
-                    else{
-                        url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripLM.2 (FET).R";
-                    }
+                String url = CoDaPackConf.rScriptPath + "scripLM.2 (FET).R";
                     
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     

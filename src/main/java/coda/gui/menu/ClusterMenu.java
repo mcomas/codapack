@@ -7,6 +7,7 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.Variable;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
@@ -188,14 +189,8 @@ public class ClusterMenu extends AbstractMenuDialog{
 
                     // executem script d'R
                     
-                        String url;
-                        if(System.getProperty("os.name").startsWith("Windows")){
-                            url = "Scripts_Amb_Base/scripCluster K-means versio 0 (FET).R";
-                        }
-                        else{
-                            url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripCluster K-means versio 0 (FET).R";
-                        }
-
+                        String url = CoDaPackConf.rScriptPath + "scripCluster K-means versio 0 (FET).R";
+                        
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 
                         String[] errorMessage = re.eval("error").asStringArray();

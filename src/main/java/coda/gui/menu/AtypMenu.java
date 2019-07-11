@@ -8,6 +8,7 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Variable;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
@@ -45,7 +46,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * AtypMenu -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * AtypMenu -> X numerica i positiva amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class AtypMenu extends AbstractMenuDialog{
@@ -152,14 +153,7 @@ public class AtypMenu extends AbstractMenuDialog{
 
                     // executem script d'R
                     
-                        String url;
-                        
-                        if(System.getProperty("os.name").startsWith("Windows")){
-                            url = "Scripts_Amb_Base/scripAtyp versio 0 (FET).R";
-                        }
-                        else{
-                            url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scripAtyp versio 0 (FET).R";
-                        }
+                        String url = CoDaPackConf.rScriptPath + "scripAtyp versio 0 (FET).R";
 
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 

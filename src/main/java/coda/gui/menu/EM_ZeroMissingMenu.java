@@ -7,6 +7,7 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.Variable;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
@@ -43,7 +44,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * EM_ZeroMissingMenu -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * EM_ZeroMissingMenu -> X numerica i positiva amb opciï¿½ de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class EM_ZeroMissingMenu extends AbstractMenuDialog{
@@ -216,7 +217,7 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
                         }
                     }
 
-                    //if(takeMin){ // si s'ha seleccionat la opció d'agafar el màxim
+                    //if(takeMin){ // si s'ha seleccionat la opciï¿½ d'agafar el mï¿½xim
                     //    for(int i =0; i < data.length;i++){
                     //        for(int j=0; j < data[i].length;j++){
                     //            if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
@@ -239,13 +240,7 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
 
                         // executem script d'R
 
-                            String url;
-                            if(System.getProperty("os.name").startsWith("Windows")){
-                                url = "Scripts_Amb_Base/scriptilr-EM_Missing_Zero (FET).R";
-                            }
-                            else{
-                                url = System.getenv("SCRIPTS_DIRECTORY") + "Scripts_Amb_Base/scriptilr-EM_Missing_Zero (FET).R";
-                            }
+                            String url = CoDaPackConf.rScriptPath + "scriptilr-EM_Missing_Zero (FET).R";
 
                             re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 

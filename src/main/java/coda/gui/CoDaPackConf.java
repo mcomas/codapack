@@ -173,12 +173,22 @@ public class CoDaPackConf {
     public static boolean showDev = false;
     public static String lastPath = System.getProperty("user.dir");
     public static String refusedVersion = CoDaVersion;
+    public static String rScriptPath = getRScriptDefaultPath();
     //private static DecimalFormat decimalOutputFormat = new DecimalFormat("0.0000", decimalFormat);
     //private static DecimalFormat decimalOutputFormat = new DecimalFormat("##0.##E0", decimalFormat);
     //private static DecimalFormat decimalTableFormat = new DecimalFormat("0.00", decimalFormat);
     //private static DecimalFormat decimalTableFormat = new DecimalFormat("##0.##E0", decimalFormat);
     //private static DecimalFormat decimalExportFormat = new DecimalFormat("0.00########");
     
+    public static String getRScriptDefaultPath(){
+        String defaultRscriptPath = "Scripts_Amb_Base/";
+        if(!System.getProperty("os.name").startsWith("Windows") &
+           !System.getProperty("os.name").startsWith("Linux") ){
+            defaultRscriptPath = System.getenv("SCRIPTS_DIRECTORY") + defaultRscriptPath;
+        }
+        return defaultRscriptPath;
+    }
+
     public static void setShowDev(boolean showMenu){
         showDev = showMenu;
     }
@@ -237,7 +247,7 @@ public class CoDaPackConf {
             configuration.put("refused-version", refusedVersion);
             configuration.put("closure-to", closureTo);
             configuration.put("menu-dev", showDev);
-
+            configuration.put("r-script-path", rScriptPath);
             PrintWriter printer = new PrintWriter(CoDaPackConf.configurationFile);
 
             configuration.write(printer);
@@ -264,6 +274,7 @@ public class CoDaPackConf {
             decimalExportFormat = configuration.getString("decimal-export");
             lastPath = configuration.getString("last-path");
             refusedVersion = configuration.getString("refused-version");
+            rScriptPath = configuration.getString("r-script-path");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
