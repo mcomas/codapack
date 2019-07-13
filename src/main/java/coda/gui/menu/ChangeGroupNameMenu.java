@@ -37,7 +37,7 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public ChangeGroupNameMenu(final CoDaPackMain mainApp){
-        super(mainApp,"Change Group Name Menu", "categoric");
+        super(mainApp,"Change Categorical Label Menu", "categoric");
     }
     
    @Override
@@ -82,7 +82,7 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
                         JLabel[] namesLabel = new JLabel[n];
                         for(int i= 0; i <n; i++){
                             namesFieldPanel[i] = new JTextField(20);
-                            namesLabel[i] = new JLabel("Put the break value to replace \"" + selected[i] + "\" :");
+                            namesLabel[i] = new JLabel("Enter label to replace \"" + selected[i] + "\" :");
                             panel.add(namesLabel[i]);
                             panel.add(namesFieldPanel[i]);
                         }
@@ -93,7 +93,7 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
                         while(!exit){
 
                             exit = true;
-                            int answer = JOptionPane.showConfirmDialog(null,panel,"Set names values", JOptionPane.OK_CANCEL_OPTION);
+                            int answer = JOptionPane.showConfirmDialog(null,panel,"Set new labels/set new group names", JOptionPane.OK_CANCEL_OPTION);
 
                             if(answer == JOptionPane.OK_OPTION){
                                 for(int i=0; i <n && exit; i++){

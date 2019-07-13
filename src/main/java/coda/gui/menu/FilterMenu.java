@@ -53,7 +53,7 @@ public class FilterMenu extends AbstractMenuDialog{
     
     public FilterMenu(final CoDaPackMain mainApp){
        
-        super(mainApp,"Filter Menu","categoric");
+        super(mainApp,"Categorical Filter Menu","categoric");
     }
     
     @Override

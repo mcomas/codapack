@@ -177,7 +177,7 @@ public class DataFrameCreator extends JFrame{
             else{
                 panel = new JPanel();
                 JTextField dataFrameName = new JTextField(20);
-                panel.add(new JLabel("Put the name of the new table: "));
+                panel.add(new JLabel("Enter the name for the new table: "));
                 panel.add(dataFrameName);
                 
                 int answer = JOptionPane.showConfirmDialog(this, panel, "Set the name of the table", JOptionPane.OK_CANCEL_OPTION);
