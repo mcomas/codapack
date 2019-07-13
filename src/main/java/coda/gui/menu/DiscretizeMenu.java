@@ -52,8 +52,8 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     String[] options = {"interval", "frequency", "cluster","fixed"};
     JComboBox optionsList = new JComboBox(options);
     JLabel methodLabel = new JLabel("Method :");
-    JLabel breaksLabel = new JLabel("Nº levels: ");
-    JLabel optionToPutNames = new JLabel("Put the name of the groups: ");
+    JLabel breaksLabel = new JLabel("# levels: ");
+    JLabel optionToPutNames = new JLabel("Add group names: ");
     JCheckBox namesOptionCheckBox;
     JTextField breaksField = new JTextField(5);
     DataFrame df;
@@ -149,7 +149,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
                 
                 for(int i=0; i < Integer.valueOf(breaksField.getText()); i++){
                     namesField[i] = new JTextField(20);
-                    namesLabel[i] = new JLabel("Put the group name " + String.valueOf(i+1) + " :");
+                    namesLabel[i] = new JLabel("Enter group name " + String.valueOf(i+1) + " :");
                     panel.add(namesLabel[i]);
                     panel.add(namesField[i]);
                 }

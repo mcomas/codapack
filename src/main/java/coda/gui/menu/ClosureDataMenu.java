@@ -39,7 +39,7 @@ public class ClosureDataMenu extends AbstractMenuDialog{
     DataFrame dataFrame;
     
     public ClosureDataMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Closure Data Menu", false);
+        super(mainApp, "Subcomposition/closure Menu", false);
         closureTo =  new JTextField(5);
         closureTo.setText(mainApp.config.getClosureTo());
         optionsPanel.add(text1);

@@ -65,18 +65,18 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
         
         if(selectedNames.length > 0){
             
-            JLabel labelMessage = new JLabel("Use x1 to x" + String.valueOf(selectedNames.length) + " names values for variables");
+            JLabel labelMessage = new JLabel("Use x1 to x" + String.valueOf(selectedNames.length) + " names for variables");
             
             panel = new JPanel();
             panel.add(labelMessage);
             panel.add(new JLabel(""));
-            panel.add(new JLabel("Put the expression: "));
+            panel.add(new JLabel("Enter expression: "));
             JTextField expressionField, nameField;
             expressionField = new JTextField(20);
             nameField = new JTextField(20);
             panel.add(expressionField);
             panel.setLayout(new GridLayout(0,2,2,2));
-            panel.add(new JLabel("Put the name of the new var"));
+            panel.add(new JLabel("Enter new variable name: "));
             panel.add(nameField);
                 
                 boolean fieldEmpty = true, invalidName = true, invalidExpression = true;

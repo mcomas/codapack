@@ -45,7 +45,7 @@ public class PowerDataMenu extends AbstractMenuDialog{
     DataFrame dataFrame;
     
     public PowerDataMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Power Data Menu", false);
+        super(mainApp, "Power transformation Menu", false);
         powerWith =  new JTextField(5);
         powerWith.setText("1.0");
         optionsPanel.add(text1);
