@@ -74,7 +74,7 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
     public LM2(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"X composition Y real regression Menu",false,false,true);
         re = r;
-        super.setSelectedDataNames("Selected X", "Selected Y");
+        super.setSelectedDataNames("Selected X:", "Selected Y:");
         
         /* options configuration */
         

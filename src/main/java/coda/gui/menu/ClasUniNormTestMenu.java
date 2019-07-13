@@ -54,7 +54,7 @@ public class ClasUniNormTestMenu extends AbstractMenuDialog{
             
             //cridem la funcio
             re.eval("out <- capture.output(stats::shapiro.test(" + sel_names[0] + "))");
-            outputPanel.addOutput(new OutputText("<strong>Shapiro-Walk Test</strong>"));
+            outputPanel.addOutput(new OutputText("<strong>Shapiro-Wilk Test</strong>"));
             outputPanel.addOutput(new OutputForR(re.eval("out").asStringArray()));
             this.dispose();
         }

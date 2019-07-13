@@ -134,7 +134,7 @@ public class CoDaPackMenu extends JMenuBar{
         public JMenuItem itemAmalgamation;
         public final String ITEM_AMALGAM = "Amalgamation";
         public JMenuItem itemZeros;
-        public final String ITEM_ZEROS = "Rounded zero replacement";
+        public final String ITEM_ZEROS = "Non-parametric multiplicative zero replacement";
         public JMenuItem itemCreateFrame;
         public final String ITEM_CREATE_FRAME = "Create new Table";
         public JMenuItem itemAddVariables;

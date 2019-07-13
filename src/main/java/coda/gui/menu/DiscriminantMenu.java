@@ -81,7 +81,7 @@ public class DiscriminantMenu extends AbstractMenuDialog{
     public DiscriminantMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"Discriminant Menu", true);
         re = r;
-        super.setSelectedDataName("Selected data X");
+        super.setSelectedDataName("Selected X:");
         
         /* options configuration */
         

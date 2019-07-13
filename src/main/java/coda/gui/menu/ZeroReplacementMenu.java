@@ -44,7 +44,7 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
     DataFrame df;
     
     public ZeroReplacementMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Zero Replacement Menu", false);
+        super(mainApp, "Non-parametric multiplicative zero replacement Menu", false);
         
         usedPercentatgeDL =  new JTextField(5);
         usedPercentatgeDL.setText("0.65");

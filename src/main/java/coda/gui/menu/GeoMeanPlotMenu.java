@@ -64,7 +64,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     
     public GeoMeanPlotMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "GeoMeanPlotMenu menu", true);
+        super(mainApp, "Geometric mean barplot Menu", true);
         re = r;
         
     }

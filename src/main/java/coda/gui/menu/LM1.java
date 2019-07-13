@@ -77,7 +77,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
         super.setSelectedDataNames("Selected X:", "Selected Y:");
         re = r;
         
-        JButton yILR = new JButton("Set Y parition");
+        JButton yILR = new JButton("Set Y partition");
         this.optionsPanel.add(yILR);
         yILR.addActionListener(new java.awt.event.ActionListener(){
         

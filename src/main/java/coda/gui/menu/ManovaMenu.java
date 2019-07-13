@@ -72,7 +72,7 @@ public class ManovaMenu extends AbstractMenuDialog{
     public ManovaMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"Manova Menu",true);
         re = r;
-        super.setSelectedDataName("Selected composition");
+        super.setSelectedDataName("Selected Composition:");
         
         this.optionsPanel.add(residuals);
         this.optionsPanel.add(analyzeDiff);
