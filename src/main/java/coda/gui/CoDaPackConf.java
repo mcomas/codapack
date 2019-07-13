@@ -188,6 +188,10 @@ public class CoDaPackConf {
         }
         return defaultRscriptPath;
     }
+    
+    public static void setScriptsPath(String path){
+        rScriptPath = path + "/";
+    }
 
     public static void setShowDev(boolean showMenu){
         showDev = showMenu;

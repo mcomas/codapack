@@ -28,10 +28,14 @@ import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.plot.CoDaDisplayConfiguration;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -48,6 +52,8 @@ public class ConfigurationMenu extends CoDaPackDialog{
     JTextField export;
     JTextField closure;
     JCheckBox menuDevelopment;
+    JButton scriptsDirectory;
+    JFileChooser chooser;
     
     public ConfigurationMenu(CoDaPackMain window){
         super(window, "Configuration Menu");
@@ -95,6 +101,29 @@ public class ConfigurationMenu extends CoDaPackDialog{
         add(label6);
         add(menuDevelopment);
         
+        scriptsDirectory = new JButton("Change scripts directory");
+        scriptsDirectory.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                chooser = new JFileChooser();
+                chooser.setCurrentDirectory(new File(CoDaPackConf.rScriptPath));
+                chooser.setDialogTitle("R Scripts Directory Path");
+                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser.setAcceptAllFileFilterUsed(false);
+                JFrame chooserFrame = new JFrame();
+                chooserFrame.setSize(new Dimension(200,200));
+                
+                if(chooser.showOpenDialog(chooserFrame) == JFileChooser.APPROVE_OPTION){
+                    String url = chooser.getSelectedFile().getAbsolutePath();
+                    url = url.replaceAll("\\\\", "/");
+                    CoDaPackConf.setScriptsPath(url);
+                }
+                else{
+                    chooserFrame.dispose();
+                }
+            }
+        });
+        add(scriptsDirectory);
+
 
         panel.add(label1);
         panel.add(decimal);
@@ -108,6 +137,7 @@ public class ConfigurationMenu extends CoDaPackDialog{
         panel.add(closure);
         panel.add(label6);
         panel.add(menuDevelopment);
+        panel.add(scriptsDirectory);
         
         JPanel south = new JPanel();
         JButton apply = new JButton("Apply");
