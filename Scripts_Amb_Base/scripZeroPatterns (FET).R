@@ -15,18 +15,18 @@
 
 #rm(graphnames)
 graphnames <- list()
-name <- paste(tempdir(),"Zero_Pattern.png",sep="\\")
-png(name)
+name <- paste(tempdir(),"Zero_Pattern.svg",sep="\\")
+svg(name)
 sortida <- capture.output(zCompositions::zPatterns(X,label=P1,show.means=B1,bar.labels=B2))
 dev.off()
 graphnames[1] <- name
 
-printGraphics <- function(width, height){
-
-    png(graphnames[1], width, height)
-    zCompositions::zPatterns(X,label=P1,show.means=B1,suppress.print=TRUE,bar.labels=B2)
-    dev.off()
-}
+#printGraphics <- function(width, height){
+#
+#    png(graphnames[1], width, height)
+#    zCompositions::zPatterns(X,label=P1,show.means=B1,suppress.print=TRUE,bar.labels=B2)
+#    dev.off()
+#}
 
 # Ooutput
 cdp_res = list(

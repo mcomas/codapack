@@ -48,6 +48,7 @@ import javax.swing.JRadioButton;
 import javax.swing.UIManager;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
+import org.apache.batik.swing.JSVGCanvas;
 
 /**
  * ZpatternsMenu -> X numerica i Y numerica positiva amb opci� de retornar text, crear dataframe, afegir variables i  mostrar grafics
@@ -264,11 +265,10 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
             framesZpatternsMenu[position] = new JFrame();
-            JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
-            menuItem = new JMenuItem("Export As PNG");
+            menuItem = new JMenuItem("Export As SVG");
             menuItem.addActionListener(new FileChooserAction());
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
@@ -284,34 +284,11 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             menu.add(submenuExport);
             menu.add(menuItem);
             framesZpatternsMenu[position].setJMenuBar(menuBar);
-            panel.setSize(800,800);
-            BufferedImage img = ImageIO.read(new File(tempsDirR[position]));
-            ImageIcon icon = new ImageIcon(img);
-            Image image = icon.getImage();
-            Image newImg = image.getScaledInstance(panel.getWidth()-100, panel.getHeight()-100, Image.SCALE_SMOOTH);
-            ImageIcon imageFinal = new ImageIcon(newImg);
-            JLabel label = new JLabel(imageFinal);
-            label.addComponentListener(new ComponentAdapter(){
-                public void componentResized(ComponentEvent e){
-                    JLabel label = (JLabel) e.getComponent();
-                    Dimension size = label.getSize();
-                    re.eval("printGraphics(" + String.valueOf(size.width-100) + "," + String.valueOf(size.height-100) + ")");
-                    BufferedImage img = null;
-                    try {
-                        img = ImageIO.read(new File(tempsDirR[position]));
-                    } catch (IOException ex) {
-                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    ImageIcon icon = new ImageIcon(img);
-                    Image image = icon.getImage();
-                    Image newImg = image.getScaledInstance(size.width-100, size.height-100, Image.SCALE_SMOOTH);
-                    ImageIcon imageFinal = new ImageIcon(newImg);
-                    label.setIcon(imageFinal);
-                }
-            });
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            framesZpatternsMenu[position].getContentPane().add(label);
+            JSVGCanvas c = new JSVGCanvas();
+            String uri = new File(tempsDirR[position]).toURI().toString();
+            c.setURI(uri);
+            
+            framesZpatternsMenu[position].getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             framesZpatternsMenu[position].setSize(800,800);
             framesZpatternsMenu[position].setLocation(dim.width/2-framesZpatternsMenu[position].getSize().width/2, dim.height/2-framesZpatternsMenu[position].getSize().height/2);
@@ -365,7 +342,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             frame.setSize(400,400);
             jf.setDialogTitle("Select the folder to save the file");
             jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
+            jf.setSelectedFile(new File(".svg"));
             jf.setSize(400,400);
             frame.add(jf);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
