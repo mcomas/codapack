@@ -57,6 +57,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import org.apache.batik.swing.JSVGCanvas;
 import org.jzy3d.analysis.AbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
@@ -126,12 +127,18 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             re.eval(dataFrameString); // creem el dataframe amb R
             
             if(selectedNames.length == 2){ // printem el gr�fic en 2D
-                re.eval("mypath = tempdir()");	
+                
+                    /*re.eval("mypath = tempdir()");	
                     tempDirR = re.eval("print(mypath)").asString();	
-                    tempDirR += "\\out.png";	
+                    tempDirR += "\\out.svg";	
             	
-                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");	
-                    re.eval("png(mypath,width=700,height=700");	
+                    re.eval("svg(base::paste(tempdir(),\"out.svg\",sep=\"\\\\\"),width=700,height=700)");	
+                    re.eval("svg(mypath,width=700,height=700");*/
+                    
+                    this.tempDirR = re.eval(" name <- paste(tempdir(),\"Scatterplot.svg\",sep=\"\\\\\")").asString();
+                    
+                    re.eval("svg(name)");
+                    
                     if(selectedGroup != null){
                         re.eval("plot(mydf$" + selectedNames[0] + ", mydf$" + selectedNames[1] + ", col = mydf$" + selectedGroup + ")");
                         re.eval("legend(\"topright\", levels(mydf$" + selectedGroup + "), fill = mydf$" + selectedGroup + ")");
@@ -149,12 +156,17 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             }
             else{ // printem el gr�fic en 3D
                 
-                re.eval("mypath = tempdir()");
+                /*re.eval("mypath = tempdir()");
                     tempDirR = re.eval("print(mypath)").asString();
-                    tempDirR += "\\out.png";
+                    tempDirR += "\\out.svg";
             
-                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width=700,height=700)");
-                    re.eval("png(mypath,width=700,height=700");
+                    re.eval("svg(base::paste(tempdir(),\"out.svg\",sep=\"\\\\\"),width=700,height=700)");
+                    re.eval("svg(mypath,width=700,height=700");*/
+                
+                    this.tempDirR = re.eval("name <- paste(tempdir(),\"Scatterplot.svg\",sep=\"\\\\\")").asString();
+                    
+                    re.eval("svg(name)");
+                
                     if(selectedGroup != null){
                         re.eval("colors <- mydf$" + selectedGroup);
                         re.eval("scatterplot3d::scatterplot3d(mydf$" + selectedNames[0] + ",mydf$" + selectedNames[1] + ",mydf$" + selectedNames[2] +", color=as.numeric(mydf$" + selectedGroup + "), pch = 19)");
@@ -189,11 +201,10 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             JMenuItem menuItem = new JMenuItem("Open");	
             menuBar.add(menu);	
             frameScatterplot = new JFrame();	
-            JPanel panel = new JPanel();	
             menu.add(menuItem);	
             menuItem = new JMenuItem("Export");	
             JMenu submenuExport = new JMenu("Export");	
-            menuItem = new JMenuItem("Export As PNG");	
+            menuItem = new JMenuItem("Export As SVG");	
             menuItem.addActionListener(new FileChooserAction());	
             submenuExport.add(menuItem);	
             menuItem = new JMenuItem("Export As JPEG");	
@@ -208,15 +219,12 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             menuItem.addActionListener(new quitListener());	
             menu.add(submenuExport);	
             menu.add(menuItem);	
-            frameScatterplot.setJMenuBar(menuBar);	
-            panel.setSize(800,800);	
-            BufferedImage img = ImageIO.read(new File(tempDirR));
-            ImageIcon icon = new ImageIcon(img);	
-            JLabel label = new JLabel(icon);	
-            label.setSize(700, 700);	
-            panel.setLayout(new GridBagLayout());	
-            panel.add(label);	
-            frameScatterplot.getContentPane().add(panel);	
+            frameScatterplot.setJMenuBar(menuBar);
+            JSVGCanvas c = new JSVGCanvas();
+            String uri = new File(tempDirR).toURI().toString();
+            c.setURI(uri);
+
+            frameScatterplot.getContentPane().add(c);	
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();	
             frameScatterplot.setSize(800,800);	
             frameScatterplot.setLocation(dim.width/2-frameScatterplot.getSize().width/2, dim.height/2-frameScatterplot.getSize().height/2);	
@@ -257,7 +265,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             frame.setSize(400,400);
             jf.setDialogTitle("Select the folder to save the file");
             jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
+            jf.setSelectedFile(new File(".svg"));
             jf.setSize(400,400);
             frame.add(jf);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

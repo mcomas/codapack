@@ -357,7 +357,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
-            menuItem = new JMenuItem("Export As PNG");
+            menuItem = new JMenuItem("Export As SVG");
             menuItem.addActionListener(new FileChooserAction());
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
@@ -431,7 +431,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             frame.setSize(400,400);
             jf.setDialogTitle("Select the folder to save the file");
             jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
+            jf.setSelectedFile(new File(".svg"));
             jf.setSize(400,400);
             frame.add(jf);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
