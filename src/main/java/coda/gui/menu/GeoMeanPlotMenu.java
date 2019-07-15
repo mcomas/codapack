@@ -44,6 +44,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import org.apache.batik.swing.JSVGCanvas;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
@@ -290,7 +291,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
-            menuItem = new JMenuItem("Export As PNG");
+            menuItem = new JMenuItem("Export As SVG");
             menuItem.addActionListener(new FileChooserAction());
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
@@ -306,41 +307,11 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
             menu.add(submenuExport);
             menu.add(menuItem);
             frameGeoMeanPlotMenu.setJMenuBar(menuBar);
-            panel.setSize(800,800);
-            BufferedImage img = ImageIO.read(new File(tempDirR));
-            ImageIcon icon = new ImageIcon(img);
-            Image image = icon.getImage();
-            Image newImg = image.getScaledInstance(panel.getWidth()-100, panel.getHeight()-100, Image.SCALE_SMOOTH);
-            ImageIcon imageFinal = new ImageIcon(newImg);
-            JLabel label = new JLabel(imageFinal);
-            label.addComponentListener(new ComponentAdapter(){
-                public void componentResized(ComponentEvent e){
-                    JLabel label = (JLabel) e.getComponent();
-                    Dimension size = label.getSize();
-                    re.eval("mypath = tempdir()");
-                    tempDirR = re.eval("print(mypath)").asString();
-                    tempDirR += "\\out.png";
-                
-                    re.eval("png(base::paste(tempdir(),\"out.png\",sep=\"\\\\\"),width="+String.valueOf(size.width-100)+",height=" + String.valueOf(size.height-100) +")");
-                    re.eval("png(mypath,width="+String.valueOf(size.width-100)+",height="+String.valueOf(size.height-100)+")");
-                    re.eval("barplot(log(Num/Den), beside=TRUE,col=c(1:nCat))");
-                    re.eval("dev.off()");
-                    BufferedImage img = null;
-                    try {
-                        img = ImageIO.read(new File(tempDirR));
-                    } catch (IOException ex) {
-                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    ImageIcon icon = new ImageIcon(img);
-                    Image image = icon.getImage();
-                    Image newImg = image.getScaledInstance(size.width-100, size.height-100, Image.SCALE_SMOOTH);
-                    ImageIcon imageFinal = new ImageIcon(newImg);
-                    label.setIcon(imageFinal);
-                }
-            });
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            frameGeoMeanPlotMenu.getContentPane().add(label);
+            JSVGCanvas c = new JSVGCanvas();
+            String uri = new File(tempDirR).toURI().toString();
+            c.setURI(uri);
+
+            frameGeoMeanPlotMenu.getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             frameGeoMeanPlotMenu.setSize(800,800);
             frameGeoMeanPlotMenu.setLocation(dim.width/2-frameGeoMeanPlotMenu.getSize().width/2, dim.height/2-frameGeoMeanPlotMenu.getSize().height/2);
@@ -386,7 +357,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
             frame.setSize(400,400);
             jf.setDialogTitle("Select the folder to save the file");
             jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
+            jf.setSelectedFile(new File(".svg"));
             jf.setSize(400,400);
             frame.add(jf);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

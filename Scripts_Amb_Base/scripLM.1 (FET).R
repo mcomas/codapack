@@ -60,8 +60,8 @@ r2 <- (sum(FitCen^2)/sum(YCen^2))*100
 graphnames <- list()
 for (n in 1:nparts)
 {
-  name <- paste(tempdir(),paste("Plots_of_residuals_",names(Yt[n]),".png",sep=""),sep="\\")
-  png(name)
+  name <- paste(tempdir(),paste("Plots_of_residuals_",names(Yt[n]),".svg",sep=""),sep="\\")
+  svg(name)
   LM.temp <- lm(as.matrix(Yt[n])~as.matrix(X))
   oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
   title <- paste(names(Yt[n])," ~ ",names(X))
@@ -93,23 +93,6 @@ NDF <- as.data.frame(as.factor(names(Yt)))
 names(NDF)[1]<-paste("Y")
 NDF <- cbind.data.frame(NDF,t(LM$coefficients))
 names(NDF)[3]<-paste(names(X))
-
-# function to repaint the graphics (resize)
-
-printGraphics <- function(position, width, height){
-
-    for(n in 1:nparts){
-      if(n == position){
-        png(graphnames[position], width, height);
-        LM.temp <- lm(as.matrix(Yt[n])~as.matrix(X))
-        oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
-        title <- paste(names(Yt[n])," ~ ",names(X))
-        plot(LM.temp,sub.caption=title) #plot the model information
-        par(oldpar)
-        dev.off()
-      }
-    }
-}
 
 # Ooutput
 cdp_res = list(

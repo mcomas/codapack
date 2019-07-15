@@ -60,8 +60,8 @@ sortida <- list(sortida,paste(capture.output(lda1)))
 
 #rm(graphnames)
 graphnames <- list()
-name <- paste(tempdir(),'panels_of_histograms_and_overlayed_density_plots.png',sep="\\")
-png(name)
+name <- paste(tempdir(),'panels_of_histograms_and_overlayed_density_plots.svg',sep="\\")
+svg(name)
 plot(lda1, dimen=1, type="both")
 dev.off()
 graphnames[1] <- name
@@ -116,8 +116,8 @@ sortida <- list(sortida,paste(capture.output(summary(plda1$x[plda1$class==nam[1]
 sortida <- list(sortida,paste(capture.output(nam[2])))
 sortida <- list(sortida,paste(capture.output(summary(plda1$x[plda1$class==nam[2]]))))
 
-name <- paste(tempdir(),'discriminant_index.png',sep="\\")
-png(name)
+name <- paste(tempdir(),'discriminant_index.svg',sep="\\")
+svg(name)
 plot(density(plda1$x[plda1$class==nam[1]]),
      xlim=c(-7,7),ylim=c(0,0.5),main="lda",xlab="discriminant index")
 lines(density(plda1$x[plda1$class==nam[2]]),lty=2)
@@ -156,22 +156,6 @@ if (B2 == TRUE) {
 }
 
 ################################
-
-printGraphics <- function(position, width, height){
-
-	if(position == 0){
-		png(graphnames[1], width, height)
-		plot(lda1, dimen=1, type="both")
-		dev.off()
-	}	
-	else{
-		png(graphnames[2], width, height)
-		plot(density(plda1$x[plda1$class==nam[1]]),
-     		xlim=c(-7,7),ylim=c(0,0.5),main="lda",xlab="discriminant index")
-		lines(density(plda1$x[plda1$class==nam[2]]),lty=2)
-		dev.off()
-	}
-}
 
 # Output
 rm(cdp_res)

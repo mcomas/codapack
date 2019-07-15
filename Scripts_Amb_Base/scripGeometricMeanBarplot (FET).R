@@ -33,8 +33,8 @@ for(i in 1:nCat) {
 
 
 graphnames <- list()
-name <- paste(tempdir(),"Geometric mean barplot.png", sep="\\")
-png(name)
+name <- paste(tempdir(),"Geometric mean barplot.svg", sep="\\")
+svg(name)
 par(mai=c(0.5,0.5,1,1))
 barplot(log(Num/Den), beside=TRUE,legend.text=TRUE, main="Geometric mean barplot", args.legend = list(x = "topright", inset=-0.1)) 
 dev.off()

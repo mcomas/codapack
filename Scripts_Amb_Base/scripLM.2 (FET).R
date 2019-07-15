@@ -50,8 +50,8 @@ LM <- lm(as.formula(formul),data=df)
 # Create graphs
 # Create graphs
 graphnames <- list()
-name <- paste(tempdir(),'Plots_of_residuals.png',sep="\\")
-png(name)
+name <- paste(tempdir(),'Plots_of_residuals.svg',sep="\\")
+svg(name)
 oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
 plot(LM,sub.caption=formul)  # Plot the model information
 par(oldpar)
@@ -80,15 +80,6 @@ if (B2 == TRUE) {
     DF <- cbind.data.frame(DF, LM$fitted.values)
     names(DF) <-(c("residuals","fitted.values"))
   }
-}
-
-printGraphics <- function(width, height){
-  
-  png(graphnames[1], width, height)
-  oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
-  plot(LM,sub.caption=formul) # Plot the model information
-  par(oldpar)
-  dev.off()
 }
 
 

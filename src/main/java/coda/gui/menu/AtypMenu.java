@@ -42,6 +42,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import org.apache.batik.swing.JSVGCanvas;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
@@ -266,11 +267,10 @@ public class AtypMenu extends AbstractMenuDialog{
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
             framesAtypMenu[position] = new JFrame();
-            JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
-            menuItem = new JMenuItem("Export As PNG");
+            menuItem = new JMenuItem("Export As SVG");
             menuItem.addActionListener(new FileChooserAction());
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
@@ -286,13 +286,11 @@ public class AtypMenu extends AbstractMenuDialog{
             menu.add(submenuExport);
             menu.add(menuItem);
             framesAtypMenu[position].setJMenuBar(menuBar);
-            panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
-            label.setSize(700, 700);
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            framesAtypMenu[position].getContentPane().add(panel);
+            JSVGCanvas c = new JSVGCanvas();
+            String uri = new File(tempsDirR[position]).toURI().toString();
+            c.setURI(uri);
+
+            framesAtypMenu[position].getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             framesAtypMenu[position].setSize(800,800);
             framesAtypMenu[position].setLocation(dim.width/2-framesAtypMenu[position].getSize().width/2, dim.height/2-framesAtypMenu[position].getSize().height/2);
@@ -345,7 +343,7 @@ public class AtypMenu extends AbstractMenuDialog{
             frame.setSize(400,400);
             jf.setDialogTitle("Select the folder to save the file");
             jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
+            jf.setSelectedFile(new File(".svg"));
             jf.setSize(400,400);
             frame.add(jf);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

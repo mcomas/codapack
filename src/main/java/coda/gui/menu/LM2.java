@@ -46,6 +46,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
+import org.apache.batik.swing.JSVGCanvas;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
@@ -364,34 +365,11 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
             menu.add(submenuExport);
             menu.add(menuItem);
             framesLM2[position].setJMenuBar(menuBar);
-            panel.setSize(800,800);
-            BufferedImage img = ImageIO.read(new File(tempsDirR[position]));
-            ImageIcon icon = new ImageIcon(img);
-            Image image = icon.getImage();
-            Image newImg = image.getScaledInstance(panel.getWidth()-100, panel.getHeight()-100, Image.SCALE_SMOOTH);
-            ImageIcon imageFinal = new ImageIcon(newImg);
-            JLabel label = new JLabel(imageFinal);
-            label.addComponentListener(new ComponentAdapter(){
-                public void componentResized(ComponentEvent e){
-                    JLabel label = (JLabel) e.getComponent();
-                    Dimension size = label.getSize();
-                    re.eval("printGraphics(" + String.valueOf(size.width-100) + "," + String.valueOf(size.height-100) + ")");
-                    BufferedImage img = null;
-                    try {
-                        img = ImageIO.read(new File(tempsDirR[position]));
-                    } catch (IOException ex) {
-                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    ImageIcon icon = new ImageIcon(img);
-                    Image image = icon.getImage();
-                    Image newImg = image.getScaledInstance(size.width-100, size.height-100, Image.SCALE_SMOOTH);
-                    ImageIcon imageFinal = new ImageIcon(newImg);
-                    label.setIcon(imageFinal);
-                }
-            });
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            framesLM2[position].getContentPane().add(label);
+            JSVGCanvas c = new JSVGCanvas();
+            String uri = new File(tempsDirR[position]).toURI().toString();
+            c.setURI(uri);
+
+            framesLM2[position].getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             framesLM2[position].setSize(800,800);
             framesLM2[position].setLocation(dim.width/2-framesLM2[position].getSize().width/2, dim.height/2-framesLM2[position].getSize().height/2);
