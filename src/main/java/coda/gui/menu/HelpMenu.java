@@ -71,9 +71,13 @@ public class HelpMenu extends JDialog{
         
         String helpText;
         
+        /* configuracio inicial MathJax */
+        
+        helpText = "<html><head><script type=\"text/javascript\" async src=\"file://C:\\Users\\Guest2\\Downloads\\MathJax\\MathJax.js?config=TeX-MML-AM_CHTML\"></script></head>";
+        
         /* name */
         
-        helpText = "<html><center><h2>" + this.name + "</h2></center>";
+        helpText += "<center><h2>" + this.name + "</h2></center>";
         
         /* description */
         
