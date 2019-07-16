@@ -143,7 +143,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 
                 // executem script d'R
                 
-                    String url = CoDaPackConf.rScriptPath + "scripZeroPatterns (FET).R";
+                    String url = CoDaPackConf.rScriptPath + "ZPatterns.R";
                     
 
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");

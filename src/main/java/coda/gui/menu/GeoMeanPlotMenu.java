@@ -176,7 +176,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 
                     this.dispose();
                     
-                        String url = CoDaPackConf.rScriptPath + "scripGeometricMeanBarplot (FET).R";
+                        String url = CoDaPackConf.rScriptPath + "Geometric_mean_barplot.R";
                         
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 

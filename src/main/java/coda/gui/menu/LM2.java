@@ -212,7 +212,7 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
                 
                 // executem script d'R
                 
-                String url = CoDaPackConf.rScriptPath + "scripLM.2 (FET).R";
+                String url = CoDaPackConf.rScriptPath + "LM_2.R";
                     
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     

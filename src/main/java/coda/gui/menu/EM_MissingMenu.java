@@ -150,7 +150,7 @@ public class EM_MissingMenu extends AbstractMenuDialog{
 
                     // executem script d'R
 
-                        String url = CoDaPackConf.rScriptPath + "scriptilr-EM_Missing (FET).R";
+                        String url = CoDaPackConf.rScriptPath + "Logratio-EM_missing_replacement.R";
                     
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 

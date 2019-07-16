@@ -154,7 +154,7 @@ public class AtypMenu extends AbstractMenuDialog{
 
                     // executem script d'R
                     
-                        String url = CoDaPackConf.rScriptPath + "scripAtyp versio 0 (FET).R";
+                        String url = CoDaPackConf.rScriptPath + "Atipicality_index.R";
 
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 

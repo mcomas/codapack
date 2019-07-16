@@ -224,7 +224,7 @@ public class DiscriminantMenu extends AbstractMenuDialog{
                 
                 // executem script d'R
                 
-                    String url = CoDaPackConf.rScriptPath + "scripDiscriminant versio 0 (FET).R";
+                    String url = CoDaPackConf.rScriptPath + "Discriminant_analysis.R";
                 
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     

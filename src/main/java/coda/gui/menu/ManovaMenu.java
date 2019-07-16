@@ -175,7 +175,7 @@ public class ManovaMenu extends AbstractMenuDialog{
                 
                 // executem script d'R
 
-                    String url = CoDaPackConf.rScriptPath + "scripManova versio 0 (FET).R";
+                    String url = CoDaPackConf.rScriptPath + "Manova.R";
                     
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     
