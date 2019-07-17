@@ -89,10 +89,11 @@ if (B2 == TRUE) {
   }
 }
 
-NDF <- as.data.frame(as.factor(names(Yt)))
-names(NDF)[1]<-paste("Y")
-NDF <- cbind.data.frame(NDF,t(LM$coefficients))
-names(NDF)[3]<-paste(names(X))
+#PART NOVA. ARA TE EN COMPTE ELS NOMS DE TOTES LES X I TRANSPOSA COEFICIENTS PER PODER-LOS INVERTIR
+NDF<-as.data.frame(as.factor(c("intercept",names(X))))
+names(NDF)<-paste("Coefficients")
+NDF=cbind.data.frame(NDF,LM$coefficients)
+#FI PART NOVA.
 
 # Ooutput
 cdp_res = list(

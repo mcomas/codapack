@@ -45,7 +45,6 @@ sortida <- list(paste("MANOVA ANALYSIS"),
 ################################
 
 # centers of each group ci and whole center 
-
 #int = as.integer(Y)
 nCat = nlevels(as.factor(Y)) 
 #Num <- matrix(nrow = nCat, ncol = ncol(X))
@@ -97,7 +96,7 @@ sortida <- list(sortida,paste(capture.output(cov(Xt[,1:nparts])*(nobs-1))))
 DF  <-  data.frame()
 ######### FI PART NOVA
 
-if (B2 == TRUE) {
+if (B1 == TRUE) {
   DF <- data.frame()
   for (n in 1:nparts)
   {
