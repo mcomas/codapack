@@ -78,7 +78,7 @@ public final class OutputPanel extends JFXPanel {
         }
     
     	public void addWelcome(String CoDaVersion){
-		String windowText = "<b>CoDaPack</b> - Version " + CoDaVersion
+		String windowText = "<script type=\"text/javascript\" async src=\"file://C:\\Users\\Guest2\\Downloads\\MathJax\\MathJax.js?config=TeX-MML-AM_CHTML\"></script><b>CoDaPack</b> - Version " + CoDaVersion
                 + "<br>This software is being developed by the "
                 + "Research Group in Statistics and Compositional Data Analysis "
                 + "at University of Girona<br><br>";
