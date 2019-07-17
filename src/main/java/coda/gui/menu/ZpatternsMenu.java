@@ -70,9 +70,12 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     JRadioButton B2 = new JRadioButton("Show percentages");
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/zPatterns.yaml";
+    private static final String helpTitle = "zPatterns Help Menu";
     
     public ZpatternsMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"Zpatterns Plot Menu",false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         this.optionsPanel.add(B1);
