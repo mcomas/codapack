@@ -97,20 +97,6 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
         this.ilrX.setVisible(true);
     }
     
-    private Vector<String> sortSelectedNames(String[] selectedNames){
-        
-        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
-        Vector<String> res = new Vector<String>();
-        
-        ArrayList<String> sortedNames = df.getNames();
-        
-        for(String s : sortedNames){
-            if(aux.contains(s)) res.add(s);
-        }
-        
-        return res;
-    }
-    
     @Override
     public void acceptButtonActionPerformed(){
         
@@ -118,9 +104,7 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
         boolean allXpositive = true;
         boolean allYNumeric = true;
         df = mainApplication.getActiveDataFrame();
-        Vector<String> vSelectedNames1 = sortSelectedNames(selectedNames1);
         String selectedNames2[] = super.ds.getSelectedData2();
-        Vector<String> vSelectedNames2 = sortSelectedNames(selectedNames2);
         
         /* comprovar que les dades de X s�n positives */
         double[][] data = df.getNumericalData(selectedNames1);
@@ -134,8 +118,8 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
        /* comprovar que les dades de X siguin numeriques */
        
        if(allXpositive){
-            for(int i=0; i < vSelectedNames2.size() && allYNumeric;i++){
-                if(df.get(vSelectedNames2.get(i)).isText()) allYNumeric = false;
+            for(int i=0; i < selectedNames2.length && allYNumeric;i++){
+                if(df.get(selectedNames2[i]).isText()) allYNumeric = false;
             }
        }
         
@@ -147,27 +131,23 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
             
             // create dataframe on r
             
-                        int auxPos = 0;
-                        for(int i=0; i < df.size();i++){ // totes les columnes
-                            if(vSelectedNames1.contains(df.get(i).getName())){
-                                re.eval(vSelectedNames1.elementAt(auxPos) + " <- NULL");
-                                if(df.get(i).isNumeric()){
-                                    for(double j : df.get(i).getNumericalData()){
-                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +"," + String.valueOf(j) + ")");
-                                    }
-                                }
-                                else{
-                                    for(String j : df.get(i).getTextData()){
-                                        re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +",'" + j + "')");
-                                    }
-                                }
-                                auxPos++;
+                    for(int i=0; i < selectedNames1.length;i++){
+                        re.eval(selectedNames1[i] + " <- NULL");
+                        if(df.get(selectedNames1[i]).isNumeric()){
+                            for(double j : df.get(selectedNames1[i]).getNumericalData()){
+                                re.eval(selectedNames1[i] + " <- c(" + selectedNames1[i] + "," + String.valueOf(j) + ")");
                             }
                         }
+                        else{ // categorical data
+                            for(String j : df.get(selectedNames1[i]).getTextData()){
+                                re.eval(selectedNames1[i] + " <- c(" + selectedNames1[i] + ",'" + j + "')");
+                            }
+                        }
+                    }
                         
                         String dataFrameString = "X <- data.frame(";
                         for(int i=0; i < selectedNames1.length;i++){
-                            dataFrameString += vSelectedNames1.elementAt(i);
+                            dataFrameString += selectedNames1[i];
                             if(i != selectedNames1.length-1) dataFrameString += ",";
                         }
                         
@@ -178,27 +158,23 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
                         
             // create dataframe on r
             
-                        auxPos = 0;
-                        for(int i=0; i < df.size();i++){ // totes les columnes
-                            if(vSelectedNames2.contains(df.get(i).getName())){
-                                re.eval(vSelectedNames2.elementAt(auxPos) + " <- NULL");
-                                if(df.get(i).isNumeric()){
-                                    for(double j : df.get(i).getNumericalData()){
-                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +"," + String.valueOf(j) + ")");
-                                    }
-                                }
-                                else{
-                                    for(String j : df.get(i).getTextData()){
-                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +",'" + j + "')");
-                                    }
-                                }
-                                auxPos++;
+                    for(int i=0; i < selectedNames2.length;i++){
+                        re.eval(selectedNames2[i] + " <- NULL");
+                        if(df.get(selectedNames2[i]).isNumeric()){
+                            for(double j : df.get(selectedNames2[i]).getNumericalData()){
+                                re.eval(selectedNames2[i] + " <- c(" + selectedNames2[i] + "," + String.valueOf(j) + ")");
                             }
                         }
+                        else{ // categorical data
+                            for(String j : df.get(selectedNames2[i]).getTextData()){
+                                re.eval(selectedNames2[i] + " <- c(" + selectedNames2[i] + ",'" + j + "')");
+                            }
+                        }
+                    }
                         
                         dataFrameString = "Y <- data.frame(";
                         for(int i=0; i < selectedNames2.length;i++){
-                            dataFrameString += vSelectedNames2.elementAt(i);
+                            dataFrameString += selectedNames2[i];
                             if(i != selectedNames2.length-1) dataFrameString += ",";
                         }
                         
