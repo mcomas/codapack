@@ -14,8 +14,14 @@
 #library(zCompositions)
 
 #rm(graphnames)
+if(.Platform$OS.type == "unix") {
+  library(cairoDevice)
+  svg = Cairo_svg
+}
+
+save.image('temp.RData')
 graphnames <- list()
-name <- paste(tempdir(),"Zero_Pattern.svg",sep="\\")
+name <- file.path(tempdir(), 'Zero_Pattern.svg') # paste(tempdir(),"Zero_Pattern.svg",sep="\\")
 svg(name)
 sortida <- capture.output(zCompositions::zPatterns(X,label=P1,show.means=B1,bar.labels=B2))
 dev.off()
