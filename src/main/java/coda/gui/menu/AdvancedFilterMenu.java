@@ -45,27 +45,12 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
         re = r;
     }
     
-    private Vector<String> sortSelectedNames(String[] selectedNames){
-        
-        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
-        Vector<String> res = new Vector<String>();
-        
-        ArrayList<String> sortedNames = df.getNames();
-        
-        for(String s : sortedNames){
-            if(aux.contains(s)) res.add(s);
-        }
-        
-        return res;
-    }
-    
     @Override
     public void acceptButtonActionPerformed(){
         
         df = mainApplication.getActiveDataFrame();
         
         String selectedNames[] = ds.getSelectedData();
-        Vector<String> vSelectedNames = sortSelectedNames(selectedNames);
         
         if(selectedNames.length > 0){ // minimum one variable
             
@@ -101,22 +86,17 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
 
                     if(expression.length() != 0 && dataFrameNewName.length() != 0){
                         
-                        // create dataframe on r
-                        int auxPos = 0;
-                        for(int i=0; i < df.size();i++){ // totes les columnes
-                            if(vSelectedNames.contains(df.get(i).getName())){
-                                re.eval("x" + String.valueOf(auxPos+1) + " <- NULL");
-                                if(df.get(i).isNumeric()){
-                                    for(double j : df.get(i).getNumericalData()){
-                                        re.eval("x" + String.valueOf(auxPos+1) + " <- c(x" + String.valueOf(auxPos+1) +"," + String.valueOf(j) + ")");
-                                    }
+                        for(int i=0; i < selectedNames.length;i++){
+                            re.eval("x" + String.valueOf(i+1) + " <- NULL");
+                            if(df.get(selectedNames[i]).isNumeric()){
+                                for(double j : df.get(selectedNames[i]).getNumericalData()){
+                                    re.eval("x" + String.valueOf(i+1) + " <- c(x" + String.valueOf(i+1) + "," + String.valueOf(j) + ")");
                                 }
-                                else{
-                                    for(String j : df.get(i).getTextData()){
-                                        re.eval("x" + String.valueOf(auxPos+1) + " <- c(x" + String.valueOf(auxPos+1) +",'" + j + "')");
-                                    }
+                            }
+                            else{ // categorical data
+                                for(String j : df.get(selectedNames[i]).getTextData()){
+                                    re.eval("x" + String.valueOf(i+1) + " <- c(x" + String.valueOf(i+1) + ",'" + j + "')");
                                 }
-                                auxPos++;
                             }
                         }
                         
@@ -129,7 +109,6 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                         dataFrameString +=")";
                         
                         re.eval(dataFrameString); // we create the dataframe in R
-                        String [] out2 = re.eval("mydf").asStringArray();
                         
                         // cal fer el subset
                         
