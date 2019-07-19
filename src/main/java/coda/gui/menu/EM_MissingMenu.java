@@ -72,27 +72,12 @@ public class EM_MissingMenu extends AbstractMenuDialog{
         this.optionsPanel.add(B1);
     }
     
-    private Vector<String> sortSelectedNames(String[] selectedNames){
-        
-        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
-        Vector<String> res = new Vector<String>();
-        
-        ArrayList<String> sortedNames = df.getNames();
-        
-        for(String s : sortedNames){
-            if(aux.contains(s)) res.add(s);
-        }
-        
-        return res;
-    }
-    
     @Override
     public void acceptButtonActionPerformed(){
         
         df = mainApplication.getActiveDataFrame();
         
         String selectedNames[] = super.ds.getSelectedData();
-        Vector<String> vSelectedNames = sortSelectedNames(selectedNames);
         
         if(selectedNames.length > 0){
             
@@ -115,28 +100,24 @@ public class EM_MissingMenu extends AbstractMenuDialog{
                 else{
                     
                     // create dataframe on r
-            
-                        int auxPos = 0;
-                        for(int i=0; i < df.size();i++){ // totes les columnes
-                            if(vSelectedNames.contains(df.get(i).getName())){
-                                re.eval(vSelectedNames.elementAt(auxPos) + " <- NULL");
-                                if(df.get(i).isNumeric()){
-                                    for(double j : df.get(i).getNumericalData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +"," + String.valueOf(j) + ")");
-                                    }
-                                }
-                                else{
-                                    for(String j : df.get(i).getTextData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +",'" + j + "')");
-                                    }
-                                }
-                                auxPos++;
+                    
+                    for(int i=0; i < selectedNames.length;i++){
+                        re.eval(selectedNames[i] + " <- NULL");
+                        if(df.get(selectedNames[i]).isNumeric()){
+                            for(double j : df.get(selectedNames[i]).getNumericalData()){
+                                re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + "," + String.valueOf(j) + ")");
                             }
                         }
+                        else{ // categorical data
+                            for(String j : df.get(selectedNames[i]).getTextData()){
+                                re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + ",'" + j + "')");
+                            }
+                        }
+                    }
                         
                         String dataFrameString = "X <- data.frame(";
                         for(int i=0; i < selectedNames.length;i++){
-                            dataFrameString += vSelectedNames.elementAt(i);
+                            dataFrameString += selectedNames[i];
                             if(i != selectedNames.length-1) dataFrameString += ",";
                         }
                         
