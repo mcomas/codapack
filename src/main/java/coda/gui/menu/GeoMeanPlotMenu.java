@@ -70,29 +70,13 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         
     }
     
-    private Vector<String> sortSelectedNames(String[] selectedNames){
-        
-        Vector<String> aux = new Vector<String>(Arrays.asList(selectedNames));
-        Vector<String> res = new Vector<String>();
-        
-        ArrayList<String> sortedNames = df.getNames();
-        
-        for(String s : sortedNames){
-            if(aux.contains(s)) res.add(s);
-        }
-        
-        return res;
-    }
-    
     @Override
     public void acceptButtonActionPerformed(){
         
         df = mainApplication.getActiveDataFrame();
         
         String selectedNames[] = super.ds.getSelectedData();
-        Vector<String> vSelectedNames = sortSelectedNames(selectedNames);
         String selectedNames2[] = {super.ds.getSelectedGroup()};
-        Vector<String> vSelectedNames2 = sortSelectedNames(selectedNames2);
         
         if(selectedNames.length > 0 && selectedNames2[0] != null){
             
@@ -115,28 +99,24 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 else{
                     
                     // create dataframe on r
-            
-                        int auxPos = 0;
-                        for(int i=0; i < df.size();i++){ // totes les columnes
-                            if(vSelectedNames.contains(df.get(i).getName())){
-                                re.eval(vSelectedNames.elementAt(auxPos) + " <- NULL");
-                                if(df.get(i).isNumeric()){
-                                    for(double j : df.get(i).getNumericalData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +"," + String.valueOf(j) + ")");
-                                    }
-                                }
-                                else{
-                                    for(String j : df.get(i).getTextData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +",'" + j + "')");
-                                    }
-                                }
-                                auxPos++;
+                    
+                    for(int i=0; i < selectedNames.length;i++){
+                        re.eval(selectedNames[i] + " <- NULL");
+                        if(df.get(selectedNames[i]).isNumeric()){
+                            for(double j : df.get(selectedNames[i]).getNumericalData()){
+                                re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + "," + String.valueOf(j) + ")");
                             }
                         }
+                        else{ // categorical data
+                            for(String j : df.get(selectedNames[i]).getTextData()){
+                                re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + ",'" + j + "')");
+                            }
+                        }
+                    }
                         
                         String dataFrameString = "X <- data.frame(";
                         for(int i=0; i < selectedNames.length;i++){
-                            dataFrameString += vSelectedNames.elementAt(i);
+                            dataFrameString += selectedNames[i];
                             if(i != selectedNames.length-1) dataFrameString += ",";
                         }
                         
@@ -144,29 +124,23 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                         
                         re.eval(dataFrameString); // we create the dataframe in R
                         
-                        // create dataframe on R
-            
-                        auxPos = 0;
-                        for(int i=0; i < df.size();i++){ // totes les columnes
-                            if(vSelectedNames2.contains(df.get(i).getName())){
-                                re.eval(vSelectedNames2.elementAt(auxPos) + " <- NULL");
-                                if(df.get(i).isNumeric()){
-                                    for(double j : df.get(i).getNumericalData()){
-                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +"," + String.valueOf(j) + ")");
-                                    }
-                                }
-                                else{
-                                    for(String j : df.get(i).getTextData()){
-                                        re.eval(vSelectedNames2.elementAt(auxPos) + " <- c(" + vSelectedNames2.elementAt(auxPos) +",'" + j + "')");
-                                    }
-                                }
-                                auxPos++;
+                    for(int i=0; i < selectedNames2.length;i++){
+                        re.eval(selectedNames2[i] + " <- NULL");
+                        if(df.get(selectedNames2[i]).isNumeric()){
+                            for(double j : df.get(selectedNames2[i]).getNumericalData()){
+                                re.eval(selectedNames2[i] + " <- c(" + selectedNames2[i] + "," + String.valueOf(j) + ")");
                             }
                         }
+                        else{ // categorical data
+                            for(String j : df.get(selectedNames2[i]).getTextData()){
+                                re.eval(selectedNames2[i] + " <- c(" + selectedNames2[i] + ",'" + j + "')");
+                            }
+                        }
+                    }
                         
                         dataFrameString = "Y <- data.frame(";
                         for(int i=0; i < selectedNames2.length;i++){
-                            dataFrameString += vSelectedNames2.elementAt(i);
+                            dataFrameString += selectedNames2[i];
                             if(i != selectedNames2.length-1) dataFrameString += ",";
                         }
                         
