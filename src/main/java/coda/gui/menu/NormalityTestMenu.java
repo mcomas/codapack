@@ -41,7 +41,7 @@ public class NormalityTestMenu extends AbstractMenuDialog{
     DataFrame df;
 
     public NormalityTestMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Additive Logistic Normality Test", false);
+        super(mainApp, "Log-Ratio Normality Test", false);
 
         
 

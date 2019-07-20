@@ -184,7 +184,7 @@ public class CoDaPackMenu extends JMenuBar{
             public JMenuItem item_Disc_Analysis;
             public final String ITEM_DISC_ANALYSIS = "Discriminant Analysis";
         public JMenuItem itemNormalityTest;
-        public final String ITEM_NORM_TEST = "Additive Logistic Normality Tests";
+        public final String ITEM_NORM_TEST = "Log-Ratio Normality Test";
         public JMenuItem itemClasUniNormTest;
         public final String ITEM_CLAS_UNI_NORM_TEST = "Classical Univariate Normality test";
 
