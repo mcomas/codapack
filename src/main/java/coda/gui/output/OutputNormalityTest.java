@@ -65,7 +65,7 @@ public class OutputNormalityTest implements OutputElement{
             html += "<td class='alt' align='center' > " + pValues[2] + "</td>";
             html += "</tr>";
         }
-        html += "<tr><td class='l1'></td><td colspan='6' align='center' class='l1'>Bivariate angle</td></tr>";
+        /*html += "<tr><td class='l1'></td><td colspan='6' align='center' class='l1'>Bivariate angle</td></tr>";
         for(int i=0;i<names.length;i++){
             for(int j=i+1;j<names.length;j++){
                 pValues = CoDaStats.pValueChiSquareEmmpirical(bivariates[i][j]);
@@ -78,7 +78,7 @@ public class OutputNormalityTest implements OutputElement{
                 html += "<td class='alt' align='center' > " + pValues[2] + "</td>";
                 html += "</tr>";
             }
-        }
+        }*/
         html += "<tr><td class='l1'></td><td colspan='6' align='center' class='l1'>Radius</td></tr>";
         html += "<tr><th></th>";
         pValues = CoDaStats.pValueChiSquareEmmpirical(radius);
