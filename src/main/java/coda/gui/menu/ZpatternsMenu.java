@@ -45,6 +45,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
@@ -68,6 +69,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     
     JRadioButton B1 = new JRadioButton("Show means");
     JRadioButton B2 = new JRadioButton("Show percentages");
+    JTextField P1 = new JTextField(5);
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = "Help/zPatterns.yaml";
@@ -80,6 +82,9 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         
         this.optionsPanel.add(B1);
         this.optionsPanel.add(B2);
+        this.optionsPanel.add(new JLabel("Label: "));
+        P1.setText("0");
+        this.optionsPanel.add(P1);
     }
     
     @Override
@@ -160,7 +165,10 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     }
     
     void constructParametersToR(){
-        /* construim parametres string */
+        /* construim parametre label */
+        
+        if(P1.getText().length() > 0) re.eval("P1 <- " + P1.getText());
+        else re.eval("P1 <- 0"); // by default 0
         
         /* construim parametres logics */
         
@@ -169,7 +177,6 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         if(this.B2.isSelected()) re.eval("B2 <- TRUE");
         else re.eval("B2 <- FALSE");
         
-        re.eval("P1 <- 0");
     }
     
     void showText(){
