@@ -152,6 +152,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_ZEROS_R = "Non-parametric Replacement";
         public JMenuItem itemLogRatio;
         public final String ITEM_LOG_RATIO = "Logratio-EM zero Replacement";
+        public JMenuItem itemBayesianMultReplace;
+        public final String ITEM_BAYESIAN_MULT_REPLACE = "Bayesian Multiplicative Replacement";
         public JMenuItem itemEM_Missing;
         public final String ITEM_EM_MISSING = "Logratio-EM missing replacement";
         public JMenuItem itemEM_Zero_Missing;
@@ -456,6 +458,7 @@ public class CoDaPackMenu extends JMenuBar{
             itemSetDetectionLimit = new JMenuItem();
             itemZerosR = new JMenuItem();
             itemLogRatio = new JMenuItem();
+            itemBayesianMultReplace = new JMenuItem();
             itemEM_Missing = new JMenuItem();
             itemEM_Zero_Missing = new JMenuItem();
             itemAtipicalityIndex = new JMenuItem();
@@ -579,6 +582,7 @@ public class CoDaPackMenu extends JMenuBar{
             addJMenuItem(menuIrregularData, itemSetDetectionLimit, ITEM_SETDETECTION);
             addJMenuItem(menuIrregularData, itemZerosR, ITEM_ZEROS_R);
             addJMenuItem(menuIrregularData, itemLogRatio, ITEM_LOG_RATIO);
+            addJMenuItem(menuIrregularData, itemBayesianMultReplace, ITEM_BAYESIAN_MULT_REPLACE);
             menuIrregularData.addSeparator();
             addJMenuItem(menuIrregularData, itemEM_Missing, ITEM_EM_MISSING);
             addJMenuItem(menuIrregularData, itemEM_Zero_Missing, ITEM_EM_ZERO_MISSING);
