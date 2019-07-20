@@ -125,6 +125,9 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                         dataFrameString +=")";
                         
                         re.eval(dataFrameString); // we create the dataframe in R
+                        
+                        re.eval("output <- capture.output(X)");
+                        String[] outut = re.eval("output").asStringArray();
             
                 
                 constructParametersToR();        
@@ -167,7 +170,10 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     void constructParametersToR(){
         /* construim parametre label */
         
-        if(P1.getText().length() > 0) re.eval("P1 <- " + P1.getText());
+        if(P1.getText().length() > 0){
+            if(P1.getText().equals("na")) re.eval("P1 <- \"NaN\"");
+            else re.eval("P1 <- " + P1.getText());
+        }
         else re.eval("P1 <- 0"); // by default 0
         
         /* construim parametres logics */
