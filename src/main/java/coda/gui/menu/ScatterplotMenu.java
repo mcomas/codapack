@@ -56,6 +56,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.UIManager;
 import org.apache.batik.swing.JSVGCanvas;
 import org.jzy3d.analysis.AbstractAnalysis;
@@ -79,11 +80,17 @@ public class ScatterplotMenu extends AbstractMenuDialog{
     String tempDirR;
     DataFrame df;
     
+    /* options var */
+    
+    JRadioButton B1 = new JRadioButton("Set same scale");
+    
     public static final long serialVersionUID = 1L;
     
     public ScatterplotMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Scatterplot Menu", true);
         re = r;
+        
+        this.optionsPanel.add(B1);
     }
     
     @Override
@@ -95,6 +102,9 @@ public class ScatterplotMenu extends AbstractMenuDialog{
         String selectedNames[] = ds.getSelectedData();
         String selectedGroup = ds.getSelectedGroup();
         
+        double min = 0.0;
+        double max = 0.0;
+        
         if(selectedNames.length == 2 || selectedNames.length == 3){
             
             df = mainApplication.getActiveDataFrame();
@@ -102,6 +112,8 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             for(int i=0; i < selectedNames.length; i++){
                 re.eval(selectedNames[i] + " <- NULL");
                 for(double j: df.get(selectedNames[i]).getNumericalData()){
+                    if(min == 0.0 || j < min) min = j;
+                    if(max == 0.0 || j > max) max = j;
                     re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + "," + String.valueOf(j) + ")");
                 }
             }
@@ -126,25 +138,23 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             dataFrameString += ")";
             re.eval(dataFrameString); // creem el dataframe amb R
             
-            if(selectedNames.length == 2){ // printem el gr�fic en 2D
-                
-                    /*re.eval("mypath = tempdir()");	
-                    tempDirR = re.eval("print(mypath)").asString();	
-                    tempDirR += "\\out.svg";	
-            	
-                    re.eval("svg(base::paste(tempdir(),\"out.svg\",sep=\"\\\\\"),width=700,height=700)");	
-                    re.eval("svg(mypath,width=700,height=700");*/
+            this.tempDirR = re.eval("name <- paste(tempdir(),\"Scatterplot.svg\",sep=\"\\\\\")").asString();
                     
-                    this.tempDirR = re.eval(" name <- paste(tempdir(),\"Scatterplot.svg\",sep=\"\\\\\")").asString();
+            re.eval("svg(name)");
+            
+            String scaleConfig2D = "xlim = c(" + min + "," + max + "), ylim = c(" + min + "," + max + ")";
+            String scaleConfig3D = "xlim = c(" + min + "," + max + "), ylim = c(" + min + "," + max + "), zlim = c(" + min + "," + max + ")";
+            
+            if(selectedNames.length == 2){ // printem el grafic en 2D
                     
-                    re.eval("svg(name)");
-                    
-                    if(selectedGroup != null){
-                        re.eval("plot(mydf$" + selectedNames[0] + ", mydf$" + selectedNames[1] + ", col = mydf$" + selectedGroup + ")");
+                    if(selectedGroup != null){ // amb grup
+                        if(B1.isSelected()) re.eval("plot(mydf$" + selectedNames[0] + ", mydf$" + selectedNames[1] + ", col = mydf$" + selectedGroup + "," + scaleConfig2D + ")"); // eixo escalats
+                        else re.eval("plot(mydf$" + selectedNames[0] + ", mydf$" + selectedNames[1] + ", col = mydf$" + selectedGroup + ")");
                         re.eval("legend(\"topright\", levels(mydf$" + selectedGroup + "), fill = mydf$" + selectedGroup + ")");
                     }
-                    else{
-                        re.eval("plot(" + selectedNames[0] + "," + selectedNames[1] + ")");
+                    else{ // sense grup
+                        if(B1.isSelected()) re.eval("plot(" + selectedNames[0] + "," + selectedNames[1] + "," + scaleConfig2D + ")"); // eixos escalats
+                        else re.eval("plot(" + selectedNames[0] + "," + selectedNames[1] + ")");
                     }
                     re.eval("dev.off()");	
             	
@@ -154,26 +164,17 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                         Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);	
                     }
             }
-            else{ // printem el gr�fic en 3D
+            else{ // printem el grafic en 3D
                 
-                /*re.eval("mypath = tempdir()");
-                    tempDirR = re.eval("print(mypath)").asString();
-                    tempDirR += "\\out.svg";
-            
-                    re.eval("svg(base::paste(tempdir(),\"out.svg\",sep=\"\\\\\"),width=700,height=700)");
-                    re.eval("svg(mypath,width=700,height=700");*/
-                
-                    this.tempDirR = re.eval("name <- paste(tempdir(),\"Scatterplot.svg\",sep=\"\\\\\")").asString();
-                    
-                    re.eval("svg(name)");
-                
-                    if(selectedGroup != null){
+                    if(selectedGroup != null){ // amb grup
                         re.eval("colors <- mydf$" + selectedGroup);
-                        re.eval("scatterplot3d::scatterplot3d(mydf$" + selectedNames[0] + ",mydf$" + selectedNames[1] + ",mydf$" + selectedNames[2] +", color=as.numeric(mydf$" + selectedGroup + "), pch = 19)");
+                        if(B1.isSelected()) re.eval("scatterplot3d::scatterplot3d(mydf$" + selectedNames[0] + ",mydf$" + selectedNames[1] + ",mydf$" + selectedNames[2] +", color=as.numeric(mydf$" + selectedGroup + "), pch = 19, " + scaleConfig3D + ")"); // eixos escalats
+                        else re.eval("scatterplot3d::scatterplot3d(mydf$" + selectedNames[0] + ",mydf$" + selectedNames[1] + ",mydf$" + selectedNames[2] +", color=as.numeric(mydf$" + selectedGroup + "), pch = 19)");
                         re.eval("legend(\"topright\", levels(mydf$" + selectedGroup + "), fill = mydf$" + selectedGroup + ")");
                     }
-                    else{
-                        re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +",pch = 16, cex.symbols = 1.5, color=\"black\")");
+                    else{ // sense grup
+                        if(B1.isSelected()) re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +",pch = 16," + scaleConfig3D + ", cex.symbols = 1.5, color=\"black\")"); // eixos escalats
+                        else re.eval("s3d <- scatterplot3d::scatterplot3d(" + selectedNames[0] + "," + selectedNames[1] + "," + selectedNames[2] +",pch = 16, cex.symbols = 1.5, color=\"black\")");
                     }
                     re.eval("dev.off()");
             
