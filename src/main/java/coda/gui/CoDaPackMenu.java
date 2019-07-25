@@ -215,6 +215,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_PRED_REG_PLOT = "Predictive Region";
         public JMenuItem confidenceRegionPlot;
         public final String ITEM_CONF_REG_PLOT = "Center Confidence Region";
+        public JMenuItem itemBoxplot;
+        public final String ITEM_BOXPLOT = "Boxplot";
         public JMenuItem itemScatterplot;
         public final String ITEM_SCATTERPLOT = "Scatterplot 2D/3D";
         public JMenuItem itemGeoMeanPlot;
@@ -490,6 +492,7 @@ public class CoDaPackMenu extends JMenuBar{
             principalComponentPlot = new JMenuItem();
             predictiveRegionPlot = new JMenuItem();
             confidenceRegionPlot = new JMenuItem();
+            itemBoxplot = new JMenuItem();
             itemScatterplot = new JMenuItem();
             itemGeoMeanPlot = new JMenuItem();
 
@@ -618,6 +621,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuGraphs, predictiveRegionPlot, ITEM_PRED_REG_PLOT);
         addJMenuItem(menuGraphs, confidenceRegionPlot, ITEM_CONF_REG_PLOT);
         menuGraphs.addSeparator();
+        addJMenuItem(menuGraphs, itemBoxplot, ITEM_BOXPLOT);
         addJMenuItem(menuGraphs, itemScatterplot, ITEM_SCATTERPLOT);
         addJMenuItem(menuGraphs,itemGeoMeanPlot, ITEM_GEO_MEAN_PLOT);
         //addJMenuItem(menuGraphs, itemALRPlot, ITEM_ALR_PLOT);

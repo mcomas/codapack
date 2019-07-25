@@ -162,6 +162,7 @@ public final class CoDaPackMain extends JFrame{
     private PredictiveRegionMenu predictiveRegionMenu;
     private ConfidenceRegionMenu confidenceRegionMenu;
     private ZpatternsMenu zpatternsMenu;
+    private BoxplotMenu boxplotMenu;
     private ScatterplotMenu scatterplotMenu;
     private GeoMeanPlotMenu geoMeanPlotMenu;
     private Biplot3dMenu biplot3dMenu;
@@ -765,6 +766,9 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_CONF_REG_PLOT)){
             if(confidenceRegionMenu == null || confidenceRegionMenu.getDataFrame() != this.getActiveDataFrame()) confidenceRegionMenu = new ConfidenceRegionMenu(this);
             confidenceRegionMenu.setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_BOXPLOT)){
+            if(boxplotMenu == null || boxplotMenu.getDataFrame() != this.getActiveDataFrame()) boxplotMenu = new BoxplotMenu(this,re);
+            boxplotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_SCATTERPLOT)){
             if(scatterplotMenu == null || scatterplotMenu.getDataFrame() != this.getActiveDataFrame()) scatterplotMenu = new ScatterplotMenu(this,re);
             scatterplotMenu.setVisible(true);
