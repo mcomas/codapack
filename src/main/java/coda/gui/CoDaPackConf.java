@@ -239,7 +239,7 @@ public class CoDaPackConf {
     public static void setOutputColor(Color c){ ouputColor = c; }
     public static Color getOutputColor(){ return ouputColor; }
 
-    public static String configurationFile = ".codapack";
+    public static String configurationFile = System.getProperty("java.io.tmpdir") + ".codapack";
     public static void saveConfiguration(){
         try {
             JSONObject configuration = new JSONObject();

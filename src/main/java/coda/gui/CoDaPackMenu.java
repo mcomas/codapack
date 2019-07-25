@@ -341,7 +341,7 @@ public class CoDaPackMenu extends JMenuBar{
         FileReader fr = null;
         BufferedReader br = null;
         try {
-            arx = new File(".recent_files");
+            arx = new File(System.getProperty("java.io.tmpdir") + ".recent_files");
             fr = new FileReader(arx);
             br = new BufferedReader(fr);
             String linia;
@@ -367,7 +367,7 @@ public class CoDaPackMenu extends JMenuBar{
         FileWriter fit = null;
         PrintWriter pw = null;
         try {
-            fit = new FileWriter(".recent_files");
+            fit = new FileWriter(System.getProperty("java.io.tmpdir") + ".recent_files");
             pw = new PrintWriter(fit);
             String s;
             Collection c=newRecentFile.values();
