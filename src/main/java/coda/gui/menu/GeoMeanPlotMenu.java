@@ -229,7 +229,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
             tempsDirR.add(tempDirR);
-            plotGeoMeanPlotMenu(i+this.framesGeoMeanPlotMenu.size());
+            plotGeoMeanPlotMenu(this.framesGeoMeanPlotMenu.size());
         }     
     }
     

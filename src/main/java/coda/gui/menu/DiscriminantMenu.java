@@ -62,10 +62,10 @@ public class DiscriminantMenu extends AbstractMenuDialog{
     Rengine re;
     DataFrame df;
     JFrame frameDiscriminantMenu;
-    JFrame[] framesDiscriminantMenu;
+    Vector<JFrame> framesDiscriminantMenu;
     JFileChooser chooser;
     String tempDirR;
-    String[] tempsDirR;
+    Vector<String> tempsDirR;
     DataFrame dfZ = null;
     ILRMenu ilrX;
     
@@ -83,6 +83,9 @@ public class DiscriminantMenu extends AbstractMenuDialog{
         super(mainApp,"Discriminant Menu", true);
         re = r;
         super.setSelectedDataName("Selected X:");
+        
+        framesDiscriminantMenu = new Vector<JFrame>();
+        tempsDirR = new Vector<String>();
         
         /* options configuration */
         
@@ -383,12 +386,11 @@ public class DiscriminantMenu extends AbstractMenuDialog{
     void showGraphics() throws IOException{
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesDiscriminantMenu = new JFrame[numberOfGraphics];
-        this.tempsDirR = new String[numberOfGraphics];
+
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR[i] = tempDirR;
-            plotDiscriminantMenu(i);
+            tempsDirR.add(tempDirR);
+            plotDiscriminantMenu(this.framesDiscriminantMenu.size());
         }  
     }
     
@@ -434,7 +436,7 @@ public class DiscriminantMenu extends AbstractMenuDialog{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            framesDiscriminantMenu[position] = new JFrame();
+            framesDiscriminantMenu.add(new JFrame());
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -454,15 +456,15 @@ public class DiscriminantMenu extends AbstractMenuDialog{
             menuItem.addActionListener(new quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            framesDiscriminantMenu[position].setJMenuBar(menuBar);
+            framesDiscriminantMenu.elementAt(position).setJMenuBar(menuBar);
             JSVGCanvas c = new JSVGCanvas();
-            String uri = new File(tempsDirR[position]).toURI().toString();
+            String uri = new File(tempsDirR.elementAt(position)).toURI().toString();
             c.setURI(uri);
 
-            framesDiscriminantMenu[position].getContentPane().add(c);
+            framesDiscriminantMenu.elementAt(position).getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesDiscriminantMenu[position].setSize(800,800);
-            framesDiscriminantMenu[position].setLocation(dim.width/2-framesDiscriminantMenu[position].getSize().width/2, dim.height/2-framesDiscriminantMenu[position].getSize().height/2);
+            framesDiscriminantMenu.elementAt(position).setSize(800,800);
+            framesDiscriminantMenu.elementAt(position).setLocation(dim.width/2-framesDiscriminantMenu.elementAt(position).getSize().width/2, dim.height/2-framesDiscriminantMenu.elementAt(position).getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -470,16 +472,16 @@ public class DiscriminantMenu extends AbstractMenuDialog{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        framesDiscriminantMenu[position].dispose();
-                        File file = new File(tempsDirR[position]);
+                        framesDiscriminantMenu.elementAt(position).dispose();
+                        File file = new File(tempsDirR.elementAt(position));
                         file.delete();
                     }
                 }
             };
             
-            framesDiscriminantMenu[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            framesDiscriminantMenu[position].addWindowListener(exitListener);
-            framesDiscriminantMenu[position].setVisible(true);
+            framesDiscriminantMenu.elementAt(position).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesDiscriminantMenu.elementAt(position).addWindowListener(exitListener);
+            framesDiscriminantMenu.elementAt(position).setVisible(true);
     }
 
     public DataFrame getDataFrame() {
@@ -497,8 +499,8 @@ public class DiscriminantMenu extends AbstractMenuDialog{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                framesDiscriminantMenu[position].dispose();
-                File file = new File(tempsDirR[position]);
+                framesDiscriminantMenu.elementAt(position).dispose();
+                File file = new File(tempsDirR.elementAt(position));
                 file.delete();
             }
         }

@@ -58,10 +58,10 @@ public class BoxplotMenu extends AbstractMenuDialog{
     Rengine re;
     DataFrame df;
     JFrame frameBoxplotMenu;
-    JFrame[] framesBoxplotMenu;
+    Vector<JFrame> framesBoxplotMenu;
     JFileChooser chooser;
     String tempDirR;
-    String[] tempsDirR;
+    Vector<String> tempsDirR;
     
     /* options var */
     
@@ -72,6 +72,8 @@ public class BoxplotMenu extends AbstractMenuDialog{
         re = r;
         super.setSelectedDataName("Selected Composition:");
         
+        framesBoxplotMenu = new Vector<JFrame>();
+        tempsDirR = new Vector<String>();
     }
     
     @Override
@@ -221,12 +223,11 @@ public class BoxplotMenu extends AbstractMenuDialog{
     void showGraphics() throws IOException{
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesBoxplotMenu = new JFrame[numberOfGraphics];
-        this.tempsDirR = new String[numberOfGraphics];
+
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR[i] = tempDirR;
-            plotBoxplotMenu(i);
+            tempsDirR.add(tempDirR);
+            plotBoxplotMenu(this.framesBoxplotMenu.size());
         }  
     }
     
@@ -257,7 +258,7 @@ public class BoxplotMenu extends AbstractMenuDialog{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            framesBoxplotMenu[position] = new JFrame();
+            framesBoxplotMenu.add(new JFrame());
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -277,15 +278,15 @@ public class BoxplotMenu extends AbstractMenuDialog{
             menuItem.addActionListener(new BoxplotMenu.quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            framesBoxplotMenu[position].setJMenuBar(menuBar);
+            framesBoxplotMenu.elementAt(position).setJMenuBar(menuBar);
             JSVGCanvas c = new JSVGCanvas();
-            String uri = new File(tempsDirR[position]).toURI().toString();
+            String uri = new File(tempsDirR.elementAt(position)).toURI().toString();
             c.setURI(uri);
   
-            framesBoxplotMenu[position].getContentPane().add(c);
+            framesBoxplotMenu.elementAt(position).getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesBoxplotMenu[position].setSize(800,800);
-            framesBoxplotMenu[position].setLocation(dim.width/2-framesBoxplotMenu[position].getSize().width/2, dim.height/2-framesBoxplotMenu[position].getSize().height/2);
+            framesBoxplotMenu.elementAt(position).setSize(800,800);
+            framesBoxplotMenu.elementAt(position).setLocation(dim.width/2-framesBoxplotMenu.elementAt(position).getSize().width/2, dim.height/2-framesBoxplotMenu.elementAt(position).getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -293,16 +294,16 @@ public class BoxplotMenu extends AbstractMenuDialog{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        framesBoxplotMenu[position].dispose();
-                        File file = new File(tempsDirR[position]);
+                        framesBoxplotMenu.elementAt(position).dispose();
+                        File file = new File(tempsDirR.elementAt(position));
                         file.delete();
                     }
                 }
             };
             
-            framesBoxplotMenu[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            framesBoxplotMenu[position].addWindowListener(exitListener);
-            framesBoxplotMenu[position].setVisible(true);
+            framesBoxplotMenu.elementAt(position).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesBoxplotMenu.elementAt(position).addWindowListener(exitListener);
+            framesBoxplotMenu.elementAt(position).setVisible(true);
     }
 
     public DataFrame getDataFrame() {
@@ -320,8 +321,8 @@ public class BoxplotMenu extends AbstractMenuDialog{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                framesBoxplotMenu[position].dispose();
-                File file = new File(tempsDirR[position]);
+                framesBoxplotMenu.elementAt(position).dispose();
+                File file = new File(tempsDirR.elementAt(position));
                 file.delete();
             }
         }
