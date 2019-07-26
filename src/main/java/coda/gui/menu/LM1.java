@@ -59,10 +59,10 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
     Rengine re;
     DataFrame df;
     JFrame frameLM1;
-    JFrame[] framesLM1;
+    Vector<JFrame> framesLM1;
     JFileChooser chooser;
     String tempDirR;
-    String[] tempsDirR;
+    Vector<String> tempsDirR;
     //ILRMenu ilrX;
     ILRMenu ilrY;
     
@@ -77,6 +77,9 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
         super(mainApp,"X real Y composition regression Menu",false,false,true);
         super.setSelectedDataNames("Selected X:", "Selected Y:");
         re = r;
+        
+        framesLM1 = new Vector<JFrame>();
+        tempsDirR = new Vector<String>();
         
         JButton yILR = new JButton("Set Y partition");
         this.optionsPanel.add(yILR);
@@ -291,12 +294,11 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
     void showGraphics() throws IOException{
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesLM1 = new JFrame[numberOfGraphics];
-        this.tempsDirR = new String[numberOfGraphics];
+
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR[i] = tempDirR;
-            plotLM1(i);
+            tempsDirR.add(tempDirR);
+            plotLM1(this.framesLM1.size());
         }  
     }
     
@@ -328,7 +330,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            framesLM1[position] = new JFrame();
+            framesLM1.add(new JFrame());
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -348,15 +350,15 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
             menuItem.addActionListener(new quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            framesLM1[position].setJMenuBar(menuBar);
+            framesLM1.elementAt(position).setJMenuBar(menuBar);
             JSVGCanvas c = new JSVGCanvas();
-            String uri = new File(tempsDirR[position]).toURI().toString();
+            String uri = new File(tempsDirR.elementAt(position)).toURI().toString();
             c.setURI(uri);
   
-            framesLM1[position].getContentPane().add(c);
+            framesLM1.elementAt(position).getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesLM1[position].setSize(800,800);
-            framesLM1[position].setLocation(dim.width/2-framesLM1[position].getSize().width/2, dim.height/2-framesLM1[position].getSize().height/2);
+            framesLM1.elementAt(position).setSize(800,800);
+            framesLM1.elementAt(position).setLocation(dim.width/2-framesLM1.elementAt(position).getSize().width/2, dim.height/2-framesLM1.elementAt(position).getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -364,16 +366,16 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        framesLM1[position].dispose();
-                        File file = new File(tempsDirR[position]);
+                        framesLM1.elementAt(position).dispose();
+                        File file = new File(tempsDirR.elementAt(position));
                         file.delete();
                     }
                 }
             };
             
-            framesLM1[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            framesLM1[position].addWindowListener(exitListener);
-            framesLM1[position].setVisible(true);
+            framesLM1.elementAt(position).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesLM1.elementAt(position).addWindowListener(exitListener);
+            framesLM1.elementAt(position).setVisible(true);
 
     }
 
@@ -392,8 +394,8 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                framesLM1[position].dispose();
-                File file = new File(tempsDirR[position]);
+                framesLM1.elementAt(position).dispose();
+                File file = new File(tempsDirR.elementAt(position));
                 file.delete();
             }
         }
