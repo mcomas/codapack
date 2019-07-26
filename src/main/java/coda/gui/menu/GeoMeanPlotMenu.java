@@ -57,10 +57,10 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
     Rengine re;
     DataFrame df;
     JFrame frameGeoMeanPlotMenu;
-    JFrame[] framesGeoMeanPlotMenu;
+    Vector<JFrame> framesGeoMeanPlotMenu;
     JFileChooser chooser;
     String tempDirR;
-    String[] tempsDirR;
+    Vector<String> tempsDirR;
     
     public static final long serialVersionUID = 1L;
     
@@ -68,6 +68,8 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         super(mainApp, "Geometric mean barplot Menu", true);
         re = r;
         
+        framesGeoMeanPlotMenu = new Vector<JFrame>();
+        tempsDirR = new Vector<String>();
     }
     
     @Override
@@ -224,12 +226,10 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
     void showGraphics() throws IOException{
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesGeoMeanPlotMenu = new JFrame[numberOfGraphics];
-        this.tempsDirR = new String[numberOfGraphics];
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR[i] = tempDirR;
-            plotGeoMeanPlotMenu();
+            tempsDirR.add(tempDirR);
+            plotGeoMeanPlotMenu(i+this.framesGeoMeanPlotMenu.size());
         }     
     }
     
@@ -252,7 +252,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         }
     }
     
-    private void plotGeoMeanPlotMenu() throws IOException {
+    private void plotGeoMeanPlotMenu(int position) throws IOException {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -260,7 +260,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            frameGeoMeanPlotMenu = new JFrame();
+            framesGeoMeanPlotMenu.add(new JFrame());
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
@@ -277,18 +277,18 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
             menuItem = new JMenuItem("Export As Postscripts");
             //submenuExport.add(menuItem);
             menuItem = new JMenuItem("Quit");
-            menuItem.addActionListener(new quitListener());
+            menuItem.addActionListener(new quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            frameGeoMeanPlotMenu.setJMenuBar(menuBar);
+            framesGeoMeanPlotMenu.elementAt(position).setJMenuBar(menuBar);
             JSVGCanvas c = new JSVGCanvas();
-            String uri = new File(tempDirR).toURI().toString();
+            String uri = new File(tempsDirR.elementAt(position)).toURI().toString();
             c.setURI(uri);
 
-            frameGeoMeanPlotMenu.getContentPane().add(c);
+            framesGeoMeanPlotMenu.elementAt(position).getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frameGeoMeanPlotMenu.setSize(800,800);
-            frameGeoMeanPlotMenu.setLocation(dim.width/2-frameGeoMeanPlotMenu.getSize().width/2, dim.height/2-frameGeoMeanPlotMenu.getSize().height/2);
+            framesGeoMeanPlotMenu.elementAt(position).setSize(800,800);
+            framesGeoMeanPlotMenu.elementAt(position).setLocation(dim.width/2-framesGeoMeanPlotMenu.elementAt(position).getSize().width/2, dim.height/2-framesGeoMeanPlotMenu.elementAt(position).getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -296,16 +296,16 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        frameGeoMeanPlotMenu.dispose();
-                        File file = new File(tempDirR);
+                        framesGeoMeanPlotMenu.elementAt(position).dispose();
+                        File file = new File(tempsDirR.elementAt(position));
                         file.delete();
                     }
                 }
             };
             
-            frameGeoMeanPlotMenu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            frameGeoMeanPlotMenu.addWindowListener(exitListener);
-            frameGeoMeanPlotMenu.setVisible(true);
+            framesGeoMeanPlotMenu.elementAt(position).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesGeoMeanPlotMenu.elementAt(position).addWindowListener(exitListener);
+            framesGeoMeanPlotMenu.elementAt(position).setVisible(true);
     }
 
     public DataFrame getDataFrame() {
@@ -313,11 +313,17 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
     }
     
     private class quitListener implements ActionListener{
+        int position;
+        
+        public quitListener(int position){
+            this.position = position;
+        }
+        
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                frameGeoMeanPlotMenu.dispose();
-                File file = new File(tempDirR);
+                framesGeoMeanPlotMenu.elementAt(position).dispose();
+                File file = new File(tempsDirR.elementAt(position));
                 file.delete();
             }
         }
