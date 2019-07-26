@@ -60,10 +60,10 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     Rengine re;
     DataFrame df;
     JFrame frameZpatternsMenu;
-    JFrame[] framesZpatternsMenu;
+    Vector<JFrame> framesZpatternsMenu;
     JFileChooser chooser;
     String tempDirR;
-    String[] tempsDirR;
+    Vector<String> tempsDirR;
     
     /* options var */
     
@@ -79,6 +79,9 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         super(mainApp,"Zpatterns Plot Menu",false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
+        
+        framesZpatternsMenu = new Vector<JFrame>();
+        tempsDirR = new Vector<String>();
         
         this.optionsPanel.add(B1);
         this.optionsPanel.add(B2);
@@ -224,12 +227,11 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     void showGraphics() throws IOException{
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesZpatternsMenu = new JFrame[numberOfGraphics];
-        this.tempsDirR = new String[numberOfGraphics];
+
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR[i] = tempDirR;
-            plotZpatternsMenu(i);
+            tempsDirR.add(tempDirR);
+            plotZpatternsMenu(this.framesZpatternsMenu.size());
         }  
     }
     
@@ -261,7 +263,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            framesZpatternsMenu[position] = new JFrame();
+            framesZpatternsMenu.add(new JFrame());
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
@@ -280,15 +282,15 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             menuItem.addActionListener(new quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            framesZpatternsMenu[position].setJMenuBar(menuBar);
+            framesZpatternsMenu.elementAt(position).setJMenuBar(menuBar);
             JSVGCanvas c = new JSVGCanvas();
-            String uri = new File(tempsDirR[position]).toURI().toString();
+            String uri = new File(tempsDirR.elementAt(position)).toURI().toString();
             c.setURI(uri);
             
-            framesZpatternsMenu[position].getContentPane().add(c);
+            framesZpatternsMenu.elementAt(position).getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesZpatternsMenu[position].setSize(800,800);
-            framesZpatternsMenu[position].setLocation(dim.width/2-framesZpatternsMenu[position].getSize().width/2, dim.height/2-framesZpatternsMenu[position].getSize().height/2);
+            framesZpatternsMenu.elementAt(position).setSize(800,800);
+            framesZpatternsMenu.elementAt(position).setLocation(dim.width/2-framesZpatternsMenu.elementAt(position).getSize().width/2, dim.height/2-framesZpatternsMenu.elementAt(position).getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -296,16 +298,16 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        framesZpatternsMenu[position].dispose();
-                        File file = new File(tempsDirR[position]);
+                        framesZpatternsMenu.elementAt(position).dispose();
+                        File file = new File(tempsDirR.elementAt(position));
                         file.delete();
                     }
                 }
             };
             
-            framesZpatternsMenu[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            framesZpatternsMenu[position].addWindowListener(exitListener);
-            framesZpatternsMenu[position].setVisible(true);
+            framesZpatternsMenu.elementAt(position).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesZpatternsMenu.elementAt(position).addWindowListener(exitListener);
+            framesZpatternsMenu.elementAt(position).setVisible(true);
 
     }
 
@@ -324,8 +326,8 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                framesZpatternsMenu[position].dispose();
-                File file = new File(tempsDirR[position]);
+                framesZpatternsMenu.elementAt(position).dispose();
+                File file = new File(tempsDirR.elementAt(position));
                 file.delete();
             }
         }
