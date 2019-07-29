@@ -140,8 +140,9 @@ public final class DataSelector extends JPanel {
         int i = -1;
         for(String name : dataFrame.getNames()){
             variables[++i] = name;
-            if(((Variable)dataFrame.get(variables[i])).isText())
-                groupsComboBox.addItem(variables[i]);
+            if(((Variable)dataFrame.get(variables[i])).isText()){
+                if(((DefaultComboBoxModel)groupsComboBox.getModel()).getIndexOf(variables[i]) == -1) groupsComboBox.addItem(variables[i]);
+            }
             else{
                 boolean isSelected = false;
                 if(selected != null)
