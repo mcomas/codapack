@@ -101,7 +101,7 @@ public final class HelpMenu extends JFXPanel {
         
             /* configuracio inicial MathJax */
 
-            helpText = "<html><head><script type=\"text/javascript\" async src=\"file://C:\\Users\\Guest2\\Downloads\\MathJax\\MathJax.js?config=TeX-MML-AM_CHTML\"></script></head>";
+            helpText = "<html><head><script type=\"text/javascript\" async src=\"file://C:\\Users\\Guest2\\Downloads\\MathJax\\MathJax.js?config=TeX-MML-AM_CHTML-full\"></script></head>";
 
             /* name */
 
