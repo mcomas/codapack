@@ -112,18 +112,26 @@ public final class HelpMenu extends JFXPanel {
             helpText += "<h2>Description:</h2>" + this.description;
 
             /* options */
+            
+            if(this.options != null){
 
-            helpText += "<h2>Options:</h2>";
+                helpText += "<h2>Options:</h2>";
 
-            for(Map<String, Object> m: this.options){
-                for(Map.Entry<String, Object> entry: m.entrySet()){
-                    helpText += "<b>" + entry.getKey() + ":</b> " + (String) entry.getValue() + "<br><br>";
+                for(Map<String, Object> m: this.options){
+                    for(Map.Entry<String, Object> entry: m.entrySet()){
+                        helpText += "<b>" + entry.getKey() + ":</b> " + (String) entry.getValue() + "<br><br>";
+                    }
                 }
             }
 
             /* references */
+            
+            if(this.references != null){
 
-            helpText += "<h2>References</h2>" + this.references + "</html>";
+                helpText += "<h2>References</h2>" + this.references;
+            }
+            
+            helpText += "</html>";
             
             return (new OutputText(helpText));
         }
