@@ -117,7 +117,7 @@ public final class HelpMenu extends JFXPanel {
 
             for(Map<String, Object> m: this.options){
                 for(Map.Entry<String, Object> entry: m.entrySet()){
-                    helpText += "<b>" + entry.getKey() + ":</b> " + (String) entry.getValue() + "<br>";
+                    helpText += "<b>" + entry.getKey() + ":</b> " + (String) entry.getValue() + "<br><br>";
                 }
             }
 

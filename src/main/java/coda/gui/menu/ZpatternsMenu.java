@@ -72,7 +72,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     JTextField P1 = new JTextField(5);
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/zPatterns.yaml";
+    private static final String yamlUrl = "Help/Irregular data.zPatterns.yaml";
     private static final String helpTitle = "zPatterns Help Menu";
     
     public ZpatternsMenu(final CoDaPackMain mainApp, Rengine r){
