@@ -1,0 +1,8 @@
+---
+name: Irregular data.Logratio-EM Zero&Missing Replacement Help Menu
+description: This function implements model-based ordinary and robust Expectation-Maximisation algorithms to impute simultaneously left-censored data (e.g. values below detection limit, rounded zeros) and missing data via coordinates representation of compositional data which incorporate the information of the relative covariance structure. Note: zeros and missing data must be labelled using 0 and NA respectively to use this function. It uses R function \emph{lrEMplus} from package \emph{zCompositions}.
+options:
+  - Rob Option: FALSE provides maximum-likelihood estimates of model parameters (default), TRUE provides robust parameter estimates (Parameter \emph{rob} of R function).
+  - IniCov Option: Initial estimation of either the log-ratio covariance matrix (ML estimation) or unobserved data (robust estimation). It can be based on either complete observations ("complete.obs", default) or multiplicative simple replacement ("multRepl"). (Parameter \emph{ini.cov} of R function).
+  - DL Proportion: If ini.cov="multRepl", delta parameter for initial multiplicative simple replacement of left-censored data expressed in proportions (default = 0.65). (Parameter \emph{delta} of R function).
+references: Palarea-Albaladejo J. and Martin-Fernandez JA. zCompositions -- R package for multivariate imputation of left-censored data under a compositional approach. Chemometrics and Intelligence Laboratory Systems 2015. https://www.rdocumentation.org/packages/zCompositions/versions/1.3.2-1/topics/lrEMplus

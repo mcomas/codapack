@@ -1,0 +1,6 @@
+---
+name: Irregular data.Logratio-EM missing Replacement Help Menu
+description: This function implements model-based ordinary and robust Expectation-Maximisation algorithms to impute missing data via coordinates representation of compositional data which incorporate the information of the relative covariance structure. It uses R function \emph{lrEM} from package \emph{zCompositions}.
+options:
+  - Rob Option: FALSE provides maximum-likelihood estimates of model parameters (default), TRUE provides robust parameter estimates (Parameter \emph{rob} of R function).
+references: Palarea-Albaladejo J. and Martin-Fernandez JA. zCompositions -- R package for multivariate imputation of left-censored data under a compositional approach. Chemometrics and Intelligence Laboratory Systems 2015. https://www.rdocumentation.org/packages/zCompositions/versions/1.3.2-1/topics/lrEM

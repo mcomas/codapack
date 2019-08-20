@@ -1,0 +1,5 @@
+---
+name: Data.Manipulte.Calculate new Variable Help Menu
+description: This feature calculates a new variable according an R expression that involve the selected varables. The expression must be expressed on R synthax.
+options:
+references: 

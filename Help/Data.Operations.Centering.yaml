@@ -1,0 +1,7 @@
+---
+name: Data.Operations.Centering Help Menu
+description: With this feature the data is centered, that is, it is perturbed by the center or closed geometric mean of the data. This routine centers the data set, that is, it returns the data set $\mathbf{Y}$ formed by the $D$-part compositions $\mathbf{y} = g_N (\mathbf{X})^{-1} \oplus \mathbf{X}$, where $ g_N(\mathbf{X}) = \mathcal{C} \left[ \left( \prod_{k=1}^N x_{k1} \right)^{1/N}, \ldots, \left( \prod_{k=1}^N x_{kD} \right)^{1/N} \right] $ is the closed geometric mean of the data set $\mathbf{X}$. The center of the set $\mathbf{Y}$ is $\mathbf{e}$, the barycenter of the simplex; e.g. for $D = 3$ the geometric center of a ternary diagram is $[0.333, 0.333, 0.333]$. 
+options:
+  - Show Center: Writes the center of the parts selected on the output window.
+references: Aitchison, J. (1986). The Statistical Analysis of Compositional Data. Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). (Reprinted in 2003 with additional material by The Blackburn Press). 416 p.
+

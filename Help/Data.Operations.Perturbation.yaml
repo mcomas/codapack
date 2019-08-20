@@ -1,0 +1,9 @@
+---
+name: Data.Operations.Perturbation Help Menu
+description: With this feature a vector perturbs the data. The output is a matrix of $D$-part compositions $\mathbf{y} = \mathbf{p} \oplus \mathbf{x} = \mathcal{C} \left[p_1 x_1, p_2 x_2, \ldots, p_D x_D \right]$, where $\mathcal{C}$ stands for the closure operation, and $\mathbf{p}$ is a given $D$-part composition.
+options:
+  - Perturbation: the vector $\mathbf{p}$, which has to be the same length as the compositions $\mathbf{x}$. Components must be separated with blank space.
+  - Closure Result: if activated, the data is closed to a constant.
+  - Closure to: Constant of closure, by default $1.0$. Only if Closure Result is activated.
+references: Aitchison, J. (1986). The Statistical Analysis of Compositional Data. Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). (Reprinted in 2003 with additional material by The Blackburn Press). 416 p.
+
