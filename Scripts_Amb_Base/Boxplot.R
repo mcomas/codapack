@@ -12,16 +12,19 @@ Y <- as.factor(as.matrix(Y))
 nparts=length(X)
 nCat = nlevels(as.factor(Y)) 
 
+mn <- min(X)
+mx <- max(X)
+
 # Create graphs
 graphnames <- list()
-name <- paste(tempdir(),'Boxplot.svg',sep="\\")
-svg(name)
+name <- paste(tempdir(),'Boxplot.png',sep="\\")
+png(name)
 par(mfrow=c(1,nparts))
-  for (n in 1:nparts)
+  for (i in 1:nparts)
   {
-    means <- lm(X[,n]~-1+Y)$coef
-    boxplot(X[,n]~Y,xlab=colnames(X)[n])
-    points(1:nCat, means, col = "red")
+    means <- lm(log(X[,i])~-1+Y)$coef
+    boxplot(X[,i]~Y,xlab=colnames(X)[i],ylim = c(mn, mx))
+    points(1:nCat, exp(means), col = "red")
   }
 dev.off()
 graphnames[1] <- name
