@@ -17,8 +17,8 @@ mx <- max(X)
 
 # Create graphs
 graphnames <- list()
-name <- paste(tempdir(),'Boxplot.png',sep="\\")
-png(name)
+name <- paste(tempdir(),'Boxplot.svg',sep="\\")
+svg(name)
 par(mfrow=c(1,nparts))
   for (i in 1:nparts)
   {
