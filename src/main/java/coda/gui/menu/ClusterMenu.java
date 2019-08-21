@@ -25,9 +25,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -41,6 +44,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import org.apache.batik.swing.JSVGCanvas;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
@@ -53,10 +57,10 @@ public class ClusterMenu extends AbstractMenuDialog{
     Rengine re;
     DataFrame df;
     JFrame frameClusterMenu;
-    JFrame[] framesClusterMenu;
+    Vector<JFrame> framesClusterMenu;
     JFileChooser chooser;
     String tempDirR;
-    String[] tempsDirR;
+    Vector<String> tempsDirR;
     
     /* options var */
     
@@ -65,6 +69,7 @@ public class ClusterMenu extends AbstractMenuDialog{
     JRadioButton searchOpt = new JRadioButton("Find optimal number between 2 and");
     JTextField searchOptTF = new JTextField(7);
     JTextField nameOfColumn = new JTextField(10);
+    JRadioButton calinskiOption = new JRadioButton("Calinski option");
     
     public static final long serialVersionUID = 1L;
     
@@ -109,6 +114,9 @@ public class ClusterMenu extends AbstractMenuDialog{
         this.optionsPanel.add(new JLabel("Name of column of groups"));
         nameOfColumn.setText("Group");
         this.optionsPanel.add(nameOfColumn);
+        this.optionsPanel.add(calinskiOption);
+        framesClusterMenu = new Vector<JFrame>();
+        tempsDirR = new Vector<String>();
     }
     
     private Vector<String> sortSelectedNames(String[] selectedNames){
@@ -189,7 +197,7 @@ public class ClusterMenu extends AbstractMenuDialog{
 
                     // executem script d'R
                     
-                        String url = CoDaPackConf.rScriptPath + "Cluster_K-means.R";
+                        String url = CoDaPackConf.rScriptPath + "scripCluster K-means versio 0 (FETversió silhouette).R";
                         
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 
@@ -200,7 +208,11 @@ public class ClusterMenu extends AbstractMenuDialog{
                             showText();
                             createVariables();
                             createDataFrame();
-                            showGraphics();
+                            try {
+                                showGraphics();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ClusterMenu.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                         else{
                             OutputElement type = new OutputText("Error in R:");
@@ -231,6 +243,8 @@ public class ClusterMenu extends AbstractMenuDialog{
             re.eval("P1 <- " + this.searchOptTF.getText());
         }
         
+        if(this.calinskiOption.isSelected()) re.eval("B2 <- TRUE");
+        else re.eval("B2 <- FALSE");
     }
     
     void showText(){
@@ -269,16 +283,15 @@ public class ClusterMenu extends AbstractMenuDialog{
         }
     }
     
-    void showGraphics(){
+    void showGraphics() throws IOException{
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesClusterMenu = new JFrame[numberOfGraphics];
-        this.tempsDirR = new String[numberOfGraphics];
+
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR[i] = tempDirR;
-            plotClusterMenu(i);
-        }     
+            tempsDirR.add(tempDirR);
+            plotClusterMenu(this.framesClusterMenu.size());
+        }    
     }
     
     void createVariables(){
@@ -303,7 +316,7 @@ public class ClusterMenu extends AbstractMenuDialog{
         
     }
     
-    private void plotClusterMenu(int position) {
+private void plotClusterMenu(int position) throws IOException, IOException {
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -311,13 +324,13 @@ public class ClusterMenu extends AbstractMenuDialog{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            framesClusterMenu[position] = new JFrame();
+            framesClusterMenu.add(new JFrame());
             JPanel panel = new JPanel();
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
-            menuItem = new JMenuItem("Export As PNG");
-            menuItem.addActionListener(new FileChooserAction());
+            menuItem = new JMenuItem("Export As SVG");
+            menuItem.addActionListener(new ClusterMenu.FileChooserAction());
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
             //submenuExport.add(menuItem);
@@ -328,20 +341,17 @@ public class ClusterMenu extends AbstractMenuDialog{
             menuItem = new JMenuItem("Export As Postscripts");
             //submenuExport.add(menuItem);
             menuItem = new JMenuItem("Quit");
-            menuItem.addActionListener(new quitListener(position));
+            menuItem.addActionListener(new ClusterMenu.quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            framesClusterMenu[position].setJMenuBar(menuBar);
-            panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
-            label.setSize(700, 700);
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            framesClusterMenu[position].getContentPane().add(panel);
+            framesClusterMenu.elementAt(position).setJMenuBar(menuBar);
+            JSVGCanvas c = new JSVGCanvas();
+            String uri = new File(tempsDirR.elementAt(position)).toURI().toString();
+            c.setURI(uri);
+            framesClusterMenu.elementAt(position).getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesClusterMenu[position].setSize(800,800);
-            framesClusterMenu[position].setLocation(dim.width/2-framesClusterMenu[position].getSize().width/2, dim.height/2-framesClusterMenu[position].getSize().height/2);
+            framesClusterMenu.elementAt(position).setSize(800,800);
+            framesClusterMenu.elementAt(position).setLocation(dim.width/2-framesClusterMenu.elementAt(position).getSize().width/2, dim.height/2-framesClusterMenu.elementAt(position).getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -349,16 +359,16 @@ public class ClusterMenu extends AbstractMenuDialog{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        framesClusterMenu[position].dispose();
-                        File file = new File(tempsDirR[position]);
+                        framesClusterMenu.elementAt(position).dispose();
+                        File file = new File(tempsDirR.elementAt(position));
                         file.delete();
                     }
                 }
             };
             
-            framesClusterMenu[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            framesClusterMenu[position].addWindowListener(exitListener);
-            framesClusterMenu[position].setVisible(true);
+            framesClusterMenu.elementAt(position).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesClusterMenu.elementAt(position).addWindowListener(exitListener);
+            framesClusterMenu.elementAt(position).setVisible(true);
     }
 
     public DataFrame getDataFrame() {
@@ -376,8 +386,8 @@ public class ClusterMenu extends AbstractMenuDialog{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                framesClusterMenu[position].dispose();
-                File file = new File(tempsDirR[position]);
+                framesClusterMenu.elementAt(position).dispose();
+                File file = new File(tempsDirR.elementAt(position));
                 file.delete();
             }
         }
@@ -391,7 +401,7 @@ public class ClusterMenu extends AbstractMenuDialog{
             frame.setSize(400,400);
             jf.setDialogTitle("Select the folder to save the file");
             jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
+            jf.setSelectedFile(new File(".svg"));
             jf.setSize(400,400);
             frame.add(jf);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
