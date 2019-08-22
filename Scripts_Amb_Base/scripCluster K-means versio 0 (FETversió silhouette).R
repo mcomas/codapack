@@ -60,6 +60,9 @@ for (n in 1:nparts)
 N <- nrow(Xt)
 d <- dist(Xt)
 
+# Create graphs
+graphnames <- list()
+
 if (B1 == TRUE) 
 {
   k <- P1
@@ -93,20 +96,18 @@ if (B1 == TRUE)
   {
     km <- kmeans(Xt, ksi+1, nstart = 25)
   }
-}
 
-# Create graphs
-graphnames <- list()
-name <- paste(tempdir(),'Average Silhouette.svg',sep="\\")
-svg(name)
-plot(ks, ASW, type="l", xlab='Number of clusters', ylab='Average Silhouette', frame=FALSE)
-dev.off()
-graphnames[1] <- name
-name <- paste(tempdir(),'Calinski index.svg',sep="\\")
-svg(name)
-plot(kc, CALI, type="l", xlab='Number of clusters', ylab='Calinski index', frame=FALSE)
-dev.off()
-graphnames[2] <- name
+  name <- paste(tempdir(),'Average Silhouette.svg',sep="\\")
+  svg(name)
+  plot(ks, ASW, type="l", xlab='Number of clusters', ylab='Average Silhouette', frame=FALSE)
+  dev.off()
+  graphnames[1] <- name
+  name <- paste(tempdir(),'Calinski index.svg',sep="\\")
+  svg(name)
+  plot(kc, CALI, type="l", xlab='Number of clusters', ylab='Calinski index', frame=FALSE)
+  dev.off()
+  graphnames[2] <- name
+}
 
 df <- cbind.data.frame(as.factor(km$cluster))
 names(df) <- c("Group")
@@ -115,8 +116,8 @@ names(df) <- c("Group")
 #rm(cdp_res)
 cdp_res = list(
   'text' = list(paste("CLUSTER K-MEANS"),
-                paste("calinski index = ",capture.output(calinski)," Optimal number of groups = ",capture.output(kci+1)),
-                paste("Average Silhouette = ",capture.output(avg.sil)," Optimal number of groups = ",capture.output(ksi+1)),
+                paste("calinski index = ",capture.output(calinski)),
+                paste("Average Silhouette = ",capture.output(avg.sil)),
                 paste(capture.output(km))),
   'dataframe' = list(),
   'graph' = graphnames,
