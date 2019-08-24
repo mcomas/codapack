@@ -13,11 +13,8 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,7 +28,7 @@ import java.util.Arrays;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,7 +39,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import org.apache.batik.swing.JSVGCanvas;
 import org.rosuda.JRI.REXP;
@@ -69,7 +65,9 @@ public class ClusterMenu extends AbstractMenuDialog{
     JRadioButton searchOpt = new JRadioButton("Find optimal number between 2 and");
     JTextField searchOptTF = new JTextField(7);
     JTextField nameOfColumn = new JTextField(10);
-    JRadioButton calinskiOption = new JRadioButton("Calinski option");
+    //String[] optMethodOptions = {"Calinski Index", "Average Silhouette"};
+    JComboBox optMethod = new JComboBox(new String[]{"Calinski Index", "Average Silhouette"});
+    //JRadioButton calinskiOption = new JRadioButton("Calinski option");
     
     public static final long serialVersionUID = 1L;
     
@@ -85,10 +83,12 @@ public class ClusterMenu extends AbstractMenuDialog{
                     numClustersTF.setEnabled(true);
                     searchOpt.setSelected(false);
                     searchOptTF.setEnabled(false);
+                    optMethod.setEnabled(false);
                 }else{
                     numClustersTF.setEnabled(false);
                     searchOpt.setSelected(true);
                     searchOptTF.setEnabled(true);
+                    optMethod.setEnabled(true);
                 }
             }
         });
@@ -99,10 +99,12 @@ public class ClusterMenu extends AbstractMenuDialog{
             public void actionPerformed(ActionEvent e) {
                 if(searchOpt.isSelected()){
                     searchOptTF.setEnabled(true);
+                    optMethod.setEnabled(true);
                     numClusters.setSelected(false);
                     numClustersTF.setEnabled(false);
                 }else{
                     searchOptTF.setEnabled(false);
+                    optMethod.setEnabled(false);
                     numClusters.setSelected(true);
                     numClustersTF.setEnabled(true);
                 }
@@ -114,7 +116,8 @@ public class ClusterMenu extends AbstractMenuDialog{
         this.optionsPanel.add(new JLabel("Name of column of groups"));
         nameOfColumn.setText("Group");
         this.optionsPanel.add(nameOfColumn);
-        this.optionsPanel.add(calinskiOption);
+        this.optionsPanel.add(new JLabel("Optimal Method"));
+        this.optionsPanel.add(optMethod);
         framesClusterMenu = new Vector<JFrame>();
         tempsDirR = new Vector<String>();
     }
@@ -243,7 +246,7 @@ public class ClusterMenu extends AbstractMenuDialog{
             re.eval("P1 <- " + this.searchOptTF.getText());
         }
         
-        if(this.calinskiOption.isSelected()) re.eval("B2 <- TRUE");
+        if(((Object)this.optMethod.getSelectedItem()).toString().equals("Calinski Index")) re.eval("B2 <- TRUE");
         else re.eval("B2 <- FALSE");
     }
     
