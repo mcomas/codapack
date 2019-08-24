@@ -192,6 +192,12 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         REXP result;
         String[] sortida;
         
+        /* header output */
+        
+        outputPanel.addOutput(new OutputText("Geometric Mean Barplot"));
+        
+        /* R output */
+        
         int midaText = re.eval("length(cdp_res$text)").asInt();
         for(int i=0; i < midaText; i++){
             result = re.eval("cdp_res$text[[" + String.valueOf(i+1) + "]]");
