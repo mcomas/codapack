@@ -354,7 +354,7 @@ public class DiscriminantMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Discriminant Analysis"));
+        outputPanel.addOutput(new OutputText("Discriminant Analysis:"));
         
         /* R output */
         

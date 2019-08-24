@@ -191,7 +191,7 @@ public class BoxplotMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Boxplot"));
+        outputPanel.addOutput(new OutputText("Boxplot:"));
         
         /* R output */
         

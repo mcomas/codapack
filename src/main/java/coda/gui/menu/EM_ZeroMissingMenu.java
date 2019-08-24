@@ -281,7 +281,7 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Logratio-EM zero & missing replacement"));
+        outputPanel.addOutput(new OutputText("Logratio-EM zero & missing replacement:"));
         
         /* R output */
         

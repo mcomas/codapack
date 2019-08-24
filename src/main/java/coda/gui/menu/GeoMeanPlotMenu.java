@@ -194,7 +194,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Geometric Mean Barplot"));
+        outputPanel.addOutput(new OutputText("Geometric Mean Barplot:"));
         
         /* R output */
         

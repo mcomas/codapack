@@ -198,7 +198,7 @@ public class ManovaMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Manova"));
+        outputPanel.addOutput(new OutputText("Manova:"));
         
         /* R output */
         

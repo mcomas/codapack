@@ -75,7 +75,7 @@ if (B1 == TRUE)
   ASW <- sapply(ks, FUN=function(k) {
     cluster.stats(d, kmeans(Xt, centers=k, nstart=25)$cluster)$avg.silwidth
   })
-  plot(ks, ASW, type="l", xlab='Number of clusters', ylab='Average Silhouette', frame=FALSE)
+  
   ksi <- which.max(ASW)
   avg.sil <- ks[ksi]
   
@@ -85,7 +85,7 @@ if (B1 == TRUE)
     cl <- kmeans(Xt, k, nstart = 25)
     (cl$betweenss/(k-1))/(cl$tot.withinss/(N-k))
   })
-  plot(kc, CALI, type="l", xlab='Number of clusters', ylab='Calinski index', frame=FALSE)
+
   kci <- which.max(CALI)
   calinski <- kc[kci]
   

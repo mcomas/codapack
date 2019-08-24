@@ -257,7 +257,7 @@ public class ClusterMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Cluster K-means"));
+        outputPanel.addOutput(new OutputText("Cluster K-means:"));
         
         /* R output */
         

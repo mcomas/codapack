@@ -185,7 +185,7 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Bayesian Multiplicative Replacement"));
+        outputPanel.addOutput(new OutputText("Bayesian Multiplicative Replacement:"));
         
         /* R output */
         

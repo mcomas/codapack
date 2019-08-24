@@ -195,7 +195,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Zpatterns Plot"));
+        outputPanel.addOutput(new OutputText("Zpatterns Plot:"));
         
         /* R output */
         

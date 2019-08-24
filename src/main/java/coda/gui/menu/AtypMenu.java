@@ -180,7 +180,7 @@ public class AtypMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Atypicality Index"));
+        outputPanel.addOutput(new OutputText("Atypicality Index:"));
         
         /* R output */
         

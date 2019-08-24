@@ -255,7 +255,7 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("X composition Y real regression"));
+        outputPanel.addOutput(new OutputText("X composition Y real regression:"));
         
         /* R output */
         

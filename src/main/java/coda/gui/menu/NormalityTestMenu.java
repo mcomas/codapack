@@ -86,7 +86,8 @@ public class NormalityTestMenu extends AbstractMenuDialogWithILR{
         double[][] ilr = super.getBasis();
         String names[] = new String[selectedNames.length-1];
         for(int i=0;i<names.length;i++)
-            names[i] = "ilr(" + selectedNames[i] + "," + selectedNames[names.length] + ")";
+            //names[i] = "ilr(" + selectedNames[i] + "," + selectedNames[names.length] + ")";
+            names[i] = "ilr " + String.valueOf(i+1);
 
         int d = ilr.length;
         int n = ilr[0].length;
