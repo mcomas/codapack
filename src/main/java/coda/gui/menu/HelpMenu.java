@@ -40,6 +40,8 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.geometry.HPos;
@@ -48,6 +50,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.Region;
 import javafx.scene.Node;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
@@ -69,10 +72,14 @@ public final class HelpMenu extends JFXPanel {
     private String description;
     private ArrayList<Map<String, Object>> options;
     private String references;
+    public ArrayList<Map<String,Object>> links;
     
         public HelpMenu(String yamlPath) throws FileNotFoundException{
             
             this.urlYamlFile = yamlPath;
+            Map<String, Object> map = Yaml.loadType(new File(this.urlYamlFile), HashMap.class);
+                
+            inicialitzateAtributes(map);
             
             try{
                 fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "Help.html",false),StandardCharsets.ISO_8859_1);
@@ -85,10 +92,6 @@ public final class HelpMenu extends JFXPanel {
                         iniFx();
                     }
                 });
-                
-            Map<String, Object> map = Yaml.loadType(new File(this.urlYamlFile), HashMap.class);
-                
-            inicialitzateAtributes(map);
             
             OutputElement oe = generateOutput(map);
             
@@ -131,6 +134,23 @@ public final class HelpMenu extends JFXPanel {
                 helpText += "<h2>References</h2>" + this.references;
             }
             
+            /* links */
+            
+            if(this.links != null){
+                
+                helpText += "<h2>Links:</h2>";
+                
+                helpText += "<ul>";
+                
+                for(Map<String, Object> m: this.links){
+                    for(Map.Entry<String, Object> entry: m.entrySet()){
+                        helpText += "<li><a href=\"" + (String) entry.getValue() + "\" style=\"color:inherit;text-decoration:none\"></a>" + (String) entry.getValue() + "</li>";
+                    }
+                }
+                
+                helpText += "</ul>";
+            }
+            
             helpText += "</html>";
             
             return (new OutputText(helpText));
@@ -157,6 +177,11 @@ public final class HelpMenu extends JFXPanel {
 
             if(map.containsKey("references")) this.references = (String) map.get("references");
             else this.references = null;
+            
+            /* links */
+            
+            if(map.containsKey("links")) this.links = (ArrayList<Map<String,Object>>) map.get("links");
+            else this.links = null;
 
         }
         
@@ -243,7 +268,7 @@ public final class HelpMenu extends JFXPanel {
 	final WebEngine webEngine = browser.getEngine();
 
 	public Browser(){
-
+            
 		getStyleClass().add("browser");
 		webEngine.load("file:\\" + System.getProperty("java.io.tempdir") + "Help.html");
 		getChildren().add(browser);
