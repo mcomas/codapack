@@ -162,7 +162,7 @@ public abstract class AbstractMenuDialog extends JDialog{
                 JDialog dialog = new JDialog();
                 HelpMenu menu;
                 try {
-                    menu = new HelpMenu(yamlFile);
+                    menu = new HelpMenu(yamlFile, helpTitle);
                     dialog.add(menu);
                     dialog.setSize(650, 500);
                     dialog.setTitle(helpTitle);

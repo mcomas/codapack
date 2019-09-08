@@ -67,6 +67,7 @@ public final class HelpMenu extends JFXPanel {
     private Writer fileWriter;
     
     private String urlYamlFile;
+    private String helpTitle;
     
     private String name;
     private String description;
@@ -74,9 +75,10 @@ public final class HelpMenu extends JFXPanel {
     private String references;
     public ArrayList<Map<String,Object>> links;
     
-        public HelpMenu(String yamlPath) throws FileNotFoundException{
+        public HelpMenu(String yamlPath, String title) throws FileNotFoundException{
             
             this.urlYamlFile = yamlPath;
+            this.helpTitle = title;
             Map<String, Object> map = Yaml.loadType(new File(this.urlYamlFile), HashMap.class);
                 
             inicialitzateAtributes(map);
@@ -108,7 +110,7 @@ public final class HelpMenu extends JFXPanel {
 
             /* name */
 
-            helpText += "<center><h2>" + this.name + "</h2></center>";
+            helpText += "<center><h2>" + this.helpTitle + "</h2></center>";
 
             /* description */
 

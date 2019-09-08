@@ -38,10 +38,13 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
     DataFrame df;
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Filters.Advanced Filter.yaml";
+    private static final String helpTitle = "Advanced Filter Help Menu";
     
     public AdvancedFilterMenu(final CoDaPackMain mainApp, Rengine r ){
         
         super(mainApp,"Advanced Filter Menu",false, false,true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
     }
     

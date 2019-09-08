@@ -114,7 +114,7 @@ public class AddMenu extends CoDaPackDialog{
                 JDialog dialog = new JDialog();
                 HelpMenu menu;
                 try {
-                    menu = new HelpMenu(yamlUrl);
+                    menu = new HelpMenu(yamlUrl,helpTitle);
                     dialog.add(menu);
                     dialog.setSize(650, 500);
                     dialog.setTitle(helpTitle);
