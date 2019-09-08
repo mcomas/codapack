@@ -1,5 +1,3 @@
 ---
 name: Data.Manipulte.Change Categorical Label Help Menu
 description: This changes the values selected of one categorical variable. More than one value can be changed each time.
-options:
-references: 

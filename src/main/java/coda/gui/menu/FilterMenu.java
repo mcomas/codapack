@@ -45,6 +45,8 @@ import javax.swing.ListSelectionModel;
 public class FilterMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Filters.Categorical Filter.yaml";
+    private static final String helpTitle = "Categorical Filter Help Menu";
     BoxDataSelector boxdataSel;
     DataFrame df;
     JDialog dialog;
@@ -54,6 +56,7 @@ public class FilterMenu extends AbstractMenuDialog{
     public FilterMenu(final CoDaPackMain mainApp){
        
         super(mainApp,"Categorical Filter Menu","categoric");
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
     }
     
     @Override

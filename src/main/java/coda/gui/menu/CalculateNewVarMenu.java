@@ -35,9 +35,12 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     double[] dataNewVar;
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Manipulte.Calculate new Variable.yaml";
+    private static final String helpTitle = "Calculate new Variable Help Menu";
     
     public CalculateNewVarMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Calculate new Variable Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
     }
     
