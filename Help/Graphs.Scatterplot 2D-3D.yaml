@@ -1,6 +1,6 @@
 ---
-name: Graphs.Scatterplot 2D/3D Help Menu
-description: This feature displays an scatterplot of two or three variables. It uses R functions \emph{plot} for 2D plots and \emph{scatterplot3D} from package \emph{scatterplot3D} for 3D plots.
+name: "Graphs.Scatterplot 2D/3D Help Menu"
+description: "This feature displays an scatterplot of two or three variables. It uses R functions $\mathbf{plot}$ for 2D plots and $\mathbf{scatterplot3D}$ from package $\mathbf{scatterplot3D}$ for 3D plots."
 options:
-references: https://www.rdocumentation.org/packages/graphics/versions/3.6.1/topics/plot. https://www.rdocumentation.org/packages/scatterplot3d/versions/0.3-41/topics/scatterplot3d.
+references: "https://www.rdocumentation.org/packages/graphics/versions/3.6.1/topics/plot. https://www.rdocumentation.org/packages/scatterplot3d/versions/0.3-41/topics/scatterplot3d."
 

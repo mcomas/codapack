@@ -63,9 +63,12 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
     Vector<String> tempsDirR;
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Graphs.Geometric Mean Barplot.yaml";
+    private static final String helpTitle = "Geometric mean barplot Help Menu";
     
     public GeoMeanPlotMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Geometric mean barplot Menu", true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         framesGeoMeanPlotMenu = new Vector<JFrame>();

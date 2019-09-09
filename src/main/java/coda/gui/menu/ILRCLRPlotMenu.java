@@ -52,11 +52,15 @@ import javax.swing.JOptionPane;
 public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Graphs.ILR-CLR Plot.yaml";
+    private static final String helpTitle = "ILR/CLR Plot Help Menu";
+    
     JCheckBox coordinates;
     DataFrame df;
     
     public ILRCLRPlotMenu(final CoDaPackMain mainApp){
         super(mainApp, "ILR/CLR Plot Menu", true);
+        super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");

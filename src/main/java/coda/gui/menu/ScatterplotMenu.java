@@ -85,9 +85,12 @@ public class ScatterplotMenu extends AbstractMenuDialog{
     JRadioButton B1 = new JRadioButton("Set same scale");
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Graphs.Scatterplot 2D-3D.yaml";
+    private static final String helpTitle = "Scatterplot Help Menu";
     
     public ScatterplotMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Scatterplot Menu", true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         this.optionsPanel.add(B1);

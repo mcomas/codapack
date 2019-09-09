@@ -54,12 +54,16 @@ import javax.swing.JTextField;
 public class PredictiveRegionMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Graphs.Predictive Region.yaml";
+    private static final String helpTitle = "Predictive Region Help Menu";
     JTextField predLevel;
     JLabel text1 = new JLabel("Predictive level");
     DataFrame df;
     
     public PredictiveRegionMenu(final CoDaPackMain mainApp){
         super(mainApp, "Predictive Region Menu", true);//, false, true, false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         predLevel =  new JTextField("0.90 0.95 0.99", 14);
 
         optionsPanel.add(text1);

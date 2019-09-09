@@ -43,10 +43,13 @@ import javax.swing.JOptionPane;
 public class TernaryPlotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Graphs.Ternary-Quaternary Plot.yaml";
+    private static final String helpTitle = "Ternary/Quaternary Plot Help Menu";
     DataFrame df;
     
     public TernaryPlotMenu(final CoDaPackMain mainApp){
         super(mainApp, "Ternary/Quaternary Plot Menu", true);//, false, true, false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
     }
     @Override
     public void acceptButtonActionPerformed() {
