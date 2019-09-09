@@ -66,9 +66,12 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
     
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Irregular data.Bayesian-multiplicative zero replacement.yaml";
+    private static final String helpTitle = "Bayesian Multiplicative Replacement Help Menu";
     
     public BayesianMultRepMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Bayesian Multiplicative Replacement Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         /* options configuration */

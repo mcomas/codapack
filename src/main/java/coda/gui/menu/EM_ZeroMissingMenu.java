@@ -73,9 +73,12 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
     JTextField dlProportion;
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Irregular data.Logratio-EM Zero-Missing Replacement.yaml";
+    private static final String helpTitle = "Logratio-EM zero & missing replacement Help Menu";
     
     public EM_ZeroMissingMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Logratio-EM zero & missing replacement Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         /* options configuration */

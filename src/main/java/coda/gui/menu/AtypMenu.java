@@ -64,9 +64,12 @@ public class AtypMenu extends AbstractMenuDialog{
     JTextField lConf = new JTextField(10);
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Irregular data.Atipicality Index.yaml";
+    private static final String helpTitle = "Atipicality Index Help Menu";
     
     public AtypMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Atyp Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         /* options configuration */

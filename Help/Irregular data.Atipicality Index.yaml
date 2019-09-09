@@ -1,7 +1,7 @@
 ---
-name: Irregular data.Atipicality Index Help Menu
-description: With this feature the user obtains the atypical observations and their indices under the assumption of Additive Logistic Normal distribution of the selected parts. 
+name: "Irregular data.Atipicality Index Help Menu"
+description: "With this feature the user obtains the atypical observations and their indices under the assumption of Additive Logistic Normal distribution of the selected parts."
 options: 
-  - Level of Confidence: Threshold of atypicality. By  default $0.975$
-references: Aitchison, J. (1986). The Statistical Analysis of Compositional Data. Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). (Reprinted in 2003 with additional material by The Blackburn Press). 416 p.
+  - Level of Confidence: "Threshold of atypicality. By default $0.975$"
+references: "Aitchison, J. (1986). The Statistical Analysis of Compositional Data. Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). (Reprinted in 2003 with additional material by The Blackburn Press). 416 p."
 

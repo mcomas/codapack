@@ -1,8 +1,8 @@
 ---
-name: Irregular data.Set Detection Limit Help Menu
-description: This feature assigns to all zeroes the value of detection limit that will be used when performig zero replacement routines.
+name: "Irregular data.Set Detection Limit Help Menu"
+description: "This feature assigns to all zeroes the value of detection limit that will be used when performig zero replacement routines."
 options:
-  - Detection Limit: Assigns this value to all zeros of the data set.
-  - Take minimum of each column: Assigns the minimum of each column to the zeroes of this column of the data set.
-  - Global minimum of selected columns: Assigns the global minimum of selected columns to the zeroes of the data set.
-references: Martín-Fernández, J. A., C. Barceló-Vidal, and V. Pawlowsky-Glahn (2000). Zero replacement in compositional data sets. In H. Kiers, J. Rasson, P. Groenen, and M. Shader (Eds.), Studies in Classifcation, Data Analysis, and Knowledge Organization (Proceedings of the 7th Conference of the International Federation of Classifcation Societies (IFCS'2000), University of Namur, Namur, 11-14 July, pp. 155-160. Springer-Verlag, Berlin(D), 428 p. https://www.rdocumentation.org/packages/zCompositions/versions/1.3.2-1/topics/multRepl.
+  - Detection Limit: "Assigns this value to all zeros of the data set."
+  - Take minimum of each column: "Assigns the minimum of each column to the zeroes of this column of the data set."
+  - Global minimum of selected columns: "Assigns the global minimum of selected columns to the zeroes of the data set."
+references: "Martín-Fernández, J. A., C. Barceló-Vidal, and V. Pawlowsky-Glahn (2000). Zero replacement in compositional data sets. In H. Kiers, J. Rasson, P. Groenen, and M. Shader (Eds.), Studies in Classifcation, Data Analysis, and Knowledge Organization (Proceedings of the 7th Conference of the International Federation of Classifcation Societies (IFCS'2000), University of Namur, Namur, 11-14 July, pp. 155-160. Springer-Verlag, Berlin(D), 428 p. https://www.rdocumentation.org/packages/zCompositions/versions/1.3.2-1/topics/multRepl."

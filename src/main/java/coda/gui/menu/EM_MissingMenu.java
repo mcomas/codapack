@@ -62,9 +62,12 @@ public class EM_MissingMenu extends AbstractMenuDialog{
     
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Irregular data.Logratio-EM missing Replacement.yaml";
+    private static final String helpTitle = "Logratio-EM missing replacement Help Menu";
     
     public EM_MissingMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Logratio-EM missing replacement Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         /* options configuration */

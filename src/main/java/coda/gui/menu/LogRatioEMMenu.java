@@ -31,6 +31,8 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
      */
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Irregular data.Logratio-EM Zero Replacement.yaml";
+    private static final String helpTitle = "Logratio-EM zero Replacement Help Menu";
     JTextField DLProportion = new JTextField("0.65");
     double percentatgeDL = 0.65;
     String[] robOptions = {"FALSE","TRUE"};
@@ -52,6 +54,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
     
     public LogRatioEMMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Logratio-EM zero Replacement Menu",false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         optionsPanel.add(robOption);

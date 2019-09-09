@@ -35,6 +35,8 @@ import javax.swing.*;
  */
 public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Irregular data.Set Detection Limit.yaml";
+    private static final String helpTitle = "Set Detection Limit Help";
     //Fixem valor per defecte Detection Limit
     double detectionLimit = 0.01;
     //Creem el quadre de text
@@ -49,6 +51,7 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
     
     public SetDetectionLimitMenu(CoDaPackMain mainApp) {
         super(mainApp, "Set Detection Limit", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         //Marquem el botó Detection Limit com a seleccionat per defecte
         l_usedDetectionLimit.setSelected(true);

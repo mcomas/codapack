@@ -309,9 +309,9 @@ public final class HelpMenu extends JFXPanel {
             }
 
             webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "Help.html");
-            webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
+            /*webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
                 webEngine.executeScript("window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);");
-            });
+            });*/
         }
         
         public void clean(String text){
@@ -324,8 +324,8 @@ public final class HelpMenu extends JFXPanel {
             }
 
             webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "Help.html");
-            webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
+            /*webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
                 webEngine.executeScript("window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);");
-            });
+            });*/
         }
 }

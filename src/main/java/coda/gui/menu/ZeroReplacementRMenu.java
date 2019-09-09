@@ -46,6 +46,8 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
      * *** ATRIBUTES ****
      */
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Irregular Data. Non-Parametric Zero Replacement.yaml";
+    private static final String helpTitle = "Zero Replacement R Help Menu";
     JTextField closure = new JTextField("1.0");
     double percentatgeDL = 0.65;
     JTextField usedPercentatgeDL;
@@ -64,6 +66,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
     public ZeroReplacementRMenu(final CoDaPackMain mainApp, Rengine r) {
 
         super(mainApp, "Zero Replacement R Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
 
         usedPercentatgeDL = new JTextField(5);
