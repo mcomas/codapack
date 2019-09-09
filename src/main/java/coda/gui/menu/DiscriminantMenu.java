@@ -78,9 +78,12 @@ public class DiscriminantMenu extends AbstractMenuDialog{
     JRadioButton B5 = new JRadioButton("Posterior prob. for the classes");
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Statistics.Multivariate Analysis.Discriminant Analysis.yaml";
+    private static final String helpTitle = "Discriminant Help Menu";
     
     public DiscriminantMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"Discriminant Menu", true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         super.setSelectedDataName("Selected X:");
         

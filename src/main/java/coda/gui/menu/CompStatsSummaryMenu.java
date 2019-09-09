@@ -47,6 +47,8 @@ import javax.swing.event.ChangeListener;
  */
 public class CompStatsSummaryMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Statistics.Compositional Statistics Summary.yaml";
+    private static final String helpTitle = "Numerical Summary Help";
     JCheckBox centerCheck;
     JCheckBox vararrayCheck;
     JCheckBox totalvarCheck;
@@ -57,6 +59,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
     
     public CompStatsSummaryMenu(final CoDaPackMain mainApp){
         super(mainApp, "Numerical Summary", true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         centerCheck = new JCheckBox("Center", true);
 

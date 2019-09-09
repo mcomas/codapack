@@ -1,11 +1,10 @@
 ---
-name: Statistics.Classical Statistics Summary Help Menu
-description: This menu produces an standard descriptive statistics, including mean (arithmetic), percentiles, standard deviation, correlation matrix and covariance matrix.
+name: "Statistics.Classical Statistics Summary Help Menu"
+description: "This menu produces an standard descriptive statistics, including mean (arithmetic), percentiles, standard deviation, correlation matrix and covariance matrix."
 options: 
-  - Mean: Displays the Arithmetic Mean.
-  - Percentile: Displays the Percentiles. If activated percentiles must be separates by blank spaces.
-  - Standard Deviation: Displays the Standard deviation.
-  - Correlation Matrix: Displays the Correlation matrix.
-  - Covariance Matrix: Displays the Covariance matrix.
-references: 
+  - Mean: "Displays the Arithmetic Mean."
+  - Percentile: "Displays the Percentiles. If activated percentiles must be separates by blank spaces."
+  - Standard Deviation: "Displays the Standard deviation."
+  - Correlation Matrix: "Displays the Correlation matrix."
+  - Covariance Matrix: "Displays the Covariance matrix."
 

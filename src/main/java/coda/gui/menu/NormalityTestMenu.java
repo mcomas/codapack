@@ -43,9 +43,12 @@ import javax.swing.JButton;
 public class NormalityTestMenu extends AbstractMenuDialogWithILR{
     
     DataFrame df;
+    private static final String yamlUrl = "Help/Statistics.Additive Logistic Normality Tests.yaml";
+    private static final String helpTitle = "Log-Ratio Normality Test Help";
 
     public NormalityTestMenu(final CoDaPackMain mainApp){
         super(mainApp, "Log-Ratio Normality Test", false);
+        super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");

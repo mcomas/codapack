@@ -22,6 +22,8 @@ import org.rosuda.JRI.Rengine;
 public class ClasUniNormTestMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Statistics.Univariate Classical Normality Tests.yaml";
+    private static final String helpTitle = "Classical Univariate Normality Test Help Menu";
     DataFrame df;
     Rengine re;
     
@@ -32,6 +34,7 @@ public class ClasUniNormTestMenu extends AbstractMenuDialog{
     public ClasUniNormTestMenu(final CoDaPackMain mainApp, Rengine r){
         
         super(mainApp, "Classical Univariate Normality Test Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         optionsPanel.add(normOpt);

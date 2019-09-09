@@ -71,9 +71,12 @@ public class LM2 extends AbstractMenuDialog2NumCatONum{
     JRadioButton B2 = new JRadioButton("Fitted");
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Statistics.Multivariate Analysis.Regression.X Composition Y Real.yaml";
+    private static final String helpTitle = "X composition Y real regression Help Menu";
     
     public LM2(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"X composition Y real regression Menu",false,false,true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         super.setSelectedDataNames("Selected X:", "Selected Y:");
         

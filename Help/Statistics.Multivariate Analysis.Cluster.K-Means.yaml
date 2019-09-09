@@ -1,7 +1,0 @@
----
-name: Statistics.Multivariate Analysis.Cluster.K-Means Help Menu
-description: This feature performs a multivariate cluster analysis of selected parts.
-options:
-  - Number of clusters: If checked, the user must indicate a fixed number of clusters.
-  - Find optimal number of clusters: If checked, the user must indicate the maximum number of clusters.
-references: 

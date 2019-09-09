@@ -44,6 +44,8 @@ import javax.swing.event.ChangeListener;
  */
 public class ClasStatsSummaryMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Statistics.Classical Statistics Summary.yaml";
+    private static final String helpTitle = "Numerical Summary Help";
     JCheckBox meanCheck;
     JCheckBox stdDevCheck;
     JCheckBox covarianceCheck;
@@ -54,7 +56,7 @@ public class ClasStatsSummaryMenu extends AbstractMenuDialog{
     
     public ClasStatsSummaryMenu(final CoDaPackMain mainApp){
         super(mainApp, "Numerical Summary", true);
-
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         meanCheck = new JCheckBox("Mean", true);
 

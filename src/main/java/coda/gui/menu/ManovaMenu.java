@@ -68,9 +68,13 @@ public class ManovaMenu extends AbstractMenuDialog{
     JRadioButton analyzeDiff = new JRadioButton("Dif. between pairs of groups");
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Statistics.Multivariate Analysis.Manova.yaml";
+    private static final String helpTitle = "Manova Help Menu";
     
     public ManovaMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"Manova Menu",true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         re = r;
         super.setSelectedDataName("Selected Composition:");
         
