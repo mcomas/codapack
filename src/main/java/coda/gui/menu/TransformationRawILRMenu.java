@@ -32,11 +32,14 @@ import javax.swing.*;
  */
 public class TransformationRawILRMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Transformations.Raw-ILR.yaml";
+    private static final String helpTitle = "Raw-ILR Transform Help Menu";
     
     DataFrame df;
 
     public TransformationRawILRMenu(final CoDaPackMain mainApp){
         super(mainApp, "Raw-ILR Transform Menu", false);
+        super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");

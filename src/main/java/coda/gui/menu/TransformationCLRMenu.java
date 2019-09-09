@@ -33,6 +33,9 @@ import javax.swing.JTextField;
  */
 public class TransformationCLRMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Transformations.CLR.yaml";
+    private static final String helpTitle = "CLR Transform Help Menu";
+    
     JRadioButton rc;
     JRadioButton cr;
     JTextField closure = new JTextField("1.0");
@@ -40,6 +43,7 @@ public class TransformationCLRMenu extends AbstractMenuDialog{
 
     public TransformationCLRMenu(final CoDaPackMain mainApp){
         super(mainApp, "CLR Transform Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JPanel opt = new JPanel();
         rc = new JRadioButton("Raw-CLR");
