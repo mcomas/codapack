@@ -33,12 +33,17 @@ import javax.swing.JOptionPane;
  */
 public class CenterDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Operations.Centering.yaml";
+    private static final String helpTitle = "Center Data Help Menu";
+    
     String selected[];
     JCheckBox centerCheck;
     DataFrame dataFrame;
     
     public CenterDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Center Data Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         centerCheck = new JCheckBox("Show Center", true);
         optionsPanel.add(centerCheck);
     }

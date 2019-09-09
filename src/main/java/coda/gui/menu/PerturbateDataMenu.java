@@ -39,6 +39,9 @@ import javax.swing.JTextField;
  */
 public class PerturbateDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Operations.Perturbation.yaml";
+    private static final String helpTitle = "Perturbate Data Help Menu";
+    
     String selected[];
     JTextField perturbateWith;
     JLabel text1 = new JLabel("Perturbation");
@@ -50,6 +53,8 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
     
     public PerturbateDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Perturbate Data Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         perturbateWith =  new JTextField("1.0 1.0 1.0", 14);
         //perturbateWith.setText();
         optionsPanel.add(text1);

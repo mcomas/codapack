@@ -29,9 +29,13 @@ public class SortDataMenu extends AbstractMenuDialog{
     JCheckBox decSort;
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Manipulte.Sort Data.yaml";
+    private static final String helpTitle = "Sort Data Help Menu";
     
     public SortDataMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Sort Data Menu", false, false, true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         re = r;
         decSort = new JCheckBox("Decreasing sort",false);
         this.optionsPanel.add(decSort);

@@ -33,6 +33,9 @@ import javax.swing.JTextField;
  */
 public class ClosureDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Operations.Subcomposition-Closure.yaml";
+    private static final String helpTitle = "Subcomposition/closure Help Menu";
+    
     String selected[];
     JTextField closureTo;
     JLabel text1 = new JLabel("Closure");
@@ -40,6 +43,8 @@ public class ClosureDataMenu extends AbstractMenuDialog{
     
     public ClosureDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Subcomposition/closure Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         closureTo =  new JTextField(5);
         closureTo.setText(mainApp.config.getClosureTo());
         optionsPanel.add(text1);

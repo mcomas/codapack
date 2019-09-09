@@ -1,6 +1,6 @@
 ---
-name: Data.Operations.Subcomposition/Closure Help Menu
-description: With this feature the data is closed, i.e. data are converted into parts of some whole summing to a given constant, $\mathbf{Y} = \mathcal{C}(\mathbf{X})\,.$ If $S$ parts, $S < D \,,$ are selected, a subcomposition with $S$-parts is obtained.
+name: "Data.Operations.Subcomposition/Closure Help Menu"
+description: "With this feature the data is closed, i.e. data are converted into parts of some whole summing to a given constant, $\mathbf{Y} = \mathcal{C}(\mathbf{X})\,.$ If $S$ parts, $S < D \,,$ are selected, a subcomposition with $S$-parts is obtained."
 options:
-  - Closure: Whole summing constant is, by default $1.0$.
-references: Aitchison, J. (1986). The Statistical Analysis of Compositional Data. Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). (Reprinted in 2003 with additional material by The Blackburn Press). 416 p.
+  - Closure: "Whole summing constant is, by default $1.0$."
+references: "Aitchison, J. (1986). The Statistical Analysis of Compositional Data. Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). (Reprinted in 2003 with additional material by The Blackburn Press). 416 p."

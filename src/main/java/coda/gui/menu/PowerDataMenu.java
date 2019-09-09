@@ -36,6 +36,9 @@ import javax.swing.JTextField;
  */
 public class PowerDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Operations.Power Transformation.yaml";
+    private static final String helpTitle = "Power transformation Help Menu";
+    
     String selected[];
     JTextField powerWith;
     JLabel text1 = new JLabel("Power");
@@ -46,6 +49,8 @@ public class PowerDataMenu extends AbstractMenuDialog{
     
     public PowerDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Power transformation Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         powerWith =  new JTextField(5);
         powerWith.setText("1.0");
         optionsPanel.add(text1);
