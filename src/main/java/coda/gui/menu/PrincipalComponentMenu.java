@@ -45,10 +45,14 @@ import javax.swing.JOptionPane;
 public class PrincipalComponentMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Graphs. Ternary-Quaternary Principal Components.yaml";
+    private static final String helpTitle = "Principal Component Help Menu";
+    
     DataFrame df;
 
     public PrincipalComponentMenu(final CoDaPackMain mainApp){
         super(mainApp, "Principal Component Menu", true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
     }
     @Override
     public void acceptButtonActionPerformed() {

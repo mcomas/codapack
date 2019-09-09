@@ -46,11 +46,14 @@ import javax.swing.JOptionPane;
 public class Biplot3dMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Graphs.Biplot.yaml";
+    private static final String helpTitle = "CLR Biplot Help Menu";
     JCheckBox coordinates;
     DataFrame df;
     
     public Biplot3dMenu(final CoDaPackMain mainApp){
         super(mainApp, " CLR Biplot Menu", true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         coordinates = new JCheckBox("Add coordinates", false);
         optionsPanel.add(coordinates);

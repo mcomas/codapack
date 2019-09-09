@@ -54,12 +54,17 @@ import javax.swing.JTextField;
 public class ConfidenceRegionMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Graphs.Center Confidence Region.yaml";
+    private static final String helpTitle = "Center Confidence Region Help Menu";
+    
     JTextField predLevel;
     JLabel text1 = new JLabel("Confidence level");
     DataFrame df;
     
     public ConfidenceRegionMenu(final CoDaPackMain mainApp){
         super(mainApp, "Center Confidence Region Menu", true);//, false, true, false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         predLevel =  new JTextField("0.90 0.95 0.99", 14);
 
         optionsPanel.add(text1);
