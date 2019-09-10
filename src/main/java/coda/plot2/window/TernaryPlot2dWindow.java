@@ -33,6 +33,8 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.plot.window.*;
 import coda.gui.CoDaPackMain;
+import coda.gui.menu.AbstractMenuDialog;
+import coda.gui.menu.HelpMenu;
 import coda.plot2.objects.Ternary2dGridObject;
 import coda.plot2.TernaryPlot2dDisplay;
 import coda.plot2.objects.Ternary2dObject;
@@ -40,9 +42,16 @@ import coda.plot2.objects.TernaryObject;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.PopupMenu;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -89,6 +98,8 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
             private final String ITEM_CURVE = "Add curve";
             private JMenuItem itemElements;
             private final String ITEM_ELEMENTS = "Elements";
+            private static final String yamlUrl = "Help/Graphs.Ternary-Quaternary Plot-Empty.yaml";
+            private static final String helpTitle = "Ternary-Quaternary Plot-Empty Help";
 
     public TernaryPlot2dWindow(DataFrame dataframe, TernaryPlot2dDisplay display, String title) {
         super(dataframe, display, title);
@@ -166,11 +177,46 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
             }
         });
         controlTernaryPlot.add(rotate);
+        
+        JButton helpButton = new JButton("Help");
+        helpButton.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                JDialog dialog = new JDialog();
+                HelpMenu menu;
+                try {
+                    menu = new HelpMenu(yamlUrl,helpTitle);
+                    dialog.add(menu);
+                    dialog.setSize(650, 500);
+                    dialog.setTitle(helpTitle);
+                    dialog.setIconImage(Toolkit.getDefaultToolkit()
+                    .getImage(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logo.png")));
+                    Point p = getLocation();
+                    p.x = p.x + (getWidth()-520)/2;
+                    p.y = p.y + (getHeight()-430)/2;
+                    WindowListener exitListener = new WindowAdapter(){
+                
+                        @Override
+                        public void windowClosing(WindowEvent e){
+                                dialog.dispose();
+                                menu.deleteHtml();
+                        }
+                    };
+            
+                    dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                    dialog.addWindowListener(exitListener);
+                    dialog.setLocation(p);
+                    dialog.setVisible(true);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(AbstractMenuDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
 
         controlTernaryPlot.add(new JLabel(" "));
         
         controlTernaryPlot.add(checkBoxGridSelector);
         controlTernaryPlot.add(checkBoxCenteredSelector);
+        controlTernaryPlot.add(helpButton);
         particularControls1.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
         particularControls1.add(controlTernaryPlot);
         

@@ -34,9 +34,17 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import org.codehaus.plexus.util.StringUtils;
@@ -52,6 +60,8 @@ public class DataFrameCreator extends JFrame{
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = "Help/Data.Create New Table.yaml";
+    private static final String helpTitle = "Create New Table Help";
     
     public DataFrameCreator(final CoDaPackMain mainApp){
                 panel = new JPanel();
@@ -116,6 +126,41 @@ public class DataFrameCreator extends JFrame{
 
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         dispose();
+                    }
+                });
+                
+                JButton helpButton = new JButton("Help");
+                southPanel.add(helpButton);
+                helpButton.addActionListener(new java.awt.event.ActionListener(){
+                    public void actionPerformed(java.awt.event.ActionEvent evt){
+                        JDialog dialog = new JDialog();
+                        HelpMenu menu;
+                        try {
+                            menu = new HelpMenu(yamlUrl,helpTitle);
+                            dialog.add(menu);
+                            dialog.setSize(650, 500);
+                            dialog.setTitle(helpTitle);
+                            dialog.setIconImage(Toolkit.getDefaultToolkit()
+                            .getImage(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logo.png")));
+                            Point p = getLocation();
+                            p.x = p.x + (getWidth()-520)/2;
+                            p.y = p.y + (getHeight()-430)/2;
+                            WindowListener exitListener = new WindowAdapter(){
+
+                                @Override
+                                public void windowClosing(WindowEvent e){
+                                        dialog.dispose();
+                                        menu.deleteHtml();
+                                }
+                            };
+
+                            dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                            dialog.addWindowListener(exitListener);
+                            dialog.setLocation(p);
+                            dialog.setVisible(true);
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(AbstractMenuDialog.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 });
 
