@@ -28,9 +28,6 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -68,7 +65,7 @@ public class ManovaMenu extends AbstractMenuDialog{
     JRadioButton analyzeDiff = new JRadioButton("Dif. between pairs of groups");
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Statistics.Multivariate Analysis.Manova.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Multivariate Analysis.Manova.yaml";
     private static final String helpTitle = "Manova Help Menu";
     
     public ManovaMenu(final CoDaPackMain mainApp, Rengine r){

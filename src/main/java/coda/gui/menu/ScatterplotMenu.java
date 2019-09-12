@@ -25,37 +25,27 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import javax.swing.JFrame;
 import org.rosuda.JRI.Rengine;
 import coda.gui.CoDaPackMain;
-import static coda.gui.CoDaPackMain.outputPanel;
-import static coda.gui.CoDaPackMain.re;
-import coda.gui.output.OutputElement;
-import coda.gui.output.OutputForR;
-import coda.gui.output.OutputText;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
 import org.apache.batik.swing.JSVGCanvas;
@@ -63,10 +53,8 @@ import org.jzy3d.analysis.AbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
-import org.jzy3d.plot3d.primitives.Sphere;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**
@@ -85,7 +73,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
     JRadioButton B1 = new JRadioButton("Set same scale");
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Graphs.Scatterplot 2D-3D.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Scatterplot 2D-3D.yaml";
     private static final String helpTitle = "Scatterplot Help Menu";
     
     public ScatterplotMenu(final CoDaPackMain mainApp, Rengine r){

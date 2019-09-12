@@ -8,6 +8,7 @@ package coda.gui.menu;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
@@ -29,7 +30,7 @@ public class SortDataMenu extends AbstractMenuDialog{
     JCheckBox decSort;
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Manipulte.Sort Data.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Sort Data.yaml";
     private static final String helpTitle = "Sort Data Help Menu";
     
     public SortDataMenu(final CoDaPackMain mainApp, Rengine r){

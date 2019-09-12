@@ -24,6 +24,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -33,7 +34,7 @@ import javax.swing.JTextField;
  */
 public class ClosureDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Operations.Subcomposition-Closure.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Subcomposition-Closure.yaml";
     private static final String helpTitle = "Subcomposition/closure Help Menu";
     
     String selected[];

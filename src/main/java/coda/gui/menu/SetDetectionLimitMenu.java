@@ -25,6 +25,7 @@
 package coda.gui.menu;
 
 import coda.*;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 
 import javax.swing.*;
@@ -35,7 +36,7 @@ import javax.swing.*;
  */
 public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Irregular data.Set Detection Limit.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Set Detection Limit.yaml";
     private static final String helpTitle = "Set Detection Limit Help";
     //Fixem valor per defecte Detection Limit
     double detectionLimit = 0.01;

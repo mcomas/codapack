@@ -7,17 +7,11 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
-import coda.io.ImportRDA;
-import java.awt.FlowLayout;
+import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,7 +32,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
     DataFrame df;
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Filters.Advanced Filter.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Filters.Advanced Filter.yaml";
     private static final String helpTitle = "Advanced Filter Help Menu";
     
     public AdvancedFilterMenu(final CoDaPackMain mainApp, Rengine r ){

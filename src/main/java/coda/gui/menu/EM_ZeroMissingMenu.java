@@ -23,12 +23,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -73,7 +70,7 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
     JTextField dlProportion;
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Irregular data.Logratio-EM Zero-Missing Replacement.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Logratio-EM Zero-Missing Replacement.yaml";
     private static final String helpTitle = "Logratio-EM zero & missing replacement Help Menu";
     
     public EM_ZeroMissingMenu(final CoDaPackMain mainApp, Rengine r){

@@ -5,7 +5,6 @@
  */
 package coda.gui.menu;
 
-import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackConf;
@@ -14,11 +13,8 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.BinaryPartitionSelect;
-import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,11 +22,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Vector;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,8 +30,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import org.apache.batik.swing.JSVGCanvas;
@@ -64,7 +54,7 @@ public class AtypMenu extends AbstractMenuDialog{
     JTextField lConf = new JTextField(10);
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Irregular data.Atipicality Index.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Atipicality Index.yaml";
     private static final String helpTitle = "Atipicality Index Help Menu";
     
     public AtypMenu(final CoDaPackMain mainApp, Rengine r){

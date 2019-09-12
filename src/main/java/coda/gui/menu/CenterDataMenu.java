@@ -22,6 +22,7 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import coda.gui.output.OutputVector;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -33,7 +34,7 @@ import javax.swing.JOptionPane;
  */
 public class CenterDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Operations.Centering.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Centering.yaml";
     private static final String helpTitle = "Center Data Help Menu";
     
     String selected[];

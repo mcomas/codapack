@@ -23,8 +23,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -62,7 +60,7 @@ public class EM_MissingMenu extends AbstractMenuDialog{
     
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Irregular data.Logratio-EM missing Replacement.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Logratio-EM missing Replacement.yaml";
     private static final String helpTitle = "Logratio-EM missing replacement Help Menu";
     
     public EM_MissingMenu(final CoDaPackMain mainApp, Rengine r){

@@ -24,6 +24,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
@@ -36,7 +37,7 @@ import javax.swing.JTextField;
  */
 public class PowerDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Operations.Power Transformation.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Power Transformation.yaml";
     private static final String helpTitle = "Power transformation Help Menu";
     
     String selected[];

@@ -26,6 +26,7 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -51,7 +52,7 @@ import javax.swing.JTextField;
  */
 public class AddMenu extends CoDaPackDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Add Numerical Variables.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Add Numerical Variables.yaml";
     private static final String helpTitle = "Add numeric variables Help Menu";
     
     DataFrame df;

@@ -21,9 +21,8 @@ package coda.gui.menu;
 
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.gui.output.OutputILRPartition;
-import coda.gui.utils.BinaryPartitionSelect;
 
 import javax.swing.*;
 
@@ -32,7 +31,7 @@ import javax.swing.*;
  */
 public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Transformations.ILR-Raw.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Transformations.ILR-Raw.yaml";
     private static final String helpTitle = "ILR-Raw Transform Help Menu";
     
     DataFrame df;

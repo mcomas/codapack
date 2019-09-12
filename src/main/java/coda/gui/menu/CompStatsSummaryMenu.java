@@ -27,6 +27,7 @@ package coda.gui.menu;
 import coda.BasicStats;
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputCompStatsSummary;
 import coda.gui.output.OutputElement;
@@ -47,7 +48,7 @@ import javax.swing.event.ChangeListener;
  */
 public class CompStatsSummaryMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Statistics.Compositional Statistics Summary.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Compositional Statistics Summary.yaml";
     private static final String helpTitle = "Numerical Summary Help";
     JCheckBox centerCheck;
     JCheckBox vararrayCheck;

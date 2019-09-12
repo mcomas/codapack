@@ -6,13 +6,13 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.Box;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,7 +31,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
      */
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Irregular data.Logratio-EM Zero Replacement.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Logratio-EM Zero Replacement.yaml";
     private static final String helpTitle = "Logratio-EM zero Replacement Help Menu";
     JTextField DLProportion = new JTextField("0.65");
     double percentatgeDL = 0.65;

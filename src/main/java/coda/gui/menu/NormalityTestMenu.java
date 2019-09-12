@@ -26,10 +26,10 @@ package coda.gui.menu;
 
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputNormalityTest;
-import coda.gui.output.OutputText;
 import coda.gui.utils.BinaryPartitionSelect;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,7 +43,7 @@ import javax.swing.JButton;
 public class NormalityTestMenu extends AbstractMenuDialogWithILR{
     
     DataFrame df;
-    private static final String yamlUrl = "Help/Statistics.Additive Logistic Normality Tests.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Additive Logistic Normality Tests.yaml";
     private static final String helpTitle = "Log-Ratio Normality Test Help";
 
     public NormalityTestMenu(final CoDaPackMain mainApp){

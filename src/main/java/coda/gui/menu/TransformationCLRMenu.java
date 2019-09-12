@@ -21,6 +21,7 @@ package coda.gui.menu;
 
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
@@ -33,7 +34,7 @@ import javax.swing.JTextField;
  */
 public class TransformationCLRMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Transformations.CLR.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Transformations.CLR.yaml";
     private static final String helpTitle = "CLR Transform Help Menu";
     
     JRadioButton rc;

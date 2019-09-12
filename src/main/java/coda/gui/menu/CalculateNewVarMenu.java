@@ -6,20 +6,14 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
-import coda.Variable;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import org.rosuda.JRI.RVector;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -35,7 +29,7 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     double[] dataNewVar;
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Manipulte.Calculate new Variable.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Calculate new Variable.yaml";
     private static final String helpTitle = "Calculate new Variable Help Menu";
     
     public CalculateNewVarMenu(final CoDaPackMain mainApp, Rengine r){

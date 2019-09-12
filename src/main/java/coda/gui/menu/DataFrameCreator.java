@@ -8,11 +8,10 @@ package coda.gui.menu;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -28,8 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -39,8 +36,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -60,7 +55,7 @@ public class DataFrameCreator extends JFrame{
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Create New Table.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Create New Table.yaml";
     private static final String helpTitle = "Create New Table Help";
     
     public DataFrameCreator(final CoDaPackMain mainApp){

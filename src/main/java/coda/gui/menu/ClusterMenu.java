@@ -70,7 +70,7 @@ public class ClusterMenu extends AbstractMenuDialog{
     //JRadioButton calinskiOption = new JRadioButton("Calinski option");
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Statistics.Multivariate Analysis.Cluster.K-Means Versio silhouette.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Multivariate Analysis.Cluster.K-Means Versio silhouette.yaml";
     private static final String helpTitle = "Cluster Help Menu";
     
     public ClusterMenu(final CoDaPackMain mainApp, Rengine r){

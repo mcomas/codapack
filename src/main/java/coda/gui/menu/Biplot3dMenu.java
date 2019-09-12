@@ -28,6 +28,7 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.ext.jama.Matrix;
 import coda.ext.jama.SingularValueDecomposition;
+import coda.gui.CoDaPackConf;
 import coda.plot.window.Biplot3dWindow;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
@@ -46,7 +47,7 @@ import javax.swing.JOptionPane;
 public class Biplot3dMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Graphs.Biplot.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Biplot.yaml";
     private static final String helpTitle = "CLR Biplot Help Menu";
     JCheckBox coordinates;
     DataFrame df;

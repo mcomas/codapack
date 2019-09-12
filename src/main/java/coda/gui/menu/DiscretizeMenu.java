@@ -26,6 +26,7 @@ package coda.gui.menu;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -33,7 +34,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import org.rosuda.JRI.RList;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -46,7 +46,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     JPanel panel;
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Manipulte.Discretize-Segment variable.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Discretize-Segment variable.yaml";
     private static final String helpTitle = "Discretize/Segment Help Menu";
     
     /** options var **/

@@ -27,18 +27,12 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.ext.jama.Matrix;
-import coda.ext.jama.SingularValueDecomposition;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.gui.output.OutputILRPartition;
 import coda.gui.output.OutputPlotHeader;
-import coda.gui.output.OutputTableTwoEntries;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.plot.Biplot2dDisplay;
 import coda.plot.Biplot3dDisplay;
-import coda.plot.RealPlot2dDisplay.RealPlot2dBuilder;
-import coda.plot.RealPlot3dDisplay.RealPlot3dBuilder;
-import coda.plot.window.Biplot2dWindow;
-import coda.plot.window.Biplot3dWindow;
 import coda.plot.window.CoDaPlotWindow;
 import coda.plot.window.RealPlot2dWindow;
 import coda.plot.window.RealPlot3dWindow;
@@ -52,7 +46,7 @@ import javax.swing.JOptionPane;
 public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Graphs.ILR-CLR Plot.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.ILR-CLR Plot.yaml";
     private static final String helpTitle = "ILR/CLR Plot Help Menu";
     
     JCheckBox coordinates;

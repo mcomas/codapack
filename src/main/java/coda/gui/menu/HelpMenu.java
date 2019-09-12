@@ -20,10 +20,10 @@
 package coda.gui.menu;
 
 import static coda.gui.CoDaPackConf.CoDaVersion;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputText;
-import java.awt.Rectangle;
 import javafx.scene.paint.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,27 +35,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.Region;
 import javafx.scene.Node;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import org.ho.yaml.Yaml;
 
 public final class HelpMenu extends JFXPanel {
@@ -106,7 +96,7 @@ public final class HelpMenu extends JFXPanel {
         
             /* configuracio inicial MathJax */
 
-            helpText = "<html><head><script type=\"text/javascript\" async src=\"file://C:\\Users\\Guest2\\Downloads\\MathJax\\MathJax.js?config=TeX-MML-AM_CHTML-full\"></script></head>";
+            helpText = "<html><head><script type=\"text/javascript\" async src=\"file://" + CoDaPackConf.mathJaxPath + "?config=TeX-MML-AM_CHTML-full\"></script></head>";
 
             /* name */
 

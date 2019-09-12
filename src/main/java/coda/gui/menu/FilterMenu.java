@@ -21,22 +21,16 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import coda.gui.utils.BoxDataSelector;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -45,7 +39,7 @@ import javax.swing.ListSelectionModel;
 public class FilterMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Filters.Categorical Filter.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Filters.Categorical Filter.yaml";
     private static final String helpTitle = "Categorical Filter Help Menu";
     BoxDataSelector boxdataSel;
     DataFrame df;

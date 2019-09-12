@@ -27,6 +27,7 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.ext.jama.Matrix;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 
@@ -54,7 +55,7 @@ import javax.swing.JTextField;
 public class PredictiveRegionMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Graphs.Predictive Region.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Predictive Region.yaml";
     private static final String helpTitle = "Predictive Region Help Menu";
     JTextField predLevel;
     JLabel text1 = new JLabel("Predictive level");

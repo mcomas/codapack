@@ -20,11 +20,11 @@
 package coda.gui.menu;
 
 import coda.CoDaStats;
-import static coda.CoDaStats.closure;
 import coda.DataFrame;
 import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
@@ -39,7 +39,7 @@ import javax.swing.JTextField;
  */
 public class PerturbateDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Operations.Perturbation.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Perturbation.yaml";
     private static final String helpTitle = "Perturbate Data Help Menu";
     
     String selected[];

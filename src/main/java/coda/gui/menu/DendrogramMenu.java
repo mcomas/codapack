@@ -28,6 +28,7 @@ import coda.BasicStats;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Utils;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputILRPartition;
 import coda.gui.output.OutputPlotHeader;
@@ -48,7 +49,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
     JCheckBox balancesCheck;
     JCheckBox statisticsCheck;
     DataFrame df;
-    private static final String yamlUrl = "Help/Graphs.Balance Dendrogram.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Balance Dendrogram.yaml";
     private static final String helpTitle = "Balance Dendogram Help Menu";
     
     public DendrogramMenu(final CoDaPackMain mainApp){

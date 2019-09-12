@@ -6,6 +6,7 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputForR;
@@ -22,7 +23,7 @@ import org.rosuda.JRI.Rengine;
 public class ClasUniNormTestMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Statistics.Univariate Classical Normality Tests.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Univariate Classical Normality Tests.yaml";
     private static final String helpTitle = "Classical Univariate Normality Test Help Menu";
     DataFrame df;
     Rengine re;

@@ -15,27 +15,17 @@ import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -43,7 +33,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -72,7 +61,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     JTextField P1 = new JTextField(5);
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Irregular data.zPatterns.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.zPatterns.yaml";
     private static final String helpTitle = "zPatterns Help Menu";
     
     public ZpatternsMenu(final CoDaPackMain mainApp, Rengine r){

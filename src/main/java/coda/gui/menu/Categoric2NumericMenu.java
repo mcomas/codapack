@@ -27,6 +27,7 @@ package coda.gui.menu;
 import coda.gui.utils.BoxDataSelector;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -48,7 +49,7 @@ import javax.swing.JPanel;
  */
 public class Categoric2NumericMenu extends JDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Manipulte.Categorical to Numeric.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Categorical to Numeric.yaml";
     private static final String helpTitle = "Categorical to Numeric Help";
     
     BoxDataSelector ds;

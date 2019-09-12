@@ -27,6 +27,7 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.ext.jama.Matrix;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 
@@ -54,7 +55,7 @@ import javax.swing.JTextField;
 public class ConfidenceRegionMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Graphs.Center Confidence Region.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Center Confidence Region.yaml";
     private static final String helpTitle = "Center Confidence Region Help Menu";
     
     JTextField predLevel;

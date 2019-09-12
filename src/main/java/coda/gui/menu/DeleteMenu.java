@@ -27,6 +27,7 @@ package coda.gui.menu;
 import coda.gui.utils.BoxDataSelector;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -48,7 +49,7 @@ import javax.swing.JPanel;
  */
 public class DeleteMenu extends JDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Data.Delete Variables.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Delete Variables.yaml";
     private static final String helpTitle = "Delete variables Help";
     
     BoxDataSelector ds;

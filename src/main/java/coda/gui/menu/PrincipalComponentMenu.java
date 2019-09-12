@@ -28,6 +28,7 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.ext.jama.Matrix;
 import coda.ext.jama.SingularValueDecomposition;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputTableTwoEntries;
@@ -45,7 +46,7 @@ import javax.swing.JOptionPane;
 public class PrincipalComponentMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Graphs. Ternary-Quaternary Principal Components.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs. Ternary-Quaternary Principal Components.yaml";
     private static final String helpTitle = "Principal Component Help Menu";
     
     DataFrame df;

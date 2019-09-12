@@ -25,6 +25,7 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 import coda.plot.window.CoDaPlotWindow;
@@ -43,7 +44,7 @@ import javax.swing.JOptionPane;
 public class TernaryPlotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Graphs.Ternary-Quaternary Plot.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Ternary-Quaternary Plot.yaml";
     private static final String helpTitle = "Ternary/Quaternary Plot Help Menu";
     DataFrame df;
     

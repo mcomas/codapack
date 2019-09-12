@@ -23,8 +23,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -36,8 +34,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
@@ -66,7 +62,7 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
     
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Irregular data.Bayesian-multiplicative zero replacement.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Bayesian-multiplicative zero replacement.yaml";
     private static final String helpTitle = "Bayesian Multiplicative Replacement Help Menu";
     
     public BayesianMultRepMenu(final CoDaPackMain mainApp, Rengine r){

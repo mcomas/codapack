@@ -31,6 +31,7 @@ package coda.plot2.window;
 
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.plot.window.*;
 import coda.gui.CoDaPackMain;
 import coda.gui.menu.AbstractMenuDialog;
@@ -98,7 +99,7 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
             private final String ITEM_CURVE = "Add curve";
             private JMenuItem itemElements;
             private final String ITEM_ELEMENTS = "Elements";
-            private static final String yamlUrl = "Help/Graphs.Ternary-Quaternary Plot-Empty.yaml";
+            private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Ternary-Quaternary Plot-Empty.yaml";
             private static final String helpTitle = "Ternary-Quaternary Plot-Empty Help";
 
     public TernaryPlot2dWindow(DataFrame dataframe, TernaryPlot2dDisplay display, String title) {

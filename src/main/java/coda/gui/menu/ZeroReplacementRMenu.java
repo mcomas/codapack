@@ -20,11 +20,8 @@ package coda.gui.menu;
 
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import static coda.gui.CoDaPackMain.outputPanel;
-import static coda.gui.CoDaPackMain.re;
-import coda.gui.output.OutputElement;
-import coda.gui.output.OutputForR;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
@@ -46,7 +43,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
      * *** ATRIBUTES ****
      */
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Irregular Data. Non-Parametric Zero Replacement.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular Data. Non-Parametric Zero Replacement.yaml";
     private static final String helpTitle = "Zero Replacement R Help Menu";
     JTextField closure = new JTextField("1.0");
     double percentatgeDL = 0.65;

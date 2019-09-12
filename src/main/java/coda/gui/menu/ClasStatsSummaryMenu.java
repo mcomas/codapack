@@ -26,6 +26,7 @@ package coda.gui.menu;
 
 import coda.BasicStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputClasStatsSummary;
 import coda.gui.output.OutputElement;
@@ -44,7 +45,7 @@ import javax.swing.event.ChangeListener;
  */
 public class ClasStatsSummaryMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Help/Statistics.Classical Statistics Summary.yaml";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Classical Statistics Summary.yaml";
     private static final String helpTitle = "Numerical Summary Help";
     JCheckBox meanCheck;
     JCheckBox stdDevCheck;
