@@ -28,6 +28,7 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -58,6 +59,7 @@ public class ManovaMenu extends AbstractMenuDialog{
     JFileChooser chooser;
     String tempDirR;
     String[] tempsDirR;
+    ArrayList<String> names;
     
     /* options var */
     
@@ -77,6 +79,7 @@ public class ManovaMenu extends AbstractMenuDialog{
         
         this.optionsPanel.add(residuals);
         this.optionsPanel.add(analyzeDiff);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -346,6 +349,10 @@ public class ManovaMenu extends AbstractMenuDialog{
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

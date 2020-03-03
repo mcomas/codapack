@@ -689,7 +689,7 @@ public final class CoDaPackMain extends JFrame{
             if(clusterMenu == null || clusterMenu.getDataFrame() != this.getActiveDataFrame()) clusterMenu = new ClusterMenu(this,re);
             clusterMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MANOVA)){
-            if(manovaMenu == null || manovaMenu.getDataFrame() != this.getActiveDataFrame()) manovaMenu = new ManovaMenu(this,re);
+            if(manovaMenu == null || manovaMenu.getDataFrame() != this.getActiveDataFrame() || !manovaMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) manovaMenu = new ManovaMenu(this,re);
             manovaMenu.setVisible(true);
         }else if(title.contains(jMenuBar.ITEM_DISC_ANALYSIS)){
             if(discriminantMenu == null || discriminantMenu.getDataFrame() != this.getActiveDataFrame()) discriminantMenu = new DiscriminantMenu(this,re);
