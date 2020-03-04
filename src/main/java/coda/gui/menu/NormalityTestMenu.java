@@ -88,7 +88,7 @@ public class NormalityTestMenu extends AbstractMenuDialogWithILR{
         int [] mapping = df.getMapingToData(selectedNames, selection);
         double[][] data = df.getNumericalData(selectedNames, mapping);
 
-        double[][] ilr = super.getBasis();
+        double[][] ilr = CoDaStats.transformRawILR(data, super.getPartition());
         String names[] = new String[selectedNames.length-1];
         for(int i=0;i<names.length;i++)
             //names[i] = "ilr(" + selectedNames[i] + "," + selectedNames[names.length] + ")";
