@@ -44,6 +44,7 @@ import coda.plot2.objects.Ternary3dObject;
 import coda.plot2.objects.Ternary3dSurfaceObject;
 import coda.plot2.window.TernaryPlot2dWindow;
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -60,6 +61,7 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
     JTextField predLevel;
     JLabel text1 = new JLabel("Predictive level");
     DataFrame df;
+    ArrayList<String> names;
     
     public PredictiveRegionMenu(final CoDaPackMain mainApp){
         super(mainApp, "Predictive Region Menu", true);//, false, true, false);
@@ -69,6 +71,7 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
 
         optionsPanel.add(text1);
         optionsPanel.add(predLevel);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     public void acceptButtonActionPerformed() {
@@ -162,5 +165,9 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

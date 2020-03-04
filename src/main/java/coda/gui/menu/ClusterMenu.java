@@ -52,6 +52,7 @@ public class ClusterMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
+    ArrayList<String> names;
     JFrame frameClusterMenu;
     Vector<JFrame> framesClusterMenu;
     JFileChooser chooser;
@@ -123,6 +124,7 @@ public class ClusterMenu extends AbstractMenuDialog{
         this.optionsPanel.add(optMethod);
         framesClusterMenu = new Vector<JFrame>();
         tempsDirR = new Vector<String>();
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     private Vector<String> sortSelectedNames(String[] selectedNames){
@@ -385,6 +387,10 @@ private void plotClusterMenu(int position) throws IOException, IOException {
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

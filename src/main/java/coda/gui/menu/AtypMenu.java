@@ -22,6 +22,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -44,6 +45,7 @@ public class AtypMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
+    ArrayList<String> names;
     JFrame frameAtypMenu;
     JFrame[] framesAtypMenu;
     JFileChooser chooser;
@@ -67,6 +69,7 @@ public class AtypMenu extends AbstractMenuDialog{
         this.optionsPanel.add(new JLabel("Level of Confidence"));
         this.lConf.setText("0.975");
         this.optionsPanel.add(lConf);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -296,6 +299,10 @@ public class AtypMenu extends AbstractMenuDialog{
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

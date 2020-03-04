@@ -10,6 +10,7 @@ import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.Box;
@@ -47,6 +48,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
     JTextField dlProportion;
     Rengine re;
     DataFrame df;
+    ArrayList<String> names;
     
     /**
      * METODES DE CLASSE
@@ -86,6 +88,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
         optionsPanel.add(l_usedPercentatgeDL);
         optionsPanel.add(dlProportion);
         optionsPanel.add(Box.createVerticalStrut(25));
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
         //optionsPanel.add(Box.createHorizontalStrut(50));
         //performMax = new JCheckBox("Min result", false);
         //performMax.setSelected(true);
@@ -237,5 +240,9 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

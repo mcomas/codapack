@@ -23,6 +23,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -51,6 +52,7 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
     JFileChooser chooser;
     String tempDirR;
     String[] tempsDirR;
+    ArrayList<String> names;
     
     /* options var */
     
@@ -76,6 +78,7 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
         this.optionsPanel.add(P1ComboOptions);
         this.optionsPanel.add(new JLabel("Output: "));
         this.optionsPanel.add(P2ComboOptions);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -311,6 +314,10 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

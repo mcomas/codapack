@@ -57,6 +57,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
     JCheckBox percentileCheck;
     JButton vararrayOptions;
     DataFrame df;
+    ArrayList<String> names;
     
     public CompStatsSummaryMenu(final CoDaPackMain mainApp){
         super(mainApp, "Numerical Summary", true);
@@ -90,7 +91,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
         optionsPanel.add(vararrayCheck);              
         optionsPanel.add(totalvarCheck);
         //optionsPanel.add(vararrayOptions);
-        
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
         
 
         
@@ -208,5 +209,9 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

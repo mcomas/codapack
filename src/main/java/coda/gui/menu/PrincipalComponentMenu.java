@@ -37,6 +37,7 @@ import coda.plot.PrincipalComponent3dDisplay.PrincipalComponent3dBuilder;
 import coda.plot.window.CoDaPlotWindow;
 import coda.plot.window.TernaryPlot2dWindow;
 import coda.plot.window.TernaryPlot3dWindow;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -50,10 +51,12 @@ public class PrincipalComponentMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Principal Component Help Menu";
     
     DataFrame df;
+    ArrayList<String> names;
 
     public PrincipalComponentMenu(final CoDaPackMain mainApp){
         super(mainApp, "Principal Component Menu", true);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     public void acceptButtonActionPerformed() {
@@ -146,6 +149,10 @@ public class PrincipalComponentMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

@@ -13,6 +13,7 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.JCheckBox;
@@ -28,6 +29,7 @@ public class SortDataMenu extends AbstractMenuDialog{
     Rengine re;
     DataFrame df;
     JCheckBox decSort;
+    ArrayList<String> names;
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Sort Data.yaml";
@@ -40,6 +42,7 @@ public class SortDataMenu extends AbstractMenuDialog{
         re = r;
         decSort = new JCheckBox("Decreasing sort",false);
         this.optionsPanel.add(decSort);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -140,6 +143,10 @@ public class SortDataMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
 }

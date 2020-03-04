@@ -27,6 +27,7 @@ package coda.gui.menu;
 import coda.*;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -49,6 +50,7 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
     //Creem la opció Global of Selected Columns
     JRadioButton l_globalSelectedColumns = new JRadioButton("Global Minimum of Selected Columns");
     DataFrame df;
+    ArrayList<String> names;
     
     public SetDetectionLimitMenu(CoDaPackMain mainApp) {
         super(mainApp, "Set Detection Limit", false);
@@ -74,6 +76,7 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
         group.add(l_usedDetectionLimit);
         group.add(l_takeMinimunColum);
         group.add(l_globalSelectedColumns);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
         
     }
 
@@ -188,6 +191,10 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
 }

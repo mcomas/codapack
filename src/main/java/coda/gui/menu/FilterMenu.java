@@ -26,6 +26,7 @@ import coda.gui.utils.BoxDataSelector;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -43,6 +44,7 @@ public class FilterMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Categorical Filter Help Menu";
     BoxDataSelector boxdataSel;
     DataFrame df;
+    ArrayList<String> names;
     JDialog dialog;
     String[] sel_names;
     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -51,6 +53,7 @@ public class FilterMenu extends AbstractMenuDialog{
        
         super(mainApp,"Categorical Filter Menu","categoric");
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -119,4 +122,9 @@ public class FilterMenu extends AbstractMenuDialog{
     public DataFrame getDataFrame(){
         return this.df;
     }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
+    }
+    
 }

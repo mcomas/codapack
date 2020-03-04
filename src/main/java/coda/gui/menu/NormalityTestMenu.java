@@ -43,6 +43,7 @@ import javax.swing.JButton;
 public class NormalityTestMenu extends AbstractMenuDialogWithILR{
     
     DataFrame df;
+    ArrayList<String> names;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Additive Logistic Normality Tests.yaml";
     private static final String helpTitle = "Log-Ratio Normality Test Help";
 
@@ -69,6 +70,7 @@ public class NormalityTestMenu extends AbstractMenuDialogWithILR{
             }
         });
         
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     public void initiatePartitionMenu(){
@@ -116,6 +118,10 @@ public class NormalityTestMenu extends AbstractMenuDialogWithILR{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

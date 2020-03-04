@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -33,6 +34,7 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Change Categorical Label Help Menu";
     
     DataFrame df;
+    ArrayList<String> names;
     String [] sel_names;
     BoxDataSelector boxDataSel;
     JDialog dialog;
@@ -42,6 +44,7 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
     public ChangeGroupNameMenu(final CoDaPackMain mainApp){
         super(mainApp,"Change Categorical Label Menu", "categoric");
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
    @Override
@@ -133,5 +136,9 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
     
    public DataFrame getDataFrame(){
        return this.df;
+   }
+   
+   public ArrayList<String> getDataFrameNames(){
+       return this.names;
    }
 }

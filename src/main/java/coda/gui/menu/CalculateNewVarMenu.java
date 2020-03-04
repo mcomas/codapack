@@ -9,6 +9,7 @@ import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,6 +27,7 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     JFrame frame;
     JPanel panel;
     DataFrame df;
+    ArrayList<String> names;
     double[] dataNewVar;
     
     public static final long serialVersionUID = 1L;
@@ -36,6 +38,7 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
         super(mainApp, "Calculate new Variable Menu", false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -140,5 +143,9 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

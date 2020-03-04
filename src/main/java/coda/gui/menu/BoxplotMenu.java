@@ -62,6 +62,7 @@ public class BoxplotMenu extends AbstractMenuDialog{
     JFileChooser chooser;
     String tempDirR;
     Vector<String> tempsDirR;
+    ArrayList<String> names;
     
     /* options var */
     
@@ -74,6 +75,7 @@ public class BoxplotMenu extends AbstractMenuDialog{
         
         framesBoxplotMenu = new Vector<JFrame>();
         tempsDirR = new Vector<String>();
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -314,6 +316,10 @@ public class BoxplotMenu extends AbstractMenuDialog{
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

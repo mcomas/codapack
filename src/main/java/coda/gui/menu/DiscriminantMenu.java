@@ -25,6 +25,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -52,6 +53,7 @@ public class DiscriminantMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
+    ArrayList<String> names;
     JFrame frameDiscriminantMenu;
     Vector<JFrame> framesDiscriminantMenu;
     JFileChooser chooser;
@@ -112,6 +114,7 @@ public class DiscriminantMenu extends AbstractMenuDialog{
         this.optionsPanel.add(B3);
         this.optionsPanel.add(B4);
         this.optionsPanel.add(B5);
+        this.names= new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     public void configureILRX(){
@@ -486,6 +489,10 @@ public class DiscriminantMenu extends AbstractMenuDialog{
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

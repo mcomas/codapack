@@ -28,6 +28,7 @@ import coda.Variable;
 import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -59,6 +60,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     JCheckBox namesOptionCheckBox;
     JTextField breaksField = new JTextField(5);
     DataFrame df;
+    ArrayList<String> names;
     
     public DiscretizeMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Discretize/Segment Menu", false);
@@ -74,6 +76,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
         namesOptionCheckBox = new JCheckBox();
         namesOptionCheckBox.setSelected(false);
         optionsPanel.add(namesOptionCheckBox);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -196,5 +199,9 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

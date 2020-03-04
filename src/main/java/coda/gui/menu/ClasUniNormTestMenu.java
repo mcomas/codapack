@@ -11,6 +11,7 @@ import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,6 +27,7 @@ public class ClasUniNormTestMenu extends AbstractMenuDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Univariate Classical Normality Tests.yaml";
     private static final String helpTitle = "Classical Univariate Normality Test Help Menu";
     DataFrame df;
+    ArrayList<String> names;
     Rengine re;
     
     String[] normalityOption = {"Shapiro-Wilk Test","Kolmogorov-Smirnov Test"};
@@ -40,6 +42,7 @@ public class ClasUniNormTestMenu extends AbstractMenuDialog{
         
         optionsPanel.add(normOpt);
         optionsPanel.add(normOptionList);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -88,5 +91,9 @@ public class ClasUniNormTestMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

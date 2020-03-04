@@ -23,6 +23,7 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -35,6 +36,7 @@ public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
     private static final String helpTitle = "ILR-Raw Transform Help Menu";
     
     DataFrame df;
+    ArrayList<String> names;
 
     public TransformationILRRawMenu(final CoDaPackMain mainApp){
         super(mainApp, "ILR-Raw Transform Menu", false);
@@ -56,6 +58,8 @@ public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
                 initiatePartitionMenu();
             }
         });*/
+        
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
 
     }
 
@@ -88,5 +92,9 @@ public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

@@ -25,6 +25,7 @@ import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
+import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -41,6 +42,7 @@ public class ClosureDataMenu extends AbstractMenuDialog{
     JTextField closureTo;
     JLabel text1 = new JLabel("Closure");
     DataFrame dataFrame;
+    ArrayList<String> names;
     
     public ClosureDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Subcomposition/closure Menu", false);
@@ -50,6 +52,7 @@ public class ClosureDataMenu extends AbstractMenuDialog{
         closureTo.setText(mainApp.config.getClosureTo());
         optionsPanel.add(text1);
         optionsPanel.add(closureTo);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
 
     @Override
@@ -98,6 +101,10 @@ public class ClosureDataMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.dataFrame;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }
 

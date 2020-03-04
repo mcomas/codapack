@@ -27,6 +27,7 @@ import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -49,6 +50,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
     DataFrame dataFrame;
+    ArrayList<String> names;
     
     
     public PerturbateDataMenu(final CoDaPackMain mainApp){
@@ -77,6 +79,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
         optionsPanel.add(performClosure);
         optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
 
     @Override
@@ -140,6 +143,10 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.dataFrame;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }
 

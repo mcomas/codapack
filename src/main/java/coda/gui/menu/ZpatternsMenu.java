@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,6 +54,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     JFileChooser chooser;
     String tempDirR;
     Vector<String> tempsDirR;
+    ArrayList<String> names;
     
     /* options var */
     
@@ -77,6 +79,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
         this.optionsPanel.add(new JLabel("Label: "));
         P1.setText("0");
         this.optionsPanel.add(P1);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -308,6 +311,10 @@ public class ZpatternsMenu extends AbstractMenuDialog{
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

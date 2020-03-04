@@ -36,6 +36,7 @@ import coda.gui.output.OutputVector;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.plot.DendrogramDisplay.DendrogramBuilder;
 import coda.plot.window.DendrogramWindow;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -49,6 +50,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
     JCheckBox balancesCheck;
     JCheckBox statisticsCheck;
     DataFrame df;
+    ArrayList<String> names;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Balance Dendrogram.yaml";
     private static final String helpTitle = "Balance Dendogram Help Menu";
     
@@ -76,6 +78,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
         statisticsCheck = new JCheckBox("Add statistics", true);
         optionsPanel.add(balancesCheck);
         optionsPanel.add(statisticsCheck);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     public void initiatePartitionMenu(){
         BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData() );
@@ -152,6 +155,10 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

@@ -37,6 +37,7 @@ import coda.plot.Biplot2dDisplay.Biplot2dBuilder;
 import coda.plot.Biplot3dDisplay.Biplot3dBuilder;
 import coda.plot.window.Biplot2dWindow;
 import coda.plot.window.CoDaPlotWindow;
+import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
@@ -51,6 +52,7 @@ public class Biplot3dMenu extends AbstractMenuDialog{
     private static final String helpTitle = "CLR Biplot Help Menu";
     JCheckBox coordinates;
     DataFrame df;
+    ArrayList<String> names;
     
     public Biplot3dMenu(final CoDaPackMain mainApp){
         super(mainApp, " CLR Biplot Menu", true);
@@ -58,6 +60,7 @@ public class Biplot3dMenu extends AbstractMenuDialog{
         
         coordinates = new JCheckBox("Add coordinates", false);
         optionsPanel.add(coordinates);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     @SuppressWarnings("empty-statement")
@@ -173,6 +176,10 @@ public class Biplot3dMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

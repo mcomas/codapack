@@ -24,6 +24,7 @@ import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -42,6 +43,7 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
     DataFrame df;
+    ArrayList<String> names;
     
     public ZeroReplacementMenu(final CoDaPackMain mainApp){
         super(mainApp, "Non-parametric multiplicative zero replacement Menu", false);
@@ -69,6 +71,7 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
         optionsPanel.add(performClosure);
         optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     public void acceptButtonActionPerformed() {
@@ -98,6 +101,10 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
 }

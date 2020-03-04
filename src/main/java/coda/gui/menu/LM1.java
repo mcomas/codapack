@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +56,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
     Vector<String> tempsDirR;
     //ILRMenu ilrX;
     ILRMenu ilrY;
+    ArrayList<String> names;
     
     /* options var */
     
@@ -85,6 +87,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
         
         this.optionsPanel.add(B1);
         this.optionsPanel.add(B2);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     public void configureILRY(){
@@ -380,6 +383,10 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

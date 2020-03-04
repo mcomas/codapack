@@ -662,121 +662,121 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_CREATE_FRAME)){
             new DataFrameCreator(this);
         }else if(title.equals(jMenuBar.ITEM_RAW_ALR)){
-            if(transformationALRMenu == null || transformationALRMenu.getDataFrame() != this.getActiveDataFrame()) transformationALRMenu = new TransformationALRMenu(this);
+            if(transformationALRMenu == null || transformationALRMenu.getDataFrame() != this.getActiveDataFrame() || !transformationALRMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) transformationALRMenu = new TransformationALRMenu(this);
             transformationALRMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_RAW_CLR)){
-            if(transformationCLRMenu == null || transformationCLRMenu.getDataFrame() != this.getActiveDataFrame()) transformationCLRMenu = new TransformationCLRMenu(this);
+            if(transformationCLRMenu == null || transformationCLRMenu.getDataFrame() != this.getActiveDataFrame() || !transformationCLRMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) transformationCLRMenu = new TransformationCLRMenu(this);
             transformationCLRMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_T_RAW_ILR)) {
-            if(transformationRawILRMenu == null || transformationRawILRMenu.getDataFrame() != this.getActiveDataFrame()) transformationRawILRMenu = new TransformationRawILRMenu(this);
+            if(transformationRawILRMenu == null || transformationRawILRMenu.getDataFrame() != this.getActiveDataFrame() || !transformationRawILRMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) transformationRawILRMenu = new TransformationRawILRMenu(this);
             transformationRawILRMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_T_ILR_RAW)) {
-            if(transformationILRRawMenu == null || transformationILRRawMenu.getDataFrame() != this.getActiveDataFrame()) transformationILRRawMenu = new TransformationILRRawMenu(this);
+            if(transformationILRRawMenu == null || transformationILRRawMenu.getDataFrame() != this.getActiveDataFrame() || !transformationILRRawMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) transformationILRRawMenu = new TransformationILRRawMenu(this);
             transformationILRRawMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DISCRETIZE)){
-            if(discretizeMenu == null || discretizeMenu.getDataFrame() != this.getActiveDataFrame()) discretizeMenu = new DiscretizeMenu(this,re); 
+            if(discretizeMenu == null || discretizeMenu.getDataFrame() != this.getActiveDataFrame() || !discretizeMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) discretizeMenu = new DiscretizeMenu(this,re); 
             discretizeMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLAS_STATS_SUMMARY)){
-            if(clasStatsSummaryMenu == null || clasStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame()) clasStatsSummaryMenu = new ClasStatsSummaryMenu(this);
+            if(clasStatsSummaryMenu == null || clasStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame() || !clasStatsSummaryMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) clasStatsSummaryMenu = new ClasStatsSummaryMenu(this);
             clasStatsSummaryMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_REG_XREAL_YCOMP)){
-            if(LM1 == null || LM1.getDataFrame() != this.getActiveDataFrame()) LM1 = new LM1(this,re);
+            if(LM1 == null || LM1.getDataFrame() != this.getActiveDataFrame() || !LM1.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) LM1 = new LM1(this,re);
             LM1.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_REG_XCOMP_YREAL)){
-            if(LM2 == null || LM2.getDataFrame() != this.getActiveDataFrame()) LM2 = new LM2(this,re);
+            if(LM2 == null || LM2.getDataFrame() != this.getActiveDataFrame() || !LM2.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) LM2 = new LM2(this,re);
             LM2.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLUST_KMEANS)){
-            if(clusterMenu == null || clusterMenu.getDataFrame() != this.getActiveDataFrame()) clusterMenu = new ClusterMenu(this,re);
+            if(clusterMenu == null || clusterMenu.getDataFrame() != this.getActiveDataFrame() || !clusterMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) clusterMenu = new ClusterMenu(this,re);
             clusterMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MANOVA)){
             if(manovaMenu == null || manovaMenu.getDataFrame() != this.getActiveDataFrame() || !manovaMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) manovaMenu = new ManovaMenu(this,re);
             manovaMenu.setVisible(true);
         }else if(title.contains(jMenuBar.ITEM_DISC_ANALYSIS)){
-            if(discriminantMenu == null || discriminantMenu.getDataFrame() != this.getActiveDataFrame()) discriminantMenu = new DiscriminantMenu(this,re);
+            if(discriminantMenu == null || discriminantMenu.getDataFrame() != this.getActiveDataFrame() || !discriminantMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) discriminantMenu = new DiscriminantMenu(this,re);
             discriminantMenu.setVisible(true);        
         }else if(title.equals(jMenuBar.ITEM_COMP_STATS_SUMMARY)){
-            if(compStatsSummaryMenu == null || compStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame()) compStatsSummaryMenu = new CompStatsSummaryMenu(this); 
+            if(compStatsSummaryMenu == null || compStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame() || !compStatsSummaryMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) compStatsSummaryMenu = new CompStatsSummaryMenu(this); 
             compStatsSummaryMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_NORM_TEST)){
-            if(normalityTestMenu == null || normalityTestMenu.getDataFrame() != this.getActiveDataFrame()) normalityTestMenu = new NormalityTestMenu(this);
+            if(normalityTestMenu == null || normalityTestMenu.getDataFrame() != this.getActiveDataFrame() || !normalityTestMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) normalityTestMenu = new NormalityTestMenu(this);
             normalityTestMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLAS_UNI_NORM_TEST)){
-            if(clasUniNormTestMenu == null || clasUniNormTestMenu.getDataFrame() != this.getActiveDataFrame()) clasUniNormTestMenu = new ClasUniNormTestMenu(this,re);
+            if(clasUniNormTestMenu == null || clasUniNormTestMenu.getDataFrame() != this.getActiveDataFrame() || !clasUniNormTestMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) clasUniNormTestMenu = new ClasUniNormTestMenu(this,re);
             clasUniNormTestMenu.setVisible(true);
         }
         else if(title.equals(jMenuBar.ITEM_ATIP_INDEX)){
-            if(atypMenu == null || atypMenu.getDataFrame() != this.getActiveDataFrame()) atypMenu = new AtypMenu(this,re);
+            if(atypMenu == null || atypMenu.getDataFrame() != this.getActiveDataFrame() || !atypMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) atypMenu = new AtypMenu(this,re);
             atypMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CENTER)){
-            if(centerDataMenu == null || centerDataMenu.getDataFrame() != this.getActiveDataFrame()) centerDataMenu = new CenterDataMenu(this); 
+            if(centerDataMenu == null || centerDataMenu.getDataFrame() != this.getActiveDataFrame() || !centerDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) centerDataMenu = new CenterDataMenu(this); 
             centerDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLOSURE)){
-            if(closureDataMenu == null || closureDataMenu.getDataFrame() != this.getActiveDataFrame()) closureDataMenu = new ClosureDataMenu(this);
+            if(closureDataMenu == null || closureDataMenu.getDataFrame() != this.getActiveDataFrame() || !closureDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) closureDataMenu = new ClosureDataMenu(this);
             closureDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CALCULATE_NEW_VAR)){
-            if(calculateNewVarMenu == null || calculateNewVarMenu.getDataFrame() != this.getActiveDataFrame()) calculateNewVarMenu = new CalculateNewVarMenu(this,re);
+            if(calculateNewVarMenu == null || calculateNewVarMenu.getDataFrame() != this.getActiveDataFrame() || !calculateNewVarMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) calculateNewVarMenu = new CalculateNewVarMenu(this,re);
             calculateNewVarMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_AMALGAM)){
             new AmalgamationDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PERTURBATE)){
-            if(perturbateDataMenu == null || perturbateDataMenu.getDataFrame() != this.getActiveDataFrame()) perturbateDataMenu = new PerturbateDataMenu(this);
+            if(perturbateDataMenu == null || perturbateDataMenu.getDataFrame() != this.getActiveDataFrame() || !perturbateDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) perturbateDataMenu = new PerturbateDataMenu(this);
             perturbateDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_POWER)){
-            if(powerDataMenu == null || powerDataMenu.getDataFrame() != this.getActiveDataFrame()) powerDataMenu = new PowerDataMenu(this);
+            if(powerDataMenu == null || powerDataMenu.getDataFrame() != this.getActiveDataFrame() || !powerDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) powerDataMenu = new PowerDataMenu(this);
             powerDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZEROS)){
-            if(zeroReplacementMenu == null || zeroReplacementMenu.getDataFrame() != this.getActiveDataFrame()) zeroReplacementMenu = new ZeroReplacementMenu(this);
+            if(zeroReplacementMenu == null || zeroReplacementMenu.getDataFrame() != this.getActiveDataFrame() || !zeroReplacementMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) zeroReplacementMenu = new ZeroReplacementMenu(this);
             zeroReplacementMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZEROS_R)){
-            if(zeroReplacementRMenu == null || zeroReplacementRMenu.getDataFrame() != this.getActiveDataFrame()) zeroReplacementRMenu = new ZeroReplacementRMenu(this,re);
+            if(zeroReplacementRMenu == null || zeroReplacementRMenu.getDataFrame() != this.getActiveDataFrame() || !zeroReplacementRMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) zeroReplacementRMenu = new ZeroReplacementRMenu(this,re);
             zeroReplacementRMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_LOG_RATIO)){
-            if(logRatioEMMenu == null || logRatioEMMenu.getDataFrame() != this.getActiveDataFrame()) logRatioEMMenu = new LogRatioEMMenu(this,re);
+            if(logRatioEMMenu == null || logRatioEMMenu.getDataFrame() != this.getActiveDataFrame() || !logRatioEMMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) logRatioEMMenu = new LogRatioEMMenu(this,re);
             logRatioEMMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_BAYESIAN_MULT_REPLACE)){
-            if(bayesianMultRepMenu == null || bayesianMultRepMenu.getDataFrame() != this.getActiveDataFrame()) bayesianMultRepMenu = new BayesianMultRepMenu(this,re);
+            if(bayesianMultRepMenu == null || bayesianMultRepMenu.getDataFrame() != this.getActiveDataFrame() || !bayesianMultRepMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) bayesianMultRepMenu = new BayesianMultRepMenu(this,re);
             bayesianMultRepMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_EM_MISSING)){
-            if(EM_MissingMenu == null || EM_MissingMenu.getDataFrame() != this.getActiveDataFrame()) EM_MissingMenu = new EM_MissingMenu(this,re);
+            if(EM_MissingMenu == null || EM_MissingMenu.getDataFrame() != this.getActiveDataFrame() || !EM_MissingMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) EM_MissingMenu = new EM_MissingMenu(this,re);
             EM_MissingMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_EM_ZERO_MISSING)){
-            if(EM_ZeroMissingMenu == null || EM_ZeroMissingMenu.getDataFrame() != this.getActiveDataFrame()) EM_ZeroMissingMenu = new EM_ZeroMissingMenu(this,re);
+            if(EM_ZeroMissingMenu == null || EM_ZeroMissingMenu.getDataFrame() != this.getActiveDataFrame() || !EM_ZeroMissingMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) EM_ZeroMissingMenu = new EM_ZeroMissingMenu(this,re);
             EM_ZeroMissingMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_SORT_DATA)){
-            if(sortDataMenu == null || sortDataMenu.getDataFrame() != this.getActiveDataFrame()) sortDataMenu = new SortDataMenu(this,re);
+            if(sortDataMenu == null || sortDataMenu.getDataFrame() != this.getActiveDataFrame() || !sortDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) sortDataMenu = new SortDataMenu(this,re);
             sortDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_FILTER)){
-            if(filterMenu == null || filterMenu.getDataFrame() != this.getActiveDataFrame()) filterMenu = new FilterMenu(this);
+            if(filterMenu == null || filterMenu.getDataFrame() != this.getActiveDataFrame() || !filterMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) filterMenu = new FilterMenu(this);
             filterMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ADV_FILTER)){
-            if(advancedFilterMenu == null || advancedFilterMenu.getDataFrame() != this.getActiveDataFrame()) advancedFilterMenu = new AdvancedFilterMenu(this,re);
+            if(advancedFilterMenu == null || advancedFilterMenu.getDataFrame() != this.getActiveDataFrame() || !advancedFilterMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) advancedFilterMenu = new AdvancedFilterMenu(this,re);
             advancedFilterMenu.setVisible(true);
         }else if (title.equals(jMenuBar.ITEM_SETDETECTION)){
-            if(setDetectionLimitMenu == null || setDetectionLimitMenu.getDataFrame() != this.getActiveDataFrame()) setDetectionLimitMenu = new SetDetectionLimitMenu(this);  
+            if(setDetectionLimitMenu == null || setDetectionLimitMenu.getDataFrame() != this.getActiveDataFrame() || !setDetectionLimitMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) setDetectionLimitMenu = new SetDetectionLimitMenu(this);  
             setDetectionLimitMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CHANGE_CAT_NAME_GROUP)){
-            if(changeGroupNameMenu == null || changeGroupNameMenu.getDataFrame() != this.getActiveDataFrame()) changeGroupNameMenu = new ChangeGroupNameMenu(this);
+            if(changeGroupNameMenu == null || changeGroupNameMenu.getDataFrame() != this.getActiveDataFrame() || !changeGroupNameMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) changeGroupNameMenu = new ChangeGroupNameMenu(this);
             changeGroupNameMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
-            if(ternaryPlotMenu == null || ternaryPlotMenu.getDataFrame() != this.getActiveDataFrame()) ternaryPlotMenu = new TernaryPlotMenu(this);
+            if(ternaryPlotMenu == null || ternaryPlotMenu.getDataFrame() != this.getActiveDataFrame() || !ternaryPlotMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) ternaryPlotMenu = new TernaryPlotMenu(this);
             ternaryPlotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PRED_REG_PLOT)){
-            if(predictiveRegionMenu == null || predictiveRegionMenu.getDataFrame() != this.getActiveDataFrame()) predictiveRegionMenu = new PredictiveRegionMenu(this);
+            if(predictiveRegionMenu == null || predictiveRegionMenu.getDataFrame() != this.getActiveDataFrame() || !predictiveRegionMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) predictiveRegionMenu = new PredictiveRegionMenu(this);
             predictiveRegionMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CONF_REG_PLOT)){
-            if(confidenceRegionMenu == null || confidenceRegionMenu.getDataFrame() != this.getActiveDataFrame()) confidenceRegionMenu = new ConfidenceRegionMenu(this);
+            if(confidenceRegionMenu == null || confidenceRegionMenu.getDataFrame() != this.getActiveDataFrame() || !confidenceRegionMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) confidenceRegionMenu = new ConfidenceRegionMenu(this);
             confidenceRegionMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_BOXPLOT)){
-            if(boxplotMenu == null || boxplotMenu.getDataFrame() != this.getActiveDataFrame()) boxplotMenu = new BoxplotMenu(this,re);
+            if(boxplotMenu == null || boxplotMenu.getDataFrame() != this.getActiveDataFrame() || !boxplotMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) boxplotMenu = new BoxplotMenu(this,re);
             boxplotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_SCATTERPLOT)){
-            if(scatterplotMenu == null || scatterplotMenu.getDataFrame() != this.getActiveDataFrame()) scatterplotMenu = new ScatterplotMenu(this,re);
+            if(scatterplotMenu == null || scatterplotMenu.getDataFrame() != this.getActiveDataFrame() || !scatterplotMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) scatterplotMenu = new ScatterplotMenu(this,re);
             scatterplotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZPATTERNS)){
-            if(zpatternsMenu == null || zpatternsMenu.getDataFrame() != this.getActiveDataFrame()) zpatternsMenu = new ZpatternsMenu(this,re);
+            if(zpatternsMenu == null || zpatternsMenu.getDataFrame() != this.getActiveDataFrame() || !zpatternsMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) zpatternsMenu = new ZpatternsMenu(this,re);
             zpatternsMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_GEO_MEAN_PLOT)){
-            if(geoMeanPlotMenu == null || geoMeanPlotMenu.getDataFrame() != this.getActiveDataFrame()) geoMeanPlotMenu = new GeoMeanPlotMenu(this,re);
+            if(geoMeanPlotMenu == null || geoMeanPlotMenu.getDataFrame() != this.getActiveDataFrame() || !geoMeanPlotMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) geoMeanPlotMenu = new GeoMeanPlotMenu(this,re);
             geoMeanPlotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_EMPTY_TERNARY_PLOT)){
             String names[] = {"X", "Y", "Z"};
@@ -793,13 +793,13 @@ public final class CoDaPackMain extends JFrame{
             frame.setCenter(center);
             frame.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_BIPLOT)){
-            if(biplot3dMenu == null || biplot3dMenu.getDataFrame() != this.getActiveDataFrame()) biplot3dMenu = new Biplot3dMenu(this);
+            if(biplot3dMenu == null || biplot3dMenu.getDataFrame() != this.getActiveDataFrame() || !biplot3dMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) biplot3dMenu = new Biplot3dMenu(this);
             biplot3dMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ILR_BIPLOT)){
-            if(iLRCLRPlotMenu == null || iLRCLRPlotMenu.getDataFrame() != this.getActiveDataFrame()) iLRCLRPlotMenu = new ILRCLRPlotMenu(this);
+            if(iLRCLRPlotMenu == null || iLRCLRPlotMenu.getDataFrame() != this.getActiveDataFrame() || !iLRCLRPlotMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) iLRCLRPlotMenu = new ILRCLRPlotMenu(this);
             iLRCLRPlotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DENDROGRAM_PLOT)){
-            if(dendrogramMenu == null || dendrogramMenu.getDataFrame() != this.getActiveDataFrame()) dendrogramMenu = new DendrogramMenu(this); 
+            if(dendrogramMenu == null || dendrogramMenu.getDataFrame() != this.getActiveDataFrame() || !dendrogramMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) dendrogramMenu = new DendrogramMenu(this); 
             dendrogramMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ALR_PLOT)){
             new ALRPlotMenu(this).setVisible(true);
@@ -816,7 +816,7 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_NUM_VAR)){
             new Categoric2NumericMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PC_PLOT)){
-            if(principalComponentMenu == null || principalComponentMenu.getDataFrame() != this.getActiveDataFrame()) principalComponentMenu = new PrincipalComponentMenu(this);
+            if(principalComponentMenu == null || principalComponentMenu.getDataFrame() != this.getActiveDataFrame() || !principalComponentMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) principalComponentMenu = new PrincipalComponentMenu(this);
             principalComponentMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_FORCE_UPDATE)){
             CoDaPackConf.refusedVersion = CoDaPackConf.CoDaVersion;

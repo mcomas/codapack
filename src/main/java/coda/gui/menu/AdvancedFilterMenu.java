@@ -9,6 +9,7 @@ import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +31,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
     JFrame frame;
     JPanel pane;
     DataFrame df;
+    ArrayList<String> names;
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Filters.Advanced Filter.yaml";
@@ -40,6 +42,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
         super(mainApp,"Advanced Filter Menu",false, false,true);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -195,5 +198,9 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

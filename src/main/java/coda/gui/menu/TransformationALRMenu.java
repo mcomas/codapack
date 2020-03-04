@@ -23,6 +23,7 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
+import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -41,6 +42,7 @@ public class TransformationALRMenu extends AbstractMenuDialog{
     JRadioButton ar;
     JTextField closure = new JTextField("1.0");
     DataFrame df;
+    ArrayList<String> names;
 
     public TransformationALRMenu(final CoDaPackMain mainApp){
         super(mainApp, "ALR Transform Menu", false);
@@ -57,6 +59,7 @@ public class TransformationALRMenu extends AbstractMenuDialog{
         opt.add(ra);
         opt.add(ar);
         optionsPanel.add(opt);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     public void acceptButtonActionPerformed() {
@@ -88,6 +91,10 @@ public class TransformationALRMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }
 

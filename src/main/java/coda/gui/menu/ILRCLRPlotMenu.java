@@ -36,6 +36,7 @@ import coda.plot.Biplot3dDisplay;
 import coda.plot.window.CoDaPlotWindow;
 import coda.plot.window.RealPlot2dWindow;
 import coda.plot.window.RealPlot3dWindow;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -51,6 +52,7 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
     
     JCheckBox coordinates;
     DataFrame df;
+    ArrayList<String> names;
     
     public ILRCLRPlotMenu(final CoDaPackMain mainApp){
         super(mainApp, "ILR/CLR Plot Menu", true);
@@ -77,6 +79,7 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
         optionsPanel.add(coordinates);
         
         base.setEnabled(true);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
         
     }
     public void initiatePartitionMenu(){
@@ -213,6 +216,10 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

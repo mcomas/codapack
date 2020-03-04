@@ -23,6 +23,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -52,6 +53,7 @@ public class EM_MissingMenu extends AbstractMenuDialog{
     JFileChooser chooser;
     String tempDirR;
     String[] tempsDirR;
+    ArrayList<String> names;
     
     /* options var */
     
@@ -71,6 +73,7 @@ public class EM_MissingMenu extends AbstractMenuDialog{
         /* options configuration */
         
         this.optionsPanel.add(B1);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -309,6 +312,10 @@ public class EM_MissingMenu extends AbstractMenuDialog{
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +52,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
     JFileChooser chooser;
     String tempDirR;
     Vector<String> tempsDirR;
+    ArrayList<String> names;
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Geometric Mean Barplot.yaml";
@@ -63,6 +65,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         
         framesGeoMeanPlotMenu = new Vector<JFrame>();
         tempsDirR = new Vector<String>();
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -309,6 +312,10 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
 
     public DataFrame getDataFrame() {
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
     private class quitListener implements ActionListener{

@@ -24,6 +24,7 @@ import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JCheckBox;
@@ -56,6 +57,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
     //JLabel lmax = new JLabel("Use minimum positive value observed");
     Rengine re;
     DataFrame df;
+    ArrayList<String> names;
 
     /**
      * *** METODES DE CLASSE ****
@@ -89,6 +91,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         optionsPanel.add(performClosure);
         optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
         //performMax = new JCheckBox("", false);
         //performMax.setSelected(true);
         //optionsPanel.add(lmax);
@@ -222,5 +225,9 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

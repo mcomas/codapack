@@ -39,6 +39,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -67,6 +68,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
     JFrame frameScatterplot;
     String tempDirR;
     DataFrame df;
+    ArrayList<String> names;
     
     /* options var */
     
@@ -82,6 +84,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
         re = r;
         
         this.optionsPanel.add(B1);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -335,5 +338,9 @@ public class ScatterplotMenu extends AbstractMenuDialog{
     
     public DataFrame getDataFrame(){
         return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }
