@@ -156,13 +156,7 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
     
     public void showCenter(boolean center){
         this.showCenter = center;
-        double totalX = 0, totalY = 0;
-        for(int i=0; i < Z.length; i++){
-            totalX += Z[i][0];
-            totalY += Z[i][1];
-        }
-        centerCalculated[0] = totalX/Z.length;
-        centerCalculated[1] = totalY/Z.length;
+        this.centerCalculated = CoDaStats.ternaryTransform(this.center[0], this.center[1], this.center[2], this.center[3]);
     }
     
     @Override

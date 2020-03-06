@@ -202,13 +202,7 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
     
     public void showCenter(boolean showCenter){
         this.showCenter = showCenter;
-        double totalX = 0, totalY = 0;
-        for(int i = 0; i < Z.length;i++){
-            totalX += Z[i][0];
-            totalY += Z[i][1];
-        }
-        centerCalculated[0] = totalX/Z.length;
-        centerCalculated[1] = totalY/Z.length;
+        this.centerCalculated = CoDaStats.ternaryTransform(center[0], center[1], center[2]);
     }
     
     @Override
@@ -297,7 +291,7 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
     public void drawCenter(Graphics2D g2){
         if(this.showCenter){
             Point2D o = null;
-            o = defaultTransform.transform(new Point2D.Double(centerCalculated[0],centerCalculated[1]),o);
+            o = defaultTransform.transform(new Point2D.Double(this.centerCalculated[0],this.centerCalculated[1]),o);
             g2.setColor(Color.RED);
             g2.fillRect((int)o.getX(), (int)o.getY(), 10, 10);
             g2.setColor(Color.RED);
