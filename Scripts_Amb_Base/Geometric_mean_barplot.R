@@ -53,7 +53,7 @@ dev.off()
 graphnames[1] <- name
 
 cdp_res = list(
-  'text' = "GEOMETRIC MEAN BARPLOT",
+  'text' = list(),
   'dataframe' = list(),
   'graph' = graphnames,
   'new_data' = list()

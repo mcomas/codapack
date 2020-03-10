@@ -29,6 +29,9 @@ import coda.gui.CoDaPackConf;
 import javax.swing.JFrame;
 import org.rosuda.JRI.Rengine;
 import coda.gui.CoDaPackMain;
+import static coda.gui.CoDaPackMain.outputPanel;
+import coda.gui.output.OutputPlotHeader;
+import coda.gui.output.OutputText;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -153,7 +156,8 @@ public class ScatterplotMenu extends AbstractMenuDialog{
                     re.eval("dev.off()");	
             	
                     try {	
-                        plotScatterplot();	
+                        plotScatterplot();
+                        CoDaPackMain.outputPanel.addOutput(new OutputPlotHeader("Scatterplot 2D", selectedNames));
                     } catch (IOException ex) {	
                         Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);	
                     }
@@ -174,6 +178,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
             
                     try {
                         plotScatterplot();
+                        CoDaPackMain.outputPanel.addOutput(new OutputPlotHeader("Scatterplot 3D", selectedNames));
                     } catch (IOException ex) {
                         Logger.getLogger(ScatterplotMenu.class.getName()).log(Level.SEVERE, null, ex);
                     }

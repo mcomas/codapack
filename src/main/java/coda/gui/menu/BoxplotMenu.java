@@ -12,6 +12,7 @@ import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
+import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputText;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -165,7 +166,7 @@ public class BoxplotMenu extends AbstractMenuDialog{
 
                     if(errorMessage[0].equals("NULL")){
                         /* executem totes les accions possibles */
-                        showText();
+                        showText(selectedNames1);
                         createVariables();
                         createDataFrame();
                         try {
@@ -192,14 +193,14 @@ public class BoxplotMenu extends AbstractMenuDialog{
         /* construim parametres logics */
     }
     
-    void showText(){
+    void showText(String[] selectedNames){
         
         REXP result;
         String[] sortida;
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Boxplot:<br>"));
+        CoDaPackMain.outputPanel.addOutput(new OutputPlotHeader("Boxplot", selectedNames));
         
         /* R output */
         

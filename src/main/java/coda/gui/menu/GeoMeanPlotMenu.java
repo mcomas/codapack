@@ -12,6 +12,7 @@ import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
+import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputText;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -156,7 +157,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
 
                         if(errorMessage[0].equals("NULL")){
                             /* executem totes les accions possibles */
-                            showText();
+                            showText(selectedNames);
                             createVariables();
                             createDataFrame();
                             try {
@@ -183,14 +184,14 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
         }
     }
     
-    void showText(){
+    void showText(String [] selectedNames){
         
         REXP result;
         String[] sortida;
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Geometric Mean Barplot:"));
+        CoDaPackMain.outputPanel.addOutput(new OutputPlotHeader("Geometric mean barplot", selectedNames));
         
         /* R output */
         
