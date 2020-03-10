@@ -152,6 +152,7 @@ public class ConfigurationMenu extends CoDaPackDialog{
                 if(CoDaPackConf.showDev) CoDaPackMain.jMenuBar.activeDevMenu();
                 else CoDaPackMain.jMenuBar.disableDevMenu();
                 CoDaPackMain.tablePanel.updateUI();
+                setVisible(false);
             }
         });
         south.add(apply);

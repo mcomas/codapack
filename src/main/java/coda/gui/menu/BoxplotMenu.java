@@ -86,13 +86,13 @@ public class BoxplotMenu extends AbstractMenuDialog{
         String selectedNames1[] = super.ds.getSelectedData();
         String selectedNames2[] = {super.ds.getSelectedGroup()};
         
-        if(selectedNames1.length > 0 && selectedNames2[0] != null){
+        if(selectedNames1.length > 0){
             
             double[][] numericData = df.getNumericalData(selectedNames1);
             
             // Create X matrix
             
-            // create dataframe on r
+            // create dataframe X on r
             
                     for(int i=0; i < selectedNames1.length;i++){
                         re.eval(selectedNames1[i] + " <- NULL");
@@ -116,10 +116,12 @@ public class BoxplotMenu extends AbstractMenuDialog{
                         
                         dataFrameString +=")";
                         
-                        re.eval(dataFrameString); // we create the dataframe in R
+                        re.eval(dataFrameString); // we create the dataframe X in R
 
                         
-            // create dataframe on r
+            // create dataframe Y on r
+            
+                if (selectedNames2[0] != null){ // si tenim algun grup
             
                     for(int i=0; i < selectedNames2.length;i++){
                         re.eval(selectedNames2[i] + " <- NULL");
@@ -142,8 +144,12 @@ public class BoxplotMenu extends AbstractMenuDialog{
                         }
                         
                         dataFrameString +=")";
+                }
+                else{ // si no tenim cap grup llavors posem la Y a null
+                    dataFrameString = "Y <- NULL";
+                }
                         
-                        re.eval(dataFrameString); // we create the dataframe in R
+                        re.eval(dataFrameString); // we create the dataframe Y in R
             
                 
                 constructParametersToR();        
@@ -177,7 +183,7 @@ public class BoxplotMenu extends AbstractMenuDialog{
         }
         else{
             if(selectedNames1.length == 0) JOptionPane.showMessageDialog(null, "No data selected in data 1");
-            else JOptionPane.showMessageDialog(null, "No group selected");
+            //else JOptionPane.showMessageDialog(null, "No group selected");
         }
     }
     
@@ -193,7 +199,7 @@ public class BoxplotMenu extends AbstractMenuDialog{
         
         /* header output */
         
-        outputPanel.addOutput(new OutputText("Boxplot:"));
+        outputPanel.addOutput(new OutputText("Boxplot:<br>"));
         
         /* R output */
         
