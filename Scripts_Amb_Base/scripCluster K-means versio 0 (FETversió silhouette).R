@@ -32,6 +32,8 @@
 #P1 <- 10
 #B2 <- as.logical(FALSE)
 
+################# LIBRARIES #################
+
 library(coda.base)
 
 #average silhouette width or the Pearson version of Hubert's gamma
@@ -46,6 +48,22 @@ library(coda.base)
 # We choose the best cluster according calinski index with number of clusters between 2 and 10
 
 library(fpc)
+
+################# FUNCTIONS #################
+
+generateFileName <- function(candidateName){
+  name = candidateName
+  nameFile = paste(name, ".svg", sep = "")
+
+  while(file.exists(nameFile)){
+    name = paste(name, "c", sep = "")
+    nameFile = paste(name, ".svg", sep = "")
+  }
+
+  return(nameFile)
+}
+
+################# MAIN #################
 
 #rm(km)
 Xt <- coda.base::coordinates(X, basis = "ilr", label = "ilr.", sparse_basis = FALSE)
@@ -97,12 +115,12 @@ if (B1 == TRUE)
     km <- kmeans(Xt, ksi+1, nstart = 25)
   }
 
-  name <- paste(tempdir(),'Average Silhouette.svg',sep="\\")
+  name <- generateFileName(paste(tempdir(),'Average Silhouette',sep="\\"))
   svg(name)
   plot(ks, ASW, type="l", xlab='Number of clusters', ylab='Average Silhouette', frame=FALSE)
   dev.off()
   graphnames[1] <- name
-  name <- paste(tempdir(),'Calinski index.svg',sep="\\")
+  name <- generateFileName(paste(tempdir(),'Calinski index',sep="\\"))
   svg(name)
   plot(kc, CALI, type="l", xlab='Number of clusters', ylab='Calinski index', frame=FALSE)
   dev.off()

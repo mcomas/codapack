@@ -29,11 +29,28 @@
 #BaseX = matrix(c(1, 1, -1, 1, -1, 0), ncol = 2)
 #Z <- X
 
+################# LIBRARIES #################
 
 #install.packages("zCompositions")
 library(zCompositions)
 library(coda.base)
 library(plyr)
+
+################# FUNCTIONS #################
+
+generateFileName <- function(candidateName){
+	name = candidateName
+	nameFile = paste(name, ".svg", sep = "")
+
+	while(file.exists(nameFile)){
+		name = paste(name, "c", sep = "")
+		nameFile = paste(name, ".svg", sep = "")
+	}
+
+	return(nameFile)
+}
+
+################# MAIN #################
 
 
 #Xt <- coda.base::coordinates(X, basis = "ilr", label = "ilr.", sparse_basis = FALSE)
@@ -60,7 +77,7 @@ sortida <- list(sortida,paste(capture.output(lda1)))
 
 #rm(graphnames)
 graphnames <- list()
-name <- paste(tempdir(),'panels_of_histograms_and_overlayed_density_plots.svg',sep="\\")
+name <- generateFileName(paste(tempdir(),'panels_of_histograms_and_overlayed_density_plots',sep="\\"))
 svg(name)
 plot(lda1, dimen=1, type="both")
 dev.off()
@@ -116,7 +133,7 @@ sortida <- list(sortida,paste(capture.output(summary(plda1$x[plda1$class==nam[1]
 sortida <- list(sortida,paste(capture.output(nam[2])))
 sortida <- list(sortida,paste(capture.output(summary(plda1$x[plda1$class==nam[2]]))))
 
-name <- paste(tempdir(),'discriminant_index.svg',sep="\\")
+name <- generateFileName(paste(tempdir(),'discriminant_index',sep="\\"))
 svg(name)
 plot(density(plda1$x[plda1$class==nam[1]]),
      xlim=c(-7,7),ylim=c(0,0.5),main="lda",xlab="discriminant index")

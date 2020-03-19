@@ -13,6 +13,23 @@
 #Y <- as.data.frame(dpolen[,4])
 #X <- as.data.frame(dFAM[,1:3])
 #Y <- as.data.frame(dFAM[,4])
+
+################# FUNCTIONS #################
+
+generateFileName <- function(candidateName){
+	name = candidateName
+	nameFile = paste(name, ".svg", sep = "")
+
+	while(file.exists(nameFile)){
+		name = paste(name, "c", sep = "")
+		nameFile = paste(name, ".svg", sep = "")
+	}
+
+	return(nameFile)
+}
+
+################# MAIN #################
+
 if (is.factor(Y) == FALSE) {
          Y <- as.factor(as.matrix(Y))
      }
@@ -46,7 +63,7 @@ for(i in 2:nCat) {
 
 graphnames <- list()
 #name <- paste("Bar_plot_comparing_all_the_centers_with_the_whole_center.png",sep="")
-name <- paste(tempdir(),"Geometric mean barplot.svg", sep="\\")
+name <- generateFileName(paste(tempdir(),"Geometric mean barplot", sep="\\"))
 svg(name)
 barplot(log(Num/Den), beside=TRUE,col=c(1:nCat))
 dev.off()

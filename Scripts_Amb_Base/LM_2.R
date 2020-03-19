@@ -5,6 +5,8 @@
 # BaseX: Matrix containing SBP
 # Menu S3
 
+################# LIBRARIES #################
+
 #library(ggplot2)
 library(coda.base)
 #library(plyr)
@@ -17,6 +19,22 @@ library(coda.base)
 #B1 <- as.logical(TRUE)
 #B2 <- as.logical(TRUE)
 #BaseX = matrix(c(1, 1, -1, 1, -1, 0), ncol = 2)
+
+################# FUNCTIONS #################
+
+generateFileName <- function(candidateName){
+  name = candidateName
+  nameFile = paste(name, ".svg", sep = "")
+
+  while(file.exists(nameFile)){
+    name = paste(name, "c", sep = "")
+    nameFile = paste(name, ".svg", sep = "")
+  }
+
+  return(nameFile)
+}
+
+################# MAIN #################
 
 Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
 nparts=length(Xt)
@@ -49,7 +67,7 @@ LM <- lm(as.formula(formul),data=df)
 # Create graphs
 # Create graphs
 graphnames <- list()
-name <- paste(tempdir(),'Plots_of_residuals.svg',sep="\\")
+name <- generateFileName(paste(tempdir(),'Plots_of_residuals',sep="\\"))
 svg(name)
 oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
 plot(LM,sub.caption=formul)  # Plot the model information

@@ -266,7 +266,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
             menuItem = new JMenuItem("Export As SVG");
-            menuItem.addActionListener(new FileChooserAction());
+            menuItem.addActionListener(new FileChooserAction(position));
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
             //submenuExport.add(menuItem);
@@ -337,6 +337,12 @@ public class ZpatternsMenu extends AbstractMenuDialog{
     
     private class FileChooserAction implements ActionListener{
         
+        int position;
+        
+        public FileChooserAction(int position){
+            this.position = position;
+        }
+        
         public void actionPerformed(ActionEvent e){
             JFrame frame = new JFrame();
             JFileChooser jf = new JFileChooser();
@@ -356,7 +362,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                     canExit = true;
                 }
                 if(JFileChooser.APPROVE_OPTION == result){ // guardem arxiu en el path
-                    File f = new File(tempDirR);
+                    File f = new File(tempsDirR.elementAt(position));
                     f.deleteOnExit();
                     String path = jf.getSelectedFile().getAbsolutePath();
                     File f2 = new File(path);

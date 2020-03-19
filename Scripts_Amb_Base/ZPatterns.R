@@ -13,15 +13,32 @@
 
 #library(zCompositions)
 
-#rm(graphnames)
-if(.Platform$OS.type == "unix") {
-  library(cairoDevice)
-  svg = Cairo_svg
+################# FUNCTIONS #################
+
+generateFileName <- function(candidateName){
+	name = candidateName
+	nameFile = paste(name, ".svg", sep = "")
+
+	while(file.exists(nameFile)){
+		name = paste(name, "c", sep = "")
+		nameFile = paste(name, ".svg", sep = "")
+	}
+
+	return(nameFile)
 }
 
-save.image('temp.RData')
+################# MAIN #################
+
+#rm(graphnames)
+#if(.Platform$OS.type == "unix") {
+#  library(cairoDevice)
+#  svg = Cairo_svg
+#}
+
+#save.image('temp.RData')
 graphnames <- list()
-name <- file.path(tempdir(), 'Zero_Pattern.svg') # paste(tempdir(),"Zero_Pattern.svg",sep="\\")
+name <- generateFileName(paste(tempdir(), 'Zero_Pattern', sep = "\\"))
+#name <- file.path(tempdir(), 'Zero_Pattern.svg') # paste(tempdir(),"Zero_Pattern.svg",sep="\\")
 svg(name)
 sortida <- capture.output(zCompositions::zPatterns(X,label=P1,show.means=B1,bar.labels=B2))
 dev.off()

@@ -11,6 +11,22 @@
 #X <- as.data.frame(Alimentation[,1:9])
 #Y <- as.data.frame(Alimentation[,12])
 
+################# FUNCTIONS #################
+
+generateFileName <- function(candidateName){
+  name = candidateName
+  nameFile = paste(name, ".svg", sep = "")
+
+  while(file.exists(nameFile)){
+    name = paste(name, "c", sep = "")
+    nameFile = paste(name, ".svg", sep = "")
+  }
+
+  return(nameFile)
+}
+
+################# MAIN #################
+
 nparts=length(X)
 mn <- min(X)
 mx <- max(X)
@@ -18,7 +34,7 @@ mx <- max(X)
 if (is.null(Y)) { # sense grups
   # Create graphs
   graphnames <- list()
-  name <- paste(tempdir(),'Boxplot.svg',sep="\\")
+  name <- generateFileName(paste(tempdir(),'Boxplot',sep="\\"))
   svg(name)
   nr <- (nparts %/% 5) + 1
   if(nparts %% nr == 0){nc = nparts %/% nr}else{nc = (nparts %/% nr)+1}
@@ -40,7 +56,7 @@ if (is.null(Y)) { # sense grups
 
 # Create graphs
   graphnames <- list()
-  name <- paste(tempdir(),'Boxplot.svg',sep="\\")
+  name <- generateFileName(paste(tempdir(),'Boxplot',sep="\\"))
   svg(name)
   nr <- (nparts %/% 5) + 1
   if(nparts %% nr == 0){nc = nparts %/% nr}else{nc = (nparts %/% nr)+1}

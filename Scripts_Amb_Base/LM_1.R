@@ -5,6 +5,8 @@
 # BaseY: Matrix containing SBP
 # Menu S3
 
+################# LIBRARIES #################
+
 #library(ggplot2)
 library(coda.base)
 #library(plyr)
@@ -19,6 +21,23 @@ library(coda.base)
 #BaseY = matrix(c(1, 1, -1, 1, -1, 0), ncol = 2)
 
 #Yt <- coda.base::coordinates(Y, basis = "ilr", label = "ilr.", sparse_basis = FALSE)
+
+################# FUNCTIONS #################
+
+generateFileName <- function(candidateName){
+  name = candidateName
+  nameFile = paste(name, ".svg", sep = "")
+
+  while(file.exists(nameFile)){
+    name = paste(name, "c", sep = "")
+    nameFile = paste(name, ".svg", sep = "")
+  }
+
+  return(nameFile)
+}
+
+################# MAIN #################
+
 Yt <- coda.base::coordinates(Y, basis = coda.base::sbp_basis(BaseY))
 nparts=length(Yt)
 for (n in 1:nparts)
@@ -60,7 +79,7 @@ r2 <- (sum(FitCen^2)/sum(YCen^2))*100
 graphnames <- list()
 for (n in 1:nparts)
 {
-  name <- paste(tempdir(),paste("Plots_of_residuals_",names(Yt[n]),".svg",sep=""),sep="\\")
+  name <- generateFileName(paste(tempdir(),paste("Plots_of_residuals_",names(Yt[n]),sep=""),sep="\\"))
   svg(name)
   LM.temp <- lm(as.matrix(Yt[n])~as.matrix(X))
   oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
