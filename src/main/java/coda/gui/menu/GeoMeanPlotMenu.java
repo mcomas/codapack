@@ -221,7 +221,13 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
                 }
             }
             
-            newDataFrame.setName(re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString());
+            String dataFrameName = re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString();
+            
+            while(!mainApplication.isDataFrameNameAvailable(dataFrameName)){
+                dataFrameName += "c";
+            }
+            
+            newDataFrame.setName(dataFrameName);
             mainApplication.addDataFrame(newDataFrame);
         }
     }
