@@ -606,6 +606,11 @@ public final class DataSelector2NumOCatNumOCat extends JPanel {
             model1.insertElementAt(ee, from);
         }
     }
+    
+    public void setSelectedNames(String data1, String data2) {
+        this.labSelected1.setText(data1);
+        this.labSelected2.setText(data2);
+    }
 
     // Variables declaration - do not modify
     private javax.swing.JButton insertButton1;

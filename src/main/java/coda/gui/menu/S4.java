@@ -72,6 +72,7 @@ public class S4 extends AbstractMenuDialog2NumOCatNumOCat{
     
     public S4(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"S4 menu",false,false,true);
+        super.setSelectedDataNames("Selected data X:", "Selected data Y:");
         re = r;
         
         /* options configuration */

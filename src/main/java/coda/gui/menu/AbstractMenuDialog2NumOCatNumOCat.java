@@ -153,6 +153,10 @@ public abstract class AbstractMenuDialog2NumOCatNumOCat extends JDialog{
     public DataFrameSelector getDFS() {
         return dfs;
     }
+    
+    public void setSelectedDataNames(String data1, String data2){
+        ds.setSelectedNames(data1,data2);
+    }
 
     public boolean[] getValidComposition(DataFrame df, String[] selectedNames){
         boolean selection[] = df.getValidCompositions(selectedNames);
