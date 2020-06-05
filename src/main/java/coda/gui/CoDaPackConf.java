@@ -107,7 +107,7 @@ public class CoDaPackConf {
     //public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
 
 
-    public static String CoDaVersion = "2 02 21";
+    public static String CoDaVersion = "2 03 01";
     public static int CoDaUpdaterVersion = 4;
 
     public static int[] getVersionNum(String version_str){
