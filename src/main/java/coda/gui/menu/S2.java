@@ -38,6 +38,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import org.apache.batik.swing.JSVGCanvas;
+import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -49,9 +51,9 @@ public class S2 extends AbstractMenuDialog2NumCat{
     Rengine re;
     DataFrame df;
     JFrame frameS2;
-    JFrame[] framesS2;
+    Vector<JFrame> framesS2;
     JFileChooser chooser;
-    String[] tempsDirR;
+    Vector<String> tempsDirR;
     String tempDirR;
     ILRMenu ilrX;
     ILRMenu ilrY;
@@ -93,6 +95,9 @@ public class S2 extends AbstractMenuDialog2NumCat{
                configureILRY();
             }
         });
+        
+        framesS2 = new Vector<JFrame>();
+        tempsDirR = new Vector<String>();
         
         this.optionsPanel.add(new JLabel("      P1:"));
         this.optionsPanel.add(P1);
@@ -294,11 +299,20 @@ public class S2 extends AbstractMenuDialog2NumCat{
     
     void showText(){
         
+        REXP result;
+        String[] sortida;
+        
+        /* header output */
+        
+        outputPanel.addOutput(new OutputText("S2 Menu:"));
+        
+        /* R output */
+        
         int midaText = re.eval("length(cdp_res$text)").asInt();
         for(int i=0; i < midaText; i++){
-            re.eval("out <- capture.output(cdp_res$text[[" + String.valueOf(i+1) + "]])");
-            OutputElement e = new OutputForR(re.eval("out").asStringArray());
-            outputPanel.addOutput(e);
+            result = re.eval("cdp_res$text[[" + String.valueOf(i+1) + "]]");
+            sortida = result.asStringArray();
+            outputPanel.addOutput(new OutputForR(sortida));
         }
     }
     
@@ -328,12 +342,11 @@ public class S2 extends AbstractMenuDialog2NumCat{
     void showGraphics(){
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesS2 = new JFrame[numberOfGraphics];
-        this.tempsDirR = new String[numberOfGraphics];
+
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR[i] = tempDirR;
-            plotS2(i);
+            tempsDirR.add(tempDirR);
+            plotS2(this.framesS2.size());
         }   
     }
     
@@ -372,6 +385,7 @@ public class S2 extends AbstractMenuDialog2NumCat{
     }
     
     private void plotS2(int position) {
+
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -379,13 +393,12 @@ public class S2 extends AbstractMenuDialog2NumCat{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            framesS2[position] = new JFrame();
-            JPanel panel = new JPanel();
+            framesS2.add(new JFrame());
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
-            menuItem = new JMenuItem("Export As PNG");
-            menuItem.addActionListener(new FileChooserAction());
+            menuItem = new JMenuItem("Export As SVG");
+            menuItem.addActionListener(new S2.FileChooserAction(position));
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
             //submenuExport.add(menuItem);
@@ -396,20 +409,18 @@ public class S2 extends AbstractMenuDialog2NumCat{
             menuItem = new JMenuItem("Export As Postscripts");
             //submenuExport.add(menuItem);
             menuItem = new JMenuItem("Quit");
-            menuItem.addActionListener(new quitListener(position));
+            menuItem.addActionListener(new S2.quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            framesS2[position].setJMenuBar(menuBar);
-            panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
-            label.setSize(700, 700);
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            framesS2[position].getContentPane().add(panel);
+            framesS2.elementAt(position).setJMenuBar(menuBar);
+            JSVGCanvas c = new JSVGCanvas();
+            String uri = new File(tempsDirR.elementAt(position)).toURI().toString();
+            c.setURI(uri);
+            
+            framesS2.elementAt(position).getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesS2[position].setSize(800,800);
-            framesS2[position].setLocation(dim.width/2-framesS2[position].getSize().width/2, dim.height/2-framesS2[position].getSize().height/2);
+            framesS2.elementAt(position).setSize(800,800);
+            framesS2.elementAt(position).setLocation(dim.width/2-framesS2.elementAt(position).getSize().width/2, dim.height/2-framesS2.elementAt(position).getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -417,16 +428,16 @@ public class S2 extends AbstractMenuDialog2NumCat{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        framesS2[position].dispose();
-                        File file = new File(tempsDirR[position]);
+                        framesS2.elementAt(position).dispose();
+                        File file = new File(tempsDirR.elementAt(position));
                         file.delete();
                     }
                 }
             };
             
-            framesS2[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            framesS2[position].addWindowListener(exitListener);
-            framesS2[position].setVisible(true);
+            framesS2.elementAt(position).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesS2.elementAt(position).addWindowListener(exitListener);
+            framesS2.elementAt(position).setVisible(true);
     }
     
     private class quitListener implements ActionListener{
@@ -440,14 +451,20 @@ public class S2 extends AbstractMenuDialog2NumCat{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                framesS2[position].dispose();
-                File file = new File(tempsDirR[position]);
+                framesS2.elementAt(position).dispose();
+                File file = new File(tempsDirR.elementAt(position));
                 file.delete();
             }
         }
     }
     
-    private class FileChooserAction implements ActionListener{
+private class FileChooserAction implements ActionListener{
+        
+        int position;
+        
+        public FileChooserAction(int position){
+            this.position = position;
+        }
         
         public void actionPerformed(ActionEvent e){
             JFrame frame = new JFrame();
@@ -455,7 +472,7 @@ public class S2 extends AbstractMenuDialog2NumCat{
             frame.setSize(400,400);
             jf.setDialogTitle("Select the folder to save the file");
             jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
+            jf.setSelectedFile(new File(".svg"));
             jf.setSize(400,400);
             frame.add(jf);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -468,7 +485,7 @@ public class S2 extends AbstractMenuDialog2NumCat{
                     canExit = true;
                 }
                 if(JFileChooser.APPROVE_OPTION == result){ // guardem arxiu en el path
-                    File f = new File(tempDirR);
+                    File f = new File(tempsDirR.elementAt(position));
                     f.deleteOnExit();
                     String path = jf.getSelectedFile().getAbsolutePath();
                     File f2 = new File(path);

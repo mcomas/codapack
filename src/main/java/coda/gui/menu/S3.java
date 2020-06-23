@@ -38,6 +38,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import org.apache.batik.swing.JSVGCanvas;
+import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -49,10 +51,10 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
     Rengine re;
     DataFrame df;
     JFrame frameS3;
-    JFrame[] framesS3;
+    Vector<JFrame> framesS3;
     JFileChooser chooser;
     String tempDirR;
-    String[] tempsDirR;
+    Vector<String> tempsDirR;
     ILRMenu ilrX;
     ILRMenu ilrY;
     
@@ -93,6 +95,9 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
                configureILRY();
             }
         });
+        
+        framesS3 = new Vector<JFrame>();
+        tempsDirR = new Vector<String>();
         
         this.optionsPanel.add(new JLabel("      P1:"));
         this.optionsPanel.add(P1);
@@ -299,11 +304,20 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
     
     void showText(){
         
+        REXP result;
+        String[] sortida;
+        
+        /* header output */
+        
+        outputPanel.addOutput(new OutputText("S3 Menu:"));
+        
+        /* R output */
+        
         int midaText = re.eval("length(cdp_res$text)").asInt();
         for(int i=0; i < midaText; i++){
-            re.eval("out <- capture.output(cdp_res$text[[" + String.valueOf(i+1) + "]])");
-            OutputElement e = new OutputForR(re.eval("out").asStringArray());
-            outputPanel.addOutput(e);
+            result = re.eval("cdp_res$text[[" + String.valueOf(i+1) + "]]");
+            sortida = result.asStringArray();
+            outputPanel.addOutput(new OutputForR(sortida));
         }
     }
     
@@ -333,12 +347,11 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
     void showGraphics(){
         
         int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesS3 = new JFrame[numberOfGraphics];
-        this.tempsDirR = new String[numberOfGraphics];
+
         for(int i=0; i < numberOfGraphics; i++){
             tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR[i] = tempDirR;
-            plotS3(i);
+            tempsDirR.add(tempDirR);
+            plotS3(this.framesS3.size());
         }  
     }
     
@@ -378,7 +391,8 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
         */
     }
     
-    private void plotS3(int position) {
+     private void plotS3(int position) {
+
             Font f = new Font("Arial", Font.PLAIN,12);
             UIManager.put("Menu.font", f);
             UIManager.put("MenuItem.font",f);
@@ -386,13 +400,12 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
             JMenu menu = new JMenu("File");
             JMenuItem menuItem = new JMenuItem("Open");
             menuBar.add(menu);
-            framesS3[position] = new JFrame();
-            JPanel panel = new JPanel();
+            framesS3.add(new JFrame());
             menu.add(menuItem);
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
-            menuItem = new JMenuItem("Export As PNG");
-            menuItem.addActionListener(new FileChooserAction());
+            menuItem = new JMenuItem("Export As SVG");
+            menuItem.addActionListener(new S3.FileChooserAction(position));
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
             //submenuExport.add(menuItem);
@@ -403,20 +416,18 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
             menuItem = new JMenuItem("Export As Postscripts");
             //submenuExport.add(menuItem);
             menuItem = new JMenuItem("Quit");
-            menuItem.addActionListener(new quitListener(position));
+            menuItem.addActionListener(new S3.quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
-            framesS3[position].setJMenuBar(menuBar);
-            panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
-            label.setSize(700, 700);
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            framesS3[position].getContentPane().add(panel);
+            framesS3.elementAt(position).setJMenuBar(menuBar);
+            JSVGCanvas c = new JSVGCanvas();
+            String uri = new File(tempsDirR.elementAt(position)).toURI().toString();
+            c.setURI(uri);
+            
+            framesS3.elementAt(position).getContentPane().add(c);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesS3[position].setSize(800,800);
-            framesS3[position].setLocation(dim.width/2-framesS3[position].getSize().width/2, dim.height/2-framesS3[position].getSize().height/2);
+            framesS3.elementAt(position).setSize(800,800);
+            framesS3.elementAt(position).setLocation(dim.width/2-framesS3.elementAt(position).getSize().width/2, dim.height/2-framesS3.elementAt(position).getSize().height/2);
             
             WindowListener exitListener = new WindowAdapter(){
                 
@@ -424,16 +435,16 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
                 public void windowClosing(WindowEvent e){
                     int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
                     if(confirm == 0){
-                        framesS3[position].dispose();
-                        File file = new File(tempsDirR[position]);
+                        framesS3.elementAt(position).dispose();
+                        File file = new File(tempsDirR.elementAt(position));
                         file.delete();
                     }
                 }
             };
             
-            framesS3[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            framesS3[position].addWindowListener(exitListener);
-            framesS3[position].setVisible(true);
+            framesS3.elementAt(position).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            framesS3.elementAt(position).addWindowListener(exitListener);
+            framesS3.elementAt(position).setVisible(true);
     }
     
     private class quitListener implements ActionListener{
@@ -447,8 +458,8 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
         public void actionPerformed(ActionEvent e){
             int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
             if(confirm == 0){
-                framesS3[position].dispose();
-                File file = new File(tempsDirR[position]);
+                framesS3.elementAt(position).dispose();
+                File file = new File(tempsDirR.elementAt(position));
                 file.delete();
             }
         }
@@ -456,13 +467,19 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
     
     private class FileChooserAction implements ActionListener{
         
+        int position;
+        
+        public FileChooserAction(int position){
+            this.position = position;
+        }
+        
         public void actionPerformed(ActionEvent e){
             JFrame frame = new JFrame();
             JFileChooser jf = new JFileChooser();
             frame.setSize(400,400);
             jf.setDialogTitle("Select the folder to save the file");
             jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
+            jf.setSelectedFile(new File(".svg"));
             jf.setSize(400,400);
             frame.add(jf);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -475,7 +492,7 @@ public class S3 extends AbstractMenuDialog2NumCatONum{
                     canExit = true;
                 }
                 if(JFileChooser.APPROVE_OPTION == result){ // guardem arxiu en el path
-                    File f = new File(tempDirR);
+                    File f = new File(tempsDirR.elementAt(position));
                     f.deleteOnExit();
                     String path = jf.getSelectedFile().getAbsolutePath();
                     File f2 = new File(path);

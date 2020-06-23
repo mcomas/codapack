@@ -42,6 +42,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import static org.apache.commons.lang3.math.NumberUtils.isNumber;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -74,12 +75,12 @@ public class DataFrameCreator extends JFrame{
         
         if(answer == JOptionPane.OK_OPTION){
             
-            while(answer == JOptionPane.OK_OPTION && (columnsField.getText().length() <= 0  || rowsField.getText().length() <= 0 || !StringUtils.isNumeric(columnsField.getText()) || !StringUtils.isNumeric(rowsField.getText()) || Double.valueOf(columnsField.getText()) < 1 || Double.valueOf(rowsField.getText()) < 1)){
+            while(answer == JOptionPane.OK_OPTION && (columnsField.getText().length() <= 0  || rowsField.getText().length() <= 0 || !isNumber(columnsField.getText()) || !isNumber(rowsField.getText()) || Double.valueOf(columnsField.getText()) < 1 || Double.valueOf(rowsField.getText()) < 1)){
             
                 if(columnsField.getText().length() <= 0 || rowsField.getText().length() <= 0){
                     JOptionPane.showMessageDialog(null, "Some field empty");
                 }
-                else if(!StringUtils.isNumeric(columnsField.getText()) || !StringUtils.isNumeric(rowsField.getText())){
+                else if(!isNumber(columnsField.getText()) || !isNumber(rowsField.getText())){
                     JOptionPane.showMessageDialog(null, "Some field is not numeric");
                 }
                 else{
@@ -184,10 +185,10 @@ public class DataFrameCreator extends JFrame{
                 for(int j = 0; j < table.getRowCount() && noEmpty && varNamesCorrect && coherentData; j++){
                     if(table.getValueAt(j,count) == null || table.getValueAt(j, count).toString().length() == 0) noEmpty = false;
                     else if(j == 0){
-                        if(StringUtils.isNumeric(table.getValueAt(j,count).toString())) varNamesCorrect = false;
+                        if(isNumber(table.getValueAt(j,count).toString())) varNamesCorrect = false;
                         else varNames[count] = table.getValueAt(j,count).toString();
                     }
-                    else if(StringUtils.isNumeric(table.getValueAt(j,count).toString())){
+                    else if(isNumber(table.getValueAt(j,count).toString())){
                         isNumeric = true;
                         auxNum[j-1] = Double.valueOf(table.getValueAt(j, count).toString());
                     }
