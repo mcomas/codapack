@@ -22,7 +22,9 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import coda.gui.output.OutputVector;
+import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
@@ -33,12 +35,21 @@ import javax.swing.JOptionPane;
  */
 public class CenterDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Centering.yaml";
+    private static final String helpTitle = "Center Data Help Menu";
+    
     String selected[];
     JCheckBox centerCheck;
+    DataFrame dataFrame;
+    ArrayList<String> names;
+    
     public CenterDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Center Data Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         centerCheck = new JCheckBox("Show Center", true);
         optionsPanel.add(centerCheck);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
 
     @Override
@@ -47,7 +58,7 @@ public class CenterDataMenu extends AbstractMenuDialog{
         try{
             
             String selectedNames[] = ds.getSelectedData();
-            DataFrame dataFrame = mainApplication.getActiveDataFrame();
+            dataFrame = mainApplication.getActiveDataFrame();
 
             boolean selection[] = dataFrame.getValidCompositions(selectedNames);
             double[][] data = dataFrame.getNumericalData(selectedNames);
@@ -77,6 +88,14 @@ public class CenterDataMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(this, "Closured value must be a double");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.dataFrame;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }
 

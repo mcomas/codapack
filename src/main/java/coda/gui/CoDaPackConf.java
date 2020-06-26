@@ -23,6 +23,7 @@ import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -106,7 +107,7 @@ public class CoDaPackConf {
     //public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
 
 
-    public static String CoDaVersion = "2 02 21";
+    public static String CoDaVersion = "2 03 01";
     public static int CoDaUpdaterVersion = 4;
 
     public static int[] getVersionNum(String version_str){
@@ -169,13 +170,67 @@ public class CoDaPackConf {
     public static String decimalOutputFormat = "0.0000";
     public static String decimalTableFormat = "0.00";
     public static String decimalExportFormat = "0.00########";
+    public static String closureTo = "1.0";
+    public static boolean showDev = false;
     public static String lastPath = System.getProperty("user.dir");
     public static String refusedVersion = CoDaVersion;
+    public static String rScriptPath = getRScriptDefaultPath();
+    public static String helpPath = getHelpPath();
+    public static String mathJaxPath = getMathJaxPath();
     //private static DecimalFormat decimalOutputFormat = new DecimalFormat("0.0000", decimalFormat);
     //private static DecimalFormat decimalOutputFormat = new DecimalFormat("##0.##E0", decimalFormat);
     //private static DecimalFormat decimalTableFormat = new DecimalFormat("0.00", decimalFormat);
     //private static DecimalFormat decimalTableFormat = new DecimalFormat("##0.##E0", decimalFormat);
     //private static DecimalFormat decimalExportFormat = new DecimalFormat("0.00########");
+    
+    public static String getRScriptDefaultPath(){
+        String defaultRscriptPath = "Scripts_Amb_Base/";
+        if(!System.getProperty("os.name").startsWith("Windows") &
+           !System.getProperty("os.name").startsWith("Linux") ){
+            defaultRscriptPath = System.getenv("SCRIPTS_DIRECTORY") + defaultRscriptPath;
+        }
+        return defaultRscriptPath;
+    }
+    
+    public static String getHelpPath(){
+        String helpPath = "Help/";
+        if(!System.getProperty("os.name").startsWith("Windows") &
+           !System.getProperty("os.name").startsWith("Linux") ){
+            helpPath = System.getenv("HELP_DIRECTORY") + helpPath;
+        }
+        return helpPath;
+    }
+    
+    public static String getMathJaxPath(){
+        
+        if(System.getProperty("os.name").startsWith("Windows") || System.getProperty("os.name").startsWith("Linux")){
+            File mathJaxFile = new File("MathJax\\MathJax.js");
+            return mathJaxFile.getAbsolutePath();
+        }
+        else{
+            return System.getenv("MATHJAX_DIRECTORY") + "MathJax.js";
+        }
+    }
+    
+    public static void setScriptsPath(String path){
+        rScriptPath = path + "/";
+    }
+
+    public static void setShowDev(boolean showMenu){
+        showDev = showMenu;
+    }
+    
+    public static void setClosureTo(String closure){
+        closureTo = closure;
+    }
+    
+    public String getClosureTo(){
+        return closureTo;
+    }
+    
+    public boolean getShowDev(){
+        return showDev;
+    }
 
     public static void setDecimalFormat(char f){
         decimalFormat = f;
@@ -207,7 +262,7 @@ public class CoDaPackConf {
     public static void setOutputColor(Color c){ ouputColor = c; }
     public static Color getOutputColor(){ return ouputColor; }
 
-    public static String configurationFile = ".codapack";
+    public static String configurationFile = System.getProperty("java.io.tmpdir") + ".codapack";
     public static void saveConfiguration(){
         try {
             JSONObject configuration = new JSONObject();
@@ -217,7 +272,9 @@ public class CoDaPackConf {
             configuration.put("decimal-export", decimalExportFormat);
             configuration.put("last-path", lastPath);
             configuration.put("refused-version", refusedVersion);
-
+            configuration.put("closure-to", closureTo);
+            configuration.put("menu-dev", showDev);
+            configuration.put("r-script-path", rScriptPath);
             PrintWriter printer = new PrintWriter(CoDaPackConf.configurationFile);
 
             configuration.write(printer);
@@ -236,12 +293,15 @@ public class CoDaPackConf {
             FileReader file = new FileReader(CoDaPackConf.configurationFile);
             JSONObject configuration = new JSONObject(new BufferedReader(file).readLine());
             file.close();
+            closureTo = configuration.getString("closure-to");
+            showDev = configuration.getBoolean("menu-dev");
             decimalFormat = (char) configuration.getInt("decimal-format");
             decimalOutputFormat = configuration.getString("decimal-output");
             decimalTableFormat = configuration.getString("decimal-table");
             decimalExportFormat = configuration.getString("decimal-export");
             lastPath = configuration.getString("last-path");
             refusedVersion = configuration.getString("refused-version");
+            rScriptPath = configuration.getString("r-script-path");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

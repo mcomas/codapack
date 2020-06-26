@@ -1,0 +1,6 @@
+---
+name: "Statistics.Univariate Classical Tests Help Menu"
+description: "This function alows the user to perform a test for normality of a single variable."
+options: 
+  - Normality test: "Shapiro-Wilks test (default, uses R function \emph{shapiro.test}) or Kolmogorov-Smirnov (default, uses R function \emph{ks.test})"
+references: "https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/shapiro.test. https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/ks.test"

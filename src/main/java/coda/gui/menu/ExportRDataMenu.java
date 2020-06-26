@@ -42,7 +42,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import org.renjin.eval.Context;
-import org.renjin.primitives.io.serialization.RDataWriter;
+import org.renjin.serialization.RDataWriter;
 import org.renjin.sexp.IntArrayVector;
 import org.renjin.sexp.DoubleArrayVector;
 import org.renjin.sexp.ListVector;

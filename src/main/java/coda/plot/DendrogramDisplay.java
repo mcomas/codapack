@@ -45,6 +45,7 @@ import java.util.List;
  */
 public class DendrogramDisplay extends CoDa2dDisplay{
     private double LEFT = 0, RIGHT = 0;
+    private int auxToSetBalanceNames = 1;
     private String names[];
     private double x[][];
     private int partition[][];
@@ -69,6 +70,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
     BasicStroke dashed = new BasicStroke(config.getSize("axis"),
         BasicStroke.JOIN_MITER, BasicStroke.CAP_ROUND,
         1.0f, dash1, 2f);
+    
     public DendrogramDisplay(DendrogramBuilder builder){
         names = builder.names;
         x = builder.x;
@@ -268,7 +270,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
                 factor, 0 ,
                 0, -factor,
                 width/2, height/2);               
-
+        this.auxToSetBalanceNames = 0;
         drawBracket(T.getRootElement(), g2);
         INDEX1 = 0; INDEX2 = 0; drawLabels(T.getRootElement(), g2);
     }
@@ -316,6 +318,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
 
     private void drawBracket(Node<DendroBracket> node, Graphics2D g2){
 
+        this.auxToSetBalanceNames++;
         double param_size = 0.018;
         DendroBracket data = node.getData();
         float s = 1.5f;
@@ -327,6 +330,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
 
         Point2D bottom = null;
         bottom = defaultTransform.transform(new Point2D.Double(data.top.getX(), data.left.getY()), bottom);
+        g2.drawString("ilr " + this.auxToSetBalanceNames,(int)bottom.getX()+5,(int)bottom.getY()-5);
         g2.draw(PlotUtils.drawLine(top,  bottom));
 
         Point2D l = null;

@@ -53,12 +53,14 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
     protected int[] groups;
     protected int[] mapping;
     protected double[] definedGrid;
+    protected double[] centerCalculated = new double[2];
 
     protected final double[][] origZ;
     protected double[][] Z;
     protected boolean[] showZ;
 
     protected boolean isCentered = false;
+    protected boolean showCenter = false;
     protected double[] center;
 
     // Simple vertices    
@@ -197,6 +199,12 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
             }
         }
     }
+    
+    public void showCenter(boolean showCenter){
+        this.showCenter = showCenter;
+        this.centerCalculated = CoDaStats.ternaryTransform(center[0], center[1], center[2]);
+    }
+    
     @Override
     public void transformData(){
         V[0] = transform(oriV1[0], oriV1[1], V[0]);
@@ -227,6 +235,8 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
         if( showGrid ) drawGrid(g2);
         drawAxis(g2);        
         drawData(g2);
+        this.showCenter(this.showCenter);
+        drawCenter(g2);
         drawLabels(g2);
     }
     public void drawGrid(Graphics2D g2){
@@ -277,6 +287,18 @@ public class TernaryPlot2dDisplay extends CoDa2dDisplay{
                 }
             }
     }
+    
+    public void drawCenter(Graphics2D g2){
+        if(this.showCenter){
+            Point2D o = null;
+            o = defaultTransform.transform(new Point2D.Double(this.centerCalculated[0],this.centerCalculated[1]),o);
+            g2.setColor(Color.RED);
+            g2.fillRect((int)o.getX(), (int)o.getY(), 10, 10);
+            g2.setColor(Color.RED);
+            g2.drawRect((int)o.getX(),(int)o.getY(), 10, 10);
+        }
+    }
+    
     public void drawAreas(Graphics2D g2){
         g2.setPaint( config.getColor("area"));
         Point2D o1 = null, o2 = null, o3 = null;

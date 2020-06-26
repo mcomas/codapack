@@ -1,0 +1,3 @@
+---
+name: Data.Filters.Categorical Filter Help Menu
+description: This feature filters the observations with the same value on the selected categorical variable. More than 1 value of the variable can be selected.

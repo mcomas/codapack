@@ -36,6 +36,7 @@ public class AtipicalityIndexMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     JLabel text1 = new JLabel("Threshold:");
     JTextField  thresholdField;
+    DataFrame df;
 
     public AtipicalityIndexMenu(final CoDaPackMain mainApp){
         super(mainApp, "Atipicality Index Menu", false);
@@ -48,7 +49,7 @@ public class AtipicalityIndexMenu extends AbstractMenuDialog{
     public void acceptButtonActionPerformed() {
         double threshold = Double.parseDouble(thresholdField.getText().trim());
 
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData();
         int m = sel_names.length;
         String[] new_names = new String[m];
@@ -75,6 +76,10 @@ public class AtipicalityIndexMenu extends AbstractMenuDialog{
         mainApplication.updateDataFrame(df);
 
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
     }
 }
 

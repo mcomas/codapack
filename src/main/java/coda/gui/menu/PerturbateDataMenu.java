@@ -20,13 +20,14 @@
 package coda.gui.menu;
 
 import coda.CoDaStats;
-import static coda.CoDaStats.closure;
 import coda.DataFrame;
 import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,14 +40,23 @@ import javax.swing.JTextField;
  */
 public class PerturbateDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Perturbation.yaml";
+    private static final String helpTitle = "Perturbate Data Help Menu";
+    
     String selected[];
     JTextField perturbateWith;
     JLabel text1 = new JLabel("Perturbation");
     JCheckBox performClosure;
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
+    DataFrame dataFrame;
+    ArrayList<String> names;
+    
+    
     public PerturbateDataMenu(final CoDaPackMain mainApp){
         super(mainApp, "Perturbate Data Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        
         perturbateWith =  new JTextField("1.0 1.0 1.0", 14);
         //perturbateWith.setText();
         optionsPanel.add(text1);
@@ -64,11 +74,12 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
             }
         });
         closureTo =  new JTextField(5);
-        closureTo.setText("1.0");
+        closureTo.setText(mainApp.config.getClosureTo());
         
         optionsPanel.add(performClosure);
         optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
 
     @Override
@@ -76,7 +87,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
         //Comprobation that closuredTo is a double value is needed
         try{
             String selectedNames[] = ds.getSelectedData();
-            DataFrame dataFrame = mainApplication.getActiveDataFrame();
+            dataFrame = mainApplication.getActiveDataFrame();
 
             String[] v = perturbateWith.getText().split(" ");
 
@@ -128,6 +139,14 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(this, "Closured value must be a double");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.dataFrame;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }
 

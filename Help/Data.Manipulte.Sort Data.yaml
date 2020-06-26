@@ -1,0 +1,5 @@
+---
+name: Data.Manipulte.Sort Data Help Menu
+description: "This feature orders the whole data set according some variables selectes. It returns a permutation which rearranges according the first variable into ascending or descending order, breaking ties by further variables. It uses R function $\mathbf{order}$."
+options:
+  - Decreasing Sort: Perform sort in descending order (e.g. Z to A)

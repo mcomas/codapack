@@ -1,0 +1,3 @@
+---
+name: "Data.Manipulte.Categorical to Numeric Help Menu"
+description: "This feature transforms the selected variables coded with a string into a numerical ones, and overwrites the result on the same variables."

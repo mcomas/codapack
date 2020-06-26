@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.renjin:renjin-guava:17.0b">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/renjin/renjin-guava/17.0b/renjin-guava-17.0b.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/renjin/renjin-guava/17.0b/renjin-guava-17.0b-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/renjin/renjin-guava/17.0b/renjin-guava-17.0b-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -21,9 +21,9 @@ package coda.gui.menu;
 
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.gui.output.OutputILRPartition;
-import coda.gui.utils.BinaryPartitionSelect;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -32,9 +32,15 @@ import javax.swing.*;
  */
 public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Transformations.ILR-Raw.yaml";
+    private static final String helpTitle = "ILR-Raw Transform Help Menu";
+    
+    DataFrame df;
+    ArrayList<String> names;
 
     public TransformationILRRawMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Raw-ILR Transform Menu", false);
+        super(mainApp, "ILR-Raw Transform Menu", false);
+        super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
         //JButton manuallyPart = new JButton("Define Manually");
@@ -52,6 +58,8 @@ public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
                 initiatePartitionMenu();
             }
         });*/
+        
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
 
     }
 
@@ -66,7 +74,7 @@ public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
     public void acceptButtonActionPerformed() {
         int[][] partition = getPartition();
         if (partition != null) {
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String[] sel_names = ds.getSelectedData();
             int m = sel_names.length+1;
             String[] new_names = new String[m];
@@ -80,5 +88,13 @@ public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
         }else{
             JOptionPane.showMessageDialog(this, "<html>You must define a partition</html>");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

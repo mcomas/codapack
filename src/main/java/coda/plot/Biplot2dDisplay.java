@@ -45,8 +45,8 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
 
     private double[][] oriH;
     private double[][] H;
-    private TeXIcon decomposition = new TeXFormula("Z_{clr} = U \\left( V \\Gamma \\right)^T").//\\left(U \\, \\Gamma^{0.5}\\right) \\; \\left( V \\, \\Gamma^{0.5} \\right)^T").
-	                    createTeXIcon(TeXConstants.STYLE_DISPLAY, 16f);
+    //private TeXIcon decomposition = new TeXFormula("Z_{clr} = U \\left( V \\Gamma \\right)^T").//\\left(U \\, \\Gamma^{0.5}\\right) \\; \\left( V \\, \\Gamma^{0.5} \\right)^T").
+	//                    createTeXIcon(TeXConstants.STYLE_DISPLAY, 16f);
     //TeXIcon iconVectorLabel[];
     String vectorLabel[];
 
@@ -81,8 +81,8 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
 
         int s = config.getSize("label").intValue();
         textLabel = new String[2];
-        textLabel[0] = "1st";
-        textLabel[1] = "2nd";
+        textLabel[0] = "ilr.1";
+        textLabel[1] = "ilr.2";
         /*iconLabel = new TeXIcon[2];
         iconLabel[0] = new TeXFormula("1st").
                     createTeXIcon(TeXConstants.STYLE_DISPLAY, s);
@@ -149,8 +149,8 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
             else
                 formula += "\\left( U \\Gamma \\right)  V^T";
 
-            decomposition = new TeXFormula(formula).
-	                    createTeXIcon(TeXConstants.STYLE_DISPLAY, 16f);
+//            decomposition = new TeXFormula(formula).
+	                    //createTeXIcon(TeXConstants.STYLE_DISPLAY, 16f);
 
         }catch(ParseException e){
 
@@ -177,10 +177,10 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
     public void paintComponent(Graphics2D g2, double width, double height){
         super.paintComponent(g2,width,height);
         drawVectors(g2);
-        drawDecomposition(g2);
+        //drawDecomposition(g2);
     }
     public void drawDecomposition(Graphics2D g2){
-        decomposition.paintIcon(null, g2, getWidth()-200, getHeight()-50);
+//        decomposition.paintIcon(null, g2, getWidth()-200, getHeight()-50);
     }
     public void drawVectors(Graphics2D g2){
         

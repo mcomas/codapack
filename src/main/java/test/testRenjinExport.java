@@ -13,7 +13,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.renjin.eval.Context;
-import org.renjin.primitives.io.serialization.RDataWriter;
+import org.renjin.serialization.RDataWriter;
 import org.renjin.sexp.DoubleArrayVector;
 import org.renjin.sexp.DoubleVector;
 import org.renjin.sexp.IntArrayVector;

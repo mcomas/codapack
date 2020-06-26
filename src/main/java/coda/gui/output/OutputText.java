@@ -38,7 +38,7 @@ public class OutputText implements OutputElement{
     }
     public String printHTML(String html) {
         
-            html += "<b>" + label + "</b><br>";
+            html += "<b>" + label + "</b>";
         
 
         return html;

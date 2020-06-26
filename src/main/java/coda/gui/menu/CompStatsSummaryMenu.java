@@ -27,6 +27,7 @@ package coda.gui.menu;
 import coda.BasicStats;
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputCompStatsSummary;
 import coda.gui.output.OutputElement;
@@ -47,14 +48,20 @@ import javax.swing.event.ChangeListener;
  */
 public class CompStatsSummaryMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Compositional Statistics Summary.yaml";
+    private static final String helpTitle = "Numerical Summary Help";
     JCheckBox centerCheck;
     JCheckBox vararrayCheck;
     JCheckBox totalvarCheck;
     JTextField  percentileField;
     JCheckBox percentileCheck;
     JButton vararrayOptions;
+    DataFrame df;
+    ArrayList<String> names;
+    
     public CompStatsSummaryMenu(final CoDaPackMain mainApp){
         super(mainApp, "Numerical Summary", true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         centerCheck = new JCheckBox("Center", true);
 
@@ -84,7 +91,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
         optionsPanel.add(vararrayCheck);              
         optionsPanel.add(totalvarCheck);
         //optionsPanel.add(vararrayOptions);
-        
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
         
 
         
@@ -93,7 +100,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed() {
         String selectedNames[] = ds.getSelectedData();
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         
         boolean[] selection = getValidComposition(df, selectedNames);
         int sizeBefore = selection.length;
@@ -198,5 +205,13 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
         }
         CoDaPackMain.outputPanel.addOutput(outputs);
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

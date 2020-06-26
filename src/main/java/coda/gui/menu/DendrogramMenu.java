@@ -28,6 +28,7 @@ import coda.BasicStats;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Utils;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputILRPartition;
 import coda.gui.output.OutputPlotHeader;
@@ -35,6 +36,7 @@ import coda.gui.output.OutputVector;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.plot.DendrogramDisplay.DendrogramBuilder;
 import coda.plot.window.DendrogramWindow;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -44,10 +46,17 @@ import javax.swing.JOptionPane;
  * @author marc
  */
 public class DendrogramMenu extends AbstractMenuDialogWithILR{
+    
     JCheckBox balancesCheck;
     JCheckBox statisticsCheck;
+    DataFrame df;
+    ArrayList<String> names;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Balance Dendrogram.yaml";
+    private static final String helpTitle = "Balance Dendogram Help Menu";
+    
     public DendrogramMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Dendrogram Menu", true);
+        super(mainApp, "Balance Dendrogram Menu", true);
+        super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");
@@ -69,6 +78,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
         statisticsCheck = new JCheckBox("Add statistics", true);
         optionsPanel.add(balancesCheck);
         optionsPanel.add(statisticsCheck);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     public void initiatePartitionMenu(){
         BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData() );
@@ -79,7 +89,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
         int [][] partition = getPartition();
         if(partition != null){
 
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String selectedNames[] = ds.getSelectedData();
 
             int m = selectedNames.length-1;
@@ -124,7 +134,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
 
             if(statisticsCheck.isSelected()){
                 String [] ilrNames = new String[ilr.length];
-                for(int i=0;i<ilr.length;i++) ilrNames[i] = "Balance " + (i+1);
+                for(int i=0;i<ilr.length;i++) ilrNames[i] = "ilr " + (i+1);
 
                 double [] mean = coda.BasicStats.mean(ilr);
                 double [] variance = BasicStats.variance(ilr);
@@ -141,6 +151,14 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
             JOptionPane.showMessageDialog(this, "<html>You must define a partition</html>");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

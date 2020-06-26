@@ -28,6 +28,7 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.ext.jama.Matrix;
 import coda.ext.jama.SingularValueDecomposition;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputTableTwoEntries;
@@ -36,6 +37,7 @@ import coda.plot.PrincipalComponent3dDisplay.PrincipalComponent3dBuilder;
 import coda.plot.window.CoDaPlotWindow;
 import coda.plot.window.TernaryPlot2dWindow;
 import coda.plot.window.TernaryPlot3dWindow;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -43,16 +45,24 @@ import javax.swing.JOptionPane;
  * @author mcomas
  */
 public class PrincipalComponentMenu extends AbstractMenuDialog{
+    
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs. Ternary-Quaternary Principal Components.yaml";
+    private static final String helpTitle = "Principal Component Help Menu";
+    
+    DataFrame df;
+    ArrayList<String> names;
 
     public PrincipalComponentMenu(final CoDaPackMain mainApp){
         super(mainApp, "Principal Component Menu", true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     public void acceptButtonActionPerformed() {
         String selectedNames[] = ds.getSelectedData();
         if(selectedNames.length == 3 || selectedNames.length == 4){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = df.getNumericalData(selectedNames, mapping);
@@ -135,6 +145,14 @@ public class PrincipalComponentMenu extends AbstractMenuDialog{
         }else{
             JOptionPane.showMessageDialog(this, "<html>Select <b>three</b> or <b>four</b> variables</html>");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

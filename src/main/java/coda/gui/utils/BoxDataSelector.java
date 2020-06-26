@@ -33,6 +33,9 @@ package coda.gui.utils;
 import coda.DataFrame;
 import java.awt.BorderLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -49,6 +52,30 @@ public final class BoxDataSelector extends javax.swing.JPanel {
         initComponents();
         if(dataFrame != null) setDataList(dataFrame);
     }
+    
+    public BoxDataSelector(String[] var){
+        initComponents();
+        setDataListString(var);
+    }
+    
+    public void setDataListString(String[] var){
+        
+        DefaultListModel model = new DefaultListModel();
+        variables = new String[var.length];
+        //Iterator it = dataFrame.getNamesIterator();
+        int i = 0;
+        for(String name : var){
+            variables[i] = name;
+            model.addElement(variables[i++]);
+        }
+        /*
+        while(it.hasNext()){
+            variables[i] = (String) it.next();
+            model.addElement(variables[i++]);
+        }*/
+        jList1.setModel(model);
+    }
+    
     public void setDataList(DataFrame dataFrame){
         DefaultListModel model = new DefaultListModel();
         variables = new String[dataFrame.size()];

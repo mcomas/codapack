@@ -25,6 +25,7 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 import coda.plot.window.CoDaPlotWindow;
@@ -34,6 +35,7 @@ import coda.plot.TernaryPlot2dDisplay.TernaryPlot2dBuilder;
 import coda.plot.TernaryPlot3dDisplay;
 import coda.plot.TernaryPlot3dDisplay.TernaryPlot3dBuilder;
 import coda.plot.window.TernaryPlot2dWindow;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -41,16 +43,24 @@ import javax.swing.JOptionPane;
  * @author mcomas
  */
 public class TernaryPlotMenu extends AbstractMenuDialog{
+    
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Ternary-Quaternary Plot.yaml";
+    private static final String helpTitle = "Ternary/Quaternary Plot Help Menu";
+    DataFrame df;
+    ArrayList<String> names;
+    
     public TernaryPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Ternary Plot Menu", true);//, false, true, false);
+        super(mainApp, "Ternary/Quaternary Plot Menu", true);//, false, true, false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     public void acceptButtonActionPerformed() {
 
         String selectedNames[] = ds.getSelectedData();
         if(selectedNames.length == 3 || selectedNames.length == 4){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = df.getNumericalData(selectedNames, mapping);
@@ -86,7 +96,6 @@ public class TernaryPlotMenu extends AbstractMenuDialog{
                 }
                 TernaryPlot3dDisplay display = builder.build();
                 plot = new TernaryPlot3dWindow(df, display, "Ternary Plot 3d");
-                
             }
             plot.setLocationRelativeTo(mainApplication);
             plot.setVisible(true);
@@ -95,5 +104,13 @@ public class TernaryPlotMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(this, "<html>Select <b>three</b> or <b>four</b> variables</html>");
         }
         
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

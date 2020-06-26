@@ -48,12 +48,14 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
     protected int[] groups;
     protected String[] gnames;
     protected int[] mapping;
+    protected double[] centerCalculated = new double[2];
 
     protected final double[][] origZ;
     protected double[][] Z;
     protected boolean[] showZ;
 
     protected boolean isCentered = false;
+    protected boolean showCenter = false;
     protected double[] center;
     
     private final double[] oriV1 = {-0.2886751347, 0.5, -0.2041241452};
@@ -151,6 +153,12 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
             }
         }
     }
+    
+    public void showCenter(boolean center){
+        this.showCenter = center;
+        this.centerCalculated = CoDaStats.ternaryTransform(this.center[0], this.center[1], this.center[2], this.center[3]);
+    }
+    
     @Override
     public void transformData(){
         V[0] = transform(oriV1[0], oriV1[1], oriV1[2], V[0]);
@@ -174,8 +182,10 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
                 width/2.3, height/1.9);
 
         drawAreas(g2);
-        drawAxis(g2);        
-        drawData(g2);        
+        drawData(g2);
+        drawAxis(g2);
+        this.showCenter(this.showCenter);
+        drawCenter(g2);
         drawLabels(g2);
     }
     private double crossProduct(double x1, double x2, double y1, double y2){
@@ -305,6 +315,18 @@ public class TernaryPlot3dDisplay extends CoDa3dDisplay{
             }
         }
     }
+    
+    private void drawCenter(Graphics2D g2){
+        if(this.showCenter){
+            Point2D o = null;
+            o = defaultTransform.transform(new Point2D.Double(centerCalculated[0],centerCalculated[1]), o);
+            g2.setColor(Color.RED);
+            g2.fillRect((int)o.getX(),(int)o.getY(),10,10);
+            g2.setColor(Color.RED);
+            g2.drawRect((int)o.getX(),(int)o.getY(),10,10);
+        }
+    }
+    
     private void drawAreas(Graphics2D g2){
         g2.setPaint( config.getColor("area"));
         Point2D o1 = null, o2 = null, o3 = null, o4 = null;

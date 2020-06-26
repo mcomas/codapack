@@ -25,7 +25,9 @@
 package coda.gui.menu;
 
 import coda.*;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -35,6 +37,8 @@ import javax.swing.*;
  */
 public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Set Detection Limit.yaml";
+    private static final String helpTitle = "Set Detection Limit Help";
     //Fixem valor per defecte Detection Limit
     double detectionLimit = 0.01;
     //Creem el quadre de text
@@ -45,9 +49,12 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
     JRadioButton l_takeMinimunColum = new JRadioButton("Take Minimum of Each Column");
     //Creem la opció Global of Selected Columns
     JRadioButton l_globalSelectedColumns = new JRadioButton("Global Minimum of Selected Columns");
+    DataFrame df;
+    ArrayList<String> names;
     
     public SetDetectionLimitMenu(CoDaPackMain mainApp) {
         super(mainApp, "Set Detection Limit", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         //Marquem el botó Detection Limit com a seleccionat per defecte
         l_usedDetectionLimit.setSelected(true);
@@ -69,6 +76,7 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
         group.add(l_usedDetectionLimit);
         group.add(l_takeMinimunColum);
         group.add(l_globalSelectedColumns);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
         
     }
 
@@ -82,7 +90,7 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
         boolean isGlobalMinimumSelected = l_globalSelectedColumns.isSelected();
 
         //Obtenim el DataFrame actiu
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         //Guardem el nom de les columnes seleccionades en una taula d'strings
         String[] sel_names = ds.getSelectedData();
         //Guardem el nùmero de columnes seleccionades en una variable
@@ -179,6 +187,14 @@ public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
         mainApplication.updateDataFrame(df);
        
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
     
 }

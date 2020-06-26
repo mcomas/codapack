@@ -28,6 +28,7 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.ext.jama.Matrix;
 import coda.ext.jama.SingularValueDecomposition;
+import coda.gui.CoDaPackConf;
 import coda.plot.window.Biplot3dWindow;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
@@ -36,6 +37,7 @@ import coda.plot.Biplot2dDisplay.Biplot2dBuilder;
 import coda.plot.Biplot3dDisplay.Biplot3dBuilder;
 import coda.plot.window.Biplot2dWindow;
 import coda.plot.window.CoDaPlotWindow;
+import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
@@ -44,13 +46,21 @@ import javax.swing.JOptionPane;
  * @author mcomas
  */
 public class Biplot3dMenu extends AbstractMenuDialog{
+    
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Biplot.yaml";
+    private static final String helpTitle = "CLR Biplot Help Menu";
     JCheckBox coordinates;
+    DataFrame df;
+    ArrayList<String> names;
+    
     public Biplot3dMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Biplot Menu", true);
+        super(mainApp, " CLR Biplot Menu", true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         coordinates = new JCheckBox("Add coordinates", false);
         optionsPanel.add(coordinates);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     @SuppressWarnings("empty-statement")
@@ -65,7 +75,7 @@ public class Biplot3dMenu extends AbstractMenuDialog{
                 plotNames[i] = "clr."+ selectedNames[i];
                 
             }
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = CoDaStats.centerData(df.getNumericalData(selectedNames, mapping));
@@ -162,6 +172,14 @@ public class Biplot3dMenu extends AbstractMenuDialog{
         }else{
             JOptionPane.showMessageDialog(this, "<html>Select at least <b>three</b> variables</html>");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

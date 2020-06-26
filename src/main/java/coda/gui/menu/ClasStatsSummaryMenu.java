@@ -26,6 +26,7 @@ package coda.gui.menu;
 
 import coda.BasicStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputClasStatsSummary;
 import coda.gui.output.OutputElement;
@@ -44,15 +45,20 @@ import javax.swing.event.ChangeListener;
  */
 public class ClasStatsSummaryMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Classical Statistics Summary.yaml";
+    private static final String helpTitle = "Numerical Summary Help";
     JCheckBox meanCheck;
     JCheckBox stdDevCheck;
     JCheckBox covarianceCheck;
     JCheckBox correlationCheck;
     JTextField  percentileField;
     JCheckBox percentileCheck;
+    DataFrame df;
+    ArrayList<String> names;
+    
     public ClasStatsSummaryMenu(final CoDaPackMain mainApp){
         super(mainApp, "Numerical Summary", true);
-
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         meanCheck = new JCheckBox("Mean", true);
 
@@ -83,6 +89,7 @@ public class ClasStatsSummaryMenu extends AbstractMenuDialog{
         optionsPanel.add(stdDevCheck);
         optionsPanel.add(correlationCheck);
         optionsPanel.add(covarianceCheck);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
 
         
     }
@@ -90,7 +97,7 @@ public class ClasStatsSummaryMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed() {
         String selectedNames[] = ds.getSelectedData();
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         
         boolean[] selection = getValidData(df, selectedNames);
         int sizeBefore = selection.length;
@@ -179,5 +186,13 @@ public class ClasStatsSummaryMenu extends AbstractMenuDialog{
         }
         CoDaPackMain.outputPanel.addOutput(outputs);
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }

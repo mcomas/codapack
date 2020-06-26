@@ -24,6 +24,7 @@ import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -41,8 +42,11 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
     JCheckBox performClosure;
     JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
+    DataFrame df;
+    ArrayList<String> names;
+    
     public ZeroReplacementMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Zero Replacement Menu", false);
+        super(mainApp, "Non-parametric multiplicative zero replacement Menu", false);
         
         usedPercentatgeDL =  new JTextField(5);
         usedPercentatgeDL.setText("0.65");
@@ -62,11 +66,12 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
             }
         });
         closureTo =  new JTextField(5);
-        closureTo.setText("1.0");
+        closureTo.setText(mainApp.config.getClosureTo());
         
         optionsPanel.add(performClosure);
         optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     public void acceptButtonActionPerformed() {
@@ -74,7 +79,7 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
         percentatgeDL = Double.parseDouble(usedPercentatgeDL.getText());
         
         
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData();
         int m = sel_names.length;
         String[] new_names = new String[m];
@@ -93,5 +98,14 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
        
         setVisible(false);
     }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
+    }
+    
 }
 

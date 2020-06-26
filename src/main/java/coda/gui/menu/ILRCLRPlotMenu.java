@@ -27,21 +27,16 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.ext.jama.Matrix;
-import coda.ext.jama.SingularValueDecomposition;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.gui.output.OutputILRPartition;
 import coda.gui.output.OutputPlotHeader;
-import coda.gui.output.OutputTableTwoEntries;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.plot.Biplot2dDisplay;
 import coda.plot.Biplot3dDisplay;
-import coda.plot.RealPlot2dDisplay.RealPlot2dBuilder;
-import coda.plot.RealPlot3dDisplay.RealPlot3dBuilder;
-import coda.plot.window.Biplot2dWindow;
-import coda.plot.window.Biplot3dWindow;
 import coda.plot.window.CoDaPlotWindow;
 import coda.plot.window.RealPlot2dWindow;
 import coda.plot.window.RealPlot3dWindow;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -50,10 +45,18 @@ import javax.swing.JOptionPane;
  * @author mcomas
  */
 public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
+    
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.ILR-CLR Plot.yaml";
+    private static final String helpTitle = "ILR/CLR Plot Help Menu";
+    
     JCheckBox coordinates;
+    DataFrame df;
+    ArrayList<String> names;
+    
     public ILRCLRPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ILR Plot Menu", true);
+        super(mainApp, "ILR/CLR Plot Menu", true);
+        super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");
@@ -76,6 +79,7 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
         optionsPanel.add(coordinates);
         
         base.setEnabled(true);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
         
     }
     public void initiatePartitionMenu(){
@@ -94,7 +98,7 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
                 plotNames[i] = "clr."+ selectedNames[i];
                 
             }
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = df.getNumericalData(selectedNames, mapping);
@@ -190,14 +194,14 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
             }else{
 
                 Biplot2dDisplay.Biplot2dBuilder builder =
-                        new Biplot2dDisplay.Biplot2dBuilder(plotNames, data, vdata).mapping(mapping);
+                        new Biplot2dDisplay.Biplot2dBuilder(plotNames, data, vdata).mapping(mapping);             
                 if(groupedBy != null){
                     builder.groups(coda.Utils.reduceData(
                             df.getDefinedGroup(groupedBy),
                             selection), coda.Utils.getCategories(
                             df.getCategoricalData(groupedBy),selection));
                 }
-
+                
                 biplotWindow =
                         new RealPlot2dWindow(df, builder.build(), "ILR/CLR plot");
                                
@@ -208,6 +212,14 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
         }else{
             JOptionPane.showMessageDialog(this, "<html>Select at least <b>three</b> variables</html>");
         }
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

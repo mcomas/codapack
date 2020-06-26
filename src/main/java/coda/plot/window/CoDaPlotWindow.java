@@ -39,12 +39,26 @@ import coda.gui.menu.SelectVariableMenu;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.plot.AbstractCoDaDisplay;
 import coda.plot.CoDaDisplayConfiguration;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -54,7 +68,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBoxMenuItem;
@@ -75,7 +94,7 @@ import javax.swing.event.ChangeListener;
  *
  * @author marc
  */
-public class CoDaPlotWindow extends javax.swing.JFrame{
+public class CoDaPlotWindow extends javax.swing.JFrame implements KeyListener{
     public static final long serialVersionUID = 1L;
     
     protected AbstractCoDaDisplay display;
@@ -88,6 +107,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
     //private JButton saveButton = new JButton("Save..");
     static public JFileChooser fc = new JFileChooser();
     static{
+        fc.setFileFilter(new FileNameExtensionFilter("PDF file", "pdf"));
         fc.setFileFilter(new FileNameExtensionFilter("EPS file", "eps"));
         //fc.setFileFilter(new FileNameExtensionFilter("LaTeX file", "tex"));
         fc.setFileFilter(new FileNameExtensionFilter("PNG file", "png"));
@@ -100,7 +120,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         protected JMenu menuFile;
         private final String ITEM_FILE = "File";
             private JMenuItem itemImage;
-            private final String ITEM_IMAGE = "Snapshot...";
+            private final String ITEM_IMAGE = "Save as...";
             private JMenuItem itemConf;
             private final String ITEM_CONF = "Configuration...";
             private JMenuItem itemQuit;
@@ -113,7 +133,8 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
             protected JCheckBoxMenuItem itemShowObsName;
     DataFrame dataframe;
     public CoDaPlotWindow(DataFrame dataframe, final AbstractCoDaDisplay plotDisplay, String title) {
-        
+        this.setFocusable(true);
+        this.addKeyListener(this);
         this.dataframe = dataframe;
         jMenuBar = new JMenuBar();
         menuFile = new JMenu();
@@ -242,7 +263,7 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         menu.setVisible(true);
     }
     public void saveImage(){
-        if( fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+        if( fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
             FileNameExtensionFilter ff = (FileNameExtensionFilter)fc.getFileFilter();
             File file = fc.getSelectedFile();
             String file_name = file.getAbsolutePath();
@@ -262,7 +283,54 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
                     (OutputStream)(new FileOutputStream(new File(file_name))), 0,0,width ,height , ColorMode.COLOR_RGB);
                     display.paintComponent(g);//, width, height);
                     g.close();
-                }/*else if(extension.equalsIgnoreCase("tex")){
+                }
+                else if(extension.equalsIgnoreCase("pdf")){ // save the plot in pdf extension
+                    int width = display.getWidth();
+                    int height = display.getHeight();
+                    
+                    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                    com.itextpdf.text.Rectangle one = new com.itextpdf.text.Rectangle(this.getWidth(),this.getHeight());
+                    Graphics g = image.getGraphics();
+                    Graphics2D graphics = (Graphics2D) g;
+                    
+                    Document document = new Document();
+                    document.setPageSize(one);
+                    
+                    try{
+                        PdfWriter writer;
+                        writer = PdfWriter.getInstance(document, new FileOutputStream(file_name));
+                        document.open();
+                        PdfContentByte cb = writer.getDirectContent();
+                        Graphics2D g2 = cb.createGraphics(width, height);
+                        Robot robot = new Robot();
+                        Rectangle screen = new Rectangle(this.getX()+10,this.getY()+50, this.getWidth()-20, this.getHeight()-40);
+                        BufferedImage i = robot.createScreenCapture(screen);
+                        g2.drawImage(i, 0,0, null);
+                        g2.dispose();
+                        document.close();
+                    }catch(Exception e){
+                        System.err.println(e.getMessage());
+                    }
+                    
+                }else if(extension.equalsIgnoreCase("jpg")){ // millorem la qualitat de l'exportacio
+                    int width = display.getWidth();
+                    int height = display.getHeight();
+                    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                    Graphics g = image.getGraphics();
+                    Graphics2D graphics = (Graphics2D) g;
+                    display.paintComponent(graphics);//, width, height);
+                    
+                    JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
+                    jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                    jpegParams.setCompressionQuality(1f);
+                    
+                    final ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+                    writer.setOutput(new FileImageOutputStream(new File(file_name)));
+                    writer.write(null, new IIOImage(image,null,null), jpegParams);
+                    graphics.dispose();
+                    image.flush();
+                }
+                /*else if(extension.equalsIgnoreCase("tex")){
                     int width = display.getWidth();
                     int height = display.getHeight();
 
@@ -298,6 +366,67 @@ public class CoDaPlotWindow extends javax.swing.JFrame{
         }
         public String getExtension() {
             return extension;
+        }
+    }
+    
+    public void keyPressed(KeyEvent e){
+                if ((e.getKeyCode() == KeyEvent.VK_C) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+                    try {
+                        Robot robot = new Robot();
+                        Rectangle screen = new Rectangle(this.getX()+10,this.getY()+30, this.getWidth()-20, this.getHeight()-40);
+                        BufferedImage i = robot.createScreenCapture(screen);
+                        TransferableImage trans = new TransferableImage(i);
+                        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+                        c.setContents(trans, null);
+                    } catch (AWTException ex) {
+                        Logger.getLogger(CoDaPlotWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent e){
+        
+    }
+    
+    public void keyReleased(KeyEvent e){
+        
+    }
+    
+    private class TransferableImage implements Transferable {
+
+        Image i;
+
+        public TransferableImage( Image i ) {
+            this.i = i;
+        }
+
+        public Object getTransferData( DataFlavor flavor )
+        throws UnsupportedFlavorException, IOException {
+            if ( flavor.equals( DataFlavor.imageFlavor ) && i != null ) {
+                return i;
+            }
+            else {
+                throw new UnsupportedFlavorException( flavor );
+            }
+        }
+
+        public DataFlavor[] getTransferDataFlavors() {
+            DataFlavor[] flavors = new DataFlavor[ 1 ];
+            flavors[ 0 ] = DataFlavor.imageFlavor;
+            return flavors;
+        }
+
+        public boolean isDataFlavorSupported( DataFlavor flavor ) {
+            DataFlavor[] flavors = getTransferDataFlavors();
+            for ( int i = 0; i < flavors.length; i++ ) {
+                if ( flavor.equals( flavors[ i ] ) ) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

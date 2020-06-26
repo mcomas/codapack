@@ -26,58 +26,102 @@ package coda.gui.menu;
 
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputNormalityTest;
-import coda.gui.output.OutputText;
+import coda.gui.utils.BinaryPartitionSelect;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.JButton;
 
 /**
  *
  * @author mcomas
  */
-public class NormalityTestMenu extends AbstractMenuDialog{
+public class NormalityTestMenu extends AbstractMenuDialogWithILR{
+    
+    DataFrame df;
+    ArrayList<String> names;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Additive Logistic Normality Tests.yaml";
+    private static final String helpTitle = "Log-Ratio Normality Test Help";
 
     public NormalityTestMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Additive Logistic Normality Test", false);
+        super(mainApp, "Log-Ratio Normality Test", false);
+        super.setHelpConfig(yamlUrl, helpTitle);
 
+        JButton defaultPart = new JButton("Default Partition");
+        JButton manuallyPart = new JButton("Define Manually");
         
-
+        this.optionsPanel.add(defaultPart);
+        defaultPart.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(ActionEvent evt){
+                setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
+            }
+        });
+        
+        this.optionsPanel.add(manuallyPart);
+        manuallyPart.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(ActionEvent evt){
+                initiatePartitionMenu();
+            }
+        });
+        
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
+    
+    public void initiatePartitionMenu(){
+        BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData());
+        binaryMenu.setVisible(true);
+    }
+    
+    
     @Override
     public void acceptButtonActionPerformed() {
         String selectedNames[] = ds.getSelectedData();
-        DataFrame df = mainApplication.getActiveDataFrame();
+        df = mainApplication.getActiveDataFrame();
 
         boolean[] selection = getValidComposition(df, selectedNames);
         int [] mapping = df.getMapingToData(selectedNames, selection);
         double[][] data = df.getNumericalData(selectedNames, mapping);
 
-        double[][] aln = CoDaStats.transformRawALR(data);
+        double[][] ilr = CoDaStats.transformRawILR(data, super.getPartition());
         String names[] = new String[selectedNames.length-1];
         for(int i=0;i<names.length;i++)
-            names[i] = "alr(" + selectedNames[i] + "," + selectedNames[names.length] + ")";
+            //names[i] = "ilr(" + selectedNames[i] + "," + selectedNames[names.length] + ")";
+            names[i] = "ilr " + String.valueOf(i+1);
 
-        int d = aln.length;
-        int n = aln[0].length;
+        int d = ilr.length;
+        int n = ilr[0].length;
         double marginal[][] = new double[d][3];
         double bivariate[][][] = new double[d][d][3];
 
 
         for(int i=0;i<d;i++)
-            marginal[i] = CoDaStats.marginalUnivariateTest(aln[i]);
+            marginal[i] = CoDaStats.marginalUnivariateTest(ilr[i]);
 
         for(int i=0;i<d;i++)
             for(int j=i+1;j<d;j++)
-                bivariate[i][j] = CoDaStats.bivariateAngleTest(aln[i], aln[j]);
+                bivariate[i][j] = CoDaStats.bivariateAngleTest(ilr[i], ilr[j]);
 
-        double radius[] = CoDaStats.radiusTest(aln);
+        double radius[] = CoDaStats.radiusTest(ilr);
 
         ArrayList<OutputElement> outputs = new ArrayList<OutputElement>();
         outputs.add(new OutputNormalityTest(names, marginal, bivariate, radius));
 
         CoDaPackMain.outputPanel.addOutput(outputs);
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 
 }

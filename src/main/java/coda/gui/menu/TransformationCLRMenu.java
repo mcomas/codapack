@@ -21,7 +21,9 @@ package coda.gui.menu;
 
 import coda.CoDaStats;
 import coda.DataFrame;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -33,12 +35,18 @@ import javax.swing.JTextField;
  */
 public class TransformationCLRMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Transformations.CLR.yaml";
+    private static final String helpTitle = "CLR Transform Help Menu";
+    
     JRadioButton rc;
     JRadioButton cr;
     JTextField closure = new JTextField("1.0");
+    DataFrame df;
+    ArrayList<String> names;
 
     public TransformationCLRMenu(final CoDaPackMain mainApp){
         super(mainApp, "CLR Transform Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JPanel opt = new JPanel();
         rc = new JRadioButton("Raw-CLR");
@@ -51,12 +59,13 @@ public class TransformationCLRMenu extends AbstractMenuDialog{
         opt.add(rc);
         opt.add(cr);
         optionsPanel.add(opt);
+        this.names  = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
 
     @Override
     public void acceptButtonActionPerformed() {
         if(rc.isSelected()){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String[] sel_names = ds.getSelectedData();
             int m = sel_names.length;
             String[] new_names = new String[m];
@@ -69,7 +78,7 @@ public class TransformationCLRMenu extends AbstractMenuDialog{
             df.addData(new_names, coda.Utils.recoverData(clr, selection));
             mainApplication.updateDataFrame(df);
         }else{
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String[] sel_names = ds.getSelectedData();
             int m = sel_names.length;
             String[] new_names = new String[m];
@@ -79,6 +88,14 @@ public class TransformationCLRMenu extends AbstractMenuDialog{
             mainApplication.updateDataFrame(df);
         }
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return this.df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }
 

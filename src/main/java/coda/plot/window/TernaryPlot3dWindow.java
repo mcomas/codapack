@@ -48,6 +48,7 @@ public class TernaryPlot3dWindow extends CoDaPlot3dWindow{
     private TernaryPlot3dDisplay ternaryPlot;
     
     private JCheckBox checkBoxCenteredSelector = new JCheckBox();
+    private JCheckBox checkBoxShowCenterSelector = new JCheckBox();
     
     private JLabel jLabel1 = new JLabel("Zoom");
     
@@ -66,21 +67,41 @@ public class TernaryPlot3dWindow extends CoDaPlot3dWindow{
                 checkBoxCenteredSelectorActionPerformed(evt);
             }
         });
+        
+        checkBoxShowCenterSelector.setText("Show the center");
+        checkBoxShowCenterSelector.addActionListener(new ActionListener(){
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                checkBoxShowCenterSelectorActionPerformed(evt);
+            }
+        });
 
         JPanel controlTernaryPlot = new JPanel();
         controlTernaryPlot.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
         controlTernaryPlot.setSize(0,40);
         controlTernaryPlot.add(checkBoxCenteredSelector);
+        controlTernaryPlot.add(checkBoxShowCenterSelector);
 
         particularControls1.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
         particularControls1.add(controlTernaryPlot);
         pack();
     }
+    
     private void checkBoxCenteredSelectorActionPerformed(java.awt.event.ActionEvent evt) {
         if(checkBoxCenteredSelector.isSelected()){
            ternaryPlot.setCentered(true);
         }else{
             ternaryPlot.setCentered(false);
+        }
+        ternaryPlot.repaint();
+    }
+    
+    private void checkBoxShowCenterSelectorActionPerformed(java.awt.event.ActionEvent evt){
+        if(checkBoxShowCenterSelector.isSelected()){
+            ternaryPlot.showCenter(true);
+        }
+        else{
+            ternaryPlot.showCenter(false);
         }
         ternaryPlot.repaint();
     }

@@ -1,0 +1,8 @@
+---
+name: "Data.Operations.Power Transformation Help Menu"
+description: "With this feature applies a power transformation to the data \citep{Ait86}. For $a\in \mathbb{R}\,,$ the power transformation returns $a \otimes x = C \left[ x_1^a, x_2^a, \ldots, x_D^a \right] $."
+options:
+  - Power: "the constant of the operation."
+  - Closure Result: "if activated, the data is closed to a constant."
+  - Closure to: "Constant of closure, by default $1.0$. Only if Closure Result is activated."
+references: "Aitchison, J. (1986). The Statistical Analysis of Compositional Data. Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). (Reprinted in 2003 with additional material by The Blackburn Press). 416 p."

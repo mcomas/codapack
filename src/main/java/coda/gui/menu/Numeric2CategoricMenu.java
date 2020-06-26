@@ -27,11 +27,21 @@ package coda.gui.menu;
 import coda.gui.utils.BoxDataSelector;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.BorderLayout;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -39,6 +49,9 @@ import javax.swing.JOptionPane;
  */
 public class Numeric2CategoricMenu extends JDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Numeric to Categorical.yaml";
+    private static final String helpTitle = "Numeric to Categorical Help";
+    
     BoxDataSelector ds;
     DataFrame df;
     public Numeric2CategoricMenu(final CoDaPackMain mainApp){
@@ -55,9 +68,11 @@ public class Numeric2CategoricMenu extends JDialog{
         getContentPane().setLayout(new BorderLayout());
 
         getContentPane().add(ds, BorderLayout.CENTER);
+        
+        JPanel southPanel = new JPanel();
 
         JButton accept = new JButton("Accept");
-        getContentPane().add(accept, BorderLayout.SOUTH);
+        southPanel.add(accept);
         accept.addActionListener(new java.awt.event.ActionListener() {
             
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -71,6 +86,43 @@ public class Numeric2CategoricMenu extends JDialog{
             }
             
         });
+        
+        JButton helpButton = new JButton("Help");
+        southPanel.add(helpButton);
+        helpButton.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                JDialog dialog = new JDialog();
+                HelpMenu menu;
+                try {
+                    menu = new HelpMenu(yamlUrl,helpTitle);
+                    dialog.add(menu);
+                    dialog.setSize(650, 500);
+                    dialog.setTitle(helpTitle);
+                    dialog.setIconImage(Toolkit.getDefaultToolkit()
+                    .getImage(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logo.png")));
+                    Point p = getLocation();
+                    p.x = p.x + (getWidth()-520)/2;
+                    p.y = p.y + (getHeight()-430)/2;
+                    WindowListener exitListener = new WindowAdapter(){
+                
+                        @Override
+                        public void windowClosing(WindowEvent e){
+                                dialog.dispose();
+                                menu.deleteHtml();
+                        }
+                    };
+            
+                    dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                    dialog.addWindowListener(exitListener);
+                    dialog.setLocation(p);
+                    dialog.setVisible(true);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(AbstractMenuDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        getContentPane().add(southPanel, BorderLayout.SOUTH);
     }
     @Override
     public void setVisible(boolean v){

@@ -22,6 +22,8 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
+import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -33,12 +35,18 @@ import javax.swing.JTextField;
  */
 public class TransformationALRMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Transformations.ALR.yaml";
+    private static final String helpTitle = "ALR Transform Help Menu";
+    
     JRadioButton ra;
     JRadioButton ar;
     JTextField closure = new JTextField("1.0");
+    DataFrame df;
+    ArrayList<String> names;
 
     public TransformationALRMenu(final CoDaPackMain mainApp){
         super(mainApp, "ALR Transform Menu", false);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JPanel opt = new JPanel();
         ra = new JRadioButton("Raw-ALR");
@@ -51,11 +59,12 @@ public class TransformationALRMenu extends AbstractMenuDialog{
         opt.add(ra);
         opt.add(ar);
         optionsPanel.add(opt);
+        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     @Override
     public void acceptButtonActionPerformed() {
         if(ra.isSelected()){
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String[] sel_names = ds.getSelectedData();
             int m = sel_names.length-1;
             String[] new_names = new String[m];
@@ -68,7 +77,7 @@ public class TransformationALRMenu extends AbstractMenuDialog{
             df.addData(new_names, coda.Utils.recoverData(alr, selection));
             mainApplication.updateDataFrame(df);
         }else{
-            DataFrame df = mainApplication.getActiveDataFrame();
+            df = mainApplication.getActiveDataFrame();
             String[] sel_names = ds.getSelectedData();
             int m = sel_names.length+1;
             String[] new_names = new String[m];
@@ -78,6 +87,14 @@ public class TransformationALRMenu extends AbstractMenuDialog{
             mainApplication.updateDataFrame(df);
         }
         setVisible(false);
+    }
+    
+    public DataFrame getDataFrame(){
+        return df;
+    }
+    
+    public ArrayList<String> getDataFrameNames(){
+        return this.names;
     }
 }
 
