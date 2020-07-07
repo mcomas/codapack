@@ -97,7 +97,7 @@ public class PowerDataMenu extends AbstractMenuDialog{
             double power = Double.parseDouble(powerWith.getText());
 
             String[] new_names = new String[selectedNames.length];
-            for(int i=0;i<selectedNames.length;i++) new_names[i] = selectedNames[i] + "^" + Double.toString(power);
+            for(int i=0;i<selectedNames.length;i++) new_names[i] = selectedNames[i] + ".pt." + Double.toString(power);
 
             // = CoDaPack.center(df.getNumericalDataZeroFree(sel_names));
             double[][] dpow = CoDaStats.powerData(vdata,power);

@@ -99,13 +99,15 @@ public class TernaryPlot2dWindow extends CoDaPlot2dWindow{
             private final String ITEM_CURVE = "Add curve";
             private JMenuItem itemElements;
             private final String ITEM_ELEMENTS = "Elements";
-            private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Ternary-Quaternary Plot-Empty.yaml";
-            private static final String helpTitle = "Ternary-Quaternary Plot-Empty Help";
+            private String yamlUrl;
+            private String helpTitle;
 
-    public TernaryPlot2dWindow(DataFrame dataframe, TernaryPlot2dDisplay display, String title) {
+    public TernaryPlot2dWindow(DataFrame dataframe, TernaryPlot2dDisplay display, String title, String yamlUrl, String helpTitle) {
         super(dataframe, display, title);
 
         this.menuData.setVisible(false);
+        this.yamlUrl = yamlUrl;
+        this.helpTitle = helpTitle;
         menuEdit = new JMenu();
         menuEdit.setText(ITEM_EDIT);
         itemAddDataSet = new JMenuItem();

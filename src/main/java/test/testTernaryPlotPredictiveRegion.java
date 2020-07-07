@@ -26,6 +26,7 @@ package test;
 
 import coda.CoDaStats;
 import coda.ext.jama.Matrix;
+import coda.gui.CoDaPackConf;
 import coda.plot2.window.TernaryPlot2dWindow;
 import coda.plot2.PlotUtils;
 import coda.plot2.objects.Ternary2dObject;
@@ -72,7 +73,7 @@ public class testTernaryPlotPredictiveRegion {
             display.addCoDaObject(curveObject4);
         
         
-        TernaryPlot2dWindow frame = new TernaryPlot2dWindow(null, display, "Test");
+        TernaryPlot2dWindow frame = new TernaryPlot2dWindow(null, display, "Test", CoDaPackConf.helpPath + "Graphs.Predictive Region.yaml", "Predictive Region Help Menu");
         frame.setCenter(CoDaStats.center(new Matrix(data).transpose().getArray()));
         frame.getContentPane().add(display);
         frame.setVisible(true);

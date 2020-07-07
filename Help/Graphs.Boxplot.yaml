@@ -1,0 +1,5 @@
+---
+name: "Graphs.Boxplot Help Menu"
+description: "This feature draws a Boxplot of each of the selected parts. If a categorical variable is selected for each part and group a boxplot is drawn. If selected it also draws the geometric or arithmetic mean as a red point."
+options:
+- Draw mean: "geometric (default) / arithmetic / none."

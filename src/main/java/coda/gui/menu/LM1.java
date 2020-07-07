@@ -185,7 +185,7 @@ public class LM1 extends AbstractMenuDialog2NumCatONum{
                 
                 // executem script d'R
                 
-                    String url = CoDaPackConf.rScriptPath + "LM_1.R";
+                    String url = CoDaPackConf.rScriptPath + "Regression_X_Real_Y_Composition.R";
 
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     

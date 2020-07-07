@@ -72,7 +72,7 @@ public class testTernaryPloConfidenceRegion {
             display.addCoDaObject(curveObject4);
         
         
-        TernaryPlot2dWindow frame = new TernaryPlot2dWindow(null, display, "Test");
+        TernaryPlot2dWindow frame = new TernaryPlot2dWindow(null, display, "Test", "Test", "Test");
         frame.setCenter(CoDaStats.center(new Matrix(data).transpose().getArray()));
         frame.getContentPane().add(display);
         frame.setVisible(true);

@@ -149,11 +149,11 @@ public class CoDaPackMenu extends JMenuBar{
         public JMenuItem itemSetDetectionLimit;
         public final String ITEM_SETDETECTION ="Set detection limit";
         public JMenuItem itemZerosR;
-        public final String ITEM_ZEROS_R = "Non-parametric Replacement";
+        public final String ITEM_ZEROS_R = "Non-parametric zero Replacement";
         public JMenuItem itemLogRatio;
         public final String ITEM_LOG_RATIO = "Logratio-EM zero Replacement";
         public JMenuItem itemBayesianMultReplace;
-        public final String ITEM_BAYESIAN_MULT_REPLACE = "Bayesian Multiplicative Replacement";
+        public final String ITEM_BAYESIAN_MULT_REPLACE = "Bayesian Multiplicative zero Replacement";
         public JMenuItem itemEM_Missing;
         public final String ITEM_EM_MISSING = "Logratio-EM missing replacement";
         public JMenuItem itemEM_Zero_Missing;

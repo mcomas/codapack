@@ -102,7 +102,7 @@ public class testTernaryPlotNew {
             display.addCoDaObject(curveObject3);
         }
         //CoDaObject
-        TernaryPlot2dWindow frame = new TernaryPlot2dWindow(null, display, "Test");
+        TernaryPlot2dWindow frame = new TernaryPlot2dWindow(null, display, "Test", "Test", "Test");
         frame.setCenter(CoDaStats.center(dataset1));
         //JFrame frame = new JFrame();
         //frame.setSize(600,500);

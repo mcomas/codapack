@@ -135,7 +135,7 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
                         display.addCoDaObject(curveObject);
                     }
                 }
-                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Center Confidence Region");
+                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Center Confidence Region", this.yamlFile, this.helpTitle);
                 plot.setCenter(CoDaStats.center(data));
                 plot.setVisible(true);
             }else{// selectedNames.length == 4

@@ -102,7 +102,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
             double[][] vdata = coda.Utils.reduceData(data, selection);
 
             String[] new_names = new String[selectedNames.length];
-            for(int i=0;i<selectedNames.length;i++) new_names[i] = Double.toString(perturbation[i]) + ".x." + selectedNames[i];
+            for(int i=0;i<selectedNames.length;i++) new_names[i] = selectedNames[i] + ".x." + Double.toString(perturbation[i]);
 
             double[][] dpert = CoDaStats.perturbateData(vdata, perturbation);
             if(performClosure.isSelected()){
