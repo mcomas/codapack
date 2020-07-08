@@ -325,7 +325,7 @@ public final class CoDaPackMain extends JFrame{
         String ruta = CoDaPackConf.lastPath; //fillRecentPath();
         JFileChooser chooseFile = new JFileChooser(ruta);
         if(title.equals(jMenuBar.ITEM_IMPORT_XLS)){
-            JOptionPane.showMessageDialog(this, "A valid variable name consists of letters, numbers and the dot or underline characters.\n The variable name starts with a letter or the dot not followed by a number.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names donít follow this rule, you can correct it on the data table of CoDaPack.", "Warning", JOptionPane.WARNING_MESSAGE);
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Excel files", "xls", "xlsx"));
@@ -342,7 +342,7 @@ public final class CoDaPackMain extends JFrame{
                 CoDaPackConf.lastPath = ruta;
             }
         }else if(title.equals(jMenuBar.ITEM_IMPORT_RDA)){
-            JOptionPane.showMessageDialog(this, "A valid variable name consists of letters, numbers and the dot or underline characters.\n The variable name starts with a letter or the dot not followed by a number.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names donít follow this rule, you can correct it on the data table of CoDaPack.", "Warning", JOptionPane.WARNING_MESSAGE);
             //Aqu√≠ tractem l'event IMPORT_RDA
             chooseFile.resetChoosableFileFilters();
             //Filtrem per llegir nom√©s els arxius RDA
@@ -363,7 +363,7 @@ public final class CoDaPackMain extends JFrame{
             //Guardem la ruta
             CoDaPackConf.lastPath = ruta;
         }else if(title.equals(jMenuBar.ITEM_IMPORT_CSV)){
-            JOptionPane.showMessageDialog(this, "A valid variable name consists of letters, numbers and the dot or underline characters.\n The variable name starts with a letter or the dot not followed by a number.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names donít follow this rule, you can correct it on the data table of CoDaPack.", "Warning", JOptionPane.WARNING_MESSAGE);
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Text file", "txt"));
@@ -450,7 +450,6 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_EXPORT_R)) {
             new ExportRDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_OPEN)){
-            JOptionPane.showMessageDialog(this, "A valid variable name consists of letters, numbers and the dot or underline characters.\n The variable name starts with a letter or the dot not followed by a number.", "Warning", JOptionPane.WARNING_MESSAGE);
             if (!dataFrame.isEmpty()) {
                 //Comprovar si hi ha canvis. si n'hi ha finestra
                 boolean hasChange = false;
@@ -515,7 +514,6 @@ public final class CoDaPackMain extends JFrame{
                 } else jMenuBar.active_path = fn;
             }
         }else if(title.equals(jMenuBar.ITEM_ADD)){
-            JOptionPane.showMessageDialog(this, "A valid variable name consists of letters, numbers and the dot or underline characters.\n The variable name starts with a letter or the dot not followed by a number.", "Warning", JOptionPane.WARNING_MESSAGE);
             CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
             ArrayList<DataFrame> dfs = imp.importDataFrames();
             for(DataFrame df: dfs) {
