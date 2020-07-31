@@ -117,8 +117,7 @@ public class PrincipalComponentMenu extends AbstractMenuDialog{
                             df.getCategoricalData(groupedBy),selection));
                 }
 
-                window = new TernaryPlot2dWindow(
-                        df, builder.build(), "Principal Component Plot");
+                window = new TernaryPlot2dWindow(df, builder.build(), "Principal Component Plot");
 
                 window.setVisible(true);
                 setVisible(false);                

@@ -113,7 +113,7 @@ public class PredictiveRegionMenu extends AbstractMenuDialog{
                     display.addCoDaObject(curveObject);
                 }
 
-                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Predictive Region");
+                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Predictive Region", this.yamlFile, this.helpTitle);
                 plot.setLocationRelativeTo(mainApplication);
                 plot.setCenter(CoDaStats.center(data));
                 plot.setVisible(true);

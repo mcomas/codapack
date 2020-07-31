@@ -304,7 +304,8 @@ public class Variable extends ArrayList<Element>{
                     Element el = get(i);
                     if( el instanceof Zero){
                         Zero zero = (Zero)el;
-                        obj.put("l", zero.detection);
+                        if(Double.isNaN(zero.detection)) obj.put("l", 0);
+                        else obj.put("l", zero.detection);
                     }else if( el instanceof Numeric){
                         Numeric el_n = (Numeric)el;
                         obj.put("v", el_n.getValue().toString());

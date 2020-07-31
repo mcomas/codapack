@@ -72,7 +72,7 @@ public class ImportXLSMenu extends JDialog {
         super(mainApp, modal);
         
         this.chooseFile = chooseFile;
-        
+                
         initComponents();
 
         setLocationRelativeTo(mainApp);  

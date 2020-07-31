@@ -325,6 +325,7 @@ public final class CoDaPackMain extends JFrame{
         String ruta = CoDaPackConf.lastPath; //fillRecentPath();
         JFileChooser chooseFile = new JFileChooser(ruta);
         if(title.equals(jMenuBar.ITEM_IMPORT_XLS)){
+            JOptionPane.showMessageDialog(this, "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names donít follow this rule, you can correct it on the data table of CoDaPack.", "Warning", JOptionPane.WARNING_MESSAGE);
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Excel files", "xls", "xlsx"));
@@ -341,6 +342,7 @@ public final class CoDaPackMain extends JFrame{
                 CoDaPackConf.lastPath = ruta;
             }
         }else if(title.equals(jMenuBar.ITEM_IMPORT_RDA)){
+            JOptionPane.showMessageDialog(this, "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names donít follow this rule, you can correct it on the data table of CoDaPack.", "Warning", JOptionPane.WARNING_MESSAGE);
             //Aqu√≠ tractem l'event IMPORT_RDA
             chooseFile.resetChoosableFileFilters();
             //Filtrem per llegir nom√©s els arxius RDA
@@ -361,6 +363,7 @@ public final class CoDaPackMain extends JFrame{
             //Guardem la ruta
             CoDaPackConf.lastPath = ruta;
         }else if(title.equals(jMenuBar.ITEM_IMPORT_CSV)){
+            JOptionPane.showMessageDialog(this, "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names donít follow this rule, you can correct it on the data table of CoDaPack.", "Warning", JOptionPane.WARNING_MESSAGE);
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Text file", "txt"));
@@ -788,7 +791,7 @@ public final class CoDaPackMain extends JFrame{
             display.addCoDaObject(gridObject);
             double center[] = {1,1,1};
 
-            TernaryPlot2dWindow frame = new TernaryPlot2dWindow(this.getActiveDataFrame(), display, "Ternary/Quaternary Plot -- Testing version");
+            TernaryPlot2dWindow frame = new TernaryPlot2dWindow(this.getActiveDataFrame(), display, "Ternary/Quaternary Plot -- Testing version", CoDaPackConf.helpPath + "Graphs.Ternary-Quaternary Plot-Empty.yaml", "Ternary/Quaternary Plot Empty Help Menu");
             frame.setLocationRelativeTo(this);
             frame.setCenter(center);
             frame.setVisible(true);

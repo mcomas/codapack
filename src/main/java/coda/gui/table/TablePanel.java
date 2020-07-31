@@ -132,6 +132,7 @@ public final class TablePanel extends JPanel{
           {
             if (event.getClickCount() == 2)
             {
+              JOptionPane.showMessageDialog(null, "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names don’t follow this rule, you can correct it on the data table of CoDaPack.", "Warning", JOptionPane.WARNING_MESSAGE);
               editColumnAt(event.getPoint());
             }
           }

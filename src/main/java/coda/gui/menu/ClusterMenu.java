@@ -205,7 +205,7 @@ public class ClusterMenu extends AbstractMenuDialog{
 
                     // executem script d'R
                     
-                        String url = CoDaPackConf.rScriptPath + "scripCluster K-means versio 0 (FETversió silhouette).R";
+                        String url = CoDaPackConf.rScriptPath + "Cluster_K-means.R";
                         
                         re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
 

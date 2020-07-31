@@ -36,6 +36,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -64,15 +65,22 @@ public class BoxplotMenu extends AbstractMenuDialog{
     String tempDirR;
     Vector<String> tempsDirR;
     ArrayList<String> names;
+    JComboBox optDrawMean = new JComboBox(new String[]{"Geometric", "Arithmetic", "None"});
     
     /* options var */
     
     public static final long serialVersionUID = 1L;
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Boxplot.yaml";
+    private static final String helpTitle = "Boxplot Help Menu";
     
     public BoxplotMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"Boxplot Menu",true);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
-        super.setSelectedDataName("Selected Composition:");
+        super.setSelectedDataName("Selected Variables:");
+        
+        this.optionsPanel.add(new JLabel("Draw mean"));
+        this.optionsPanel.add(optDrawMean);
         
         framesBoxplotMenu = new Vector<JFrame>();
         tempsDirR = new Vector<String>();
@@ -190,7 +198,11 @@ public class BoxplotMenu extends AbstractMenuDialog{
     
     void constructParametersToR(){
         
-        /* construim parametres logics */
+        /* construim parametres string */
+        
+        if(((Object)this.optDrawMean.getSelectedItem()).toString().equals("Geometric")) re.eval("P1 <- \"geometric\"");
+        else if(((Object)this.optDrawMean.getSelectedItem()).toString().equals("Arithmetic")) re.eval("P1 <- \"arithmetic\"");
+        else re.eval("P1 <- \"none\"");
     }
     
     void showText(String[] selectedNames){

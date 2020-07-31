@@ -48,7 +48,7 @@ public class TernaryPlot2Utility {
                 double center[] = {1,1,1};
 
                 TernaryPlot2dWindow frame = 
-                        new TernaryPlot2dWindow(null, display, "Ternary Plot -- Testing version");
+                        new TernaryPlot2dWindow(null, display, "Ternary Plot -- Testing version", "Test", "Test");
                 frame.setCenter(center);
                 frame.setVisible(true);
                 
