@@ -27,6 +27,8 @@ package coda.io;
 import coda.DataFrame;
 import coda.Variable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Vector;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -35,12 +37,15 @@ import org.renjin.sexp.DoubleVector;
 import org.renjin.sexp.ListVector;
 import org.renjin.sexp.SEXP;
 import org.renjin.sexp.StringVector;
+import org.rosuda.JRI.Rengine;
 
 /**
  *
  * @author david
  */
 public class ImportRDA {
+    
+    Rengine re;
     ScriptEngineManager manager;
     ScriptEngine engine;
     
@@ -53,20 +58,30 @@ public class ImportRDA {
     String suffix = null;
 
     //El constructor
-    public ImportRDA(JFileChooser chooseFile) throws ScriptException {
+    public ImportRDA(JFileChooser chooseFile, Rengine r) throws ScriptException{
         manager = new ScriptEngineManager(); //Static ?
         engine = manager.getEngineByName("Renjin");
+        re = r;
         cf = chooseFile;
         df_names = getDataFramesNames(chooseFile.getSelectedFile().getAbsolutePath().replace("\\","/"));
         
     }
+    
+    private void resaveFileVersion2(String fileName){
+        re.eval("load('" + fileName + "')");
+        re.eval("save(list = ls(), file = '" + fileName + "', version = 2)");
+        re.eval("rm(list = ls())");
+    }
 
     //Obté el nom dels dataframes que conté l'arxiu filename i el retorna
-    public StringVector getDataFramesNames(String filename) throws ScriptException {
-        if(engine == null) {
+    public StringVector getDataFramesNames(String filename) throws ScriptException{
+        if(re == null) {
             throw new RuntimeException("Renjin Script Engine not found on the classpath.");
         }
         fname = filename;
+        
+        resaveFileVersion2(fname);
+        
         engine.eval("load('" + fname + "')");
         engine.eval("CDP_nms = ls()");
         engine.eval("CDP_x = sapply(lapply(CDP_nms, get), is.data.frame)");
@@ -76,7 +91,7 @@ public class ImportRDA {
     }
 
     //Aquest mètode és l'encarregat d'obrir els dataframes seleccionats
-    public ArrayList<DataFrame> getDfSelected(String[] sel_names, String pre, String su) throws ScriptException, DataFrame.DataFrameException {
+    public ArrayList<DataFrame> getDfSelected(String[] sel_names, String pre, String su) throws DataFrame.DataFrameException, ScriptException {
         int d=0;
         prefix = pre;
         suffix = su;

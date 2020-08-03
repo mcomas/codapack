@@ -351,7 +351,7 @@ public final class CoDaPackMain extends JFrame{
             //Comprovem si es selecciona un arxiu aprovat
             if(chooseFile.showOpenDialog(jSplitPane) == JFileChooser.APPROVE_OPTION){
                 //Creem una nova instància ImportRDA, serà l'encarregada de mostrar i obrir els dataframes
-                ImportRDA impdf = new ImportRDA(chooseFile);
+                ImportRDA impdf = new ImportRDA(chooseFile, re);
                 //Creem una nova instància ImportRDAMenu, serà l'encarregada de gestionar el menú
                 ImportRDAMenu imprdam = new ImportRDAMenu(this, chooseFile, impdf);
                 //Fem el menú visible
