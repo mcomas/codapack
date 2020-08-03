@@ -68,6 +68,7 @@ public class ImportRDA {
     }
     
     private void resaveFileVersion2(String fileName){
+        re.eval("rm(list = ls())");
         re.eval("load('" + fileName + "')");
         re.eval("save(list = ls(), file = '" + fileName + "', version = 2)");
         re.eval("rm(list = ls())");
