@@ -45,7 +45,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * S1 -> X numerica i positiva amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * S1 -> X numerica i positiva amb opcio de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class S1 extends AbstractMenuDialogWithILR{

@@ -98,7 +98,7 @@ public class FilterMenu extends AbstractMenuDialog{
                 int n = selected.length;
                 dialog.setVisible(false);
                 
-                // començem el filtratge
+                // comencem el filtratge
                 
                 // Creem tots els subframes que ens facin falta
                 

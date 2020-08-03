@@ -43,7 +43,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * S2 -> X numerica i Y categorica amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * S2 -> X numerica i Y categorica amb opcio de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class S2 extends AbstractMenuDialog2NumCat{

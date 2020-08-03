@@ -107,7 +107,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         String percentatgeDL = "delta=" + usedPercentatgeDL.getText(); // we get the percentatgeDL
         String label = "label=0"; // label for default its 0
         
-        // configurem si és vol agafara els maxims de les columnes
+        // configurem si es vol agafara els maxims de les columnes
         
         //boolean takeMin = true;
         //if(!performMax.isSelected()) takeMin = false;
@@ -160,7 +160,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                 
                 if(numZeros == numDlevel){ // si tenim detection limit per tots els zeros llavors tot be
                 
-                // modificació en el cas de que no tingui level detector agafant minim columna
+                // modificacio en el cas de que no tingui level detector agafant minim columna
                 
                 //if(takeMin){
                     

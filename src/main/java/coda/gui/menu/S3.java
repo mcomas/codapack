@@ -43,7 +43,7 @@ import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
- * S3 -> X numerica i Y numerica o categorica amb opció de retornar text, crear dataframe, afegir variables i  mostrar grafics
+ * S3 -> X numerica i Y numerica o categorica amb opcio de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
 public class S3 extends AbstractMenuDialog2NumCatONum{

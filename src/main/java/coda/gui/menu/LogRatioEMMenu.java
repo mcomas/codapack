@@ -120,7 +120,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
         String delta = "delta=" + dlProportion.getText();
         String label = "label=0"; // label per defecte a 0
         
-        // configurem si és vol agafara els maxims de les columnes
+        // configurem si es vol agafara els maxims de les columnes
         
         //boolean takeMin = true;
         //if(!performMax.isSelected()) takeMin = false;
@@ -129,7 +129,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
         String[] sel_names = ds.getSelectedData();
         int m = sel_names.length;
         
-        if(m >= 2){ // dos o més variables seleccionades
+        if(m >= 2){ // dos o mes variables seleccionades
             
             String[] new_names = new String[m];
             for(int i=0; i < m; i++){
@@ -174,7 +174,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
                     }
                 }
                 
-                //if(takeMin){ // si s'ha seleccionat la opció d'agafar el màxim
+                //if(takeMin){ // si s'ha seleccionat la opcio d'agafar el maxim
                 //    for(int i =0; i < data.length;i++){
                 //        for(int j=0; j < data[i].length;j++){
                 //            if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];

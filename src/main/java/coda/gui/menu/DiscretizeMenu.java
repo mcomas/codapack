@@ -1,5 +1,5 @@
 /** 
- *  Copyright 2011-2016 Marc Comas - Santiago Thió
+ *  Copyright 2011-2016 Marc Comas - Santiago ThiÃ³
  *
  *  This file is part of CoDaPack.
  *
