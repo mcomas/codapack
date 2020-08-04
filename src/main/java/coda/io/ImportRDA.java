@@ -85,16 +85,16 @@ public class ImportRDA {
         }
         
         fname = filename;
+        try{
+        File tempFile = File.createTempFile("temp", ".RData");
+
+        resaveFileVersion2(fname, tempFile.getAbsolutePath());
         
-        String tempFile = (System.getProperty("java.io.tmpdir") + "CoDaPack.RData").replace("\\","/");
-        
-        resaveFileVersion2(fname, tempFile);
-        
-        engine.eval("load('" + tempFile + "')");
-        
-        File tempFileToDelete = new File(tempFile);
-        tempFileToDelete.delete();
-        
+        engine.eval("load('" + tempFile.getAbsolutePath() + "')");
+        tempFile.delete();
+        }catch(java.io.IOException e){
+            // Problemes al crear l'arxiu temporal
+        }
         engine.eval("CDP_nms = ls()");
         engine.eval("CDP_x = sapply(lapply(CDP_nms, get), is.data.frame)");
         StringVector sdf = (StringVector)engine.eval("CDP_nms[CDP_x==TRUE]");
