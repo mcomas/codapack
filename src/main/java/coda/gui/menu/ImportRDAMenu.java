@@ -48,11 +48,6 @@ import javax.swing.JTextField;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import org.renjin.sexp.DoubleVector;
-import org.renjin.sexp.ListVector;
-import org.renjin.sexp.LogicalVector;
-import org.renjin.sexp.SEXP;
-import org.renjin.sexp.StringVector;
 
 /**
  *
