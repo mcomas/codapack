@@ -26,6 +26,7 @@ package coda.io;
 
 import coda.DataFrame;
 import coda.Variable;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
@@ -67,11 +68,14 @@ public class ImportRDA {
         
     }
     
-    private void resaveFileVersion2(String fileName){
-        re.eval("rm(list = ls())");
-        re.eval("load('" + fileName + "')");
-        re.eval("save(list = ls(), file = '" + fileName + "', version = 2)");
-        re.eval("rm(list = ls())");
+    private void resaveFileVersion2(String fileName,String tempFile){
+
+        re.eval("etreball = new.env()");
+
+        re.eval("load('"+ fileName + "', envir = etreball)");
+
+        re.eval("save(list = ls(envir = etreball), file = '" + tempFile + "', version = 2, envir = etreball)");
+
     }
 
     //Obté el nom dels dataframes que conté l'arxiu filename i el retorna
@@ -79,11 +83,18 @@ public class ImportRDA {
         if(re == null) {
             throw new RuntimeException("Renjin Script Engine not found on the classpath.");
         }
+        
         fname = filename;
         
-        resaveFileVersion2(fname);
+        String tempFile = (System.getProperty("java.io.tmpdir") + "CoDaPack.RData").replace("\\","/");
         
-        engine.eval("load('" + fname + "')");
+        resaveFileVersion2(fname, tempFile);
+        
+        engine.eval("load('" + tempFile + "')");
+        
+        File tempFileToDelete = new File(tempFile);
+        tempFileToDelete.delete();
+        
         engine.eval("CDP_nms = ls()");
         engine.eval("CDP_x = sapply(lapply(CDP_nms, get), is.data.frame)");
         StringVector sdf = (StringVector)engine.eval("CDP_nms[CDP_x==TRUE]");
