@@ -88,9 +88,9 @@ public class ImportRDA {
         try{
         File tempFile = File.createTempFile("temp", ".RData");
 
-        resaveFileVersion2(fname, tempFile.getAbsolutePath());
+        resaveFileVersion2(fname, tempFile.getAbsolutePath().replace("\\","/"));
         
-        engine.eval("load('" + tempFile.getAbsolutePath() + "')");
+        engine.eval("load('" + tempFile.getAbsolutePath().replace("\\","/") + "')");
         tempFile.delete();
         }catch(java.io.IOException e){
             // Problemes al crear l'arxiu temporal
