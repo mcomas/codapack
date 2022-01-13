@@ -23,6 +23,7 @@ import coda.DataFrame;
 import coda.gui.utils.DataSelector;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
+import coda.gui.utils.DataSelector2NumOCatNumOCat;
 import coda.io.ImportRDA;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -54,7 +55,7 @@ import org.renjin.sexp.StringVector;
  * @author mcomas
  */
 public abstract class AbstractMenuDialog extends JDialog{
-    final DataSelector ds;
+    DataSelector ds;
     DataFrameSelector dfs;
     public JPanel optionsPanel = new JPanel();;
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -113,11 +114,22 @@ public abstract class AbstractMenuDialog extends JDialog{
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), categoric);
         initialize();
     }
-    
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title){
+        super(mainApp, title);
+        
+    }
     public void setHelpMenuConfiguration(String yamlUrl, String helpTitle){
         
         this.yamlFile = yamlUrl;
         this.helpTitle = helpTitle;
+    }
+    
+    public void activeGroups(final CoDaPackMain mainApp, boolean groups){
+        System.out.println("Active Groups"+ groups);
+        mainApplication = mainApp;
+        dfs = null;
+        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
+        initialize();
     }
     
     private void initialize(){

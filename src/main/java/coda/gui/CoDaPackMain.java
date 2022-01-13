@@ -120,6 +120,7 @@ public final class CoDaPackMain extends JFrame{
     private final DataFrameSelectorListener dataFrameListener = new DataFrameSelectorListener();
     
 
+    String ArchiuSeleccionat;
     
     private String ITEM_APPLICATION_NAME;
     // Menu
@@ -450,7 +451,9 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_EXPORT_R)) {
             new ExportRDataMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_OPEN)){
+            System.out.println("ITEM_OPEN");
             if (!dataFrame.isEmpty()) {
+                System.out.println("isEmpty");
                 //Comprovar si hi ha canvis. si n'hi ha finestra
                 boolean hasChange = false;
                 Iterator<DataFrame> i = dataFrame.iterator();
@@ -459,6 +462,7 @@ public final class CoDaPackMain extends JFrame{
                     if (df.getChange()) hasChange = true;
                 }
                 if (hasChange) {
+                    System.out.println(" has change");
                     int response = JOptionPane.showConfirmDialog(this, "<html>Your changes will be lost if you close <br/>Do you want to continue?</html>", "Confirm",
                             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (response == JOptionPane.YES_OPTION){
@@ -482,6 +486,8 @@ public final class CoDaPackMain extends JFrame{
                     }
                 }
                 else {
+                    
+                System.out.println("else has change");
                     dataFrame.clear();
                     activeDataFrame = -1;
                     jMenuBar.active_path = null;
@@ -501,6 +507,8 @@ public final class CoDaPackMain extends JFrame{
                     } else jMenuBar.active_path = fn;
                 }
             }else {
+                
+                System.out.println("else");
                 CoDaPackImporter imp = new CoDaPackImporter().setParameters(this);
                 ArrayList<DataFrame> dfs = imp.importDataFrames();
                 for (DataFrame df : dfs) {
@@ -535,6 +543,7 @@ public final class CoDaPackMain extends JFrame{
             jMenuBar.removeRecentFiles();
         }
         else if(title.equals(jMenuBar.ITEM_SAV)){
+            System.out.println("Workspace");
             if (jMenuBar.active_path != null) {
                 String fileNameExt = ".cdp";
                 String fileName = jMenuBar.active_path;
@@ -559,6 +568,7 @@ public final class CoDaPackMain extends JFrame{
                 }
             }
             else {
+                System.out.println("else Workspace");
                 chooseFile.resetChoosableFileFilters();
                 chooseFile.setFileFilter(
                         new FileNameExtensionFilter("CoDaPack Workspace", "cdp"));
@@ -584,6 +594,7 @@ public final class CoDaPackMain extends JFrame{
                 CoDaPackConf.lastPath = ruta;
             }
         }else if(title.equals(jMenuBar.ITEM_SAVE)){
+            System.out.println("ITEM_SAVE");
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("CoDaPack Workspace", "cdp"));
@@ -608,12 +619,14 @@ public final class CoDaPackMain extends JFrame{
             ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
             CoDaPackConf.lastPath = ruta;
         }else if(title.equals(jMenuBar.ITEM_DEL_DATAFRAME)){
+            System.out.println("item_del_Dataframe");
             if( dataFrame.size() > 0 ){
                 removeDataFrame(dataFrame.get(activeDataFrame));
             }else{
                 JOptionPane.showMessageDialog(this, "No table available");
             }
         }else if(title.equals(jMenuBar.ITEM_DELETE_ALL_TABLES)){
+            System.out.println("Delete All Tables");
             int responseDeleteAllTables = JOptionPane.showConfirmDialog(null, "Are you sure to delete all the tables?","Delete All Tables", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
             if(responseDeleteAllTables == JOptionPane.YES_OPTION){
@@ -663,7 +676,8 @@ public final class CoDaPackMain extends JFrame{
             if(configurationMenu == null) configurationMenu = new ConfigurationMenu(this);
             configurationMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CREATE_FRAME)){
-            new DataFrameCreator(this);
+            System.out.println("Create Frame");
+            new DataFrameCreator(this); 
         }else if(title.equals(jMenuBar.ITEM_RAW_ALR)){
             if(transformationALRMenu == null || transformationALRMenu.getDataFrame() != this.getActiveDataFrame() || !transformationALRMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) transformationALRMenu = new TransformationALRMenu(this);
             transformationALRMenu.setVisible(true);
@@ -701,9 +715,11 @@ public final class CoDaPackMain extends JFrame{
             if(compStatsSummaryMenu == null || compStatsSummaryMenu.getDataFrame() != this.getActiveDataFrame() || !compStatsSummaryMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) compStatsSummaryMenu = new CompStatsSummaryMenu(this); 
             compStatsSummaryMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_NORM_TEST)){
+            System.out.println("ITEM_NORM_TEST");
             if(normalityTestMenu == null || normalityTestMenu.getDataFrame() != this.getActiveDataFrame() || !normalityTestMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) normalityTestMenu = new NormalityTestMenu(this);
             normalityTestMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLAS_UNI_NORM_TEST)){
+            System.out.println("ITEM_CLAS_UNI_NORM_TEST");
             if(clasUniNormTestMenu == null || clasUniNormTestMenu.getDataFrame() != this.getActiveDataFrame() || !clasUniNormTestMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) clasUniNormTestMenu = new ClasUniNormTestMenu(this,re);
             clasUniNormTestMenu.setVisible(true);
         }
@@ -711,9 +727,11 @@ public final class CoDaPackMain extends JFrame{
             if(atypMenu == null || atypMenu.getDataFrame() != this.getActiveDataFrame() || !atypMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) atypMenu = new AtypMenu(this,re);
             atypMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CENTER)){
+            System.out.println("ITEM_CENTER");
             if(centerDataMenu == null || centerDataMenu.getDataFrame() != this.getActiveDataFrame() || !centerDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) centerDataMenu = new CenterDataMenu(this); 
             centerDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLOSURE)){
+            System.out.println("ITEM_CLOSURE");
             if(closureDataMenu == null || closureDataMenu.getDataFrame() != this.getActiveDataFrame() || !closureDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) closureDataMenu = new ClosureDataMenu(this);
             closureDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CALCULATE_NEW_VAR)){
@@ -728,12 +746,15 @@ public final class CoDaPackMain extends JFrame{
             if(powerDataMenu == null || powerDataMenu.getDataFrame() != this.getActiveDataFrame() || !powerDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) powerDataMenu = new PowerDataMenu(this);
             powerDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZEROS)){
+            System.out.println("ITEM_ZEROS");
             if(zeroReplacementMenu == null || zeroReplacementMenu.getDataFrame() != this.getActiveDataFrame() || !zeroReplacementMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) zeroReplacementMenu = new ZeroReplacementMenu(this);
             zeroReplacementMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ZEROS_R)){
+            System.out.println("ITEM_ZEROS_R");
             if(zeroReplacementRMenu == null || zeroReplacementRMenu.getDataFrame() != this.getActiveDataFrame() || !zeroReplacementRMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) zeroReplacementRMenu = new ZeroReplacementRMenu(this,re);
             zeroReplacementRMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_LOG_RATIO)){
+            System.out.println("ITEM_LOG_RATIO");
             if(logRatioEMMenu == null || logRatioEMMenu.getDataFrame() != this.getActiveDataFrame() || !logRatioEMMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) logRatioEMMenu = new LogRatioEMMenu(this,re);
             logRatioEMMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_BAYESIAN_MULT_REPLACE)){
@@ -749,18 +770,22 @@ public final class CoDaPackMain extends JFrame{
             if(sortDataMenu == null || sortDataMenu.getDataFrame() != this.getActiveDataFrame() || !sortDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) sortDataMenu = new SortDataMenu(this,re);
             sortDataMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_FILTER)){
+            System.out.println("ITEM_FILTER");
             if(filterMenu == null || filterMenu.getDataFrame() != this.getActiveDataFrame() || !filterMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) filterMenu = new FilterMenu(this);
             filterMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ADV_FILTER)){
+            System.out.println("ITEM_ADV_FILTER");
             if(advancedFilterMenu == null || advancedFilterMenu.getDataFrame() != this.getActiveDataFrame() || !advancedFilterMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) advancedFilterMenu = new AdvancedFilterMenu(this,re);
             advancedFilterMenu.setVisible(true);
         }else if (title.equals(jMenuBar.ITEM_SETDETECTION)){
             if(setDetectionLimitMenu == null || setDetectionLimitMenu.getDataFrame() != this.getActiveDataFrame() || !setDetectionLimitMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) setDetectionLimitMenu = new SetDetectionLimitMenu(this);  
             setDetectionLimitMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CHANGE_CAT_NAME_GROUP)){
+            System.out.println("ITEM_CHANGE_CAT_NAME_GROUP");
             if(changeGroupNameMenu == null || changeGroupNameMenu.getDataFrame() != this.getActiveDataFrame() || !changeGroupNameMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) changeGroupNameMenu = new ChangeGroupNameMenu(this);
             changeGroupNameMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_TERNARY_PLOT)){
+            System.out.println("ITEM_TERNARY_PLOT");
             if(ternaryPlotMenu == null || ternaryPlotMenu.getDataFrame() != this.getActiveDataFrame() || !ternaryPlotMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) ternaryPlotMenu = new TernaryPlotMenu(this);
             ternaryPlotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PRED_REG_PLOT)){
@@ -796,9 +821,11 @@ public final class CoDaPackMain extends JFrame{
             frame.setCenter(center);
             frame.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_BIPLOT)){
+            System.out.println("ITEM_BIPLOT");
             if(biplot3dMenu == null || biplot3dMenu.getDataFrame() != this.getActiveDataFrame() || !biplot3dMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) biplot3dMenu = new Biplot3dMenu(this);
             biplot3dMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ILR_BIPLOT)){
+            System.out.println("ITEM_ILR_BIPLOT");
             if(iLRCLRPlotMenu == null || iLRCLRPlotMenu.getDataFrame() != this.getActiveDataFrame() || !iLRCLRPlotMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) iLRCLRPlotMenu = new ILRCLRPlotMenu(this);
             iLRCLRPlotMenu.setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DENDROGRAM_PLOT)){
@@ -807,16 +834,22 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_ALR_PLOT)){
             new ALRPlotMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CLR_PLOT)){
+            System.out.println("ITEM_CLR_PLOT");
             new CLRPlotMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ILR_PLOT)){
+            System.out.println("ITEM_ILR_PLOT");
             new ILRPlotMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_ADD_VAR)){
+            System.out.println("ITEM_ADD_VAR");
             new AddMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_DEL_VAR)){
+            System.out.println("DeletteMenu");
             new DeleteMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_CAT_VAR)){
+            System.out.println("ITEM_CAT_VAR");
             new Numeric2CategoricMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_NUM_VAR)){
+            System.out.println("ITEM_NUM_VAR");
             new Categoric2NumericMenu(this).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_PC_PLOT)){
             if(principalComponentMenu == null || principalComponentMenu.getDataFrame() != this.getActiveDataFrame() || !principalComponentMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames())) principalComponentMenu = new PrincipalComponentMenu(this);
@@ -829,6 +862,7 @@ public final class CoDaPackMain extends JFrame{
             new CoDaPackAbout(this).setVisible(true);
         }else if(title.equals(jMenuBar.R_TEST)){
             // first we get the session info
+            System.out.println("R_TEST");
             re.eval("a <- capture.output(sessionInfo())");
             OutputElement e = new OutputForR(re.eval("a").asStringArray());
             outputPanel.addOutput(e);
@@ -855,6 +889,17 @@ public final class CoDaPackMain extends JFrame{
             new S3(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_S4)){
             new S4(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_MODEL_PM)){
+            new T1(this,re).setVisible(true);
+        }
+        else{
+            for(int i = 0; i< jMenuBar.NomsMenuItems.size(); i++){
+                if(title.equals(jMenuBar.NomsMenuItems.get(i))){
+                    ArchiuSeleccionat = jMenuBar.NomsMenuItems.get(i);
+                    new T1(this,re).setVisible(true);
+                    
+                }
+            }
         }
     }
     public class DataFrameSelectorListener implements ItemListener{
@@ -899,6 +944,7 @@ public final class CoDaPackMain extends JFrame{
         File f = new File(CoDaPackConf.configurationFile);
         if(f.exists())
             CoDaPackConf.loadConfiguration();
+            //CoDaPackConf.saveConfiguration();
         else
             CoDaPackConf.saveConfiguration();
         
@@ -928,9 +974,13 @@ public final class CoDaPackMain extends JFrame{
             for(DataFrame df: dfs) {
                 main.addDataFrame(df);
             }
-        }    
+        }
+        
     }
-    
+    public String getNameTXT(){
+            
+        return ArchiuSeleccionat;
+    }
     public static class UpdateConnection implements Runnable{
         CoDaPackMain main;
         public UpdateConnection(CoDaPackMain main){
@@ -996,5 +1046,6 @@ public final class CoDaPackMain extends JFrame{
                 Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
             } 
         }
+        
     }
 }

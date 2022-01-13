@@ -115,7 +115,7 @@ public class S0 extends AbstractMenuDialogWithILR{
     }
     
     public void initiatePartitionMenu(){
-        BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, ds.getSelectedData());
+        BinaryPartitionSelect binaryMenu = new BinaryPartitionSelect(this, super.ds.getSelectedData());
         binaryMenu.setVisible(true);
     }
     
@@ -131,38 +131,39 @@ public class S0 extends AbstractMenuDialogWithILR{
 
             // create dataframe on r
             
-                        int auxPos = 0;
-                        for(int i=0; i < df.size();i++){ // totes les columnes
-                            if(vSelectedNames.contains(df.get(i).getName())){
-                                re.eval(vSelectedNames.elementAt(auxPos) + " <- NULL");
-                                if(df.get(i).isNumeric()){
-                                    for(double j : df.get(i).getNumericalData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +"," + String.valueOf(j) + ")");
-                                    }
-                                }
-                                else{
-                                    for(String j : df.get(i).getTextData()){
-                                        re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +",'" + j + "')");
-                                    }
-                                }
-                                auxPos++;
+                int auxPos = 0;
+                for(int i=0; i < df.size();i++){ // totes les columnes
+                    if(vSelectedNames.contains(df.get(i).getName())){
+                        re.eval(vSelectedNames.elementAt(auxPos) + " <- NULL");
+                        if(df.get(i).isNumeric()){
+                            for(double j : df.get(i).getNumericalData()){
+                                re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +"," + String.valueOf(j) + ")");
                             }
                         }
-                        
-                        String dataFrameString = "X <- data.frame(";
-                        for(int i=0; i < selectedNames.length;i++){
-                            dataFrameString += vSelectedNames.elementAt(i);
-                            if(i != selectedNames.length-1) dataFrameString += ",";
+                        else{
+                            for(String j : df.get(i).getTextData()){
+                                re.eval(vSelectedNames.elementAt(auxPos) + " <- c(" + vSelectedNames.elementAt(auxPos) +",'" + j + "')");
+                            }
                         }
-                        
-                        dataFrameString +=")";
-                        
-                        re.eval(dataFrameString); // we create the dataframe in R
-                        
-                        constructParametersToR();
+                        auxPos++;
+                    }
+                }
+
+                String dataFrameString = "X <- data.frame(";
+                for(int i=0; i < selectedNames.length;i++){
+                    dataFrameString += vSelectedNames.elementAt(i);
+                    if(i != selectedNames.length-1) dataFrameString += ",";
+                }
+
+                dataFrameString +=")";
+
+                re.eval(dataFrameString); 
+                
+                // we create the dataframe in R
+
+                constructParametersToR();
                 
                 this.dispose();
-                
                 // executem script d'R
                 frameS0 = new JFrame();
                 chooser = new JFileChooser();

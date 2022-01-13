@@ -42,7 +42,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import static org.apache.commons.lang3.math.NumberUtils.isNumber;
+import static org.apache.commons.lang3.math.NumberUtils.isNumber; 
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -60,6 +60,7 @@ public class DataFrameCreator extends JFrame{
     private static final String helpTitle = "Create New Table Help";
     
     public DataFrameCreator(final CoDaPackMain mainApp){
+    //public DataFrameCreator(final ParaProbarMiMenu mainApp){
                 panel = new JPanel();
                 panel.add(new JLabel("Use first row to set variable names"));
                 panel.add(new JLabel(""));

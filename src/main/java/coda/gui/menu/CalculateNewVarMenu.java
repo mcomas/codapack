@@ -35,7 +35,8 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Calculate new Variable Help Menu";
     
     public CalculateNewVarMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Calculate new Variable Menu", false);
+    //public CalculateNewVarMenu(final ParaProbarMiMenu mainApp, Rengine r){
+        super(mainApp, "Calculate new Variable Menu", false);//----?
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());

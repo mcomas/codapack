@@ -32,10 +32,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Scanner;
 import java.util.Set;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.RegexFileFilter;
 
 /**
  *
@@ -45,6 +50,8 @@ public class CoDaPackMenu extends JMenuBar{
     /*
      * Defining actions
      */
+    String nomPersonalDirectory = "menus_personalitzables";
+    
     public JMenu menuFile;
     public final String ITEM_FILE = "File";
         public JMenuItem itemOpen;
@@ -243,8 +250,64 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_MODEL_S3 = "Model S3";
         public JMenuItem itemModelS4;
         public final String ITEM_MODEL_S4 = "Model S4";
-
+        public JMenu itemModelPM;
+        public final String ITEM_MODEL_PM = "Personal Menu";
+        
+        ArrayList<JMenuItem> PersonalMenuItems = new ArrayList<JMenuItem>();
+        ArrayList<String> NomsMenuItems = new ArrayList<String>();
+        
     public String active_path = null;
+    
+    private void crearPersonalMenu(){
+        try {
+            File archivo  = new File("./"+nomPersonalDirectory);
+            //System.out.println("Current directory path using canonical path method :- " + archivo);
+            String canonicalPath = new File("./"+nomPersonalDirectory).getCanonicalPath();
+            //System.out.println("Current directory path using canonical path method :- " + canonicalPath);
+ 
+            /*String usingSystemProperty = System.getProperty("user.dir");
+            System.out.println("Current directory path using system property:- " + usingSystemProperty);*/
+           if (!archivo.exists()) {
+                JOptionPane.showMessageDialog(null,"OJO: ¡¡No existe el archivo de configuración!!");
+
+            }else{
+                if (archivo.isFile()){ 
+                    JOptionPane.showMessageDialog(null,"El archiu "+ canonicalPath +" es un archiu");
+
+                }
+                else {
+                    //------------
+                    /*Collection files = FileUtils.listFiles(
+                        canonicalPath, 
+                        new RegexFileFilter("^(.*?)"), 
+                        DirectoryFileFilter.DIRECTORY
+                    );*/
+                    
+                    //File dir = new File(".");
+                    FileFilter fileFilter = new RegexFileFilter("^(.*?)");
+                    File[] files = archivo.listFiles(fileFilter);
+                    for (File file : files) {
+                        String nomArchiu = file.toString().substring(nomPersonalDirectory.length()+3);
+                        
+                        JMenuItem JmenuItemAux = new JMenuItem();
+                        PersonalMenuItems.add(JmenuItemAux);
+                        NomsMenuItems.add(nomArchiu);
+                        
+                    }
+                    //------------
+                    /*
+                    String[] types = {"txt"};
+                    Collection<File> files2 = FileUtils.listFiles(canonicalPath, types , true);
+                    */
+                    //-------------
+                    //Files.find(Paths.get(sDir), 999, (p, bfa) -> bfa.isRegularFile()).forEach(System.out::println) ;
+                }
+            } 
+        } catch (IOException e) {
+            System.out.println("IOException Occured" + e.getMessage());
+        }
+        
+    }
     
     private JMenuItem addJMenuItem(JMenu menu, JMenuItem item, String title){
         //item.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
@@ -507,6 +570,8 @@ public class CoDaPackMenu extends JMenuBar{
             itemModelS2 = new JMenuItem();
             itemModelS3 = new JMenuItem();
             itemModelS4 = new JMenuItem();
+            itemModelPM = new JMenu();
+            
         
         menuFile.setText(ITEM_FILE);
         addJMenuItem(menuFile, itemOpen, ITEM_OPEN);
@@ -645,6 +710,14 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuDevelopment,itemModelS2, ITEM_MODEL_S2);
         addJMenuItem(menuDevelopment,itemModelS3, ITEM_MODEL_S3);
         addJMenuItem(menuDevelopment,itemModelS4, ITEM_MODEL_S4);
+            itemModelPM.setText(ITEM_MODEL_PM);
+            menuDevelopment.add(itemModelPM);
+            crearPersonalMenu();
+            for(int i= 0; i< PersonalMenuItems.size(); i++){
+                addJMenuItem(itemModelPM,PersonalMenuItems.get(i), NomsMenuItems.get(i));
+            }
+
+        
     }
 
     public void addDataFrame(){

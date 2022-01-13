@@ -245,10 +245,14 @@ public class ClusterMenu extends AbstractMenuDialog{
         if(this.numClusters.isSelected()){
             re.eval("B1 <- TRUE");
             re.eval("P1 <- " + this.numClustersTF.getText());
+            
+            System.out.println("construct parameters: "+this.numClustersTF.getText());
+            
         }
         else{
             re.eval("B1 <- FALSE");
             re.eval("P1 <- " + this.searchOptTF.getText());
+            System.out.println("construct parameters: "+this.searchOptTF.getText());
         }
         
         if(((Object)this.optMethod.getSelectedItem()).toString().equals("Calinski Index")) re.eval("B2 <- TRUE");
