@@ -1,0 +1,14 @@
+exec:
+Bayesian_multiplicative_replacement.R
+
+
+Name of Variables:
+Selector:
+GBM
+SQ
+BL
+CZM
+
+Selector:
+prop
+p-counts

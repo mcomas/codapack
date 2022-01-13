@@ -1,0 +1,5 @@
+exec:
+Geometric_mean_barplot.R
+
+Groups:
+true

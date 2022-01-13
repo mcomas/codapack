@@ -1,0 +1,11 @@
+exec:
+Boxplot.R
+
+Groups:
+True
+
+Name of Variables:
+Selector:
+Geometric
+Arithmetic
+None

@@ -1,0 +1,9 @@
+exec:
+Scatterplot.R
+
+Groups:
+true
+
+Name of Variables:
+Bool:
+Set same scale

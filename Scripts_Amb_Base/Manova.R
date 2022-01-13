@@ -21,7 +21,7 @@ if (is.factor(Y) == FALSE) {
 
 nOrig <- length(X)
 nobs <- nrow(X)
-Xt <- coda.base::coordinates(X, basis = "ilr", label = "ilr.", sparse_basis = FALSE)
+Xt <- coda.base::coordinates(X, basis = "ilr", label = "ilr.")
 #Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
 nparts=length(Xt)
 for (n in 1:nparts)

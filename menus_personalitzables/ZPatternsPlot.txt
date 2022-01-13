@@ -1,0 +1,10 @@
+exec:
+ZPatterns PLot.R
+
+Name of Variables:
+Bool:
+Show means
+Showpercentages
+
+Text:
+Label td:0

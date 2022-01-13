@@ -1,0 +1,37 @@
+exec:
+Cluster_K-means.R
+
+Groups:
+false
+
+Variables:
+1
+
+Name of Variables:
+
+Bool:
+Number of clusters
+Text:
+Number of clusters
+
+Bool:
+Find optimal number between 2 
+Text:
+number between 2 and >2
+
+
+
+Text:
+Name of column of groups td: groups
+
+
+Selector:
+Calinski Index
+Average Silhouette
+
+
+
+
+
+
+

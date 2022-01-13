@@ -1,0 +1,16 @@
+exec:
+Discriminant_analysis.R
+
+Groups:
+true
+
+Partitions:
+set X Partition
+
+Name of Variables:
+Bool:
+Use of inform prior
+Predicting for a new Sample Z
+Discriminant scores
+Max. posteriori prob classification
+Posterior prob. for the classes
