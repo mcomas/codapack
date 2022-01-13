@@ -43,7 +43,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import static org.apache.commons.lang3.math.NumberUtils.isNumber; 
-import org.codehaus.plexus.util.StringUtils;
+//import org.codehaus.plexus.util.StringUtils;
 
 /**
  *
