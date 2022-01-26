@@ -889,6 +889,8 @@ public final class CoDaPackMain extends JFrame{
             new S3(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_S4)){
             new S4(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_MODEL_CPM)){
+            new CrearMenuPersonal(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_PM)){
             new T1(this,re).setVisible(true);
         }
