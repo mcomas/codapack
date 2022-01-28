@@ -250,6 +250,8 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_MODEL_S3 = "Model S3";
         public JMenuItem itemModelS4;
         public final String ITEM_MODEL_S4 = "Model S4";
+        public JMenuItem itemModelCrearMenu;
+        public final String ITEM_MODEL_CPM = "Crear Personal Menu";
         public JMenu itemModelPM;
         public final String ITEM_MODEL_PM = "Personal Menu";
         
@@ -570,6 +572,7 @@ public class CoDaPackMenu extends JMenuBar{
             itemModelS2 = new JMenuItem();
             itemModelS3 = new JMenuItem();
             itemModelS4 = new JMenuItem();
+            itemModelCrearMenu = new JMenuItem();
             itemModelPM = new JMenu();
             
         
@@ -710,6 +713,7 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuDevelopment,itemModelS2, ITEM_MODEL_S2);
         addJMenuItem(menuDevelopment,itemModelS3, ITEM_MODEL_S3);
         addJMenuItem(menuDevelopment,itemModelS4, ITEM_MODEL_S4);
+        addJMenuItem(menuDevelopment,itemModelCrearMenu, ITEM_MODEL_CPM);
             itemModelPM.setText(ITEM_MODEL_PM);
             menuDevelopment.add(itemModelPM);
             crearPersonalMenu();
