@@ -98,8 +98,7 @@
             <configuration>
                 <source>1.8</source>
                 <target>1.8</target>
-                <fork>true</fork>
-		<executable>L:\David\CodaPack10\download\jdk-10.0.2\bin\javac</executable>		
+                <fork>true</fork>			
             </configuration>
          </plugin>
       </plugins>

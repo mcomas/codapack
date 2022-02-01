@@ -203,7 +203,7 @@ public class T1 extends AbstractMenuGeneral{
                                 //comprovar que el archiu existeix
                                 File archivo = new File("./Scripts_Amb_Base/"+line);
                                 if (!archivo.exists()) {
-                                    JOptionPane.showMessageDialog(null,"OJO: ¡¡No existe el archivo de configuración!!");
+                                    JOptionPane.showMessageDialog(null,"OJO: ï¿½ï¿½No existe el archivo de configuraciï¿½n!!");
                                     valid = false;
                                 }else{
                                     if (archivo.isFile()){ 
@@ -310,7 +310,7 @@ public class T1 extends AbstractMenuGeneral{
                         }
                     }
                     //amb totes les variable ja llegides adapta el abstractMenu a les opcions entrades
-                    //ex: amb groups, amb més d'una variable...
+                    //ex: amb groups, amb mï¿½s d'una variable...
                     tempsDirR = new Vector<String>();
                     framesT1 = new Vector<JFrame>();
                     if(valid)super.activeGroups(mainApp, groups, twoVars, df);

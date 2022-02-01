@@ -270,7 +270,7 @@ public class CoDaPackMenu extends JMenuBar{
             /*String usingSystemProperty = System.getProperty("user.dir");
             System.out.println("Current directory path using system property:- " + usingSystemProperty);*/
            if (!archivo.exists()) {
-                JOptionPane.showMessageDialog(null,"OJO: ¡¡No existe el archivo de configuración!!");
+                JOptionPane.showMessageDialog(null,"OJO: ï¿½ï¿½No existe el archivo de configuraciï¿½n!!");
 
             }else{
                 if (archivo.isFile()){ 
