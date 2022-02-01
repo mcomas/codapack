@@ -182,6 +182,12 @@
          <version>5.5.8</version>
          <type>jar</type>
       </dependency>
+      <dependency>
+         <groupId>org.openjfx</groupId>
+         <artifactId>javafx</artifactId>
+         <version>17-ea+2</version>
+         <type>pom</type>
+     </dependency>
       <!--
         <dependency>
          <groupId>org.jzy3d</groupId>
@@ -221,4 +227,3 @@
             -->
    </repositories>
 </project>
-
