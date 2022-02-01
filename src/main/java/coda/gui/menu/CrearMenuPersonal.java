@@ -20,6 +20,7 @@ import java.io.FileWriter;
  * @author dcano
  */
 public class CrearMenuPersonal extends AbstractCrearMenu  {
+
     T1 previsualitzacio;
     int WIDTH = 560;
     int HEIGHT = 430;
@@ -35,6 +36,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     JButton jbRefresh= new JButton("Refrescar");
     JFrame winMain = new JFrame("winMain");
     JPanel jpMenu, jpan1 = new JPanel(), jpan2 = new JPanel(), jpan3 = new JPanel(), jpan4 = new JPanel();
+    JButton jbPartitions= new JButton("Afegir Particions");
     JButton jp1 = new JButton("prova1");
     JButton jp2 = new JButton("prova2");
     ILRMenu ILRBools;
@@ -48,6 +50,8 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     
     JRadioButton partitionsButton = new JRadioButton("partitions");
     
+
+    boolean nPartitons = false;
     
     
     public CrearMenuPersonal(final CoDaPackMain mainApp, Rengine r){
@@ -95,7 +99,14 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             }
         });
         
+        /*
+        this.optionsPanel.add(jbPartitions);
+        jbPartitions.addActionListener(new java.awt.event.ActionListener(){
         
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+               configurejbPartitions();
+            }
+        });*/
         this.optionsPanel.add(jbSelector);
         jbSelector.addActionListener(new java.awt.event.ActionListener(){
         
@@ -161,8 +172,9 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             }
         });
         
-    }
     
+    
+    }
     /*
     void crearBoto(){
         jpan2 = new JPanel();   
@@ -173,6 +185,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         jp2.setSize(100, 100);
         jp2.setVisible(false);
         jp2.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+
     }*/
     
     public void configurejbGroups(){
@@ -193,8 +206,10 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         this.jpan3.setVisible(false);
         this.jpan4.setVisible(false);
         
-        
+
     }
+    
+    
     
     public void configurejbBool(){
         System.out.println("configurejbBool");
@@ -218,12 +233,19 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         this.jpan2.setVisible(true);
         this.jpan3.setVisible(false);
         this.jpan4.setVisible(false);
+        /*
+        JTextField P1 = new JTextField("Input Name Var"+NomsBotonsBool.size(),20);
+        NomsBotonsBool.add("Input Name Var"+NomsBotonsBool.size());
+        EstatBotonsBool.add(P1);
+        this.optionsPanel.add(new JLabel("      name Var"+NomsBotonsBool.size()+":"));
+        this.optionsPanel.add(P1);
         //this.optionsPanel.setVisible(true);
         
         //this.optionsPanel.add(jbBool);
-         System.out.println("configurejbBool2");
+         System.out.println("configurejbBool2");*/
          
-         //crearBoto();
+
+
          
     }
     
@@ -246,12 +268,21 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         this.jpan2.setVisible(false);
         this.jpan3.setVisible(true);
         this.jpan4.setVisible(false);
+        /*
+        JTextField P1 = new JTextField("Input Name Var"+BotonsText.size(),20);
+        BotonsText.add("Input Name Var"+BotonsText.size());
+        TextBotonsText.add(P1);
+        this.optionsPanel.add(new JLabel("      name Var"+BotonsText.size()+":"));
+        this.optionsPanel.add(P1);
+        */
+
         
         //}
         //this.optionsPanel.setVisible(true);
         
     }
     
+
     public void configurejbRefresh(){
         System.out.println("configurejbrefresh");
         
@@ -259,6 +290,13 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         previsualitzacio.TEST(testNameArch);*/
         
         
+
+   
+        System.out.println("configurejbPartitions");
+        
+        nPartitons= !nPartitons;
+        
+        System.out.println("configurejbPartitions2");
     }
     
     @Override
@@ -274,10 +312,12 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
         //Groups:
         if(groupsButton.isSelected())contenido += "Groups:\n" +"True\n \n";
+
         else contenido += "Groups:\n" +"False\n \n";
         //Partitions:
         //contenido += "Partitions: \n";
         if(partitionsButton.isSelected()){
+
             contenido += "Partitions:\n"+ "Set partition\n\n";
         }
           
@@ -323,8 +363,5 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             e.printStackTrace();
         }
     }
-    
-    
-    
-    
+
 }
