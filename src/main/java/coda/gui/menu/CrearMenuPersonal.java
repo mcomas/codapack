@@ -7,6 +7,7 @@ package coda.gui.menu;
 import coda.gui.CoDaPackMain;
 import javax.swing.*;
 import org.rosuda.JRI.Rengine;
+import java.awt.*;
 import java.awt.event.*;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.io.FileWriter;
  * @author dcano
  */
 public class CrearMenuPersonal extends AbstractCrearMenu  {
+    T1 previsualitzacio;
     int WIDTH = 560;
     int HEIGHT = 430;
     //exec.R Name
@@ -30,7 +32,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     JButton jbSelector = new JButton("AfegirSelector");
     JButton jbBool= new JButton("Afegir Botons I/0");
     JButton jbText= new JButton("Afegir Text");
-    JButton jbPartitions= new JButton("Afegir Particions");
+    JButton jbRefresh= new JButton("Refrescar");
     JFrame winMain = new JFrame("winMain");
     JPanel jpMenu, jpan1 = new JPanel(), jpan2 = new JPanel(), jpan3 = new JPanel(), jpan4 = new JPanel();
     JButton jp1 = new JButton("prova1");
@@ -44,7 +46,8 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     ArrayList<JTextField> EstatBotonsBool = new ArrayList<JTextField>();
     ArrayList<javax.swing.JComboBox> ArrayComboBox = new ArrayList<javax.swing.JComboBox>();
     
-    boolean nPartitons = false;
+    JRadioButton partitionsButton = new JRadioButton("partitions");
+    
     
     
     public CrearMenuPersonal(final CoDaPackMain mainApp, Rengine r){
@@ -91,13 +94,8 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
                configurejbText();
             }
         });
-        this.optionsPanel.add(jbPartitions);
-        jbPartitions.addActionListener(new java.awt.event.ActionListener(){
         
-            public void actionPerformed(java.awt.event.ActionEvent evt){
-               configurejbPartitions();
-            }
-        });
+        
         this.optionsPanel.add(jbSelector);
         jbSelector.addActionListener(new java.awt.event.ActionListener(){
         
@@ -105,54 +103,67 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
                configurejbGroups();
             }
         });
-       
-        /*JTextField P1 = new JTextField("Input Name Var"+BotonsText.size(),20);
-        BotonsText.add("Input Name Var"+BotonsText.size());
-        TextBotonsText.add(P1);
-        this.optionsPanel.add(P1);*/
-        /*for(int i= 0; i<10;i++){
-            JTextField P1 = new JTextField("Input Name Var"+BotonsText.size(),20);
-            BotonsText.add("Input Name Var"+BotonsText.size());
-            TextBotonsText.add(P1);
-            this.optionsPanel.add(P1);
-            //this.optionsPanel.add(TextBotonsText.get(i));
-        }*/
+        this.optionsPanel.add(partitionsButton);
         
-        /*for(int i= 0; i<TextBotonsText.size();i++){
-            this.optionsPanel.add(TextBotonsText.get(i));
-        }
-        for(int i= 0; i<EstatBotonsBool.size();i++){
-            this.optionsPanel.add(EstatBotonsBool.get(i));
-        }*/
-        jpan1.setSize(100, HEIGHT);
+        
+       
+        
+        /*jpan1.setSize(100, HEIGHT);
         jpan2.setSize(100, HEIGHT);
         jpan3.setSize(100, HEIGHT);
-        jpan4.setSize(100, HEIGHT);
+        jpan4.setSize(100, HEIGHT);*/
         
+        jpan1.setPreferredSize(new Dimension(500, 300));
         this.optionsPanel.add(jpan1);
+        //this.optionsPanel.add(jpan1);
+        jpan2.setPreferredSize(new Dimension(500, 300));
         this.optionsPanel.add(jpan2);
+        jpan3.setPreferredSize(new Dimension(500, 300));
+        this.optionsPanel.add(jpan3);
+        jpan4.setPreferredSize(new Dimension(500, 300));
+        this.optionsPanel.add(jpan4);
         
+        //jpan1.setLayout(null);
         jpan1.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        JLabel jb1 = new JLabel("SECTION 1");
-        jpan1.add(jb1);
+        jpan1.setBounds(new Rectangle(500,50,100,75));
+        JLabel jb1 = new JLabel("                                                      Grups                                                           ");
+        jpan1.add(jb1, BorderLayout.CENTER);
         jpan1.setVisible(true);
         
+        //jpan2.setLayout(null);
         jpan2.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        JLabel jb2 = new JLabel("SECTION 2");
-        jpan2.add(jb2);
+        jpan2.setBounds(new Rectangle(500,50,100,75));
+        JLabel jb2 = new JLabel("                                                      Booleans                                                           ");
+        jpan2.add(jb2, BorderLayout.CENTER);
         jpan2.setVisible(false);
         
+        //jpan3.setLayout(null);
         jpan3.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        JLabel jb3 = new JLabel("SECTION 3");
-        jpan3.add(jb2);
+        jpan3.setBounds(new Rectangle(500,50,100,75));
+        JLabel jb3 = new JLabel("                                                      Entrada text/num                                                           ");
+        jpan3.add(jb3, BorderLayout.CENTER);
         jpan3.setVisible(false);
         
+        //jpan4.setLayout(null);
         jpan4.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        JLabel jb4 = new JLabel("SECTION 4");
-        jpan4.add(jb2);
+        JLabel jb4 = new JLabel("                                                      SECTION 4                                                          ");
+        jpan4.setBounds(new Rectangle(500,50,100,75));
+        jpan4.add(jb4, BorderLayout.CENTER);
         jpan4.setVisible(false);
+        
+        
+        jbRefresh.setBounds(new Rectangle(200,50,100,750));
+        this.optionsPanel.add(jbRefresh, BorderLayout.SOUTH);
+        jbRefresh.addActionListener(new java.awt.event.ActionListener(){
+        
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+               configurejbRefresh();
+            }
+        });
+        
     }
     
+    /*
     void crearBoto(){
         jpan2 = new JPanel();   
         
@@ -162,42 +173,47 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         jp2.setSize(100, 100);
         jp2.setVisible(false);
         jp2.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-    }
+    }*/
     
     public void configurejbGroups(){
         System.out.println("configurejbGroups");
         //jpan1 = new JPanel();   
         
-        JTextField jl1 = new JTextField("Nom Grup");
+        JLabel jlG = new JLabel("                Grup:  ");
+        jlG.setPreferredSize(new Dimension(200, 25));
+        this.jpan1.add(jlG, BorderLayout.LINE_START);
         
-        this.jpan1.add(jl1);
-        this.jpan1.add(new JLabel("\n"));
+        JTextField jl1 = new JTextField("Nom Grup");
+        jl1.setPreferredSize(new Dimension(200, 25));
+        this.jpan1.add(jl1, BorderLayout.CENTER);
+        
+        this.jpan1.setVisible(false);
         this.jpan1.setVisible(true);
         this.jpan2.setVisible(false);
         this.jpan3.setVisible(false);
         this.jpan4.setVisible(false);
         
         
-        //crearBoto();
-        //----
-        //jpan1.setVisible(true);
-        //jpan2.setVisible(false);
-        //----
-        this.optionsPanel.add(jpan1);
     }
     
     public void configurejbBool(){
         System.out.println("configurejbBool");
-            
+        
+        JLabel jlG = new JLabel("                       Bool:  ");
+        jlG.setPreferredSize(new Dimension(200, 25));
+        
         JTextField P1 = new JTextField("Input Name Var"+NomsBotonsBool.size(),20);
         NomsBotonsBool.add("Input Name Var"+NomsBotonsBool.size());
         EstatBotonsBool.add(P1);
+       
         //this.optionsPanel.add(new JLabel("      name Var"+NomsBotonsBool.size()+":"));
         //this.optionsPanel.add(P1);
-        this.jpan2.add(P1);
+        P1.setPreferredSize(new Dimension(300, 25));
+        this.jpan2.add(jlG, BorderLayout.LINE_START);
+        this.jpan2.add(P1, BorderLayout.CENTER);
         
-        this.jpan2.add(new JLabel("\n"));
         
+        this.jpan2.setVisible(false);
         this.jpan1.setVisible(false);
         this.jpan2.setVisible(true);
         this.jpan3.setVisible(false);
@@ -214,15 +230,18 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     public void configurejbText(){
         System.out.println("configurejbText");
         //for(int i = 0; i< 5; i++){
+        JLabel jlG = new JLabel("                Entrada de text:  ");
+        jlG.setPreferredSize(new Dimension(200, 25));
         JTextField P1 = new JTextField("Input Name Var"+BotonsText.size(),20);
         BotonsText.add("Input Name Var"+BotonsText.size());
         TextBotonsText.add(P1);
         //this.optionsPanel.add(new JLabel("      name Var"+BotonsText.size()+":"));
         //this.optionsPanel.add(P1);
-        this.jpan3.add(P1);
+        P1.setPreferredSize(new Dimension(300, 25));
+        this.jpan3.add(jlG, BorderLayout.LINE_START);
+        this.jpan3.add(P1, BorderLayout.CENTER);
         
-        this.jpan3.add(new JLabel("\n"));
-        
+        this.jpan3.setVisible(false);
         this.jpan1.setVisible(false);
         this.jpan2.setVisible(false);
         this.jpan3.setVisible(true);
@@ -233,18 +252,13 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
     }
     
-    public void configurejbPartitions(){
-        System.out.println("configurejbPartitions");
+    public void configurejbRefresh(){
+        System.out.println("configurejbrefresh");
         
-        nPartitons= !nPartitons;
+        /*String testNameArch = "prev.txt";
+        previsualitzacio.TEST(testNameArch);*/
         
         
-        this.jpan1.setVisible(false);
-        this.jpan2.setVisible(false);
-        this.jpan3.setVisible(false);
-        this.jpan4.setVisible(true);
-        
-        System.out.println("configurejbPartitions2");
     }
     
     @Override
@@ -263,7 +277,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         else contenido += "Groups:\n" +"False\n \n";
         //Partitions:
         //contenido += "Partitions: \n";
-        if(nPartitons){
+        if(partitionsButton.isSelected()){
             contenido += "Partitions:\n"+ "Set partition\n\n";
         }
           
