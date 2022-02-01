@@ -74,7 +74,7 @@ public final class HelpMenu extends JFXPanel {
             inicialitzateAtributes(map);
             
             try{
-                fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "Help.html",false),StandardCharsets.ISO_8859_1);
+                fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/Help.html",false),StandardCharsets.ISO_8859_1);
             }catch(IOException e){
                     System.out.println("Problem occurs when deleting the directory : Help.html");
                     e.printStackTrace();
@@ -244,7 +244,7 @@ public final class HelpMenu extends JFXPanel {
             
             try {
                 fileWriter.close();
-                File htmlFile = new File(System.getProperty("java.io.tmpdir") + "Help.html");
+                File htmlFile = new File(System.getProperty("java.io.tmpdir") + "/Help.html");
                 htmlFile.delete();
                 
             } catch (IOException ex) {
@@ -262,7 +262,7 @@ public final class HelpMenu extends JFXPanel {
 	public Browser(){
             
 		getStyleClass().add("browser");
-		webEngine.load("file:\\" + System.getProperty("java.io.tempdir") + "Help.html");
+		webEngine.load("file:\\" + System.getProperty("java.io.tempdir") + "/Help.html");
 		getChildren().add(browser);
 		webEngine.setUserStyleSheetLocation(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "style.css").toString());
 	}
@@ -291,14 +291,14 @@ public final class HelpMenu extends JFXPanel {
 
 	public void repaint(String text){
             
-            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "Help.html",true),StandardCharsets.ISO_8859_1)){
+            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/Help.html",true),StandardCharsets.ISO_8859_1)){
                 fileWriter.write(text);
             }catch(IOException e){
                 System.out.println("Problem occurs when deleting the directory : Help.html");
                 e.printStackTrace();
             }
 
-            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "Help.html");
+            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "/Help.html");
             /*webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
                 webEngine.executeScript("window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);");
             });*/
@@ -306,14 +306,14 @@ public final class HelpMenu extends JFXPanel {
         
         public void clean(String text){
             
-            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "Help.html",false),StandardCharsets.ISO_8859_1)){
+            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/Help.html",false),StandardCharsets.ISO_8859_1)){
                 fileWriter.write(text);
             }catch(IOException e){
                 System.out.println("Problem occurs when deleting the directory : Help.html");
                 e.printStackTrace();
             }
 
-            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "Help.html");
+            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "/Help.html");
             /*webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
                 webEngine.executeScript("window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);");
             });*/
