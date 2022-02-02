@@ -48,6 +48,7 @@ library(coda.base)
 # We choose the best cluster according calinski index with number of clusters between 2 and 10
 
 library(fpc)
+library(cluster)
 
 ################# FUNCTIONS #################
 
@@ -68,80 +69,81 @@ generateFileName <- function(candidateName){
 #rm(km)
 Xt <- coda.base::coordinates(X, basis = "ilr", label = "ilr.")
 #Xt <- coda.base::coordinates(X, basis = sbp_basis(BaseX))
-nparts=length(Xt)
-for (n in 1:nparts)
-{
-  colnames(Xt)[n] <- paste("ilr.",n,sep="")
-}
+nparts=NCOL(Xt)
+
 #head(Xt)
+i.nona = which(rowSums(is.na(Xt))==0)
 
-N <- nrow(Xt)
-d <- dist(Xt)
-
+Xt.nona = Xt[i.nona,]
 # Create graphs
 graphnames <- list()
 
-if (B1 == TRUE) 
-{
-  k <- P1
+if(B1){
+  krange = P1
+}else{
+  krange = 2:P1
+}
+l_km = lapply(krange, function(k){
   set.seed(123456789)
-  km <- kmeans(Xt, k, nstart = 25)
-  calinski <- (km$betweenss/(k-1))/(km$tot.withinss/(N-k))
-  avg.sil <- cluster.stats(d, km$cluster)$avg.silwidth
-} else
-{
-  ks <- 2:P1      
-  ASW <- sapply(ks, FUN=function(k) {
-    set.seed(123456789)
-    cluster.stats(d, kmeans(Xt, centers=k, nstart=25)$cluster)$avg.silwidth
-  })
-  
-  ksi <- which.max(ASW)
-  avg.sil <- ks[ksi]
-  
-  
-  kc <- 2:P1      
-  CALI <- sapply(kc, FUN=function(k) {
-    set.seed(123456789)
-    cl <- kmeans(Xt, k, nstart = 25)
-    (cl$betweenss/(k-1))/(cl$tot.withinss/(N-k))
-  })
-  
-  kci <- which.max(CALI)
-  calinski <- kc[kci]
-  
-  if (B2 == TRUE) 
-  {
-    set.seed(123456789)
-    km <- kmeans(Xt, kci+1, nstart = 25)
-  } else
-  {
-    set.seed(123456789)
-    km <- kmeans(Xt, ksi+1, nstart = 25)
-  }
-  
+  kmeans(Xt.nona, k, nstart = 25)
+})
+
+
+v_calinski = sapply(l_km, function(km) fpc::calinhara(Xt.nona, km$cluster))
+dist.X.nona = dist(Xt.nona)
+v_silhouette = sapply(l_km, function(km) mean(cluster::silhouette(km$cluster, dist.X.nona)[,'sil_width']))
+
+
+if(B2){ # Calinski
+  i_best = which.max(v_calinski)
+}else{ # Silhoutte
+  D.X.nona = 
+  i_best = which.max(v_silhouette)
+}
+
+km_best = l_km[[i_best]]
+
+
+if(!B1){
   name <- generateFileName(paste(tempdir(),'Average Silhouette',sep="\\"))
   svg(name)
-  plot(ks, ASW, type="l", xlab='Number of clusters', ylab='Average Silhouette', frame=FALSE)
+  plot(krange, v_silhouette, type="l", xlab='Number of clusters', ylab='Average Silhouette', frame=FALSE)
   dev.off()
   graphnames[1] <- name
   name <- generateFileName(paste(tempdir(),'Calinski index',sep="\\"))
   svg(name)
-  plot(kc, CALI, type="l", xlab='Number of clusters', ylab='Calinski index', frame=FALSE)
+  plot(krange, v_calinski, type="l", xlab='Number of clusters', ylab='Calinski index', frame=FALSE)
   dev.off()
   graphnames[2] <- name
 }
 
-df <- cbind.data.frame(as.factor(km$cluster))
-names(df) <- c("Group")
+gr = rep('na', nrow(X))
+gr[i.nona] = km_best$cluster
+df = data.frame('Group' = gr)
 
+dres = data.frame('Centers' = krange,
+                  'CH index' = v_calinski,
+                  'AS index' = v_silhouette)
+
+dcenters = as.data.frame(composition(km_best$centers))
+names(dcenters) = colnames(X)
+
+dcenters$Size = km_best$size
+dcenters$`Within SS` = km_best$withinss
+
+
+
+output_text = list(capture.output(dres),
+                   c("Centers:", capture.output(dcenters)),
+                   sprintf("(between_SS / total_SS =  %.2f %%)", 100* km_best$betweenss / km_best$totss))
+if(nrow(Xt) - length(i.nona) > 0){
+  output_text = c(output_text, 
+                  sprintf("(%d observations deleted due to missingness)", nrow(Xt) - length(i.nona)))
+}
 # Output
 #rm(cdp_res)
 cdp_res = list(
-  'text' = list(paste("CLUSTER K-MEANS"),
-                paste("calinski index = ",capture.output(calinski)),
-                paste("Average Silhouette = ",capture.output(avg.sil)),
-                paste(capture.output(km))),
+  'text' = output_text,
   'dataframe' = list(),
   'graph' = graphnames,
   'new_data' = df

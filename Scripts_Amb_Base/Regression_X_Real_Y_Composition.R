@@ -38,16 +38,12 @@ generateFileName <- function(candidateName){
 
 ################# MAIN #################
 
-Yt <- coda.base::coordinates(Y, basis = coda.base::sbp_basis(BaseY))
-nparts=length(Yt)
-for (n in 1:nparts)
-{
-  colnames(Yt)[n] <- paste("ilr.",n,sep="")
-}
-#head(Yt)
+Yt <- coda.base::coordinates(Y, basis = coda.base::sbp_basis(BaseY), label = "ilr.")
+nparts=NCOL(Yt)
+
 
 # Linear model
-LM <- lm(as.matrix(Yt)~as.matrix(X))
+LM <- lm(as.matrix(Yt)~., data=as.data.frame(X))
 
 #summary(LM)
 #put names to residuals and fitted values columns
@@ -70,7 +66,7 @@ FitCen <- scale(LM$fitted.values,scale=FALSE)
 sum(FitCen^2)
 # Calculate SST:
 #YCen <- scale(Dep,scale=FALSE)
-YCen <- scale(Yt,scale=FALSE)
+YCen <- scale(Yt[-LM$na.action,],scale=FALSE)
 sum(YCen^2)
 # Calculate R2
 r2 <- (sum(FitCen^2)/sum(YCen^2))*100
@@ -114,11 +110,11 @@ names(NDF)<-paste("Coefficients")
 NDF=cbind.data.frame(NDF,LM$coefficients)
 #FI PART NOVA.
 
+
 # Ooutput
 cdp_res = list(
-  'text' = list(paste("LINEAR REGRESSION"),
-                paste(capture.output(summary(LM))),
-                paste("r^2 = ",capture.output(r2))),
+  'text' = list(gsub("[‘’]", "'", capture.output(summary(LM))),
+                capture.output(cat(sprintf("Overall R² = %0.4f", r2)))),
 #  'dataframe' = list('coefficients' = LM$coefficients),
   'dataframe' = list('coefficients' = NDF),
   'graph' = graphnames,
