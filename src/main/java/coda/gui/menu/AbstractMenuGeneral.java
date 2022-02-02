@@ -20,46 +20,26 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
-import coda.Variable;
-import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelectorGeneral;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
-import coda.gui.utils.DataSelector2NumOCatNumOCat;
 import coda.io.ImportRDA;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.script.ScriptException;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.SwingConstants;
-import javax.swing.border.TitledBorder;
-import javax.swing.ListModel;
-import javax.swing.JComponent;
-import org.renjin.sexp.StringVector;
 /**
  *
  * @author dcano98

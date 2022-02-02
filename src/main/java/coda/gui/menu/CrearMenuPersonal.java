@@ -5,11 +5,9 @@
 package coda.gui.menu;
 
 import coda.gui.CoDaPackMain;
-import static coda.gui.CoDaPackMain.re;
 import javax.swing.*;
 import org.rosuda.JRI.Rengine;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.io.BufferedWriter;
@@ -22,7 +20,7 @@ import java.io.FileWriter;
  */
 public class CrearMenuPersonal extends AbstractCrearMenu  {
 
-    //T1 previsualitzacio;
+    T1 previsualitzacio;
     int WIDTH = 560;
     int HEIGHT = 430;
     //exec.R Name
@@ -98,9 +96,8 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
                configurejbText();
             }
         });
-        
-        /*
-        this.optionsPanel.add(jbPartitions);
+
+        /*this.optionsPanel.add(jbPartitions);
         jbPartitions.addActionListener(new java.awt.event.ActionListener(){
         
             public void actionPerformed(java.awt.event.ActionEvent evt){
@@ -119,10 +116,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
        
         
-        /*jpan1.setSize(100, HEIGHT);
-        jpan2.setSize(100, HEIGHT);
-        jpan3.setSize(100, HEIGHT);
-        jpan4.setSize(100, HEIGHT);*/
+        
         
         jpan1.setPreferredSize(new Dimension(500, 300));
         this.optionsPanel.add(jpan1);
@@ -175,7 +169,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     
     
     }
-
+    
     
     public void configurejbGroups(){
         System.out.println("configurejbGroups");
@@ -195,47 +189,31 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         this.jpan3.setVisible(false);
         this.jpan4.setVisible(false);
         
-
+        
     }
     
-    
+
     
     public void configurejbBool(){
         System.out.println("configurejbBool");
         
         JLabel jlG = new JLabel("                       Bool:  ");
         jlG.setPreferredSize(new Dimension(200, 25));
-        
-        JTextField P1 = new JTextField("Input Name Var"+NomsBotonsBool.size(),20);
-        NomsBotonsBool.add("Input Name Var"+NomsBotonsBool.size());
-        EstatBotonsBool.add(P1);
-       
-        //this.optionsPanel.add(new JLabel("      name Var"+NomsBotonsBool.size()+":"));
-        //this.optionsPanel.add(P1);
-        P1.setPreferredSize(new Dimension(300, 25));
         this.jpan2.add(jlG, BorderLayout.LINE_START);
-        this.jpan2.add(P1, BorderLayout.CENTER);
         
+        JTextField jl1 = new JTextField("Input Name Var"+NomsBotonsBool.size(),25);
+        NomsBotonsBool.add("Input Name Var"+NomsBotonsBool.size());
+        EstatBotonsBool.add(jl1);
+        jl1.setPreferredSize(new Dimension(200, 25));
+        this.jpan2.add(jl1, BorderLayout.CENTER);
         
         this.jpan2.setVisible(false);
         this.jpan1.setVisible(false);
         this.jpan2.setVisible(true);
         this.jpan3.setVisible(false);
         this.jpan4.setVisible(false);
-        /*
-        JTextField P1 = new JTextField("Input Name Var"+NomsBotonsBool.size(),20);
-        NomsBotonsBool.add("Input Name Var"+NomsBotonsBool.size());
-        EstatBotonsBool.add(P1);
-        this.optionsPanel.add(new JLabel("      name Var"+NomsBotonsBool.size()+":"));
-        this.optionsPanel.add(P1);
-        //this.optionsPanel.setVisible(true);
         
-        //this.optionsPanel.add(jbBool);
-         System.out.println("configurejbBool2");*/
-         
-
-
-         
+        
     }
     
     public void configurejbText(){
@@ -243,13 +221,14 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         //for(int i = 0; i< 5; i++){
         JLabel jlG = new JLabel("                Entrada de text:  ");
         jlG.setPreferredSize(new Dimension(200, 25));
+        this.jpan3.add(jlG, BorderLayout.LINE_START);
         JTextField P1 = new JTextField("Input Name Var"+BotonsText.size(),20);
         BotonsText.add("Input Name Var"+BotonsText.size());
         TextBotonsText.add(P1);
         //this.optionsPanel.add(new JLabel("      name Var"+BotonsText.size()+":"));
         //this.optionsPanel.add(P1);
         P1.setPreferredSize(new Dimension(300, 25));
-        this.jpan3.add(jlG, BorderLayout.LINE_START);
+        
         this.jpan3.add(P1, BorderLayout.CENTER);
         
         this.jpan3.setVisible(false);
@@ -257,13 +236,8 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         this.jpan2.setVisible(false);
         this.jpan3.setVisible(true);
         this.jpan4.setVisible(false);
-        /*
-        JTextField P1 = new JTextField("Input Name Var"+BotonsText.size(),20);
-        BotonsText.add("Input Name Var"+BotonsText.size());
-        TextBotonsText.add(P1);
-        this.optionsPanel.add(new JLabel("      name Var"+BotonsText.size()+":"));
-        this.optionsPanel.add(P1);
-        */
+
+        
 
         
         //}
@@ -283,8 +257,8 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         //new T1(this,re).setVisible(true);
         //previsualitzacio.TEST();
         
-    }
-    
+    }    
+
     @Override
     public void acceptButtonActionPerformed(){
         String contenido = "";
@@ -298,12 +272,10 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
         //Groups:
         if(groupsButton.isSelected())contenido += "Groups:\n" +"True\n \n";
-
         else contenido += "Groups:\n" +"False\n \n";
         //Partitions:
         //contenido += "Partitions: \n";
         if(partitionsButton.isSelected()){
-
             contenido += "Partitions:\n"+ "Set partition\n\n";
         }
           

@@ -5,11 +5,8 @@
  */
 package coda.gui.menu;
 
-import coda.CoDaStats;
-import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
-import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
@@ -18,7 +15,6 @@ import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 //import java.awt.GridBagLayout;
 import java.awt.Toolkit;
-import java.io.File;
 import java.util.Arrays;
 import java.util.Vector;
 //import javax.swing.ImageIcon;
@@ -29,9 +25,7 @@ import javax.swing.JOptionPane;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 import coda.DataFrame;
-import coda.gui.CoDaPackConf;
 import static coda.gui.CoDaPackMain.outputPanel;
-import coda.gui.utils.DataFrameSelector;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,9 +43,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import javax.swing.JSeparator;
