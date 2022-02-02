@@ -5,6 +5,7 @@
 package coda.gui.menu;
 
 import coda.gui.CoDaPackMain;
+import static coda.gui.CoDaPackMain.re;
 import javax.swing.*;
 import org.rosuda.JRI.Rengine;
 import java.awt.*;
@@ -21,7 +22,7 @@ import java.io.FileWriter;
  */
 public class CrearMenuPersonal extends AbstractCrearMenu  {
 
-    T1 previsualitzacio;
+    //T1 previsualitzacio;
     int WIDTH = 560;
     int HEIGHT = 430;
     //exec.R Name
@@ -51,7 +52,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     JRadioButton partitionsButton = new JRadioButton("partitions");
     
 
-    boolean nPartitons = false;
     
     
     public CrearMenuPersonal(final CoDaPackMain mainApp, Rengine r){
@@ -175,18 +175,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     
     
     }
-    /*
-    void crearBoto(){
-        jpan2 = new JPanel();   
-        
-        JLabel jl1 = new JLabel("Este es el panel 2");
-        
-        jp2.add(jl1);
-        jp2.setSize(100, 100);
-        jp2.setVisible(false);
-        jp2.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 
-    }*/
     
     public void configurejbGroups(){
         System.out.println("configurejbGroups");
@@ -291,12 +280,9 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
         
 
-   
-        System.out.println("configurejbPartitions");
+        //new T1(this,re).setVisible(true);
+        //previsualitzacio.TEST();
         
-        nPartitons= !nPartitons;
-        
-        System.out.println("configurejbPartitions2");
     }
     
     @Override
