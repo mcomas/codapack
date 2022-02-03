@@ -36,16 +36,10 @@ generateFileName <- function(candidateName){
 
 ################# MAIN #################
 
-Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
-nparts=length(Xt)
-for (n in 1:nparts)
-{
-  colnames(Xt)[n] <- paste("ilr.",n,sep="")
-}
-#head(Xt)
+Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX), label = "ilr.")
+nparts=NCOL(Xt)
 
 df <- cbind.data.frame(Xt,Y)
-nparts <- length(Xt)
 
 # Linear model
 #rm(formul)
@@ -99,11 +93,12 @@ if (B2 == TRUE) {
   }
 }
 
+text_output = gsub("as.formula(formul)", formul, capture.output(summary(LM)), fixed = TRUE)
+text_output = gsub("[‘’]", "'", text_output)
 
 # Ooutput
 cdp_res = list(
-  'text' = list(paste("LINEAR REGRESSION"),paste(capture.output(formul)),
-                paste(capture.output(summary(LM)))),
+  'text' = list(text_output),
   'dataframe' = list('coefficients' = LM$coefficients),
   'graph' = graphnames,
   'new_data' = DF
