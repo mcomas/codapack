@@ -156,7 +156,7 @@ public class T1 extends AbstractMenuGeneral{
                     while(scan.hasNextLine()){//mentre no acabi el document
 
                         String line = scan.nextLine();
-
+                        System.out.println("line: "+line);
                         //llegeix el tipus de botons, entrades de text, particions a crear
                         if(line.equals("Exec:") || line.equals("exec:")){lineaAnterior = "Exec:";
                         }else if(line.equals("Groups:") || line.equals("groups:") ){ lineaAnterior = "Groups:";
@@ -195,7 +195,7 @@ public class T1 extends AbstractMenuGeneral{
                                 //comprovar que el archiu existeix
                                 File archivo = new File("./Scripts_Amb_Base/"+line);
                                 if (!archivo.exists()) {
-                                    JOptionPane.showMessageDialog(null,"OJO: ��No existe el archivo de configuraci�n!!");
+                                    JOptionPane.showMessageDialog(null,"OJO: No existe el archivo de ejecucion!!");
                                     valid = false;
                                 }else{
                                     if (archivo.isFile()){ 
@@ -315,6 +315,183 @@ public class T1 extends AbstractMenuGeneral{
         }else{
             JOptionPane.showMessageDialog(null,"Please select data");
         }
+        
+    }
+    
+    public T1(final CoDaPackMain mainApp, Rengine r, String nom){
+        super(mainApp, "T1 menu");
+        re = r;
+        
+        String archiuTXT = nom;
+        System.out.println("archiuTXT: "+ archiuTXT);
+        
+            File archivoTXT;
+            try{
+                
+                String canonicalPath = new File("./menus_personalitzables/"+archiuTXT).getCanonicalPath();
+                System.out.println("Current directory path using canonical path method :- " + canonicalPath);
+
+                String usingSystemProperty = System.getProperty("user.dir");
+                System.out.println("Current directory path using system property:- " + usingSystemProperty);
+                archivoTXT = new File(canonicalPath);
+            
+            
+                
+                System.out.println("Current directory path using canonical path method :- " + archivoTXT.toString());
+                //String canonicalPath = new File(".").getCanonicalPath();
+                //System.out.println("Current directory path using canonical path method :- " + canonicalPath);
+                
+                //File selectedFile = fileChooser.getSelectedFile();
+                String fileName = archivoTXT.getAbsolutePath();
+                System.out.println("absolute Path :- " + archivoTXT);
+                Scanner scan;
+                try {
+                    //llegeix archiu
+                    scan = new Scanner(new File(fileName));
+                    //variables auxiliars per saber quin tipus de variables crear en cada moment
+                    String lineaAnterior = "";
+                    String Tipusvar = "";
+                    int NumVar = 0, cont = 0;
+                    groups =false;
+                    while(scan.hasNextLine()){//mentre no acabi el document
+
+                        String line = scan.nextLine();
+                        System.out.println("LINE: "+ line);
+                        //llegeix el tipus de botons, entrades de text, particions a crear
+                        if(line.equals("Exec:") || line.equals("exec:")){lineaAnterior = "Exec:";
+                        }else if(line.equals("Groups:") || line.equals("groups:") ){ lineaAnterior = "Groups:";
+                        }else if(line.equals("Variables:") || line.equals("variables:")){lineaAnterior = "Variables:";
+                        }else if(line.equals("Selector:") || line.equals("selector:")){
+                            lineaAnterior = "Selector:";
+                            javax.swing.JComboBox groupsComboBox = new javax.swing.JComboBox();
+                            ArrayComboBox.add(groupsComboBox);
+                        }else if(line.equals("Name of Variables:") || line.equals("name of variables:") || line.equals("Name of variables:")){
+                            lineaAnterior = "Name of Variables:";
+                        }
+                        else if(line.equals("Partitions:") || line.equals("partitions:") ){
+
+                            lineaAnterior = "Partitions:";
+                            
+
+                        }
+                        
+                        //crea els botons, entrades de text, particions... que ha llegit previament amb el nom de cada linea
+                        if(lineaAnterior.equals("Exec:") && !line.equals("Exec:") && !line.equals("exec:")){
+                            if(lineaAnterior.equals("Exec:") && !line.isEmpty()){
+                                //comprovar que el archiu existeix
+                                File archivo = new File("./Scripts_Amb_Base/"+line);
+                                if (!archivo.exists()) {
+                                    JOptionPane.showMessageDialog(null,"OJO: ��No existe el archivo de configuraci�n!!");
+                                    valid = false;
+                                }else{
+                                    if (archivo.isFile()){ 
+                                        nomArchiu = archivo.toString(); 
+                                        valid = true;
+                                        archiuEntratTXT =true;
+                                    }
+                                    else {
+                                        JOptionPane.showMessageDialog(null,"El archiu "+ line +" no es un archiu executable");
+                                        valid = false;
+                                    }
+                                }
+                                lineaAnterior = "";
+                            }   
+                        }
+                        else if(lineaAnterior.equals("Groups:") && !line.equals("Groups:") && !line.equals("groups:")){
+                            if(lineaAnterior.equals("Groups:") && !line.isEmpty()){
+                                if(line.equals("TRUE") || line.equals("True") || line.equals("true")) groups =true;
+                                else if(line.equals("FALSE") || line.equals("False") || line.equals("false")) groups =false;
+                                else{}//re = r;
+                                lineaAnterior = "";
+                            }
+                        }
+                        else if(lineaAnterior.equals("Variables:")&& !line.equals("Variables:") && !line.equals("variables:")){
+                            if(lineaAnterior.equals("Variables:") && !line.isEmpty()){
+                                NumVar = Integer.parseInt(line);
+                                if(NumVar == 2){
+                                    twoVars = true;
+                                }
+                            }
+                        }
+                        if( lineaAnterior.equals("Selector:")&& !line.equals("Selector:") && !line.equals("selector:")){
+                            //guardar noms selector
+                            if(!line.isEmpty()){
+                                ArrayComboBox.get(ArrayComboBox.size()-1).addItem(line);
+                                optionsPanel.add(ArrayComboBox.get(ArrayComboBox.size()-1));
+                                this.optionsPanel.add(new JSeparator());
+                            }
+                        }
+                        else if(lineaAnterior.equals("Name of Variables:") && !line.equals("Name of Variables:") && !line.equals("name of variables:") && !line.equals("Name of variables:")){
+
+                            if(line.equals("Bool:")|| line.equals("Text:")){
+                                Tipusvar = line;
+                                this.optionsPanel.add(new JSeparator());
+                            }
+                            else{
+                                if(Tipusvar.equals("Bool:")){
+                                    if(!line.isEmpty()){
+                                        JRadioButton newbutton = new JRadioButton(line);
+                                        NomsBotonsBool.add(line);
+                                        EstatBotonsBool.add(newbutton);
+                                        this.optionsPanel.add(newbutton);
+                                        this.optionsPanel.add(new JSeparator());
+                                    }
+                                }
+                                else if (Tipusvar.equals("Text:")){
+                                    if(!line.isEmpty()){
+                                        char[] aCaracters = line.toCharArray();
+                                        boolean textDefb = false;
+                                        String textDef = "", newLine = "";
+                                        for(int a=2; a<aCaracters.length; a++){
+                                            if(textDefb)textDef += aCaracters[a]; 
+
+                                            if(aCaracters[a]==':' && aCaracters[a-1] == 'd' && aCaracters[a-2] == 't'){textDefb = true;}
+
+                                            if(!textDefb) newLine += aCaracters[a-2];
+                                        }
+                                        if(!textDefb){
+                                            newLine+= aCaracters[aCaracters.length-2]+""+aCaracters[aCaracters.length-1];
+                                        }
+
+                                        JTextField P1 = new JTextField(textDef,20);
+                                        BotonsText.add(newLine);
+                                        TextBotonsText.add(P1);
+                                        this.optionsPanel.add(new JLabel("      "+newLine+":"));
+                                        this.optionsPanel.add(P1);
+                                        this.optionsPanel.add(new JSeparator());
+                                    }
+                                }
+                            }
+                        }
+
+                        if( lineaAnterior.equals("Partitions:") && !line.equals("Partitions:") && !line.equals("partitions:") ){
+                            if(!line.isEmpty()){
+                                
+                                JButton manuallyPart = new JButton(line);
+                                optionsPanel.add(manuallyPart);
+                                manuallyPart.addActionListener(new java.awt.event.ActionListener(){
+
+                                    public void actionPerformed(java.awt.event.ActionEvent evt){
+                                        //initiatePartitionMenu();
+                                        configureILRX();
+                                    }
+                                });
+                                this.optionsPanel.add(new JSeparator());
+                            }
+                        }
+                    }
+                    //amb totes les variable ja llegides adapta el abstractMenu a les opcions entrades
+                    //ex: amb groups, amb m�s d'una variable...
+                    tempsDirR = new Vector<String>();
+                    framesT1 = new Vector<JFrame>();
+                    if(valid)super.activeGroups2(mainApp, groups, twoVars, df);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(T1.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }catch (IOException e) {
+                System.out.println("IOException Occured" + e.getMessage());
+            }
+        
         
     }
     

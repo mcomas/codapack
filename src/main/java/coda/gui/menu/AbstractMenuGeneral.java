@@ -119,6 +119,18 @@ public abstract class AbstractMenuGeneral extends JDialog{
         
     }
     
+    public void activeGroups2(final CoDaPackMain mainApp, boolean groups2, boolean twoVar2 ,DataFrame dataFrame){
+        
+        groups = groups2;
+        twoVar = twoVar2;
+        
+        mainApplication = mainApp;
+        dfs = null;
+        ds = new DataSelectorGeneral(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups2, twoVar);
+        initialize2();
+        
+    }
+    
     private void initialize(){
 
         Point p = mainApplication.getLocation();
@@ -155,6 +167,63 @@ public abstract class AbstractMenuGeneral extends JDialog{
                 dispose();
             }
         });
+        JButton helpButton = new JButton("Help");
+        southPanel.add(helpButton);
+        helpButton.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                JDialog dialog = new JDialog();
+                HelpMenu menu;
+                try {
+                    menu = new HelpMenu(yamlFile, helpTitle);
+                    dialog.add(menu);
+                    dialog.setSize(650, 500);
+                    dialog.setTitle(helpTitle);
+                    dialog.setIconImage(Toolkit.getDefaultToolkit()
+                    .getImage(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logo.png")));
+                    Point p = mainApplication.getLocation();
+                    p.x = p.x + (mainApplication.getWidth()-520)/2;
+                    p.y = p.y + (mainApplication.getHeight()-430)/2;
+                    WindowListener exitListener = new WindowAdapter(){
+
+                        @Override
+                        public void windowClosing(WindowEvent e){
+                                dialog.dispose();
+                                menu.deleteHtml();
+                        }
+                    };
+
+                    dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                    dialog.addWindowListener(exitListener);
+                    dialog.setLocation(p);
+                    dialog.setVisible(true);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(AbstractMenuDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        getContentPane().add(southPanel, BorderLayout.SOUTH);
+
+    }
+    
+    private void initialize2(){
+
+        Point p = mainApplication.getLocation();
+        p.x = p.x + (mainApplication.getWidth()-520)/2;
+        p.y = p.y + (mainApplication.getHeight()-430)/2;
+        setLocation(p);
+
+        setResizable(true);
+        getContentPane().setLayout(new BorderLayout());
+        setSize(WIDTH,HEIGHT);
+        if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);
+        else if (dfs!=null) getContentPane().add(dfs, BorderLayout.CENTER);
+
+        JPanel eastPanel = new JPanel();
+        optionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
+        optionsPanel.setPreferredSize(new Dimension(250,200));
+        getContentPane().add(optionsPanel, BorderLayout.EAST);
+
+        
         JButton helpButton = new JButton("Help");
         southPanel.add(helpButton);
         helpButton.addActionListener(new java.awt.event.ActionListener(){

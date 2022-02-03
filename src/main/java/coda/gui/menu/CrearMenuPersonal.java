@@ -32,7 +32,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     JButton jbSelector = new JButton("AfegirSelector");
     JButton jbBool= new JButton("Afegir Botons I/0");
     JButton jbText= new JButton("Afegir Text");
-    JButton jbRefresh= new JButton("Refrescar");
+    JButton jbRefresh= new JButton("Previsualitza");
     JFrame winMain = new JFrame("winMain");
     JPanel jpMenu, jpan1 = new JPanel(), jpan2 = new JPanel(), jpan3 = new JPanel(), jpan4 = new JPanel();
     JButton jbPartitions= new JButton("Afegir Particions");
@@ -49,11 +49,16 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     
     JRadioButton partitionsButton = new JRadioButton("partitions");
     
-
+    
+    CoDaPackMain auxMainApp;
+    Rengine auxR;
     
     
     public CrearMenuPersonal(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"Crear Menu Personal");
+        
+        auxMainApp = mainApp;
+        auxR = r;
         
         //Nom Archiu:
         nomArchiu = new JTextField("Nom Archiu",20);
@@ -251,21 +256,11 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
         /*String testNameArch = "prev.txt";
         previsualitzacio.TEST(testNameArch);*/
-        
-        
-
-        //new T1(this,re).setVisible(true);
-        //previsualitzacio.TEST();
-        
-    }    
-
-    @Override
-    public void acceptButtonActionPerformed(){
-        String contenido = "";
+         String contenido = "";
         
         //exec:
         if(nomExec.getText() != "Example.R")
-        contenido += "exec: \n"+nomExec.getText()+"\n \n";
+        contenido += "exec:\n"+nomExec.getText()+"\n \n";
         else{
             System.out.println("No s'ha entrat cap archiu executable");
         }
@@ -273,20 +268,16 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         //Groups:
         if(groupsButton.isSelected())contenido += "Groups:\n" +"True\n \n";
         else contenido += "Groups:\n" +"False\n \n";
-        //Partitions:
-        //contenido += "Partitions: \n";
-        if(partitionsButton.isSelected()){
-            contenido += "Partitions:\n"+ "Set partition\n\n";
-        }
+       
           
         //Selector:
         //contenido += "Selector: \n";
         
         //Name of Variables:
-        contenido += "Name of Variables:: \n";
+        if(NomsBotonsBool.size()>0 && BotonsText.size()>0) contenido += "Name of Variables:\n \n";
         
         //Bool:
-        contenido += "Bool: \n";
+        if(NomsBotonsBool.size()>0 )contenido += "Bool:\n";
         
         for (int i=0;i<NomsBotonsBool.size(); i++) 
         {
@@ -295,7 +286,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         }
         
         //Text:
-        contenido += "Text: \n";
+         if(BotonsText.size()>0)contenido += "Text:\n";
         
         for (int j=0;j<BotonsText.size(); j++) 
         {
@@ -303,9 +294,94 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             System.out.println("TextP1: P"+j+" <- " + TextBotonsText.get(j).getText());
         }
         
+         //Partitions:
+        //contenido += "Partitions: \n";
+        if(partitionsButton.isSelected()){
+            contenido += "Partitions:\n"+ "Set partition\n\n";
+        }
+        
         try {
             
-            String ruta = "./menus_personalitzables/"+nomArchiu.getText()+".txt";
+            String ruta = "./menus_personalitzables/Previsualitza.txt";
+            System.out.println("ruta: "+ruta);
+            //String contenido = "Contenido de ejemplo";
+            File file = new File(ruta);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(contenido);
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+
+        new T1(auxMainApp,auxR, "Previsualitza.txt").setVisible(true);
+        //previsualitzacio.TEST();
+        
+    }    
+
+    @Override
+    public void acceptButtonActionPerformed(){
+        
+        File fichero = new File("./menus_personalitzables/Previsualitza.txt");
+        if (fichero.delete())
+            System.out.println("El fichero ha sido borrado satisfactoriamente");
+        else
+            System.out.println("El fichero no puede ser borrado");
+        
+        
+        
+         String contenido = "";
+        
+        //exec:
+        if(nomExec.getText() != "Example.R")
+        contenido += "exec:\n"+nomExec.getText()+"\n \n";
+        else{
+            System.out.println("No s'ha entrat cap archiu executable");
+        }
+        
+        //Groups:
+        if(groupsButton.isSelected())contenido += "Groups:\n" +"True\n \n";
+        else contenido += "Groups:\n" +"False\n \n";
+       
+          
+        //Selector:
+        //contenido += "Selector: \n";
+        
+        //Name of Variables:
+        if(NomsBotonsBool.size()>0 && BotonsText.size()>0) contenido += "Name of Variables:\n \n";
+        
+        //Bool:
+        if(NomsBotonsBool.size()>0 )contenido += "Bool:\n";
+        
+        for (int i=0;i<NomsBotonsBool.size(); i++) 
+        {
+            contenido += (EstatBotonsBool.get(i).getText()+"\n");
+            System.out.println("TextP1: P"+i+" <- " + EstatBotonsBool.get(i).getText());
+        }
+        
+        //Text:
+         if(BotonsText.size()>0)contenido += "Text:\n";
+        
+        for (int j=0;j<BotonsText.size(); j++) 
+        {
+            contenido += (TextBotonsText.get(j).getText()+"\n");
+            System.out.println("TextP1: P"+j+" <- " + TextBotonsText.get(j).getText());
+        }
+        
+         //Partitions:
+        //contenido += "Partitions: \n";
+        if(partitionsButton.isSelected()){
+            contenido += "Partitions:\n"+ "Set partition\n\n";
+        }
+        
+        try {
+            
+            String ruta = "./menus_personalitzables/Previsualitza.txt";
             System.out.println("ruta: "+ruta);
             //String contenido = "Contenido de ejemplo";
             File file = new File(ruta);
