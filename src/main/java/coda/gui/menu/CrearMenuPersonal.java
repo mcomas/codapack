@@ -295,7 +295,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
         
         ArraySelector[lengthSelector]= new JTextField[]{aux[0], jl1};
-        System.out.println("imprimir fi añadido");
+        System.out.println("imprimir fi aÃ±adido");
         
         
         JLabel jlG2 = new JLabel("                ");
