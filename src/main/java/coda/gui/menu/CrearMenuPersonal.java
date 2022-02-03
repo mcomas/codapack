@@ -47,6 +47,12 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     ArrayList<JTextField> EstatBotonsBool = new ArrayList<JTextField>();
     ArrayList<javax.swing.JComboBox> ArrayComboBox = new ArrayList<javax.swing.JComboBox>();
     
+    JTextField[][] ArraySelector = new JTextField[10][];
+    JTextField[] actArraySelector =  new JTextField[10];
+    int lengthSelector = 0;
+    //ArrayList<ArrayList<JTextField>> ArraySelector = new ArrayList<ArrayList<JTextField>>(10);
+    //ArrayList<ArrayList<JTextField>> ArraySelector = new ArrayList< new ArrayList<JTextField>()>();
+    
     JRadioButton partitionsButton = new JRadioButton("partitions");
     
     
@@ -180,13 +186,26 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         System.out.println("configurejbGroups");
         //jpan1 = new JPanel();   
         
-        JLabel jlG = new JLabel("                Grup:  ");
-        jlG.setPreferredSize(new Dimension(200, 25));
+        JLabel jlG = new JLabel("       Grup:  ");
+        jlG.setPreferredSize(new Dimension(150, 25));
         this.jpan1.add(jlG, BorderLayout.LINE_START);
         
-        JTextField jl1 = new JTextField("Nom Grup");
+        JTextField jl1 = new JTextField("Opcio");
         jl1.setPreferredSize(new Dimension(200, 25));
-        this.jpan1.add(jl1, BorderLayout.CENTER);
+        this.jpan1.add(jl1, BorderLayout.LINE_START);
+        
+        ArraySelector[lengthSelector] = new JTextField[]{jl1};
+        //ArraySelector[lengthSelector][ArraySelector[lengthSelector].length].add(jl1);
+        lengthSelector++;
+        JButton jlb = new JButton("Afegeix opcio");
+        jlb.setPreferredSize(new Dimension(100, 25));
+        jlb.addActionListener(new java.awt.event.ActionListener(){
+        
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+               addOption();
+            }
+        });
+        this.jpan1.add(jlb, BorderLayout.LINE_START);
         
         this.jpan1.setVisible(false);
         this.jpan1.setVisible(true);
@@ -250,7 +269,46 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
     }
     
-
+    public void addOption(){
+        
+        JLabel jlG1 = new JLabel("              ");
+        jlG1.setPreferredSize(new Dimension(150, 25));
+        this.jpan1.add(jlG1, BorderLayout.LINE_START);
+        
+        JTextField jl1 = new JTextField("Opcio");
+        jl1.setPreferredSize(new Dimension(200, 25));
+        this.jpan1.add(jl1, BorderLayout.LINE_START);
+        
+        JTextField[] aux = ArraySelector[lengthSelector];
+        /*JTextField[] aux2 = new JTextField[10];//= ArraySelector[lengthSelector];
+        System.out.println("imprimir aux");
+        for(int i = 0; i<aux.length; i++){
+            aux2[i]=aux[i];
+            System.out.println(aux[i].getText());
+        }
+        aux2[aux.length] = jl1;*/
+        
+        /*for(int i = 0; i < ArraySelector[lengthSelector].length; i++){
+            System.out.println(ArraySelector[lengthSelector]);
+        }*/
+        //ArraySelector[lengthSelector][].add(jl1);
+        
+        
+        ArraySelector[lengthSelector]= new JTextField[]{aux[0], jl1};
+        System.out.println("imprimir fi añadido");
+        
+        
+        JLabel jlG2 = new JLabel("                ");
+        jlG2.setPreferredSize(new Dimension(150, 25));
+        this.jpan1.add(jlG2, BorderLayout.LINE_START);
+        
+        this.jpan1.setVisible(false);
+        this.jpan1.setVisible(true);
+        this.jpan2.setVisible(false);
+        this.jpan3.setVisible(false);
+        this.jpan4.setVisible(false);
+    }
+    
     public void configurejbRefresh(){
         System.out.println("configurejbrefresh");
         
@@ -271,8 +329,16 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
        
           
         //Selector:
-        //contenido += "Selector: \n";
         
+        if( ArraySelector[0].length> 0){
+            contenido += "Selector:\n";
+            for(int j = 0; j<lengthSelector; j++ ){
+                for(int k = 0; k<ArraySelector[j].length; k++ ){
+                    System.out.println(ArraySelector[j][k].getText());
+                    contenido += ArraySelector[j][k].getText()+"\n";
+                }
+            }
+        }
         //Name of Variables:
         if(NomsBotonsBool.size()>0 && BotonsText.size()>0) contenido += "Name of Variables:\n \n";
         
