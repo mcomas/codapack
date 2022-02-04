@@ -93,11 +93,10 @@ public class T1 extends AbstractMenuGeneral{
         re = r;
         
         String archiuTXT = mainApp.getNameTXT();
-        System.out.println("archiuTXT: "+ archiuTXT);
         boolean datavailable ;
         //----- hi ha data carregada? -----
         try {
-            System.out.println("First character: " + mainApp.getActiveDataFrame().getNames());
+            
             datavailable = true;
         }
         catch(NullPointerException e) {
@@ -129,21 +128,16 @@ public class T1 extends AbstractMenuGeneral{
             try{
                 
                 String canonicalPath = new File("./menus_personalitzables/"+archiuTXT).getCanonicalPath();
-                System.out.println("Current directory path using canonical path method :- " + canonicalPath);
+                
 
                 String usingSystemProperty = System.getProperty("user.dir");
-                System.out.println("Current directory path using system property:- " + usingSystemProperty);
+                
                 archivoTXT = new File(canonicalPath);
             
             
-                
-                System.out.println("Current directory path using canonical path method :- " + archivoTXT.toString());
-                //String canonicalPath = new File(".").getCanonicalPath();
-                //System.out.println("Current directory path using canonical path method :- " + canonicalPath);
-                
+                                
                 //File selectedFile = fileChooser.getSelectedFile();
                 String fileName = archivoTXT.getAbsolutePath();
-                System.out.println("absolute Path :- " + archivoTXT);
                 Scanner scan;
                 try {
                     //llegeix archiu
@@ -156,7 +150,6 @@ public class T1 extends AbstractMenuGeneral{
                     while(scan.hasNextLine()){//mentre no acabi el document
 
                         String line = scan.nextLine();
-                        System.out.println("line: "+line);
                         //llegeix el tipus de botons, entrades de text, particions a crear
                         if(line.equals("Exec:") || line.equals("exec:")){lineaAnterior = "Exec:";
                         }else if(line.equals("Groups:") || line.equals("groups:") ){ lineaAnterior = "Groups:";
@@ -323,27 +316,19 @@ public class T1 extends AbstractMenuGeneral{
         re = r;
         
         String archiuTXT = nom;
-        System.out.println("archiuTXT: "+ archiuTXT);
         
             File archivoTXT;
             try{
                 
                 String canonicalPath = new File("./menus_personalitzables/"+archiuTXT).getCanonicalPath();
-                System.out.println("Current directory path using canonical path method :- " + canonicalPath);
 
                 String usingSystemProperty = System.getProperty("user.dir");
-                System.out.println("Current directory path using system property:- " + usingSystemProperty);
                 archivoTXT = new File(canonicalPath);
             
             
                 
-                System.out.println("Current directory path using canonical path method :- " + archivoTXT.toString());
-                //String canonicalPath = new File(".").getCanonicalPath();
-                //System.out.println("Current directory path using canonical path method :- " + canonicalPath);
-                
                 //File selectedFile = fileChooser.getSelectedFile();
                 String fileName = archivoTXT.getAbsolutePath();
-                System.out.println("absolute Path :- " + archivoTXT);
                 Scanner scan;
                 try {
                     //llegeix archiu
@@ -356,7 +341,6 @@ public class T1 extends AbstractMenuGeneral{
                     while(scan.hasNextLine()){//mentre no acabi el document
 
                         String line = scan.nextLine();
-                        System.out.println("LINE: "+ line);
                         //llegeix el tipus de botons, entrades de text, particions a crear
                         if(line.equals("Exec:") || line.equals("exec:")){lineaAnterior = "Exec:";
                         }else if(line.equals("Groups:") || line.equals("groups:") ){ lineaAnterior = "Groups:";
@@ -381,7 +365,7 @@ public class T1 extends AbstractMenuGeneral{
                                 //comprovar que el archiu existeix
                                 File archivo = new File("./Scripts_Amb_Base/"+line);
                                 if (!archivo.exists()) {
-                                    JOptionPane.showMessageDialog(null,"OJO: ��No existe el archivo de configuraci�n!!");
+                                    JOptionPane.showMessageDialog(null,"OJO: No existe el archivo de configuracion!!");
                                     valid = false;
                                 }else{
                                     if (archivo.isFile()){ 
@@ -681,7 +665,6 @@ public class T1 extends AbstractMenuGeneral{
                     String[] errorMessage = re.eval("error").asStringArray();
                     
                     
-                    //for(int aux= 0; aux< errorMessage.length;aux++)    System.out.println(errorMessage[aux]);
                     if(errorMessage[0].equals("NULL")){
                         // executem totes les accions possibles 
                         showText();
@@ -752,8 +735,6 @@ public class T1 extends AbstractMenuGeneral{
                     if(TextBotonsText.get(j).getText().length() > 0 && EstatBotonsBool.get(j).isSelected()) {//ERROR
                         re.eval("P"+aux+" <- " + TextBotonsText.get(j).getText());
                         aux++;
-                        
-                        System.out.println("TextP1: P"+aux+" <- " + TextBotonsText.get(j).getText());
                     }
                 //else re.eval("P"+j+" <- "+ this.TextBotonsText.get(j-1).getText());
                 }
