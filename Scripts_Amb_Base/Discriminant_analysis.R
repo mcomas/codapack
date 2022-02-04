@@ -34,7 +34,6 @@
 #install.packages("zCompositions")
 library(zCompositions)
 library(coda.base)
-library(plyr)
 
 ################# FUNCTIONS #################
 
@@ -52,21 +51,52 @@ generateFileName <- function(candidateName){
 
 ################# MAIN #################
 
-
+BASIS = coda.base::sbp_basis(BaseX)
 #Xt <- coda.base::coordinates(X, basis = "ilr", label = "ilr.", sparse_basis = FALSE)
-Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
-nparts=length(Xt)
-for (n in 1:nparts)
-{
-  colnames(Xt)[n] <- paste("ilr.",n,sep="")
+Xt <- coda.base::coordinates(X, basis = BASIS, label = 'ilr.')
+nparts=NCOL(X)
+
+prior = as.vector(prop.table(table(Y)))
+if(B1){
+  prior = rep(1, nparts)/nparts
 }
-#head(Xt)
 
-lda1 <- MASS::lda(Xt,t(Y))
 
+lda1 <- MASS::lda(Xt,t(Y), prior = prior)
+plda1 <- predict(lda1, Xt)
+lda1.dfunc = sprintf("%s = 0", paste(sprintf("%0.3f ln %s", sbp_basis(BaseX) %*% coef(lda1), names(X)), collapse = ' + '))
+
+lda1cv = MASS::lda(Xt,t(Y), prior = prior, CV = TRUE)
+
+
+sortida <- paste(capture.output(lda1))
+sortida = c(sortida, lda1.dfunc)
+ct <- table(t(Y), lda1cv$class)
+
+sortida <- c(sortida,"<b>Accuracy</b>")
+sortida <- c(sortida,capture.output(ct))
+sortida <- c(sortida,capture.output(prop.table(ct, 1)))
+sortida <- c(sortida,capture.output(prop.table(ct)))
+sortida <- c(sortida,sprintf("Accuracy: %.4f", sum(diag(prop.table(ct)))))
+
+
+if(B2){
+  P1t <- coda.base::coordinates(Z, basis = coda.base::sbp_basis(BaseX), label = 'ilr.')
+  DF1 <- as.data.frame(predict(lda1,newdata=P1t))
+}
+DF = NULL
+if(B3){
+  DF = as.data.frame(plda1$x)
+}
+if(B4){
+  if(is.null(DF)) DF = data.frame(class = as.vector(plda1$class))
+  DF$class = as.vector(plda1$class)
+}
+if(B5){
+  if(is.nulll(DF)) DF = as.data.frame(plda1$posterior)
+  DF = cbind(DF, as.data.frame(plda1$posterior))
+}
 #rm(sortida)
-sortida <- list(paste("DISCRIMINANT ANALYSIS"))
-sortida <- list(sortida,paste(capture.output(lda1)))
 
 
 ################################
@@ -83,54 +113,18 @@ plot(lda1, dimen=1, type="both")
 dev.off()
 graphnames[1] <- name
 
-################################
-
-# assess the accuracy of the prediction: percent correct for each group
-
-lda1cv <- MASS::lda(Xt,t(Y), CV=TRUE)
-
-ct <- table(t(Y), lda1cv$class)
-
-sortida <- list(sortida,paste("Accuracy"))
-sortida <- list(sortida,paste(capture.output(ct)))
-sortida <- list(sortida,paste(capture.output(prop.table(ct, 1))))
-sortida <- list(sortida,paste(capture.output(prop.table(ct))))
-sortida <- list(sortida,paste("Accuracy",capture.output(sum(diag(prop.table(ct))))))
 
 ################################
 
-# analysing the discriminant index
-plda1 <- predict(lda1,Xt)
 
-DF <- data.frame()
-#head(DF)
-if (B3 == TRUE) {
-  if(plyr::empty(DF)){
-    DF <- as.data.frame(plda1$x)
-  } else{
-    DF <- cbind.data.frame(DF, plda1$x)
-  }
-}
-if (B4 == TRUE) {
-  if(plyr::empty(DF)){
-    DF <- as.data.frame(plda1$class)
-  } else{
-    DF <- cbind.data.frame(DF, plda1$class)
-  }
-}
-if (B5 == TRUE) {
-  if(plyr::empty(DF)){
-    DF <- as.data.frame(plda1$plda1$posterior)
-  } else{
-    DF <- cbind.data.frame(DF, plda1$posterior)
-  }
-}
+
+
 
 nam <- levels(plda1$class)
-sortida <- list(sortida,paste("Analysis of discriminant index"))
-sortida <- list(sortida,paste(capture.output(nam[1])))
+sortida <- list(sortida,paste("<b>Analysis of discriminant index</b>"))
+sortida <- list(sortida,paste(nam[1]))
 sortida <- list(sortida,paste(capture.output(summary(plda1$x[plda1$class==nam[1]]))))
-sortida <- list(sortida,paste(capture.output(nam[2])))
+sortida <- list(sortida,paste(nam[2]))
 sortida <- list(sortida,paste(capture.output(summary(plda1$x[plda1$class==nam[2]]))))
 
 name <- generateFileName(paste(tempdir(),'discriminant_index',sep="\\"))
@@ -142,35 +136,6 @@ dev.off()
 graphnames[2] <- name
 
 
-################################
-
-# uniform prior: fifty-fifty"
-
-if (B1 == TRUE) {
-  lda1Unif <- MASS::lda(Xt,t(Y),rep(0.5,nparts))
-  
-  sortida <- list(sortida,paste("Uniform prior"))
-  sortida <- list(sortida,paste(capture.output(lda1Unif)))
-  
-  Orig <- cbind.data.frame(Xt,Y)
-  nX <- ncol(X)
-  midpoint <- (apply(Orig[Orig[,nparts+1]=="thol",1:nparts],2,mean) +apply(Orig[Orig[,nparts+1]=="calc",1:nparts],2,mean))/2
-  sortida <- list(sortida,paste("Mid point"))
-  sortida <- list(sortida,paste(capture.output(midpoint)))
-  sortida <- list(sortida,paste("Prediction for mid point"))
-  sortida <- list(sortida,paste(capture.output(predict(lda1Unif,midpoint))))
-}
-
-
-################################
-#predicting for new samples
-
-DF1 <- NULL
-
-if (B2 == TRUE) {
-  P1t <- coda.base::coordinates(Z, basis = coda.base::sbp_basis(BaseX))
-  DF1 <- as.data.frame(predict(lda1,P1t))
-}
 
 ################################
 
