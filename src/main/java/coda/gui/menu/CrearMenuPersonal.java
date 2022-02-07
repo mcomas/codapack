@@ -280,12 +280,12 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             else {
                 trobat = true;
                 ArraySelector[lengthSelectorI][i] = jl1;
-                System.out.println("["+lengthSelectorI+"]["+i+"]:"+ArraySelector[lengthSelectorI][i].getText());
             }
             i++;
         }
         
         
+
         
         this.jpan1.setVisible(false);
         this.jpan1.setVisible(true);
@@ -317,7 +317,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
           
         //Selector:
         
-        System.out.println("lengthSelectorI "+lengthSelectorI);
         for(int j = 1; j<=lengthSelectorI; j++ ){
             contenido += "Selector:\n";
             boolean trobat = false;

@@ -1,0 +1,10 @@
+exec:
+manova.R
+ 
+Groups:
+False
+ 
+Selector:
+Opcio
+Opcio
+Opcio

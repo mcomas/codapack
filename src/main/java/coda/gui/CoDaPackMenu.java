@@ -23,8 +23,6 @@
  */
 package coda.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.*;
 import java.util.ArrayList;
@@ -32,14 +30,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Scanner;
-import java.util.Set;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 
 /**
@@ -279,11 +273,7 @@ public class CoDaPackMenu extends JMenuBar{
                 }
                 else {
                     //------------
-                    /*Collection files = FileUtils.listFiles(
-                        canonicalPath, 
-                        new RegexFileFilter("^(.*?)"), 
-                        DirectoryFileFilter.DIRECTORY
-                    );*/
+                    
                     
                     //File dir = new File(".");
                     FileFilter fileFilter = new RegexFileFilter("^(.*?)");
@@ -297,12 +287,7 @@ public class CoDaPackMenu extends JMenuBar{
                         
                     }
                     //------------
-                    /*
-                    String[] types = {"txt"};
-                    Collection<File> files2 = FileUtils.listFiles(canonicalPath, types , true);
-                    */
-                    //-------------
-                    //Files.find(Paths.get(sDir), 999, (p, bfa) -> bfa.isRegularFile()).forEach(System.out::println) ;
+                    
                 }
             } 
         } catch (IOException e) {

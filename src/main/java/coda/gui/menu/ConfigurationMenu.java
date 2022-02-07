@@ -26,7 +26,6 @@ package coda.gui.menu;
 
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.plot.CoDaDisplayConfiguration;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -97,7 +96,7 @@ public class ConfigurationMenu extends CoDaPackDialog{
         
         JLabel label6 = new JLabel("Show Dev Menu");
         menuDevelopment = new JCheckBox();
-        menuDevelopment.setSelected(true);
+        menuDevelopment.setSelected(false);
         add(label6);
         add(menuDevelopment);
         
