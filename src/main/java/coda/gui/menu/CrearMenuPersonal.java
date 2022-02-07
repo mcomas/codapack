@@ -50,8 +50,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     JTextField[][] ArraySelector = new JTextField[10][10];
     JTextField[] actArraySelector =  new JTextField[10];
     int lengthSelectorI = 0, lengthSelectorJ = 0;
-    //ArrayList<ArrayList<JTextField>> ArraySelector = new ArrayList<ArrayList<JTextField>>(10);
-    //ArrayList<ArrayList<JTextField>> ArraySelector = new ArrayList< new ArrayList<JTextField>()>();
+    
     
     JRadioButton partitionsButton = new JRadioButton("partitions");
     
@@ -108,13 +107,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             }
         });
 
-        /*this.optionsPanel.add(jbPartitions);
-        jbPartitions.addActionListener(new java.awt.event.ActionListener(){
         
-            public void actionPerformed(java.awt.event.ActionEvent evt){
-               configurejbPartitions();
-            }
-        });*/
         this.optionsPanel.add(jbSelector);
         jbSelector.addActionListener(new java.awt.event.ActionListener(){
         
@@ -184,8 +177,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     
     public void configurejbGroups(){
         
-        //jpan1 = new JPanel();   
-        
         JLabel jlG = new JLabel("       Grup:  ");
         jlG.setPreferredSize(new Dimension(150, 25));
         this.jpan1.add(jlG, BorderLayout.LINE_START);
@@ -243,15 +234,13 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     
     public void configurejbText(){
         
-        //for(int i = 0; i< 5; i++){
         JLabel jlG = new JLabel("                Entrada de text:  ");
         jlG.setPreferredSize(new Dimension(200, 25));
         this.jpan3.add(jlG, BorderLayout.LINE_START);
         JTextField P1 = new JTextField("Input Name Var"+BotonsText.size(),20);
         BotonsText.add("Input Name Var"+BotonsText.size());
         TextBotonsText.add(P1);
-        //this.optionsPanel.add(new JLabel("      name Var"+BotonsText.size()+":"));
-        //this.optionsPanel.add(P1);
+        
         P1.setPreferredSize(new Dimension(300, 25));
         
         this.jpan3.add(P1, BorderLayout.CENTER);
@@ -263,10 +252,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         this.jpan4.setVisible(false);
 
         
-
-        
-        //}
-        //this.optionsPanel.setVisible(true);
         
     }
     
@@ -286,7 +271,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         JTextField[] aux = ArraySelector[lengthSelectorI];
         
         
-        //ArraySelector[lengthSelectorI][lengthSelectorJ] = jl1;
         
         boolean trobat  = false;
         int i = 0;
@@ -302,12 +286,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         }
         
         
-        System.out.println("imprimir fi añadido");
-        
-        
-        /*JLabel jlG2 = new JLabel("        ");
-        jlG2.setPreferredSize(new Dimension(150, 25));
-        this.jpan1.add(jlG2, BorderLayout.LINE_START);*/
         
         this.jpan1.setVisible(false);
         this.jpan1.setVisible(true);
@@ -323,8 +301,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     public void configurejbRefresh(){
         
         
-        /*String testNameArch = "prev.txt";
-        previsualitzacio.TEST(testNameArch);*/
          String contenido = "";
         
         //exec:
@@ -347,7 +323,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             boolean trobat = false;
             int k = 0;
             while(!trobat && k < 10){
-            //for(int k = 0; k<ArraySelector[j].length; k++ ){
                 System.out.println("k: "+ k);
                 if(ArraySelector[j][k] != null) {
                     
@@ -383,7 +358,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         }
         
          //Partitions:
-        //contenido += "Partitions: \n";
         if(partitionsButton.isSelected()){
             contenido += "Partitions:\n"+ "Set partition\n\n";
         }
@@ -392,7 +366,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             
             String ruta = "./menus_personalitzables/Previsualitza.txt";
             
-            //String contenido = "Contenido de ejemplo";
             File file = new File(ruta);
             // Si el archivo no existe es creado
             if (!file.exists()) {
@@ -408,7 +381,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
 
         new T1(auxMainApp,auxR, "Previsualitza.txt").setVisible(true);
-        //previsualitzacio.TEST();
         
     }    
 
@@ -425,6 +397,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         
          String contenido = "";
         
+        
         //exec:
         if(nomExec.getText() != "Example.R")
         contenido += "exec:\n"+nomExec.getText()+"\n \n";
@@ -438,7 +411,25 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
        
           
         //Selector:
-        //contenido += "Selector: \n";
+        
+        System.out.println("lengthSelectorI "+lengthSelectorI);
+        for(int j = 1; j<=lengthSelectorI; j++ ){
+            contenido += "Selector:\n";
+            boolean trobat = false;
+            int k = 0;
+            while(!trobat && k < 10){
+                System.out.println("k: "+ k);
+                if(ArraySelector[j][k] != null) {
+                    
+                    System.out.println("--["+j+"]["+k+"]:"+ArraySelector[j][k].getText());
+                    System.out.println(ArraySelector[j][k].getText());
+                    contenido += ArraySelector[j][k].getText()+"\n";
+                }else {
+                    trobat = true;
+                }
+                k++;
+            }
+        }
         
         //Name of Variables:
         if(NomsBotonsBool.size()>0 && BotonsText.size()>0) contenido += "Name of Variables:\n \n";
@@ -462,7 +453,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         }
         
          //Partitions:
-        //contenido += "Partitions: \n";
         if(partitionsButton.isSelected()){
             contenido += "Partitions:\n"+ "Set partition\n\n";
         }
@@ -471,7 +461,6 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             
             String ruta = "./menus_personalitzables/Previsualitza.txt";
             
-            //String contenido = "Contenido de ejemplo";
             File file = new File(ruta);
             // Si el archivo no existe es creado
             if (!file.exists()) {
@@ -485,5 +474,5 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             e.printStackTrace();
         }
     }
-
+        
 }
