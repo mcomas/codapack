@@ -58,28 +58,33 @@ nparts=NCOL(X)
 
 prior = as.vector(prop.table(table(Y)))
 if(B1){
-  prior = rep(1, nparts)/nparts
+  prior = prop.table(rep(1, length(prior)))
 }
 
 
 lda1 <- MASS::lda(Xt,t(Y), prior = prior)
 plda1 <- predict(lda1, Xt)
-lda1.dfunc = sprintf("%s = 0", paste(sprintf("%0.3f ln %s", sbp_basis(BaseX) %*% coef(lda1), names(X)), collapse = ' + '))
+lda1.dfunc = sprintf("Discriminant function:\n\n%s = 0", paste(sprintf("%0.3f ln %s", sbp_basis(BaseX) %*% coef(lda1), names(X)), collapse = '+'))
+lda1.dfunc = gsub("+-", "-", lda1.dfunc, fixed = TRUE)
 
 lda1cv = MASS::lda(Xt,t(Y), prior = prior, CV = TRUE)
 
 
 sortida <- paste(capture.output(lda1))
+#sortida = capture.output(knitr::kable(cbind(t(lda1$means), lda1$scaling), 'html'))
 sortida = c(sortida, lda1.dfunc)
 ct <- table(t(Y), lda1cv$class)
 
-sortida <- c(sortida,"<b>Accuracy</b>")
+sortida <- c(sortida,"Cross table:")
 sortida <- c(sortida,capture.output(ct))
-sortida <- c(sortida,capture.output(prop.table(ct, 1)))
-sortida <- c(sortida,capture.output(prop.table(ct)))
-sortida <- c(sortida,sprintf("Accuracy: %.4f", sum(diag(prop.table(ct)))))
+# sortida <- c(sortida,capture.output(prop.table(ct, 1)))
+# sortida <- c(sortida,capture.output(prop.table(ct)))
+sortida <- c(sortida,sprintf("Accuracy:\n\n (%s)/%d = %.4f", 
+                             paste(diag(ct), collapse = '+'),
+                             sum(ct),
+                             sum(diag(prop.table(ct)))))
 
-
+DF1 = NULL
 if(B2){
   P1t <- coda.base::coordinates(Z, basis = coda.base::sbp_basis(BaseX), label = 'ilr.')
   DF1 <- as.data.frame(predict(lda1,newdata=P1t))
@@ -121,7 +126,7 @@ graphnames[1] <- name
 
 
 nam <- levels(plda1$class)
-sortida <- list(sortida,paste("<b>Analysis of discriminant index</b>"))
+sortida <- list(sortida,paste("Analysis of discriminant index:"))
 sortida <- list(sortida,paste(nam[1]))
 sortida <- list(sortida,paste(capture.output(summary(plda1$x[plda1$class==nam[1]]))))
 sortida <- list(sortida,paste(nam[2]))
@@ -140,7 +145,6 @@ graphnames[2] <- name
 ################################
 
 # Output
-rm(cdp_res)
 cdp_res = list(
   'text' = unlist(sortida),
   'dataframe' = list(),
