@@ -336,7 +336,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         }
         
         //Name of Variables:
-        if(NomsBotonsBool.size()>0 && BotonsText.size()>0) contenido += "Name of Variables:\n \n";
+        if(NomsBotonsBool.size()>0 ||BotonsText.size()>0) contenido += "Name of Variables:\n \n";
         
         //Bool:
         if(NomsBotonsBool.size()>0 )contenido += "Bool:\n";
@@ -472,6 +472,7 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.setVisible(false);
     }
         
 }
