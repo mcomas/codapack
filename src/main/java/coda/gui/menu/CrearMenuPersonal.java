@@ -4,6 +4,7 @@
  */
 package coda.gui.menu;
 
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import javax.swing.*;
 import org.rosuda.JRI.Rengine;
@@ -58,9 +59,12 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
     CoDaPackMain auxMainApp;
     Rengine auxR;
     
+    private static final String yamlURL = CoDaPackConf.helpPath + "Data.CrearMenuPersonal.yaml";
+    private static final String helpTitle = "Crear Menu Personal Help Menu";
     
     public CrearMenuPersonal(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"Crear Menu Personal");
+        super.setHelpMenuConfiguration(yamlURL, helpTitle);
         
         auxMainApp = mainApp;
         auxR = r;
