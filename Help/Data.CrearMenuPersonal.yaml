@@ -1,0 +1,13 @@
+---
+name: Data.CrearMenuPersonal Help Menu
+description: "This feature create a menu defined by the user. This can define the name, define the .R file, define if groups are needed, add Bool variables, text/num inputs, selectors and partitions. To see the results after click accept, the user need to restart CoDaPack app."
+options:
+  - Nom Archiu: "String input with the name of the function."
+  - Nom Executable: "String input with the name of R file to execute."
+  - Groups: "If checked, this routine add a grup selector at the menu."
+  - Afegir Botons I/0: "Add a Bool button whith the name of the bool."
+  - Afegir Text: "Add a text/numerical input whith the name of the variable to enter."
+  - Afegir Selector: "Add a selector menu with an option to select, on click the 'Afegeix Opcio' the user can add more options to the selector."
+  - Partitions: "If checked, this routine add a partition button where can define the X partition ."
+  - Previsualitza: "On click, a new window is shown with the new menu, this is only a previsualization, not executable."
+references: ""

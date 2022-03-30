@@ -222,6 +222,17 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_SCATTERPLOT = "Scatterplot 2D/3D";
         public JMenuItem itemGeoMeanPlot;
         public final String ITEM_GEO_MEAN_PLOT = "Geometric mean barplot";
+        
+    public JMenu PersonalMenu;
+    public final String ITEM_PERSONALMENU = "My Personal Menu";
+        public JMenuItem itemModelCrearMenu;
+        public final String ITEM_MODEL_CPM = "Crear Menu Personal";
+        public JMenuItem itemModelImportarMenu;
+        public final String ITEM_MODEL_IPM = "Importar Menu";
+        public JMenuItem itemModelExportarMenu;
+        public final String ITEM_MODEL_EPM = "Exportar Menu";
+        public JMenu itemModelPM;
+        public final String ITEM_MODEL_PM = "Personal Menu";
 
    public JMenu menuHelp;
    public final String ITEM_HELP = "Help";
@@ -244,10 +255,10 @@ public class CoDaPackMenu extends JMenuBar{
         public final String ITEM_MODEL_S3 = "Model S3";
         public JMenuItem itemModelS4;
         public final String ITEM_MODEL_S4 = "Model S4";
-        public JMenuItem itemModelCrearMenu;
+        /*public JMenuItem itemModelCrearMenu;
         public final String ITEM_MODEL_CPM = "Crear Personal Menu";
         public JMenu itemModelPM;
-        public final String ITEM_MODEL_PM = "Personal Menu";
+        public final String ITEM_MODEL_PM = "Personal Menu";*/
         
         ArrayList<JMenuItem> PersonalMenuItems = new ArrayList<JMenuItem>();
         ArrayList<String> NomsMenuItems = new ArrayList<String>();
@@ -546,6 +557,12 @@ public class CoDaPackMenu extends JMenuBar{
             itemScatterplot = new JMenuItem();
             itemGeoMeanPlot = new JMenuItem();
 
+        PersonalMenu = new JMenu();
+            itemModelCrearMenu = new JMenuItem(); 
+            itemModelImportarMenu = new JMenuItem(); 
+            itemModelExportarMenu = new JMenuItem(); 
+            itemModelPM = new JMenu();
+            
         menuHelp = new JMenu();
             itemForceUpdate = new JMenuItem();
             itemAbout = new JMenuItem();
@@ -557,8 +574,8 @@ public class CoDaPackMenu extends JMenuBar{
             itemModelS2 = new JMenuItem();
             itemModelS3 = new JMenuItem();
             itemModelS4 = new JMenuItem();
-            itemModelCrearMenu = new JMenuItem();
-            itemModelPM = new JMenu();
+            //itemModelCrearMenu = new JMenuItem();
+            //itemModelPM = new JMenu();
             
         
         menuFile.setText(ITEM_FILE);
@@ -685,6 +702,19 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuGraphs, itemIlrBiPlot, ITEM_ILR_BIPLOT);
         addJMenuItem(menuGraphs, itemDendrogramPlot, ITEM_DENDROGRAM_PLOT);
         add(menuGraphs);       
+        
+        PersonalMenu.setText(ITEM_PERSONALMENU);
+        addJMenuItem(PersonalMenu, itemModelCrearMenu, ITEM_MODEL_CPM);
+        addJMenuItem(PersonalMenu, itemModelImportarMenu, ITEM_MODEL_IPM);
+        addJMenuItem(PersonalMenu, itemModelExportarMenu, ITEM_MODEL_EPM);
+        //addJMenuItem(PersonalMenu,itemModelCrearMenu, ITEM_MODEL_CPM);
+            itemModelPM.setText(ITEM_MODEL_PM);
+            PersonalMenu.add(itemModelPM);
+            crearPersonalMenu();
+            for(int i= 0; i< PersonalMenuItems.size(); i++){
+                addJMenuItem(itemModelPM,PersonalMenuItems.get(i), NomsMenuItems.get(i));
+            }
+        add(PersonalMenu);
 
         menuHelp.setText(ITEM_HELP);
         addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
@@ -698,14 +728,14 @@ public class CoDaPackMenu extends JMenuBar{
         addJMenuItem(menuDevelopment,itemModelS2, ITEM_MODEL_S2);
         addJMenuItem(menuDevelopment,itemModelS3, ITEM_MODEL_S3);
         addJMenuItem(menuDevelopment,itemModelS4, ITEM_MODEL_S4);
-        addJMenuItem(menuDevelopment,itemModelCrearMenu, ITEM_MODEL_CPM);
+        /*addJMenuItem(menuDevelopment,itemModelCrearMenu, ITEM_MODEL_CPM);
             itemModelPM.setText(ITEM_MODEL_PM);
             menuDevelopment.add(itemModelPM);
             crearPersonalMenu();
             for(int i= 0; i< PersonalMenuItems.size(); i++){
                 addJMenuItem(itemModelPM,PersonalMenuItems.get(i), NomsMenuItems.get(i));
             }
-
+*/
         
     }
 
