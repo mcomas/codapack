@@ -5,17 +5,21 @@
 package coda.gui.menu;
 
 import coda.gui.CoDaPackMain;
+import coda.gui.CoDaPackConf;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import javax.swing.JComboBox;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -24,6 +28,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import org.apache.commons.io.FilenameUtils;
 import org.rosuda.JRI.Rengine;
+import java.awt.event.*; 
 
 /**
  *
@@ -36,10 +41,50 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
     
     JTextField jl1 = new JTextField(newTxtDir), jl2 = new JTextField(newRDir), jl3 = new JTextField("");
     
+    private static final String yamlURL = CoDaPackConf.helpPath + "Personal.ExportarMenuPersonal.yaml";
+    private static final String helpTitle = "Exportar Menu Personal Help Menu";
+    
     public ExportPersonalMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Export Menu");
-        //super.setHelpMenuConfiguration(yamlURL, helpTitle);
+        super.setHelpMenuConfiguration(yamlURL, helpTitle);
         
+        //Create Combo Boz
+        JLabel jlTXT = new JLabel("Select File to export:  ");
+        jlTXT.setPreferredSize(new Dimension(200, 25));
+        this.optionsPanel.add(jlTXT);
+
+        JComboBox combo1 = new JComboBox();
+
+        combo1.addActionListener(new ActionListener() {     
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               //System.out.println("Value: " + combo1.getSelectedItem().toString());
+               getDIRS(combo1.getSelectedItem().toString());
+            }
+        });
+        combo1.setPreferredSize(new Dimension(300, 25));
+
+
+        //recorrer carpeta de TXT
+        File carpeta = new File(System.getProperty("user.dir")+"\\menus_personalitzables");
+        String[] listado = carpeta.list();
+        if (listado == null || listado.length == 0) {
+            System.out.println("No hay elementos dentro de la carpeta actual");
+            JOptionPane.showMessageDialog(null, "No hi ha elements a exportar");
+            return;
+        }
+        else {
+            for (int i=0; i< listado.length; i++) {
+                //System.out.println(listado[i]);
+		String fe = FilenameUtils.getExtension(listado[i]);
+                if ("txt".equals(fe)){
+                    combo1.addItem(listado[i]);
+                }
+            }
+        }
+        this.optionsPanel.add(combo1);
+        
+        /*
         //selector archiu txt
         JLabel jlTXT = new JLabel("    Select .txt:  ");
         jlTXT.setPreferredSize(new Dimension(150, 25));
@@ -60,7 +105,7 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
         });
         
        
-        /*
+        
         //selector archiu R
         JLabel jlR = new JLabel("    Select .R:  ");
         jlR.setPreferredSize(new Dimension(150, 25));
@@ -94,9 +139,9 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
         this.optionsPanel.add(new JSeparator());
         P3.addActionListener(new java.awt.event.ActionListener(){
         
-            public void actionPerformed(java.awt.event.ActionEvent evt){
-               selectDestination();
-            }
+        public void actionPerformed(java.awt.event.ActionEvent evt){
+           selectDestination();
+        }
         });
            
     }
@@ -112,7 +157,7 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
                 
                 String fileName = selectedFile.getAbsolutePath();;
 		String fe = FilenameUtils.getExtension(fileName);
-		System.out.println("File extension is : "+fe);
+		//System.out.println("File extension is : "+fe);
                 if ("txt".equals(fe)){
                     newTxtDir = selectedFile.getAbsolutePath();
                     jl1.setText(newTxtDir);
@@ -124,6 +169,19 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
                 //System.out.println(newTxtDir);
         }
         
+    }
+    
+    void getDIRS(String nameTXT){
+        File selectedFile = new File(System.getProperty("user.dir")+"\\menus_personalitzables\\"+nameTXT);
+        String fe = FilenameUtils.getExtension(nameTXT);
+        if ("txt".equals(fe)){
+            newTxtDir = selectedFile.getAbsolutePath();
+            jl1.setText(newTxtDir);
+            File txtFil = new File(newTxtDir);
+            buscaArchiuR(txtFil);
+        }else{
+            JOptionPane.showMessageDialog(null, selectedFile.getAbsolutePath()+" no es un archiu txt");
+        }
     }
     
     void buscaArchiuR(File archivoTXT){
@@ -146,14 +204,14 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
                             File aux = new File(System.getProperty("user.dir")+"\\Scripts_Amb_Base\\"+rFileName);
                             String fileNameR = aux.getAbsolutePath();
                             String fe = FilenameUtils.getExtension(fileNameR);
-                            System.out.println("File extension is : "+fe);
+                            //System.out.println("File extension is : "+fe);
                             if ("R".equals(fe)){
                                 newRDir = aux.getAbsolutePath();
                                 jl2.setText(newRDir);
                             }else{
                                 JOptionPane.showMessageDialog(null, aux.getAbsolutePath()+" no es un archiu R");
                             }
-                            System.out.println("newRDir: "+newRDir);
+                            //System.out.println("newRDir: "+newRDir);
                             //---
                             trobat= true;
                         }
@@ -191,7 +249,7 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
                 
                 String fileName = selectedFile.getAbsolutePath();
 		String fe = FilenameUtils.getExtension(fileName);
-		System.out.println("File extension is : "+fe);
+		//System.out.println("File extension is : "+fe);
                 if ("R".equals(fe)){
                     newRDir = selectedFile.getAbsolutePath();
                     jl2.setText(newRDir);
@@ -215,6 +273,7 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             // obtener ruta
             String selectPath = chooser.getSelectedFile().getPath();
+            String baseUrl = FilenameUtils.getPath(selectPath);
             jl3.setText(selectPath);
             //JOptionPane.showMessageDialog(null, "El directorio que elija es:" + selectPath);
         }else{
@@ -239,24 +298,32 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
         Path fileRPath = Paths.get(newRDir);
         
         String targetS = jl3.getText();
-        File targetTXT = new File(targetS+"\\"+fileTXT.getName());
-        File targetR = new File(targetS+"\\"+fileR.getName());
+        File targetTXT = new File(targetS+fileTXT.getName());
+        File targetR = new File(targetS+fileR.getName());
         Path targetPath = Paths.get(targetS);
        
         try {
-            
+            /*
 //------Crea carpeta amb els archius necessaris dins
             //crear directorio
-            File directorio = new File(targetS+"\\export_Coda\\");
+            String nameWithOutExtension = FilenameUtils.removeExtension(fileTXT.getName());
+            File directorio = new File("\\"+targetS+"\\"+nameWithOutExtension+"\\");
+            //System.out.println(directorio);
             if (!directorio.exists()) {
                 if (directorio.mkdirs()) {
                     System.out.println("Directorio creado");
                 }
+                else{
+                    System.out.println("Directorio No creado");
+                }
+            }
+            else{
+                System.out.println("Directorio no existente: "+ targetS+nameWithOutExtension+"\\");
             }
             //----move txt---
             InputStream in = new FileInputStream(fileTXT);
             OutputStream out = new FileOutputStream(directorio+"\\"+fileTXT.getName());
-           System.out.println(directorio+"\\"+fileTXT.getName());
+            //System.out.println(directorio+"\\"+fileTXT.getName());
             byte[] buf = new byte[1024];
             int len;
 
@@ -282,7 +349,7 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
             out2.close();
             
 
-
+*/
 //---------- funciona: seleccion de los dos archivos i del destino
 /*
             //----move txt---
@@ -304,14 +371,39 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
             byte[] buf2 = new byte[1024];
             int len2;
 
-            while ((len2 = in.read(buf2)) > 0) {
-              out.write(buf2, 0, len2);
+            while ((len2 = in2.read(buf2)) > 0) {
+              out2.write(buf2, 0, len2);
             }
             
             in2.close();
             out2.close();
 */
-//-------            
+//------- Zip Files
+            String nameWitOutExtension = FilenameUtils.removeExtension(fileTXT.getName());
+            
+            List<String> srcFiles = Arrays.asList(newTxtDir, newRDir);
+            
+            FileOutputStream fos = new FileOutputStream(targetS+"\\"+nameWitOutExtension+".zip");
+            System.out.println(targetS+"\\"+nameWitOutExtension+".zip");
+            ZipOutputStream zipOut = new ZipOutputStream(fos);
+            for (String srcFile : srcFiles) {
+                File fileToZip = new File(srcFile);
+                FileInputStream fis = new FileInputStream(fileToZip);
+                ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+                zipOut.putNextEntry(zipEntry);
+
+                byte[] bytes = new byte[1024];
+                int length;
+                while((length = fis.read(bytes)) >= 0) {
+                    zipOut.write(bytes, 0, length);
+                }
+                fis.close();
+            }
+            zipOut.close();
+            fos.close();
+
+
+//-------- Show meesages to User
             JOptionPane.showMessageDialog(null, "Menu exportat correctament");
             
             

@@ -1,0 +1,6 @@
+---
+name: Personal.ImportarMenuPersonal Help Menu
+description: "This feature import a menu defined by the user. The user can select the file.zip with the necessary files to import a new Menu. On click Accept button, the files will be placed in the appropriate directories for proper operation "
+options:
+  - Select .zip: "Select Box, where the user can select one of the Personal Menu."
+references: ""
