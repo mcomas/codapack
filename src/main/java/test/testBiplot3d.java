@@ -39,7 +39,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  * @author mcomas
  */
 public class testBiplot3d {
-    public static void main(String args[]) throws FileNotFoundException, IOException, InvalidFormatException {
+    public static void main(String args[]) throws FileNotFoundException, IOException, InvalidFormatException, Exception {
         //DataFrame df = ImportData.importXLS("/Users/marc/CoDa.xls", true);
         DataFrame df = ImportData.importXLS("/home/marc/software/codapack-dev/data/halimba.xls", true);
 
