@@ -37,7 +37,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  * @author mcomas
  */
 public class testNumericalStats {
-    public static void main(String args[]) throws FileNotFoundException, IOException, InvalidFormatException {
+    public static void main(String args[]) throws FileNotFoundException, IOException, InvalidFormatException, Exception {
         //DataFrame df = ImportData.importXLS("/Users/marc/workspace/CoData.xls", true);
         DataFrame df = ImportData.importXLS("G:/Recerca/EIO_RECERCA/New CoDaPack/CoData.xls", true);
 

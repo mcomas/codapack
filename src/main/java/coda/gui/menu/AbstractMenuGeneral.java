@@ -99,7 +99,9 @@ public abstract class AbstractMenuGeneral extends JDialog{
     }
     public AbstractMenuGeneral(final CoDaPackMain mainApp, String title){
         super(mainApp, title);
+        //mainApplication = mainApp;
         this.allowEmpty = true;
+        //initialize();
     }
     public void setHelpMenuConfiguration(String yamlUrl, String helpTitle){
         

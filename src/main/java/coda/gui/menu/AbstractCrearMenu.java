@@ -36,6 +36,7 @@ public abstract class AbstractCrearMenu extends JDialog{
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     String yamlFile;// variable que serveix per el path del fitxer yaml
     String helpTitle;// variable per el titol del menu
+    boolean allowEmpty = true;
     
     int WIDTH = 650;//560;
     int HEIGHT = 500;//430;
@@ -126,7 +127,7 @@ public abstract class AbstractCrearMenu extends JDialog{
     }
     @Override
     public void setVisible(boolean v){
-        if(mainApplication.getActiveDataFrame() == null ){
+        if(mainApplication.getActiveDataFrame() == null  && !allowEmpty){
             JOptionPane.showMessageDialog(this, "No data available");
             this.dispose();
         }else{

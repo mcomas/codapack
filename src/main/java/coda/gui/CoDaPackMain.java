@@ -28,7 +28,6 @@ import coda.gui.CoDaPackMenu.CoDaPackMenuListener;
 import coda.gui.menu.*;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
-import coda.gui.output.OutputText;
 import coda.gui.table.TablePanel;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.CoDaPackImporter;
@@ -42,9 +41,6 @@ import coda.plot2.window.TernaryPlot2dWindow;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -53,13 +49,8 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -68,9 +59,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.embed.swing.JFXPanel;
 import javax.script.ScriptException;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -893,6 +882,11 @@ public final class CoDaPackMain extends JFrame{
             new CrearMenuPersonal(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_PM)){
             new T1(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_MODEL_IPM)){
+            new AddToPersonalMenu(this,re).setVisible(true);
+        }
+        else if(title.equals(jMenuBar.ITEM_MODEL_EPM)){
+            new ExportPersonalMenu(this,re).setVisible(true);
         }
         else{
             for(int i = 0; i< jMenuBar.NomsMenuItems.size(); i++){

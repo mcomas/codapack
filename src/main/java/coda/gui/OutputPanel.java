@@ -20,35 +20,32 @@
 package coda.gui;
 
 import static coda.gui.CoDaPackConf.CoDaVersion;
+import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
-import java.awt.Rectangle;
+import coda.gui.output.OutputText;
 import javafx.scene.paint.Color;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.Region;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javax.script.*;
+import test.NashornExample;
+
+
 
 public final class OutputPanel extends JFXPanel {
     
@@ -57,8 +54,17 @@ public final class OutputPanel extends JFXPanel {
     private Scene scene;
     
     private Writer fileWriter;
+    int width = 1;
+    //--------- JavaScript functions
+//    private static final String ENGINE_NAME = "graal.js";
+//
+//    private final ScriptEngine engine;
+//
+//    private Invocable invoker;
+    //----------
     
-        public OutputPanel(){
+        public OutputPanel() {
+            
             try{
                 fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/CoDaPack.html",true),StandardCharsets.ISO_8859_1);
             }catch(IOException e){
@@ -72,22 +78,58 @@ public final class OutputPanel extends JFXPanel {
                 });
         }
         
+        
         public void iniFx(){
             scene = new Scene(new Browser(),500,350,Color.web("#666970"));
             this.setScene(scene);
         }
     
-    	public void addWelcome(String CoDaVersion){
+    	public void addWelcome(String CoDaVersion) /**/throws ScriptException, Exception{
 		String windowText = "<script type=\"text/javascript\" async src=\"file://" + CoDaPackConf.mathJaxPath + "?config=TeX-MML-AM_CHTML\"></script><b>CoDaPack</b> - Version " + CoDaVersion
-                + "<br>This software is being developed by the "
+                + "<link rel=\"stylesheet\" href=\"style.css\">"
+                        + "<script src=\"JavaScriptFile.js\"></script>"
+                + "<style>\n" +
+                    "#myProgress {\n" +
+                    "  position: relative;\n" +
+                    "  width: 100%;\n" +
+                    "  height: 30px;\n" +
+                    "  background-color: #ddd;\n" +
+                    "}\n" +
+                    "\n" +
+                    "#myBar {\n" +
+                    "  position: absolute;\n" +
+                    "  width: "+width+"%;\n" +
+                    "  height: 100%;\n" +
+                    "  background-color: #4CAF50;\n" +
+                    "}\n" +
+                "</style>"
+                
+                        
+                + "<br>\n This software is being developed by the "
                 + "Research Group in Statistics and Compositional Data Analysis "
-                + "at University of Girona<br><br>";
+                + "at University of Girona\n"
+                        + "<br><br>"
+                + "<div id=\"myProgress\">\n" +
+                "    <div id=\"myBar\"></div>\n" +
+                "</div>";
+                
+                //System.out.println(windowText);
+                
+                
+                //------------JavaScript call
+                NashornExample graal = new NashornExample();
+                graal.example05(width);
+                
+                OutputElement type = new OutputText(graal.example04());
+                outputPanel.addOutput(type);
                 
                 Platform.runLater(new Runnable(){
                         public void run(){
                             ((Browser)scene.getRoot()).repaint(windowText);
                         }
                 });
+                
+                
 	}
 
 	public void addOutput(OutputElement oe){
@@ -118,7 +160,7 @@ public final class OutputPanel extends JFXPanel {
         }
 
 	public void addOutput(ArrayList<OutputElement> outputs){
-
+            
 		String windowText = "";
 
 		for(OutputElement oe: outputs){
