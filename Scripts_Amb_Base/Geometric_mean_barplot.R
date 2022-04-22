@@ -49,7 +49,7 @@ nRow <- nOrig
 nCol <- nCat
 rm(cmat)
 #cmat <- matrix(, nrow = choose(nCat,2), ncol = nCat)
-cmat <- matrix(, nrow = nCat, ncol = nOrig)
+cmat <- matrix(0, nrow = nCat, ncol = nOrig)
 
 cmat[1,]=exp(apply(log(Mat[Mat[,nOrig+1]==1,1:nOrig]),2,mean))
 Num <- rbind(cmat[1,])

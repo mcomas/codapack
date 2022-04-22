@@ -1,10 +1,17 @@
 exec:
-manova.R
+Example.R
  
 Groups:
 False
  
 Selector:
 Opcio
+Selector:
 Opcio
-Opcio
+Text:
+Input Name Var0
+Input Name Var1
+Input Name Var2
+Partitions:
+Set partition
+
