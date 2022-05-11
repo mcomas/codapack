@@ -19,7 +19,7 @@
 
 package coda.gui;
 
-
+import coda.gui.menu.AddToHTMLJavaScript;
 import coda.DataFrame;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
@@ -64,10 +64,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -94,6 +97,7 @@ public final class CoDaPackMain extends JFrame{
     //Panel showing the non-column outputs and the data contained in the dataFrame
     public static JTabbedPane outputs;
     public static OutputPanel outputPanel;
+    public static OutputPanel[] outputPanels;
     public static TablePanel tablePanel;
     //Panel with the active variable
     public static DataList dataList;
@@ -164,6 +168,8 @@ public final class CoDaPackMain extends JFrame{
 
     public static CoDaPackConf config = new CoDaPackConf();
     
+    JTabbedPane tabbedPane = new JTabbedPane();
+    
     // Mac users expect the menu bar to be at the top of the screen, not in the
     // window, so enable that setting. (This is ignored on non-Mac systems).
     // Setting should be set in an static context
@@ -172,14 +178,14 @@ public final class CoDaPackMain extends JFrame{
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "CoDaPack");
         System.setProperty("com.apple.mrj.application.growbox.intrudes", "false");
     }
-    public CoDaPackMain() {
+    public CoDaPackMain() throws Exception {
         screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         // Es carrega el logo del CoDaPack        
         initComponents();
         this.setIconImage(
-                Toolkit.getDefaultToolkit().
-                        getImage(
-                getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logoL.png")));
+            Toolkit.getDefaultToolkit().
+                    getImage(
+            getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logoL.png")));
         outputPanel.addWelcome(CoDaPackConf.getVersion());
     }
     public void closeApplication(){
@@ -189,6 +195,9 @@ public final class CoDaPackMain extends JFrame{
     private void initComponents() {
         ITEM_APPLICATION_NAME = "CoDaPack v" + CoDaPackConf.getVersion();
         outputPanel = new OutputPanel();
+        outputPanels = new OutputPanel[1];
+        System.out.println(outputPanels.length);
+        outputPanels[0]=outputPanel;
         tablePanel = new TablePanel(this);
         
         //Panel with the active variable
@@ -222,8 +231,42 @@ public final class CoDaPackMain extends JFrame{
         dfSelect.add(dataFrameSelector);
         westPanel.add(dfSelect, BorderLayout.NORTH);
         westPanel.add(dataList, BorderLayout.CENTER);
+        
+        //-------------tabbedPanned
+        
+        tabbedPane.setFocusable(false);
+        //tabbedPane.setSize(500, 340);
+        
+        tabbedPane.addMouseListener(new java.awt.event.MouseAdapter(){
+            @Override
+            public void mousePressed( java.awt.event.MouseEvent evt){
+                if(SwingUtilities.isRightMouseButton(evt)){
+                    int index = tabbedPane.getSelectedIndex();
 
-        jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, outputPanel, tablePanel);
+                    if(index != 0)
+                    {
+                        JPopupMenu popupMenu = new JPopupMenu();
+                        JMenuItem delete = new JMenuItem("DELETE");
+                        delete.addActionListener(new java.awt.event.ActionListener(){
+                           @Override
+                           public void actionPerformed(java.awt.event.ActionEvent evt){
+                               tabbedPane.remove(index);
+                           }
+                        });
+                        popupMenu.add(delete);
+                        popupMenu.show(tabbedPane, evt.getX(), evt.getY());
+                    }
+                }
+            }
+        });
+        
+        tabbedPane.add("Main",outputPanel);  
+        
+        
+        
+        jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabbedPane, tablePanel);
+        //-------------
+        //jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, outputPanel, tablePanel);
         jSplitPane.setDividerSize(7);
         jSplitPane.setOneTouchExpandable(true);
         jSplitPane.setDividerLocation(350);
@@ -243,6 +286,43 @@ public final class CoDaPackMain extends JFrame{
         });        
         pack();
     }
+    
+    public boolean searchPanel(String name){
+        boolean trobat = false;
+        int i = 0;
+        while(!trobat && i< outputPanels.length){
+            if(outputPanels[i].returnHTMLName().equals(name)){
+                trobat = true;
+                outputPanel = outputPanels[i];
+                tabbedPane.setSelectedIndex(i);
+            }
+            i++;
+        }
+        return trobat;
+    }
+    
+    public void returnToMainPanel(){
+        outputPanel = outputPanels[0];
+    }
+    
+    public void addTabbedPannel(String nameHtml, String HTMLtext){
+        
+        OutputPanel[] _outputPanels = new OutputPanel[outputPanels.length+1];
+        
+        for (int i = 0; i < outputPanels.length; i++)
+            _outputPanels[i] = outputPanels[i];
+  
+        OutputPanel auxOutputPanel = new OutputPanel(nameHtml);
+        _outputPanels[outputPanels.length]=auxOutputPanel;
+        
+        outputPanels = new OutputPanel[_outputPanels.length];
+        outputPanels = _outputPanels.clone();
+        
+        tabbedPane.add(nameHtml,auxOutputPanel);  
+        JLabel tabTitleLabel = new JLabel(nameHtml);
+        tabbedPane.setTabComponentAt(tabbedPane.getTabCount()-1,tabTitleLabel);
+    }
+    
     public boolean isDataFrameNameAvailable(String name){
         for(DataFrame df : dataFrame)
             if(df.name.equals(name)) return false;
@@ -655,7 +735,10 @@ public final class CoDaPackMain extends JFrame{
                 if (response == JOptionPane.YES_OPTION) {
                     int responseSaveHTML = JOptionPane.showConfirmDialog(null, "Do you want to save the session?", "Save the session",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
                     if(responseSaveHTML == JOptionPane.NO_OPTION){
-                        outputPanel.deleteHtml();
+                        for(int a = 0; a< outputPanels.length; a++){
+                            outputPanels[a].deleteHtml();
+                        }
+                        //outputPanel.deleteHtml();
                     }
                     dispose();
                     this.closeApplication();
@@ -878,6 +961,8 @@ public final class CoDaPackMain extends JFrame{
             new S3(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_S4)){
             new S4(this,re).setVisible(true);
+        }else if(title.equals(jMenuBar.ITEM_MODEL_AddtoHTMLJavaScript)){
+            new AddToHTMLJavaScript(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_CPM)){
             new CrearMenuPersonal(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_PM)){
@@ -913,7 +998,7 @@ public final class CoDaPackMain extends JFrame{
     /**
     * @param args the command line arguments
     */
-    public static void main(String args[]){
+    public static void main(String args[]) throws Exception{
         /*
          * Look and Feel: change appearence according to OS
          */

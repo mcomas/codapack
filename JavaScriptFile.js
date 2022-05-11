@@ -1,11 +1,14 @@
 print("Hello World from JavaScriptFile.js");
 
+
+
 var fun1 = function(name) {
     print('Hi there from Javascript, ' + name);
     return "greetings from javascript";
 };
 
 var returnFecha = function(nada){
+    width = nada;
     var fecha = new Date(); //Obtiene un objeto fecha actual.
     var dia;
     var vardia = fecha.getDay();    //getDay() devuelve el dia de la semana.(0-6).
@@ -88,24 +91,92 @@ var returnFecha = function(nada){
     return salida;
 };
 
-
-function move(width) {
-    console.log("prova");
-    //var elem = document.getElementsByName("myBar");
-
-    console.log("Element :",elem);
-    //var elementNameExists = !!document.getElementsByName("myBar");
-    console.log("Is Not null ? ",elementNameExists);
-
-    //var width = 1;
-    var id = setInterval(frame, 1);
+function move2(_width) {
+    console.log("document");
+    console.log(document.URL);
+    var elem = document.getElementById("myBar");
+    var width = _width;
+    var id = setInterval(frame, 10);
     function frame() {
         if (width >= 100) {
             clearInterval(id);
         } else {
             width++;
-            //elem.style.width = width + '%';
+            elem.style.width = width + '%';
+            document.getElementById("label").innerHTML = width * 1 + '%';
         }
     }
-    return width;
 }
+
+function myFunction() {
+    var elem = document.getElementById("myBar");
+    width = 0;
+    elem.style.width = width + '%';
+    document.getElementById("label").innerHTML = width * 1 + '%';
+  }
+
+  function createRow(){
+    print("Hello World from function createRow from JavaScriptFile.js");
+  }
+
+ function createGraf(){
+    try
+    {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'doughnut',
+            data:{
+            datasets: [{
+                data: [60,18,10, 8, 4],
+                backgroundColor: ['#42a5f5', 'red', 'green','blue','violet'],
+                label: 'Comparacion de navegadores'}],
+                labels: ['Google Chrome','Safari','Edge','Firefox','Opera']},
+            options: {responsive: false}
+        });
+    }catch(error){
+        console.error(error);
+    }
+    
+    
+ }
+
+ function createGraf2(lastVal){
+    var ctx1 = document.getElementById('myChart2').getContext('2d');
+    var chart = new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            datasets: [{
+                label: 'Ganancias',
+                backgroundColor: '#42a5f5',
+                borderColor: 'gray',
+                data: [7, 8, 5, 2, 8, 10, 7,-7,4,9,-8,lastVal]
+            }		
+            ]},
+        options: {responsive: false}
+    });
+ }
+
+ function createGraf3(v1,v2,v3,v4,v5){
+    var ctx2 = document.getElementById('myChart3').getContext('2d');
+    var chart = new Chart(ctx2, {
+        type: 'radar',
+        data: 	
+        {
+            datasets: [{
+                data: [document.getElementById('v1').value,v2,v3, v4, v5],
+                backgroundColor: ['#42a5f5', 'red', 'green','blue','violet'],
+                label: 'Comparacion de navegadores'
+            }],
+            labels: [
+                'Google Chrome',
+                'Safari',
+                'Edge',
+                'Firefox',
+                'Opera'
+            ]},
+        options: {responsive: false}
+    });
+ }
+
+

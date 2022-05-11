@@ -45,6 +45,9 @@ import javafx.scene.layout.Priority;
 import javax.script.*;
 import test.NashornExample;
 
+import java.lang.*;
+import javax.swing.JProgressBar;
+
 
 
 public final class OutputPanel extends JFXPanel {
@@ -54,19 +57,40 @@ public final class OutputPanel extends JFXPanel {
     private Scene scene;
     
     private Writer fileWriter;
-    int width = 1;
+    int width = 0;
     //--------- JavaScript functions
 //    private static final String ENGINE_NAME = "graal.js";
 //
 //    private final ScriptEngine engine;
 //
 //    private Invocable invoker;
+    JProgressBar barra;
+    
+    String HTMLName = "";
     //----------
     
         public OutputPanel() {
             
             try{
+                HTMLName = "CoDaPack.html";
+                System.out.println(System.getProperty("java.io.tmpdir") + "/CoDaPack.html");
                 fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/CoDaPack.html",true),StandardCharsets.ISO_8859_1);
+            }catch(IOException e){
+                    System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
+                    e.printStackTrace();
+                }
+                Platform.runLater(new Runnable(){
+                    public void run(){
+                        iniFx();
+                    }
+                });
+        }
+        
+        public OutputPanel(String nameScript) {
+            HTMLName = nameScript+".html";
+            try{
+                System.out.println(System.getProperty("java.io.tmpdir") + "/"+nameScript+".html");
+                fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/"+nameScript+".html",true),StandardCharsets.ISO_8859_1);
             }catch(IOException e){
                     System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
                     e.printStackTrace();
@@ -80,54 +104,56 @@ public final class OutputPanel extends JFXPanel {
         
         
         public void iniFx(){
-            scene = new Scene(new Browser(),500,350,Color.web("#666970"));
+            scene = new Scene(new Browser(HTMLName),500,350,Color.web("#666970"));
             this.setScene(scene);
         }
     
     	public void addWelcome(String CoDaVersion) /**/throws ScriptException, Exception{
-		String windowText = "<script type=\"text/javascript\" async src=\"file://" + CoDaPackConf.mathJaxPath + "?config=TeX-MML-AM_CHTML\"></script><b>CoDaPack</b> - Version " + CoDaVersion
-                + "<link rel=\"stylesheet\" href=\"style.css\">"
-                        + "<script src=\"JavaScriptFile.js\"></script>"
-                + "<style>\n" +
-                    "#myProgress {\n" +
-                    "  position: relative;\n" +
-                    "  width: 100%;\n" +
-                    "  height: 30px;\n" +
-                    "  background-color: #ddd;\n" +
-                    "}\n" +
-                    "\n" +
-                    "#myBar {\n" +
-                    "  position: absolute;\n" +
-                    "  width: "+width+"%;\n" +
-                    "  height: 100%;\n" +
-                    "  background-color: #4CAF50;\n" +
-                    "}\n" +
-                "</style>"
+            clearOutput();	
+            String windowText = "<script type=\"text/javascript\" async src=\"file://" + CoDaPackConf.mathJaxPath + "?config=TeX-MML-AM_CHTML\"></script>\n"
+                    //    + "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
+                    //"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></head>"
+                    //+ "</script><b>CoDaPack</b> - Version " + CoDaVersion
+                + "<link rel=\"stylesheet\" href=\"style.css\">\n"
+                + "<script src=\"https://vega.github.io/vega/vega.min.js\"></script>\n"
+                    + "<script src=\"https://cdn.jsdelivr.net/npm/vega@5\"></script>\n"
+                + "<script src=\"chart.js\"></script>\n"
+                + "<script src=\"JavaScriptFile.js\"></script>\n"
+
+                    + "";
+                //+ "<canvas id=\"myChart\"></canvas>\n" ;
+                    
                 
-                        
-                + "<br>\n This software is being developed by the "
-                + "Research Group in Statistics and Compositional Data Analysis "
-                + "at University of Girona\n"
-                        + "<br><br>"
-                + "<div id=\"myProgress\">\n" +
-                "    <div id=\"myBar\"></div>\n" +
-                "</div>";
+                System.out.println(windowText);
+                /*Platform.runLater(new Runnable(){
+                    public void run(){
+                        ((Browser)scene.getRoot()).repaint(windowText);
+                    }
+                });*/
                 
-                //System.out.println(windowText);
-                
+                //--------Crida Engine
+                NashornExample graal = new NashornExample();
                 
                 //------------JavaScript call
-                NashornExample graal = new NashornExample();
-                graal.example05(width);
                 
-                OutputElement type = new OutputText(graal.example04());
+                OutputElement type = new OutputText(graal.example04(width));
                 outputPanel.addOutput(type);
                 
-                Platform.runLater(new Runnable(){
-                        public void run(){
-                            ((Browser)scene.getRoot()).repaint(windowText);
-                        }
-                });
+                //------------Add Inicial Text
+                OutputElement inicialText = new OutputText(windowText);
+                outputPanel.addOutput(inicialText);
+                /*Platform.runLater(new Runnable(){
+                    public void run(){
+                        ((Browser)scene.getRoot()).repaint(windowText);
+                    }
+                });*/
+                
+                //----Barra Java aprova
+                
+                barra = new JProgressBar();
+                outputPanel.add( barra );
+                //barra = graal.example05(barra, width);
+                //graal.example05(barra, width);
                 
                 
 	}
@@ -181,7 +207,7 @@ public final class OutputPanel extends JFXPanel {
             
             try {
                 fileWriter.close();
-                File htmlFile = new File(System.getProperty("java.io.tmpdir") + "/CoDaPack.html");
+                File htmlFile = new File(System.getProperty("java.io.tmpdir") + "/"+HTMLName);
                 htmlFile.delete();
                 
             } catch (IOException ex) {
@@ -189,17 +215,30 @@ public final class OutputPanel extends JFXPanel {
                 ex.printStackTrace();
             }
         }
+        
+        public String returnHTMLName(){
+            return HTMLName;
+        }
 }
 
 class Browser extends Region{
 
 	final WebView browser = new WebView();
 	final WebEngine webEngine = browser.getEngine();
+        String HTMLName = "";
 
 	public Browser(){
-
+                HTMLName = "CoDaPack.html";
 		getStyleClass().add("browser");
 		webEngine.load("file:\\" + System.getProperty("java.io.tempdir") + "/CoDaPack.html");
+		getChildren().add(browser);
+		webEngine.setUserStyleSheetLocation(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "style.css").toString());
+	}
+        
+        public Browser(String nameScript){
+                HTMLName = nameScript;
+		getStyleClass().add("browser");
+		webEngine.load("file:\\" + System.getProperty("java.io.tempdir") + "/"+HTMLName);
 		getChildren().add(browser);
 		webEngine.setUserStyleSheetLocation(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "style.css").toString());
 	}
@@ -226,14 +265,14 @@ class Browser extends Region{
 
 	public void repaint(String text){
             
-            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/CoDaPack.html",true),StandardCharsets.ISO_8859_1)){
+            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/"+HTMLName,true),StandardCharsets.ISO_8859_1)){
                 fileWriter.write(text);
             }catch(IOException e){
                 System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
                 e.printStackTrace();
             }
 
-            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "/CoDaPack.html");
+            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "/"+HTMLName);
             webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
                 webEngine.executeScript("window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);");
             });
@@ -241,14 +280,14 @@ class Browser extends Region{
         
         public void clean(String text){
             
-            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/CoDaPack.html",false),StandardCharsets.ISO_8859_1)){
+            try(Writer fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/"+HTMLName,false),StandardCharsets.ISO_8859_1)){
                 fileWriter.write(text);
             }catch(IOException e){
                 System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
                 e.printStackTrace();
             }
 
-            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "/CoDaPack.html");
+            webEngine.load("file:\\" + System.getProperty("java.io.tmpdir") + "/"+HTMLName);
             webEngine.getLoadWorker().stateProperty().addListener((obs,oldValue,newValue)->{
                 webEngine.executeScript("window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);");
             });
