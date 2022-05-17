@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import org.rosuda.JRI.Rengine;
 import java.util.Random;
 import java.io.*;
+import java.util.Arrays;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,11 +51,12 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
                     //"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></head>"
                     //+ "</script><b>CoDaPack</b> - Version " + CoDaVersion
                 + "<link rel=\"stylesheet\" href=\"style.css\">\n"
-                + "<script src=\"https://vega.github.io/vega/vega.min.js\"></script>\n"
+                //----Vega include into HTML (not using now)
+                /*+ "<script src=\"https://vega.github.io/vega/vega.min.js\"></script>\n"
                     + "<script src=\"https://cdn.jsdelivr.net/npm/vega@5\"></script>\n"
                 + "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/vega/5.7.0/vega.js\"></script>\n" +
                 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/vega-lite/3.4.0/vega-lite.js\"></script>\n" +
-                "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/vega-embed/5.1.3/vega-embed.js\"></script>\n"
+                "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/vega-embed/5.1.3/vega-embed.js\"></script>\n"*/
                 + "<script src='https://www.gstatic.com/charts/loader.js'></script>" 
                 + "<script src=\"chart.js\"></script>\n"
                 + "<script src=\"JavaScriptFile.js\"></script>\n"
@@ -148,7 +150,6 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
         new Random().nextBytes(array);
         String nameHTML = "CoDaPack"+array[0]+array[1]+array[2]+array[3];
         //String generatedString = new String(nameHTML, Charset.forName("UTF-8"));
-        //System.out.println("nameHTML: "+nameHTML);
         mainApp.addTabbedPannel(nameHTML, windowText);
         HTMLScriptName = nameHTML;
         
@@ -171,12 +172,20 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
     }
     
     String readHTML(String name) throws FileNotFoundException{
-         /* Constructing String Builder to
+        //passar el nom de l'arxiu html de sortida al arxiu R
+        System.out.println("name: "+name);
+        
+        re.eval("arxSortida<- "+name); 
+        re.assign("arxSortida", name);
+        
+        
+        /* Constructing String Builder to
         append the string into the html */
         StringBuilder html = new StringBuilder();
  
         // Reading html file on local directory
-        FileReader fr = new FileReader("L:\\David\\mcomas\\codapack\\grficambplotlygeneratdesdr\\ex02.html");
+        //FileReader fr = new FileReader("L:\\David\\mcomas\\codapack\\grficambplotlygeneratdesdr\\ex02.html");//name
+        FileReader fr = new FileReader(name);//name
  
         // Try block to check exceptions
         try {
@@ -195,7 +204,6 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
  
             // AtLast converting into the string
             String HTMLContent = html.toString();
-            //System.out.println(HTMLContent);
  
             // Closing the file after all the completion of
             // Extracting
@@ -217,15 +225,6 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
 
    
     public void crearGrafProva(){
-        
-        /*String windowText="<button class=\"button-85\" role=\"button\" onclick=\"createGraf()\">createGraf</button>\n"
-                + "<button onclick=\"createGraf2(0)\">createGraf2</button>"
-                + "<button onclick=\"createGraf3(10,15,20,20,55)\">createGraf3</button></br>\n"
-                + "<canvas id=\"myChart\"></canvas>\n"
-                + "<canvas id=\"myChart2\"></canvas>\n"
-                + "<canvas id=\"myChart3\"></canvas>\n";
-        OutputElement inicialText = new OutputText(windowText);
-        outputPanel.addOutput(inicialText);*/
         
         //------------vega--
         
@@ -267,12 +266,13 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
     
     
     
-    void insertHTMLtoCODA() throws IOException{
+    void insertHTMLtoCODA(String _nameHTML) throws IOException{
         String windowText;
         try {
             
             //---moure carpeta al temp
             String tmpdir = System.getProperty("java.io.tmpdir");
+            System.out.println(tmpdir);
             File archivo = new File(tmpdir+"\\libHTML");
             if (!archivo.exists()) {
                 System.out.println("directori no existent");
@@ -281,7 +281,8 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
                 copiarDirectorio(currentDir+"\\grficambplotlygeneratdesdr\\libHTML", tmpdir+"\\libHTML");
             }
             
-            windowText = readHTML(System.getProperty("user.dir")+"\\grficambplotlygeneratdesdr\\ex02.html");
+            //windowText = readHTML(System.getProperty("user.dir")+"\\grficambplotlygeneratdesdr\\ex02.html");//_nameHTML
+            windowText = readHTML(System.getProperty("user.dir")+"\\grficambplotlygeneratdesdr\\"+_nameHTML);//_nameHTML
             
             
             //---diferent tab
@@ -289,7 +290,6 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
             new Random().nextBytes(array);
             String nameHTML = "CoDaPack"+array[0]+array[1]+array[2]+array[3];
             //String generatedString = new String(nameHTML, Charset.forName("UTF-8"));
-            //System.out.println("nameHTML: "+nameHTML);
             _mainApp.addTabbedPannel(nameHTML, windowText);
             HTMLScriptName = nameHTML;
 
@@ -364,18 +364,35 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
        
         //String url = CoDaPackConf.rScriptPath + "..\\ex02.R";
         //String url = "L:\\\\David\\\\mcomas\\\\codapack\\\\ex02.html";
-        //System.out.println("url: "+ url);
         
         String currentDir = System.getProperty("user.dir");
         String currentDir2 = currentDir.replaceAll("\\\\", "/");
-        String url2 = currentDir2+"/grficambplotlygeneratdesdr/ex02.R";
+        String url2 = currentDir2+"/grficambplotlygeneratdesdr/ex03.R";
         //String url2 ="L:\\David\\mcomas\\codapack\\grficambplotlygeneratdesdr\\ex02.R";
-        //System.out.println("url2: "+ url2);
 
         re.eval("tryCatch({error <- \"NULL\";source(\"" + url2 + "\")}, error = function(e){ error <<- e$message})");
         
         
         String[] errorMessage = re.eval("error").asStringArray();
+        System.out.println("AAerrorMessage: "+Arrays.toString(errorMessage));
+        
+        String nomArchiuSortida = "ex03.html";//---------------------------------------------------------------------------------------------------
+        File file = new File(currentDir2+"/grficambplotlygeneratdesdr/"+nomArchiuSortida);
+                
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                System.out.println("file created");
+            } catch (IOException ex) {
+                Logger.getLogger(AddToHTMLJavaScript.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        else{
+            System.out.println("file not created");
+        }
+        
+        
         if(errorMessage[0].equals("NULL")){
             try {
                 /* executem totes les accions possibles */
@@ -383,8 +400,10 @@ public class AddToHTMLJavaScript extends AbstractMenuGeneral {
                 createVariables();
                 createDataFrame();
                 showGraphics();*/
-                insertHTMLtoCODA();
+                
+                insertHTMLtoCODA(nomArchiuSortida);
             } catch (IOException ex) {
+                System.out.println("errorMessage: "+Arrays.toString(errorMessage));
                 Logger.getLogger(AddToHTMLJavaScript.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

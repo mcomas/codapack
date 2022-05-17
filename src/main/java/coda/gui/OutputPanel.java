@@ -73,7 +73,7 @@ public final class OutputPanel extends JFXPanel {
             
             try{
                 HTMLName = "CoDaPack.html";
-                System.out.println(System.getProperty("java.io.tmpdir") + "/CoDaPack.html");
+                //System.out.println(System.getProperty("java.io.tmpdir") + "/CoDaPack.html");
                 fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/CoDaPack.html",true),StandardCharsets.ISO_8859_1);
             }catch(IOException e){
                     System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
@@ -89,7 +89,7 @@ public final class OutputPanel extends JFXPanel {
         public OutputPanel(String nameScript) {
             HTMLName = nameScript+".html";
             try{
-                System.out.println(System.getProperty("java.io.tmpdir") + "/"+nameScript+".html");
+                //System.out.println(System.getProperty("java.io.tmpdir") + "/"+nameScript+".html");
                 fileWriter = new OutputStreamWriter(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/"+nameScript+".html",true),StandardCharsets.ISO_8859_1);
             }catch(IOException e){
                     System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
@@ -124,7 +124,6 @@ public final class OutputPanel extends JFXPanel {
                 //+ "<canvas id=\"myChart\"></canvas>\n" ;
                     
                 
-                System.out.println(windowText);
                 /*Platform.runLater(new Runnable(){
                     public void run(){
                         ((Browser)scene.getRoot()).repaint(windowText);
