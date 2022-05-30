@@ -141,7 +141,7 @@ public class AddToPersonalMenu extends AbstractCrearMenu {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = jfc.getSelectedFile();
                 
-                String fileName = selectedFile.getAbsolutePath();;
+                String fileName = selectedFile.getAbsolutePath();
 		String fe = FilenameUtils.getExtension(fileName);
 		System.out.println("File extension is : "+fe);
                 if ("txt".equals(fe)){
@@ -150,7 +150,6 @@ public class AddToPersonalMenu extends AbstractCrearMenu {
                 }else{
                     JOptionPane.showMessageDialog(null, selectedFile.getAbsolutePath()+" no es un archiu txt");
                 }
-                //System.out.println(newTxtDir);
         }
         
     }
@@ -173,7 +172,6 @@ public class AddToPersonalMenu extends AbstractCrearMenu {
                 }else{
                     JOptionPane.showMessageDialog(null, selectedFile.getAbsolutePath()+" no es un archiu R");
                 }
-                //System.out.println(newRDir);
         }
     }
 
@@ -260,14 +258,9 @@ public class AddToPersonalMenu extends AbstractCrearMenu {
                             String fileNamePath = newFile.getAbsolutePath();
                             String fe = FilenameUtils.getExtension(fileNamePath);
                             if ("txt".equals(fe)){
-                                //myFile.renameTo(new File("/the/new/place/newName.file"));
-                                System.out.println("destDir: "+newFile.toString());
-                                System.out.println("destDirTXT: "+destDirTXT+"\\"+newFile.getName().toString());
                                 Files.move(Paths.get(newFile.toString()), Paths.get(destDirTXT+"\\"+newFile.getName().toString()), StandardCopyOption.REPLACE_EXISTING);
                             }
                             else if("R".equals(fe)){
-                                System.out.println("destDir: "+newFile.toString());
-                                System.out.println("destDirTXT: "+destDirR+"\\"+newFile.getName().toString());
                                 Files.move(Paths.get(newFile.toString()), Paths.get(destDirR+"\\"+newFile.getName().toString()), StandardCopyOption.REPLACE_EXISTING);
                             }
                             else{
@@ -284,25 +277,6 @@ public class AddToPersonalMenu extends AbstractCrearMenu {
         }catch(IOException ex){
             JOptionPane.showMessageDialog(null, "no s'ha pogut importar el menu");
         }
-        /*
-        boolean boolTxt = false, boolR = false;
-        if (fileTXT.renameTo(new File(targetTXTs+"\\"+ fileTXT.getName()))) {
-            boolTxt = true;
-            System.out.println("File is moved to " + targetTXTs+"\\" + fileTXT.getName());
-        } else {
-            System.out.println("Failed");
-        }
-        if (fileR.renameTo(new File(targetRs+"\\"+ fileR.getName()))) {
-            boolR = true;
-            System.out.println("File is moved to " + targetRs+"\\" + fileR.getName());
-        } else {
-            System.out.println("Failed");
-        }
         
-        if (boolTxt && boolR){
-            JOptionPane.showMessageDialog(null, "Menu importat correctament");
-        }else{
-            JOptionPane.showMessageDialog(null, "No s'ha pogut importar el menu");
-        }*/
     }
 }

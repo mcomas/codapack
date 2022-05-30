@@ -326,11 +326,9 @@ public class CrearMenuPersonal extends AbstractCrearMenu  {
             boolean trobat = false;
             int k = 0;
             while(!trobat && k < 10){
-                System.out.println("k: "+ k);
+                
                 if(ArraySelector[j][k] != null) {
                     
-                    System.out.println("--["+j+"]["+k+"]:"+ArraySelector[j][k].getText());
-                    System.out.println(ArraySelector[j][k].getText());
                     contenido += ArraySelector[j][k].getText()+"\n";
                 }else {
                     trobat = true;

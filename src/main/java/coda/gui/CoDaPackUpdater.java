@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -124,8 +123,12 @@ public class CoDaPackUpdater {
             frame.addWindowListener(new WindowAdapter(){
             @Override
             public void windowClosing(WindowEvent e){
-                //Process ps = Runtime.getRuntime().exec("java -jar CoDaPack.jar");
-                CoDaPackMain.main(null);               
+                try {
+                    //Process ps = Runtime.getRuntime().exec("java -jar CoDaPack.jar");
+                    CoDaPackMain.main(null);
+                } catch (Exception ex) {
+                    Logger.getLogger(CoDaPackUpdater.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             });
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

@@ -149,7 +149,6 @@ public final class DataSelectorGeneral extends JPanel {
         int i = -1;
         for(String name : dataFrame.getNames()){
             variables[++i] = name;
-            System.out.println("variables: "+variables[i]);
             boolean isSelected = false;
             if(selected != null)
                 for(int j=0;j<selected.length;j++)
