@@ -962,7 +962,12 @@ public final class CoDaPackMain extends JFrame{
         }else if(title.equals(jMenuBar.ITEM_MODEL_S4)){
             new S4(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_AddtoHTMLJavaScript)){
-            new AddToHTMLJavaScript(this,re).setVisible(true);
+            try {
+                new AddToHTMLJavaScript(this,re).setVisible(true);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }else if(title.equals(jMenuBar.ITEM_MODEL_CPM)){
             new CrearMenuPersonal(this,re).setVisible(true);
         }else if(title.equals(jMenuBar.ITEM_MODEL_PM)){

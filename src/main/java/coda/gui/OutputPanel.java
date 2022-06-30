@@ -43,7 +43,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javax.script.*;
-import test.NashornExample;
 
 import java.lang.*;
 import javax.swing.JProgressBar;
@@ -130,27 +129,6 @@ public final class OutputPanel extends JFXPanel {
                     }
                 });*/
                 
-                //--------Crida Engine
-                NashornExample graal = new NashornExample();
-                
-                //------------JavaScript call
-                
-                OutputElement type = new OutputText(graal.example04(width));
-                outputPanel.addOutput(type);
-                
-                //------------Add Inicial Text
-                OutputElement inicialText = new OutputText(windowText);
-                outputPanel.addOutput(inicialText);
-                /*Platform.runLater(new Runnable(){
-                    public void run(){
-                        ((Browser)scene.getRoot()).repaint(windowText);
-                    }
-                });*/
-                
-                //----Barra Java aprova
-                
-                barra = new JProgressBar();
-                outputPanel.add( barra );
                 //barra = graal.example05(barra, width);
                 //graal.example05(barra, width);
                 

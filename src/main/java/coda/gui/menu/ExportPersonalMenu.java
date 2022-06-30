@@ -269,7 +269,7 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
         int returnVal = chooser.showSaveDialog(parent);
 
          // Obtener el objeto de archivo seleccionado JFileChooser.APPROVE_OPTION
-         // Si el directorio guardado es consistente con el objeto de archivo seleccionado, devolverá 0 si tiene éxito
+         // Si el directorio guardado es consistente con el objeto de archivo seleccionado, devolver 0 si tiene exito
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             // obtener ruta
             String selectPath = chooser.getSelectedFile().getPath();
