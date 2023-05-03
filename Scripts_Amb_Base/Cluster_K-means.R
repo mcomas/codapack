@@ -67,7 +67,8 @@ generateFileName <- function(candidateName){
 ################# MAIN #################
 
 #rm(km)
-Xt <- coda.base::coordinates(X, basis = "ilr", label = "ilr.")
+B = ilr_basis(ncol(X))
+Xt <- coda.base::coordinates(X, B)
 #Xt <- coda.base::coordinates(X, basis = sbp_basis(BaseX))
 nparts=NCOL(Xt)
 
@@ -125,7 +126,7 @@ dres = data.frame('Centers' = krange,
                   'CH index' = v_calinski,
                   'AS index' = v_silhouette)
 
-dcenters = as.data.frame(composition(km_best$centers))
+dcenters = as.data.frame(composition(km_best$centers, B))
 names(dcenters) = colnames(X)
 
 dcenters$Size = km_best$size
