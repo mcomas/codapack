@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# source env_variables
+export R_HOME=/usr/lib/R
+mvn exec:exec
