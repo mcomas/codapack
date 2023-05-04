@@ -28,8 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.logging.Level;
@@ -39,8 +38,10 @@ import java.util.logging.Logger;
  * Versioning history
  * 
  * 2 01 16
- * - Text in figures and other objects can be resized from menu File-> Configuration at tab Sizes.
- * - Exportation to R has been modified. Now, CoDaPack generates a RData file instead of a source code.
+ * - Text in figures and other objects can be resized from menu File->
+ * Configuration at tab Sizes.
+ * - Exportation to R has been modified. Now, CoDaPack generates a RData file
+ * instead of a source code.
  * 
  * 2 01 15
  * 
@@ -50,13 +51,14 @@ import java.util.logging.Logger;
  * - MAC version: Save to R menu (problem solved)
  * 
  * 2 01 13
- * - Sorry, the update 2 01 12 was not correctly integrated in CoDaPack. This update correctly integrates the previous one
+ * - Sorry, the update 2 01 12 was not correctly integrated in CoDaPack. This
+ * update correctly integrates the previous one
  * 
  * 2 01 12
  * - The user can select the fraction to be used in the zero replacement menu
  * 
  * 2 01 11
- *  - Problem when exporting variables with non-regular characters to R  solved
+ * - Problem when exporting variables with non-regular characters to R solved
  * 
  * 2 01 10
  * - Amalgamation problems solved
@@ -104,13 +106,12 @@ public class CoDaPackConf {
      * This object keeps the last version
      */
     public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
-    //public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
+    // public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
 
-
-    public static String CoDaVersion = "2 03 01";
+    public static String CoDaVersion = "2 03 02";
     public static int CoDaUpdaterVersion = 4;
 
-    public static int[] getVersionNum(String version_str){
+    public static int[] getVersionNum(String version_str) {
         int num[] = new int[3];
         String[] version = version_str.split(" ");
         num[0] = Integer.parseInt(version[0]);
@@ -118,52 +119,60 @@ public class CoDaPackConf {
         num[2] = Integer.parseInt(version[2]);
         return num;
     }
-    public static String getVersion(){
+
+    public static String getVersion() {
         String[] version = CoDaVersion.split(" ");
         return version[0] + "." + version[1] + "." + version[2];
     }
-    public static String newest(String v1, String v2){
+
+    public static String newest(String v1, String v2) {
         String[] version1 = v1.split(" ");
         String[] version2 = v2.split(" ");
-        
+
         int iversion1, iversion2;
-        
-        for(int s=0;s<3;s++){
+
+        for (int s = 0; s < 3; s++) {
             iversion1 = Integer.parseInt(version1[s]);
             iversion2 = Integer.parseInt(version2[s]);
-            if(iversion1 > iversion2){
+            if (iversion1 > iversion2) {
                 return v1;
             }
-            if(iversion1 < iversion2){
+            if (iversion1 < iversion2) {
                 return v2;
-            } 
+            }
         }
         return v1;
     }
-    public static boolean updateNeeded(String v){
+
+    public static boolean updateNeeded(String v) {
         int[] actVersion = getVersionNum(CoDaPackConf.refusedVersion);
-        int [] newVersion = new int[3];
-        
+        int[] newVersion = new int[3];
+
         String[] version = v.split(" ");
         newVersion[0] = Integer.parseInt(version[0]);
         newVersion[1] = Integer.parseInt(version[1]);
         newVersion[2] = Integer.parseInt(version[2]);
-        
+
         // Same version
-        if(newVersion[0] == actVersion[0] & newVersion[1] == actVersion[1] &
-                newVersion[2] == actVersion[2]) return false;
-        
+        if (newVersion[0] == actVersion[0] & newVersion[1] == actVersion[1] &
+                newVersion[2] == actVersion[2])
+            return false;
+
         // New version
-        if(newVersion[0] == actVersion[0] & newVersion[1] == actVersion[1] &
-                newVersion[2] > actVersion[2]) return true;
-        if(newVersion[0] == actVersion[0] & newVersion[1] > actVersion[1]) return true;
-        if(newVersion[0] > actVersion[0]) return true;
-        
+        if (newVersion[0] == actVersion[0] & newVersion[1] == actVersion[1] &
+                newVersion[2] > actVersion[2])
+            return true;
+        if (newVersion[0] == actVersion[0] & newVersion[1] > actVersion[1])
+            return true;
+        if (newVersion[0] > actVersion[0])
+            return true;
+
         // Otherwise actual version is newer than published version
         return false;
     }
+
     private final static DecimalFormatSymbols decimalFormatSymb = new DecimalFormatSymbols();
-    static{
+    static {
         decimalFormatSymb.setDecimalSeparator('.');
     }
     public static char decimalFormat = '.';
@@ -172,105 +181,131 @@ public class CoDaPackConf {
     public static String decimalExportFormat = "0.00########";
     public static String closureTo = "1.0";
     public static boolean showDev = false;
-    public static String lastPath = System.getProperty("user.dir");
+    public static String temporalDir = System.getProperty("java.io.tmpdir");
+
+    public static String tmpFile(String fname) {
+        return (Paths.get(temporalDir, fname).toString());
+    }
+
+    public static String workingDir = System.getProperty("user.dir");
+    public static String codapackDir = ".";
     public static String refusedVersion = CoDaVersion;
     public static String rScriptPath = getRScriptDefaultPath();
-    public static String helpPath = getHelpPath();
+    public static String helpPath = getHelpPath() + "/";
     public static String mathJaxPath = getMathJaxPath();
-    //private static DecimalFormat decimalOutputFormat = new DecimalFormat("0.0000", decimalFormat);
-    //private static DecimalFormat decimalOutputFormat = new DecimalFormat("##0.##E0", decimalFormat);
-    //private static DecimalFormat decimalTableFormat = new DecimalFormat("0.00", decimalFormat);
-    //private static DecimalFormat decimalTableFormat = new DecimalFormat("##0.##E0", decimalFormat);
-    //private static DecimalFormat decimalExportFormat = new DecimalFormat("0.00########");
-    
-    public static String getRScriptDefaultPath(){
-        String defaultRscriptPath = "Scripts_Amb_Base/";
-        if(!System.getProperty("os.name").startsWith("Windows") &
-           !System.getProperty("os.name").startsWith("Linux") ){
+
+    // private static DecimalFormat decimalOutputFormat = new
+    // DecimalFormat("0.0000", decimalFormat);
+    // private static DecimalFormat decimalOutputFormat = new
+    // DecimalFormat("##0.##E0", decimalFormat);
+    // private static DecimalFormat decimalTableFormat = new DecimalFormat("0.00",
+    // decimalFormat);
+    // private static DecimalFormat decimalTableFormat = new
+    // DecimalFormat("##0.##E0", decimalFormat);
+    // private static DecimalFormat decimalExportFormat = new
+    // DecimalFormat("0.00########");
+
+    public static String getRScriptDefaultPath() {
+        String defaultRscriptPath = Paths.get(codapackDir, "Rscripts/").toString();
+        if (!System.getProperty("os.name").startsWith("Windows") &
+                !System.getProperty("os.name").startsWith("Linux")) {
             defaultRscriptPath = System.getenv("SCRIPTS_DIRECTORY") + defaultRscriptPath;
         }
         return defaultRscriptPath;
     }
-    
-    public static String getHelpPath(){
-        String helpPath = "Help/";
-        if(!System.getProperty("os.name").startsWith("Windows") &
-           !System.getProperty("os.name").startsWith("Linux") ){
+
+    public static String getHelpPath() {
+        String helpPath = Paths.get(codapackDir, "Help/").toString();
+        if (!System.getProperty("os.name").startsWith("Windows") &
+                !System.getProperty("os.name").startsWith("Linux")) {
             helpPath = System.getenv("HELP_DIRECTORY") + helpPath;
         }
         return helpPath;
     }
-    
-    public static String getMathJaxPath(){
-        
-        if(System.getProperty("os.name").startsWith("Windows") || System.getProperty("os.name").startsWith("Linux")){
+
+    public static String getMathJaxPath() {
+
+        if (System.getProperty("os.name").startsWith("Windows") || System.getProperty("os.name").startsWith("Linux")) {
             File mathJaxFile = new File("MathJax\\MathJax.js");
             return mathJaxFile.getAbsolutePath();
-        }
-        else{
+        } else {
             return System.getenv("MATHJAX_DIRECTORY") + "MathJax.js";
         }
     }
-    
-    public static void setScriptsPath(String path){
+
+    public static void setScriptsPath(String path) {
         rScriptPath = path + "/";
     }
 
-    public static void setShowDev(boolean showMenu){
+    public static void setShowDev(boolean showMenu) {
         showDev = showMenu;
     }
-    
-    public static void setClosureTo(String closure){
+
+    public static void setClosureTo(String closure) {
         closureTo = closure;
     }
-    
-    public String getClosureTo(){
+
+    public String getClosureTo() {
         return closureTo;
     }
-    
-    public boolean getShowDev(){
+
+    public boolean getShowDev() {
         return showDev;
     }
 
-    public static void setDecimalFormat(char f){
+    public static void setDecimalFormat(char f) {
         decimalFormat = f;
         decimalFormatSymb.setDecimalSeparator(f);
     }
-    public static char getDecimalFormat(){
+
+    public static char getDecimalFormat() {
         return decimalFormat;
     }
-    public static void setDecimalOutputFormat(String df){
+
+    public static void setDecimalOutputFormat(String df) {
         decimalOutputFormat = df;
     }
-    public static DecimalFormat getDecimalOutputFormat(){ 
+
+    public static DecimalFormat getDecimalOutputFormat() {
         return new DecimalFormat(decimalOutputFormat, decimalFormatSymb);
     }
-    public static void setDecimalTableFormat(String df){
+
+    public static void setDecimalTableFormat(String df) {
         decimalTableFormat = df;
     }
-    public static DecimalFormat getDecimalTableFormat(){
+
+    public static DecimalFormat getDecimalTableFormat() {
         return new DecimalFormat(decimalTableFormat, decimalFormatSymb);
     }
-    public static void setDecimalExportFormat(String df){
+
+    public static void setDecimalExportFormat(String df) {
         decimalExportFormat = df;
     }
-    public static DecimalFormat getDecimalExportFormat(){ 
+
+    public static DecimalFormat getDecimalExportFormat() {
         return new DecimalFormat(decimalExportFormat);
     }
 
-    private static Color ouputColor = new Color(162,193,215);
-    public static void setOutputColor(Color c){ ouputColor = c; }
-    public static Color getOutputColor(){ return ouputColor; }
+    private static Color ouputColor = new Color(162, 193, 215);
 
-    public static String configurationFile = System.getProperty("java.io.tmpdir") + "/.codapack";
-    public static void saveConfiguration(){
+    public static void setOutputColor(Color c) {
+        ouputColor = c;
+    }
+
+    public static Color getOutputColor() {
+        return ouputColor;
+    }
+
+    public static String configurationFile = tmpFile(".codapack");
+
+    public static void saveConfiguration() {
         try {
             JSONObject configuration = new JSONObject();
             configuration.put("decimal-format", decimalFormat);
             configuration.put("decimal-output", decimalOutputFormat);
             configuration.put("decimal-table", decimalTableFormat);
             configuration.put("decimal-export", decimalExportFormat);
-            configuration.put("last-path", lastPath);
+            configuration.put("last-path", workingDir);
             configuration.put("refused-version", refusedVersion);
             configuration.put("closure-to", closureTo);
             configuration.put("menu-dev", showDev);
@@ -284,11 +319,14 @@ public class CoDaPackConf {
             Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {
             Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
-        }/* catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        } /*
+           * catch (UnsupportedEncodingException ex) {
+           * Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
+           * }
+           */
     }
-    public static void loadConfiguration(){
+
+    public static void loadConfiguration() {
         try {
             FileReader file = new FileReader(CoDaPackConf.configurationFile);
             JSONObject configuration = new JSONObject(new BufferedReader(file).readLine());
@@ -299,14 +337,14 @@ public class CoDaPackConf {
             decimalOutputFormat = configuration.getString("decimal-output");
             decimalTableFormat = configuration.getString("decimal-table");
             decimalExportFormat = configuration.getString("decimal-export");
-            lastPath = configuration.getString("last-path");
+            workingDir = configuration.getString("last-path");
             refusedVersion = configuration.getString("refused-version");
             rScriptPath = configuration.getString("r-script-path");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
-        }catch (JSONException ex) {
+        } catch (JSONException ex) {
             Logger.getLogger(CoDaPackConf.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -10,6 +10,7 @@
    </properties>
    <build>
       <plugins>
+         <!--
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <version>3.0.0</version>
@@ -30,16 +31,31 @@
             <executions>
                <execution>
                   <id>make-assembly</id>
-                  <!-- this is used for inheritance merges -->
                   <phase>package</phase>
-                  <!-- bind to the packaging phase -->
                   <goals>
                      <goal>single</goal>
                   </goals>
                </execution>
             </executions>
          </plugin>
+         -->
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.4.0</version>
+            <configuration>
+               <executable>java</executable>
+               <arguments>
+                  <argument>
+                     -Djava.library.path=/home/marc/R/x86_64-pc-linux-gnu-library/4.1/rJava/jri:</argument>
+                  <argument>-classpath</argument>
+                  <classpath />
+                  <argument>coda.gui.CoDaPackMain</argument>
+               </arguments>
+            </configuration>
+         </plugin>
          <!-- Windows application -->
+         <!--
          <plugin>
             <groupId>com.akathist.maven.plugins.launch4j</groupId>
             <artifactId>launch4j-maven-plugin</artifactId>
@@ -71,7 +87,9 @@
                </execution>
             </executions>
          </plugin>
+         -->
          <!-- Mac application -->
+         <!--
          <plugin>
             <groupId>sh.tak.appbundler</groupId>
             <artifactId>appbundle-maven-plugin</artifactId>
@@ -79,7 +97,7 @@
             <configuration>
                <mainClass>coda.gui.CoDaPackMain</mainClass>
                <iconFile>src/main/resources/icons.icns</iconFile>
-               <!--<jrePath>/Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/</jrePath>-->
+               ## <jrePath>/Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/</jrePath> 
                <generateDiskImageFile>true</generateDiskImageFile>
             </configuration>
             <executions>
@@ -91,6 +109,8 @@
                </execution>
             </executions>
          </plugin>
+         -->
+
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -127,10 +147,11 @@
         </dependency>
 
       <dependency>
-         <groupId>org.renjin</groupId>
-         <artifactId>renjin-script-engine</artifactId>
-         <version>RELEASE</version>
-      </dependency>
+    <groupId>org.renjin</groupId>
+    <artifactId>renjin-script-engine</artifactId>
+    <version>3.5-beta76</version>
+</dependency>
+
       <dependency>
          <groupId>org.apache.poi</groupId>
          <artifactId>poi</artifactId>
@@ -185,23 +206,23 @@
       <dependency>
          <groupId>org.openjfx</groupId>
          <artifactId>javafx</artifactId>
-         <version>17-ea+2</version>
+         <version>20</version>
          <type>pom</type>
      </dependency>
      <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
-      <version>17-ea+17</version>
+      <version>20</version>
    </dependency>
    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
-      <version>17.0.2</version>
+      <version>20</version>
   </dependency>
   <dependency>
    <groupId>org.openjfx</groupId>
    <artifactId>javafx-controls</artifactId>
-   <version>17-ea+9</version>
+   <version>20</version>
 </dependency>
   
       <!--
@@ -230,16 +251,5 @@
          <name>bedatadriven public repo</name>
          <url>https://nexus.bedatadriven.com/content/groups/public/</url>
       </repository>
-      <repository>
-         <id>WSO2</id>
-         <name>WSO2 Repository</name>
-         <url>http://dist.wso2.org/maven2/</url>
-      </repository>
-      <!--<repository>
-         <id>jzy3d-releases</id>
-         <name>Jzy3d Releases</name>
-         <url>http://maven.jzy3d.org/releases</url>
-      </repository>
-            -->
    </repositories>
 </project>

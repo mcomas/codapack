@@ -49,67 +49,71 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author marc
  */
-public class CoDaPackImporter implements Importer{
+public class CoDaPackImporter implements Importer {
     String fname;
-    String ruta = CoDaPackConf.lastPath;
+    String ruta = CoDaPackConf.workingDir;
     ArrayList<DataFrame> dfs = new ArrayList<DataFrame>();
+
     @Override
     public CoDaPackImporter setParameters(Component frame) {
         JFileChooser chooseFile = new JFileChooser(ruta);
         chooseFile.setFileFilter(
-                    new FileNameExtensionFilter("CoDaPack files", "cdp"));
+                new FileNameExtensionFilter("CoDaPack files", "cdp"));
         chooseFile.showOpenDialog(frame);
         fname = chooseFile.getSelectedFile().getAbsolutePath();
         ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-        CoDaPackConf.lastPath = ruta;
+        CoDaPackConf.workingDir = ruta;
         return this;
     }
-    Variable readVariable(JSONObject var){
+
+    Variable readVariable(JSONObject var) {
         Variable variable = new Variable();
         try {
-            variable.setName( var.getString("n") );
+            variable.setName(var.getString("n"));
             int dtype = var.getInt("t");
             JSONArray values = var.getJSONArray("a");
-            if(dtype == Variable.VAR_NUMERIC){ // VAR_NUMERIC 2
+            if (dtype == Variable.VAR_NUMERIC) { // VAR_NUMERIC 2
                 variable.setType(Variable.VAR_NUMERIC);
-                for(int i=0;i<values.length();i++){
+                for (int i = 0; i < values.length(); i++) {
                     JSONObject object = values.getJSONObject(i);
-                    if(object.has("l")){
-                        variable.add(new Zero(Double.parseDouble(object.getString("l"))));//Double.parseDouble(object.getString("value")));
-                    }else{
+                    if (object.has("l")) {
+                        variable.add(new Zero(Double.parseDouble(object.getString("l"))));// Double.parseDouble(object.getString("value")));
+                    } else {
                         variable.add(variable.setElementFromString(object.getString("v")));
                     }
                 }
-            }else{
+            } else {
                 variable.setType(Variable.VAR_TEXT);
-                for(int i=0;i<values.length();i++){
+                for (int i = 0; i < values.length(); i++) {
                     variable.add(variable.setElementFromString(values.getString(i)));
                 }
-                
+
             }
         } catch (JSONException ex) {
             Logger.getLogger(Variable.class.getName()).log(Level.SEVERE, null, ex);
         }
         return variable;
     }
-    DataFrame readDataFrame(JSONObject df){
+
+    DataFrame readDataFrame(JSONObject df) {
         DataFrame dataFrame = new DataFrame();
         try {
             dataFrame.setName(df.getString("name"));
             JSONArray variables = df.getJSONArray("variables");
             Variable variable;
-            for(int i=0;i<variables.length();i++){
+            for (int i = 0; i < variables.length(); i++) {
                 variable = readVariable(variables.getJSONObject(i));
                 dataFrame.add(variable);
-                
+
             }
         } catch (JSONException ex) {
             Logger.getLogger(DataFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }catch (DataFrameException ex) {
+        } catch (DataFrameException ex) {
             Logger.getLogger(CoDaPackImporter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dataFrame;
     }
+
     @Override
     public DataFrame importDataFrame() {
         int i = 0;
@@ -130,6 +134,7 @@ public class CoDaPackImporter implements Importer{
         }
         return df;
     }
+
     public ArrayList<DataFrame> importDataFrames() {
         FileReader file;
         try {
@@ -140,7 +145,7 @@ public class CoDaPackImporter implements Importer{
             file.close();
 
             JSONArray dataFrames = configuration.getJSONArray("dataframes");
-            for(int i=0;i<dataFrames.length();i++)
+            for (int i = 0; i < dataFrames.length(); i++)
                 dfs.add(readDataFrame(dataFrames.getJSONObject(i)));
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "The file is not available");
@@ -148,18 +153,19 @@ public class CoDaPackImporter implements Importer{
         }
         return dfs;
     }
+
     @Override
     public String getParameters() {
         String conf = "format:codapack";
-         conf += "?" + fname;
-         return conf;
+        conf += "?" + fname;
+        return conf;
     }
 
     @Override
     public CoDaPackImporter setParameters(String pars) {
         String parameters[] = pars.split("\\?");
-        if("format:codapack".equals(parameters[0])) {
-            fname = parameters[1];            
+        if ("format:codapack".equals(parameters[0])) {
+            fname = parameters[1];
         }
         return this;
     }
