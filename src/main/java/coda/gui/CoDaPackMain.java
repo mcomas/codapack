@@ -512,7 +512,7 @@ public final class CoDaPackMain extends JFrame {
                 }
                 CoDaPackConf.workingDir = ruta;
             } else {
-                JOptionPane.showMessageDialog(null, "No data to export");
+                JOptionPane.showMessageDialog(this, "No data to export");
             }
         } else if (title.equals(jMenuBar.ITEM_EXPORT_XLS)) {
             chooseFile.resetChoosableFileFilters();
@@ -717,7 +717,7 @@ public final class CoDaPackMain extends JFrame {
             }
         } else if (title.equals(jMenuBar.ITEM_DELETE_ALL_TABLES)) {
             System.out.println("Delete All Tables");
-            int responseDeleteAllTables = JOptionPane.showConfirmDialog(null, "Are you sure to delete all the tables?",
+            int responseDeleteAllTables = JOptionPane.showConfirmDialog(this, "Are you sure to delete all the tables?",
                     "Delete All Tables", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
             if (responseDeleteAllTables == JOptionPane.YES_OPTION) {
@@ -727,7 +727,7 @@ public final class CoDaPackMain extends JFrame {
                 }
             }
         } else if (title.equals(jMenuBar.ITEM_CLEAR_OUTPUTS)) {
-            int responseCleanOutput = JOptionPane.showConfirmDialog(null, "Are you sure to clean the output?",
+            int responseCleanOutput = JOptionPane.showConfirmDialog(this, "Are you sure to clean the output?",
                     "Clean the output", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (responseCleanOutput == JOptionPane.YES_OPTION) {
                 outputPanel.clearOutput();
@@ -747,7 +747,7 @@ public final class CoDaPackMain extends JFrame {
                         "<html>Your changes will be lost if you close <br/>Do you want to exit?</html>", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
-                    int responseSaveHTML = JOptionPane.showConfirmDialog(null, "Do you want to save the session?",
+                    int responseSaveHTML = JOptionPane.showConfirmDialog(this, "Do you want to save the session?",
                             "Save the session", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (responseSaveHTML == JOptionPane.NO_OPTION) {
                         outputPanel.deleteHtml();
@@ -759,7 +759,7 @@ public final class CoDaPackMain extends JFrame {
                 int response = JOptionPane.showConfirmDialog(this, "Do you want to exit?", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
-                    int responseSaveHTML = JOptionPane.showConfirmDialog(null, "Do you want to save the session?",
+                    int responseSaveHTML = JOptionPane.showConfirmDialog(this, "Do you want to save the session?",
                             "Save the session", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (responseSaveHTML == JOptionPane.NO_OPTION) {
                         for (int a = 0; a < outputPanels.length; a++) {
