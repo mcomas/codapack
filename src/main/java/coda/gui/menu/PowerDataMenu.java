@@ -45,7 +45,7 @@ public class PowerDataMenu extends AbstractMenuDialog{
     JTextField powerWith;
     JLabel text1 = new JLabel("Power");
     JCheckBox performClosure;
-    JLabel lclosure = new JLabel("Closure to");
+    //JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
     DataFrame dataFrame;
     ArrayList<String> names;
@@ -74,7 +74,7 @@ public class PowerDataMenu extends AbstractMenuDialog{
         closureTo.setText(mainApp.config.getClosureTo());
         
         optionsPanel.add(performClosure);
-        optionsPanel.add(lclosure);
+        //optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }

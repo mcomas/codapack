@@ -91,7 +91,8 @@ public class DiscretizeMenu extends AbstractMenuDialog{
             this.dispose();
             
             re.assign("x", df.get(sel_names[0]).getNumericalData());
-            
+            String EXP = "res <- cut(x, breaks=#BREAKS#, include.lowest = TRUE)";
+
             if(optionsList.getSelectedItem().toString().equals("fixed")){
                 panel = new JPanel();
                 panel.setLayout(new GridLayout(0,2,2,2));
@@ -114,7 +115,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
 
                         exit = true;
 
-                        int answer = JOptionPane.showConfirmDialog(null, panel, "Set breaks values", JOptionPane.OK_CANCEL_OPTION);
+                        int answer = JOptionPane.showConfirmDialog(this, panel, "Set breaks values", JOptionPane.OK_CANCEL_OPTION);
 
                         if(answer == JOptionPane.OK_OPTION){
                             for(int i = 0; i < Integer.valueOf(breaksField.getText())-1 && exit;i++){
@@ -125,19 +126,20 @@ public class DiscretizeMenu extends AbstractMenuDialog{
                         }
                     }
                 }
-                
-                String breaksStringToR = "c(-Inf,";
-                for(String i: breaksValues){
-                    breaksStringToR += i +",";
-                }
-                
-                breaksStringToR += "Inf)";
-                
-                re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks =" + breaksStringToR + "))");
+                EXP = EXP.replace("#BREAKS#", "sort(unique(c(min(x)," + String.join(",", breaksValues) + ", max(x))))");
+            }                
+            if(optionsList.getSelectedItem().toString().equals("interval")){
+                EXP = EXP.replace("#BREAKS#", "seq(min(x), max(x), length = 1 + #NINT#)");
             }
-            else{
-                re.eval("res <- (arules::discretize(x, method = \"" + optionsList.getSelectedItem().toString() + "\", breaks = " + breaksField.getText() + "))");
+            if(optionsList.getSelectedItem().toString().equals("frequency")){
+                EXP = EXP.replace("#BREAKS#", "quantile(x, seq(0,1,length=1 + #NINT#))");
             }
+            if(optionsList.getSelectedItem().toString().equals("cluster")){
+                EXP = EXP.replace("#BREAKS#", "{cl = sort(kmeans(x,#NINT#,nstart=100)$centers[,]); c(min(x), cl[-1] - diff(cl)/2, max(x))}");
+            }
+            System.out.println(EXP.replace("#NINT#", breaksField.getText()));
+            re.eval(EXP.replace("#NINT#", breaksField.getText()));
+
             
             double[] res = re.eval("as.numeric(res)").asDoubleArray();
             

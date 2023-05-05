@@ -179,6 +179,7 @@ public final class CoDaPackMain extends JFrame {
 
     public CoDaPackMain() throws Exception {
         screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
+        
         // Es carrega el logo del CoDaPack
         initComponents();
         this.setIconImage(
@@ -195,9 +196,9 @@ public final class CoDaPackMain extends JFrame {
     private void initComponents() {
         ITEM_APPLICATION_NAME = "CoDaPack v" + CoDaPackConf.getVersion();
         outputPanel = new OutputPanel();
-        outputPanels = new OutputPanel[1];
-        System.out.println(outputPanels.length);
+        outputPanels = new OutputPanel[1];        
         outputPanels[0] = outputPanel;
+
         tablePanel = new TablePanel(this);
 
         // Panel with the active variable
@@ -215,12 +216,14 @@ public final class CoDaPackMain extends JFrame {
         });
 
         setTitle(ITEM_APPLICATION_NAME);
-        setPreferredSize(new Dimension(1000, 700));
-        setLocation((screenDimension.width - 1000) / 2,
-                (screenDimension.height - 700) / 2);
+        int w_size = Math.round(screenDimension.width/2);
+        int h_size = Math.round(screenDimension.height/2);
+        setPreferredSize(new Dimension(w_size, h_size));
+        setLocation((screenDimension.width - w_size) / 2,
+                (screenDimension.height - h_size) / 2);
 
         dataList.setSize(new Dimension(150, 700));
-        dataFrameSelector = new JComboBox();
+        dataFrameSelector = new JComboBox<String>();
         dataFrameSelector.setPrototypeDisplayValue("XXXXXXXXXXXXXX");
         dataFrameSelector.addItemListener(dataFrameListener);
 

@@ -47,7 +47,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
     JTextField perturbateWith;
     JLabel text1 = new JLabel("Perturbation");
     JCheckBox performClosure;
-    JLabel lclosure = new JLabel("Closure to");
+    //JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
     DataFrame dataFrame;
     ArrayList<String> names;
@@ -57,7 +57,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
         super(mainApp, "Perturbate Data Menu", false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
-        perturbateWith =  new JTextField("1.0 1.0 1.0", 14);
+        perturbateWith =  new JTextField(" <parts separated by spaces> ", 16);
         //perturbateWith.setText();
         optionsPanel.add(text1);
         optionsPanel.add(perturbateWith);
@@ -77,7 +77,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
         closureTo.setText(mainApp.config.getClosureTo());
         
         optionsPanel.add(performClosure);
-        optionsPanel.add(lclosure);
+        //optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
