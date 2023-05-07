@@ -98,14 +98,17 @@ public class ZpatternsMenu extends AbstractMenuDialog{
             // create dataframe on r
             
                     for(int i=0; i < selectedNames.length;i++){
+                        System.out.println(selectedNames[i] + " <- NULL");
                         re.eval(selectedNames[i] + " <- NULL");
                         if(df.get(selectedNames[i]).isNumeric()){
                             for(double j : df.get(selectedNames[i]).getNumericalData()){
+                                System.out.println(selectedNames[i] + " <- c(" + selectedNames[i] + "," + String.valueOf(j) + ")");
                                 re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + "," + String.valueOf(j) + ")");
                             }
                         }
                         else{ // categorical data
                             for(String j : df.get(selectedNames[i]).getTextData()){
+                                System.out.println(selectedNames[i] + " <- c(" + selectedNames[i] + ",'" + j + "')");
                                 re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + ",'" + j + "')");
                             }
                         }
@@ -118,7 +121,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                         }
                         
                         dataFrameString +=")";
-                        
+                        System.out.println(dataFrameString);
                         re.eval(dataFrameString); // we create the dataframe in R
                         
                         re.eval("output <- capture.output(X)");
@@ -131,7 +134,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
                 // executem script d'R
                 
                     String url = CoDaPackConf.rScriptPath + "ZPatterns Plot.R";
-                    
+                    System.out.println(url);
 
                     re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
                     

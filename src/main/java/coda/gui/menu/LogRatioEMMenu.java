@@ -135,7 +135,6 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
             for(int i=0; i < m; i++){
                 new_names[i] = "z_" + sel_names[i];
             }
-            
             int numZeros = 0;
             double data[][] = df.getNumericalData(sel_names);
             //double minimumsOfColumns[] = new double[m]; double minimumOfColumn;
@@ -150,7 +149,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
                 }
                 //minimumsOfColumns[i] = minimumOfColumn;
             }
-            
+            System.out.println("Number ofo zeros: " + numZeros);
             if(numZeros > 0){ // if contains zero then we do something
                 
                 // configurem la matriu X
@@ -181,7 +180,7 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
                 //        }
                 //    }
                 //}
-                
+                System.out.println(numDlevel);
                 if(numZeros == numDlevel){
                 
                     re.assign("DL", dlevel[0]);
@@ -193,32 +192,30 @@ public class LogRatioEMMenu extends AbstractMenuDialog{
 
                     // fem la crida a R per obtenir resultats
 
-                    if(iniCov == 0){ // multRepl
+/*                     if(iniCov == 0){ // multRepl
                         re.eval("out <- capture.output(zCompositions::lrEM(X," + label + ",dl=DL, ini.cov=\"multRepl\"," + rob + "," + delta + "))");
                     }
                     else{ // complete.obs
                         re.eval("out <- capture.output(zCompositions::lrEM(X," + label + ",dl=DL, ini.cov=\"complete.obs\"," + rob + "))");
+                    } */
+                    re.eval("save.image('image.RData')");
+                    if(iniCov == 0){ // multRepl
+                        System.out.println("out <- zCompositions::lrEM(X," + label + ",dl=DL, ini.cov=\"multRepl\"," + rob + "," + delta + ")");
+                        re.eval("out <- zCompositions::lrEM(X," + label + ",dl=DL, ini.cov=\"multRepl\"," + rob + "," + delta + ")");
+                    }
+                    else{ // complete.obs
+                        System.out.println("out <- zCompositions::lrEM(X," + label + ",dl=DL, ini.cov=\"complete.obs\"," + rob + ")");
+                        re.eval("out <- zCompositions::lrEM(X," + label + ",dl=DL, ini.cov=\"complete.obs\"," + rob + ")");
                     }
 
-                    String[] out = re.eval("out").asStringArray();
-
-                    // extract the numbers of out
-                    double resultat[][] = new double[data.length][data[0].length];
-                    int aux = 0; // y
-                    Pattern p = Pattern.compile("(\\d+(?:\\.\\d+))");
-                    char coma = ',';
-                    for (int i = 3; i < out.length; i++) {
-                        Matcher match = p.matcher(out[i].replace(coma, '.'));
-                        int aux2 = 0; //x
-                        while (match.find()) {
-                            double d = Double.parseDouble(match.group(1));
-                            resultat[aux2][aux] = d;
-                            aux2++;
-                        }
-                        aux++;
+                    String[] sout = re.eval("capture.output(out)").asStringArray();
+                    for(int i =0;i<sout.length;i++){
+                        System.out.println(sout[i].toString());
                     }
+                    double[][] out = re.eval("t(as.matrix(out))").asDoubleMatrix();
+                    
 
-                    df.addData(new_names, resultat);
+                    df.addData(new_names, out);
                     mainApplication.updateDataFrame(df);
                     setVisible(false);
                 }

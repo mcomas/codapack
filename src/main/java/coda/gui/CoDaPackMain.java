@@ -54,7 +54,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
+//import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -216,8 +216,8 @@ public final class CoDaPackMain extends JFrame {
         });
 
         setTitle(ITEM_APPLICATION_NAME);
-        int w_size = Math.round(screenDimension.width/2);
-        int h_size = Math.round(screenDimension.height/2);
+        int w_size = Math.round(3*screenDimension.width/4);
+        int h_size = Math.round(3*screenDimension.height/4);
         setPreferredSize(new Dimension(w_size, h_size));
         setLocation((screenDimension.width - w_size) / 2,
                 (screenDimension.height - h_size) / 2);
@@ -1061,11 +1061,20 @@ public final class CoDaPackMain extends JFrame {
             e = new OutputForR(re.eval("a").asStringArray());
             outputPanel.addOutput(e);
 
-            // finally the capabilities
+            //  the capabilities
 
             re.eval("a <- capture.output(capabilities())");
             e = new OutputForR(re.eval("a").asStringArray());
             outputPanel.addOutput(e);
+
+            // installed packages
+
+            re.eval("ip = as.data.frame(installed.packages()[,c(1,3:4)])");
+            re.eval("ip = ip[is.na(ip$Priority),1:2,drop=FALSE]");
+            e = new OutputForR(re.eval("capture.output(ip)").asStringArray());
+            outputPanel.addOutput(e);
+
+
         } else if (title.equals(jMenuBar.ITEM_MODEL_S0)) {
             new S0(this, re).setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_MODEL_S1)) {
@@ -1121,7 +1130,7 @@ public final class CoDaPackMain extends JFrame {
         /*
          * Look and Feel: change appearence according to OS
          */
-
+        System.out.println("Current JVM version - " + System.getProperty("java.version"));
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {
@@ -1191,7 +1200,7 @@ public final class CoDaPackMain extends JFrame {
         }
 
         public void run() {
-            checkForUpdate();
+            //checkForUpdate();
         }
 
         public void redirectForUpdating(String newversion) {
@@ -1225,7 +1234,7 @@ public final class CoDaPackMain extends JFrame {
                 CoDaPackConf.saveConfiguration();
             }
         }
-
+        /* 
         public void checkForUpdate() {
             try {
                 JSONObject serverData = null;
@@ -1253,6 +1262,7 @@ public final class CoDaPackMain extends JFrame {
                 Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        */
 
     }
 }

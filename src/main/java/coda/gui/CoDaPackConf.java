@@ -190,7 +190,7 @@ public class CoDaPackConf {
     public static String workingDir = System.getProperty("user.dir");
     public static String codapackDir = ".";
     public static String refusedVersion = CoDaVersion;
-    public static String rScriptPath = getRScriptDefaultPath();
+    public static String rScriptPath = getRScriptDefaultPath() + "/";
     public static String helpPath = getHelpPath() + "/";
     public static String mathJaxPath = getMathJaxPath();
 

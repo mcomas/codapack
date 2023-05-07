@@ -430,8 +430,8 @@ public class DataFrame extends HashMap<String, Variable>{
         for(int i=0;i<m;i++){
             addData(name[i], data[i]);
         }
-    }
-       public JSONObject toJSON(){
+    }    
+    public JSONObject toJSON(){
         JSONObject dataFrame = new JSONObject();
         JSONArray variables = new JSONArray();
         try {
