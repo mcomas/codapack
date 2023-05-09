@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export R_HOME=/usr/lib/R
+export R_LIBS_USER=Rlibraries/
+R
