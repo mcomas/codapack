@@ -104,7 +104,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         JFrame frame = new JFrame();
         frame.setTitle("Message");
 
-        String percentatgeDL = "delta=" + usedPercentatgeDL.getText(); // we get the percentatgeDL
+        String percentatgeDL = "frac=" + usedPercentatgeDL.getText(); // we get the percentatgeDL
         String label = "label=0"; // label for default its 0
         
         // configurem si es vol agafara els maxims de les columnes
@@ -177,27 +177,21 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
                         re.assign("tmp", dlevel[i]);
                         re.eval("DL" + " <- cbind(" + "DL" + ",matrix(tmp,nc=1))");
                     }
+                    re.eval("save.image('zero_replacement_image.RData')");
+                    System.out.println("out <- zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + ")");
+                    re.eval("out <- zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + ")");
 
-                    re.eval("out <- capture.output(zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + "))");
-
-                    String[] out = re.eval("out").asStringArray();
-
-                    // extract the numbers of out
-                    double resultat[][] = new double[data.length][data[0].length];
-                    int aux = 0; // y
-                    Pattern p = Pattern.compile("(\\d+(?:\\.\\d+))");
-                    char coma = ',';
-                    for (int i = 1; i < out.length; i++) {
-                        Matcher match = p.matcher(out[i].replace(coma,'.'));
-                        int aux2 = 0; //x
-                        while (match.find()) {
-                            double d = Double.parseDouble(match.group(1));
-                            resultat[aux2][aux] = d;
-                            aux2++;
-                        }
-                        aux++;
+                    String[] sout = re.eval("capture.output(out)").asStringArray();
+                    for(int i =0;i<sout.length;i++){
+                        System.out.println(sout[i].toString());
                     }
-
+                   
+                    re.eval("out <- t(as.matrix(out))");
+                    for(int i =0;i<sout.length;i++){
+                        System.out.println(sout[i].toString());
+                    }
+                    double resultat[][] = re.eval("(unname(out))").asDoubleMatrix();
+                    System.out.println(resultat[0].toString());
                     // put the output on dataframe
                     if (performClosure.isSelected()) {
                         double vclosureTo = Double.parseDouble(closureTo.getText());

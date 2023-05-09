@@ -29,6 +29,8 @@ import coda.Variable;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.FileNameExtensionFilter;
+import coda.io.ExportRDA;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -41,13 +43,7 @@ import java.util.zip.GZIPOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import org.renjin.eval.Context;
-import org.renjin.serialization.RDataWriter;
-import org.renjin.sexp.IntArrayVector;
-import org.renjin.sexp.DoubleArrayVector;
-import org.renjin.sexp.ListVector;
-import org.renjin.sexp.PairList;
-import org.renjin.sexp.StringArrayVector;
+import org.rosuda.JRI.Rengine;
 
 /**
  *
@@ -57,9 +53,10 @@ public class ExportRDataMenu extends AbstractMenuDialog {
     public static final long serialVersionUID = 1L;
     JTextField dfname;
     JLabel text1 = new JLabel("Data Frame name:");
-
-    public ExportRDataMenu(final CoDaPackMain mainApp) {
+    ExportRDA exportRDA;
+    public ExportRDataMenu(final CoDaPackMain mainApp, ExportRDA expRDA) {
         super(mainApp, "Export Menu", false, false, true);
+        exportRDA = expRDA;
         dfname = new JTextField("data", 14);
         optionsPanel.add(text1);
         optionsPanel.add(dfname);
@@ -89,6 +86,7 @@ public class ExportRDataMenu extends AbstractMenuDialog {
         JFileChooser chooseFile = new JFileChooser(ruta);
         chooseFile.setFileFilter(
                 new FileNameExtensionFilter("R data file", "RData"));
+                /* 
         if (chooseFile.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 String fname = chooseFile.getSelectedFile().getAbsolutePath();
@@ -96,7 +94,6 @@ public class ExportRDataMenu extends AbstractMenuDialog {
 
                 DataFrame df = mainApplication.getActiveDataFrame();
                 ListVector.NamedBuilder dataframe = new ListVector.NamedBuilder();
-
                 String[] sel_names = ds.getSelectedData();
                 for (int j = 0; j < sel_names.length; j++) {
                     Variable var = df.get(sel_names[j]);
@@ -133,5 +130,6 @@ public class ExportRDataMenu extends AbstractMenuDialog {
                 System.err.println("Error: " + e.getMessage());
             }
         }
+        */
     }
 }

@@ -5,6 +5,8 @@
    <artifactId>CoDaPack</artifactId>
    <version>2.03.01</version>
    <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
       <maven.compiler.source>1.17</maven.compiler.source>
       <maven.compiler.target>1.17</maven.compiler.target>
    </properties>
@@ -47,7 +49,7 @@
                <executable>java</executable>
                <arguments>
                   <argument>
-                     -Djava.library.path=/home/marc/R/x86_64-pc-linux-gnu-library/4.1/rJava/jri:</argument>
+                     -Djava.library.path=Rlibraries/rJava/jri/:</argument>
                   <argument>-classpath</argument>
                   <classpath />
                   <argument>coda.gui.CoDaPackMain</argument>
@@ -246,10 +248,12 @@
       </dependency>
    </dependencies>
    <repositories>
+   <!--
       <repository>
          <id>bedatadriven</id>
          <name>bedatadriven public repo</name>
          <url>https://nexus.bedatadriven.com/content/groups/public/</url>
       </repository>
+      -->
    </repositories>
 </project>

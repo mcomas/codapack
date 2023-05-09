@@ -32,6 +32,7 @@ import coda.gui.table.TablePanel;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.CoDaPackImporter;
 import coda.io.ExportData;
+import coda.io.ExportRDA;
 import coda.io.ImportRDA;
 import coda.io.WorkspaceIO;
 import coda.plot2.TernaryPlot2dDisplay;
@@ -105,7 +106,7 @@ public final class CoDaPackMain extends JFrame {
     /**
      * VARIABLE R
      */
-    public static String[] Rargs = { "--vanilla" };
+    public static String[] Rargs = {"--no-save" }; // {"--vanilla" };
     public static Rengine re = new Rengine(Rargs, false, null);
 
     private JComboBox dataFrameSelector;
@@ -535,7 +536,8 @@ public final class CoDaPackMain extends JFrame {
             ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
             CoDaPackConf.workingDir = ruta;
         } else if (title.equals(jMenuBar.ITEM_EXPORT_R)) {
-            new ExportRDataMenu(this).setVisible(true);
+            new ExportRDataMenu(this, new ExportRDA(re)).setVisible(true);
+
         } else if (title.equals(jMenuBar.ITEM_OPEN)) {
             System.out.println("ITEM_OPEN");
             if (!dataFrame.isEmpty()) {
@@ -1131,6 +1133,9 @@ public final class CoDaPackMain extends JFrame {
          * Look and Feel: change appearence according to OS
          */
         System.out.println("Current JVM version - " + System.getProperty("java.version"));
+        //re.eval("library(coda.base, lib.loc='Rlibraries')");
+        //re.eval("library(zCompositions, lib.loc='Rlibraries')");
+        //re.eval("options(width=120)");
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {

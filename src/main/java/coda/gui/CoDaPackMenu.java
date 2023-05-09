@@ -135,7 +135,7 @@ public class CoDaPackMenu extends JMenuBar {
     public JMenuItem itemAmalgamation;
     public final String ITEM_AMALGAM = "Amalgamation";
     public JMenuItem itemZeros;
-    public final String ITEM_ZEROS = "Non-parametric multiplicative zero replacement";
+    public final String ITEM_ZEROS = "Non-parametric zero replacement (java)";
     public JMenuItem itemCreateFrame;
     public final String ITEM_CREATE_FRAME = "Create new Table";
     public JMenuItem itemAddVariables;
@@ -150,7 +150,7 @@ public class CoDaPackMenu extends JMenuBar {
     public JMenuItem itemSetDetectionLimit;
     public final String ITEM_SETDETECTION = "Set detection limit";
     public JMenuItem itemZerosR;
-    public final String ITEM_ZEROS_R = "Non-parametric zero Replacement";
+    public final String ITEM_ZEROS_R = "Non-parametric zero Replacement (R)";
     public JMenuItem itemLogRatio;
     public final String ITEM_LOG_RATIO = "Logratio-EM zero Replacement";
     public JMenuItem itemBayesianMultReplace;
@@ -518,7 +518,7 @@ public class CoDaPackMenu extends JMenuBar {
         itemFilter = new JMenuItem();
         itemAdvFilter = new JMenuItem();
         /* itemAmalgamation = new JMenuItem(); */
-        /* itemZeros = new JMenuItem(); */
+        itemZeros = new JMenuItem();
         itemCreateFrame = new JMenuItem();
         itemAddVariables = new JMenuItem();
         itemDeleteVariables = new JMenuItem();
@@ -653,14 +653,14 @@ public class CoDaPackMenu extends JMenuBar {
         addJMenuItem(menuData, itemAddVariables, ITEM_ADD_VAR);
         addJMenuItem(menuData, itemDeleteVariables, ITEM_DEL_VAR);
         // addJMenuItem(menuData, itemAmalgamation, ITEM_AMALGAM);
-        // addJMenuItem(menuData, itemZeros, ITEM_ZEROS);
-
+        // 
         add(menuData);
 
         menuIrregularData.setText(ITEM_IRREG_DATA);
         addJMenuItem(menuIrregularData, zPatternsPlot, ITEM_ZPATTERNS);
         addJMenuItem(menuIrregularData, itemSetDetectionLimit, ITEM_SETDETECTION);
         addJMenuItem(menuIrregularData, itemZerosR, ITEM_ZEROS_R);
+        addJMenuItem(menuIrregularData, itemZeros, ITEM_ZEROS);
         addJMenuItem(menuIrregularData, itemLogRatio, ITEM_LOG_RATIO);
         addJMenuItem(menuIrregularData, itemBayesianMultReplace, ITEM_BAYESIAN_MULT_REPLACE);
         menuIrregularData.addSeparator();

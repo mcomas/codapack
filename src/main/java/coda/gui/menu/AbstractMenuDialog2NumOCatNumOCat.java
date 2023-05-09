@@ -36,7 +36,6 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import org.renjin.sexp.StringVector;
 /**
  *
  * @author mcomas
@@ -66,9 +65,9 @@ public abstract class AbstractMenuDialog2NumOCatNumOCat extends JDialog{
         ds = null;
         imp_df = impdf;
         String fname = chooseFile.getSelectedFile().getAbsolutePath().replace("\\","/");
-        StringVector df_names = (StringVector)imp_df.getDataFramesNames(fname);
-        if (df_names.length()!=0) {
-            variables = df_names.toArray();
+        String[]df_names = imp_df.getDataFramesNames(fname);
+        if (df_names.length!=0) {
+            variables = df_names;
             dfs = new DataFrameSelector(variables);
             initialize();
         }
