@@ -5,6 +5,7 @@
  */
 package coda.gui.menu;
 
+import coda.BasicStats;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackConf;
@@ -24,8 +25,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -57,8 +60,8 @@ public class EM_MissingMenu extends AbstractMenuDialog{
     
     /* options var */
     
-    JRadioButton B1 = new JRadioButton("Rob Option");
-    JTextField P1 = new JTextField(10);
+    JCheckBox B1 = new JCheckBox("Robust");
+    //JTextField P1 = new JTextField(10);
     
     
     public static final long serialVersionUID = 1L;
@@ -79,242 +82,56 @@ public class EM_MissingMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed(){
         
-        df = mainApplication.getActiveDataFrame();
+        String rob = "FALSE";
+        if(B1.isSelected()) rob = "TRUE";
+
+        df = mainApplication.getActiveDataFrame();        
+        String sel_names[] = super.ds.getSelectedData();
         
-        String selectedNames[] = super.ds.getSelectedData();
-        
-        if(selectedNames.length > 0){
+        if(sel_names.length > 0){
             
-            DataFrame transformedDataFrame = new DataFrame(df);
-            
-            double[][] data = df.getNumericalData(selectedNames);
-            Vector<Integer> rowsToDeleteVect = new Vector<Integer>();
-            
+            String[] new_names = new String[sel_names.length];
+            for(int i=0; i < sel_names.length; i++){
+                new_names[i] = "m_" + sel_names[i];
+            }
+
+            double data[][] = df.getNumericalData(sel_names);
             for(int i=0; i < data.length; i++){
-                for(int j = 0; j < data[i].length;j++){
-                    if(data[i][j] < 0.0) rowsToDeleteVect.add(j);
-                }
+                
+                System.out.println(Arrays.toString(data[i]));
             }
+            int numNAs = BasicStats.nNaN(data);
+
+            if(numNAs > 0){
+                for(int i=0; i < data.length; i++){
+                    re.assign(sel_names[i], data[i]);
+                }
+                re.eval("X = cbind(" + String.join(",", sel_names) + ")");               
+                
+                String E = "RES = zCompositions::lrEM(X,label=NaN,imp.missing=TRUE,ini.cov='complete.obs',rob=#ROB#)".replace("#ROB#", rob);
+                System.out.println(E);
+                re.eval(E);
+
+
+                double resultat[][] = re.eval("t(as.matrix(RES))").asDoubleMatrix();
+                
+
+                df.addData(new_names, resultat);
+                mainApplication.updateDataFrame(df);
+                setVisible(false);
+
+            }else{
+                JOptionPane.showMessageDialog(this,"Please select a variable that contains missing values");
+            }
+
             
-            if(rowsToDeleteVect.size() == df.getMaxVariableLength()) JOptionPane.showMessageDialog(null,"No positive data to analize");
-            else{
-                if(rowsToDeleteVect.size() > 0){ // if some row to ignore we transform the dataFrame
-                    JOptionPane.showMessageDialog(null,"Some Data is negative into a var selected");
-                }
-                else{
-                    
-                    // create dataframe on r
-                    
-                    for(int i=0; i < selectedNames.length;i++){
-                        re.eval(selectedNames[i] + " <- NULL");
-                        if(df.get(selectedNames[i]).isNumeric()){
-                            for(double j : df.get(selectedNames[i]).getNumericalData()){
-                                re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + "," + String.valueOf(j) + ")");
-                            }
-                        }
-                        else{ // categorical data
-                            for(String j : df.get(selectedNames[i]).getTextData()){
-                                re.eval(selectedNames[i] + " <- c(" + selectedNames[i] + ",'" + j + "')");
-                            }
-                        }
-                    }
-                        
-                        String dataFrameString = "X <- data.frame(";
-                        for(int i=0; i < selectedNames.length;i++){
-                            dataFrameString += selectedNames[i];
-                            if(i != selectedNames.length-1) dataFrameString += ",";
-                        }
-                        
-                        dataFrameString +=")";
-                        
-                        re.eval(dataFrameString); // we create the dataframe in R
-                        
-                        constructParametersToR();
-                
-                    this.dispose();
-
-                    // executem script d'R
-
-                        String url = CoDaPackConf.rScriptPath + "Logratio-EM_missing_replacement.R";
-                    
-                        re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
-
-                        String[] errorMessage = re.eval("error").asStringArray();
-
-                        if(errorMessage[0].equals("NULL")){
-                            /* executem totes les accions possibles */
-                            showText();
-                            createVariables();
-                            createDataFrame();
-                            showGraphics();
-                        }
-                        else{
-                            OutputElement type = new OutputText("Error in R:");
-                            outputPanel.addOutput(type);
-                            OutputElement outElement = new OutputForR(errorMessage);
-                            outputPanel.addOutput(outElement);
-                           }
-
-                }
-                
-            }
             
         }
         else{
-            JOptionPane.showMessageDialog(null,"Please select data");
+            JOptionPane.showMessageDialog(null,"Please select at least two columns");
         }
     }
     
-    void constructParametersToR(){
-        /* construim parametres string */
-        
-        if(this.P1.getText().length() > 0) re.eval("P1 <- " + this.P1.getText());
-        else re.eval("P1 <- NA");
-        
-        
-        /* construim parametres logics */
-        
-        if(this.B1.isSelected()) re.eval("B1 <- TRUE");
-        else re.eval("B1 <- FALSE");
-    }
-    
-    void showText(){
-        
-        REXP result;
-        String[] sortida;
-        
-        /* header output */
-        
-        outputPanel.addOutput(new OutputText("Logratio-EM missing replacement:"));
-        
-        /* R output */
-        
-        int midaText = re.eval("length(cdp_res$text)").asInt();
-        for(int i=0; i < midaText; i++){
-            result = re.eval("cdp_res$text[[" + String.valueOf(i+1) + "]]");
-            sortida = result.asStringArray();
-            outputPanel.addOutput(new OutputForR(sortida));
-        }
-    }
-    
-    void createDataFrame(){
-        int nDataFrames = re.eval("length(cdp_res$dataframe)").asInt();
-        for(int i=0; i < nDataFrames; i++){
-            int nVariables = re.eval("length(cdp_res$dataframe[[" + String.valueOf(i+1) + "]])").asInt();
-            DataFrame newDataFrame = new DataFrame();
-            for(int j=0; j < nVariables; j++){
-                String varName = re.eval("names(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "])").asString();
-                String isNumeric = re.eval("class(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asString();
-                if(isNumeric.equals("numeric")){ /* crear una variable numerica */
-                    double[] data = re.eval("as.numeric(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asDoubleArray();
-                    newDataFrame.addData(varName, data);
-                }
-                else{ /* crear una variable categorica */
-                    String[] data = re.eval("as.character(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asStringArray();
-                    newDataFrame.addData(varName, new Variable(varName,data));
-                }
-            }
-            
-            String dataFrameName = re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString();
-            
-            while(!mainApplication.isDataFrameNameAvailable(dataFrameName)){
-                dataFrameName += "c";
-            }
-            
-            newDataFrame.setName(dataFrameName);
-            mainApplication.addDataFrame(newDataFrame);
-        }
-    }
-    
-    void showGraphics(){
-        
-        int numberOfGraphics = re.eval("length(cdp_res$graph)").asInt(); /* num de grafics */
-        this.framesEM_MissingMenu = new JFrame[numberOfGraphics];
-        this.tempsDirR = new String[numberOfGraphics];
-        for(int i=0; i < numberOfGraphics; i++){
-            tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR[i] = tempDirR;
-            plotEM_MissingMenu(i);
-        }     
-    }
-    
-    void createVariables(){
-        
-        int numberOfNewVar = re.eval("length(colnames(cdp_res$new_data))").asInt(); /* numero de columnes nomes*/
-        
-        for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("colnames(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
-            String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[["+ String.valueOf(i+1) +"]]))").asString();
-            if(isNumeric.equals("TRUE")){
-                double[] data = re.eval("as.numeric(cdp_res$new_data[," + String.valueOf(i+1) + "])").asDoubleArray();
-                df.addData(varName,data);
-            }
-            else{ // categoric
-                String[] data = re.eval("as.character(cdp_res$new_data[," + String.valueOf(i+1) + "])").asStringArray();
-                df.addData(varName, new Variable(varName,data));
-            }
-            mainApplication.updateDataFrame(df);
-        }
-       
-    }
-    
-    private void plotEM_MissingMenu(int position) {
-            Font f = new Font("Arial", Font.PLAIN,12);
-            UIManager.put("Menu.font", f);
-            UIManager.put("MenuItem.font",f);
-            JMenuBar menuBar = new JMenuBar();
-            JMenu menu = new JMenu("File");
-            JMenuItem menuItem = new JMenuItem("Open");
-            menuBar.add(menu);
-            framesEM_MissingMenu[position] = new JFrame();
-            JPanel panel = new JPanel();
-            menu.add(menuItem);
-            menuItem = new JMenuItem("Export");
-            JMenu submenuExport = new JMenu("Export");
-            menuItem = new JMenuItem("Export As PNG");
-            menuItem.addActionListener(new FileChooserAction(position));
-            submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Export As JPEG");
-            //submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Export As PDF");
-            //submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Export As WMF");
-            //submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Export As Postscripts");
-            //submenuExport.add(menuItem);
-            menuItem = new JMenuItem("Quit");
-            menuItem.addActionListener(new quitListener(position));
-            menu.add(submenuExport);
-            menu.add(menuItem);
-            framesEM_MissingMenu[position].setJMenuBar(menuBar);
-            panel.setSize(800,800);
-            ImageIcon icon = new ImageIcon(tempDirR);
-            JLabel label = new JLabel(icon,JLabel.CENTER);
-            label.setSize(700, 700);
-            panel.setLayout(new GridBagLayout());
-            panel.add(label);
-            framesEM_MissingMenu[position].getContentPane().add(panel);
-            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            framesEM_MissingMenu[position].setSize(800,800);
-            framesEM_MissingMenu[position].setLocation(dim.width/2-framesEM_MissingMenu[position].getSize().width/2, dim.height/2-framesEM_MissingMenu[position].getSize().height/2);
-            
-            WindowListener exitListener = new WindowAdapter(){
-                
-                @Override
-                public void windowClosing(WindowEvent e){
-                    int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
-                    if(confirm == 0){
-                        framesEM_MissingMenu[position].dispose();
-                        File file = new File(tempsDirR[position]);
-                        file.delete();
-                    }
-                }
-            };
-            
-            framesEM_MissingMenu[position].setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            framesEM_MissingMenu[position].addWindowListener(exitListener);
-            framesEM_MissingMenu[position].setVisible(true);
-    }
 
     public DataFrame getDataFrame() {
         return this.df;
@@ -324,72 +141,4 @@ public class EM_MissingMenu extends AbstractMenuDialog{
         return this.names;
     }
     
-    private class quitListener implements ActionListener{
-        
-        int position;
-        
-        public quitListener(int position){
-            this.position = position;
-        }
-        
-        public void actionPerformed(ActionEvent e){
-            int confirm = JOptionPane.showOptionDialog(null,"Are You Sure to Close Window?","Exit Confirmation", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,null,null);
-            if(confirm == 0){
-                framesEM_MissingMenu[position].dispose();
-                File file = new File(tempsDirR[position]);
-                file.delete();
-            }
-        }
-    }
-    
-    private class FileChooserAction implements ActionListener{
-        
-        int position;
-        
-        public FileChooserAction(int position){
-            this.position = position;
-        }
-        
-        public void actionPerformed(ActionEvent e){
-            JFrame frame = new JFrame();
-            JFileChooser jf = new JFileChooser();
-            frame.setSize(400,400);
-            jf.setDialogTitle("Select the folder to save the file");
-            jf.setApproveButtonText("Save");
-            jf.setSelectedFile(new File(".png"));
-            jf.setSize(400,400);
-            frame.add(jf);
-            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-            frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-            boolean canExit = false;
-            while(! canExit){
-                int result = jf.showSaveDialog(frame);
-                if(JFileChooser.CANCEL_OPTION == result){
-                    frame.dispose();
-                    canExit = true;
-                }
-                if(JFileChooser.APPROVE_OPTION == result){ // guardem arxiu en el path
-                    File f = new File(tempsDirR[position]);
-                    f.deleteOnExit();
-                    String path = jf.getSelectedFile().getAbsolutePath();
-                    File f2 = new File(path);
-                    if(f2.exists()){
-                        int response = JOptionPane.showConfirmDialog(null, "Do you want to replace the existing file?", 
-                                "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                        if(response != JOptionPane.YES_OPTION) canExit = false;
-                        else{
-                            f.renameTo(f2);
-                            frame.dispose();
-                            canExit = true;
-                        }
-                    }
-                    else{
-                        f.renameTo(f2);
-                        frame.dispose();
-                        canExit = true;
-                    }
-                }
-            }
-        }
-    }
 }
