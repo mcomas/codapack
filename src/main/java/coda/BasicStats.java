@@ -216,4 +216,31 @@ public class BasicStats {
             }
         return cpe;
     }
+
+    public static int nZeros(double data[][]){
+        int numZeros = 0;
+        for(int i =0; i < data.length;i++){
+            //minimumOfColumn = 0.0;
+            for(int j=0;j < data[i].length;j++){
+                if(data[i][j] == 0) numZeros++;
+                //if((data[i][j] != 0 && data[i][j] < minimumOfColumn) || minimumOfColumn == 0) minimumOfColumn = data[i][j];
+            }
+            //minimumsOfColumns[i] = minimumOfColumn;
+        }
+        return(numZeros);
+
+    }
+    public static int nPositive(double data[][]){
+        int numPositive = 0;
+        for(int i =0; i < data.length;i++){
+            //minimumOfColumn = 0.0;
+            for(int j=0;j < data[i].length;j++){
+                if(data[i][j] > 0) numPositive++;
+                //if((data[i][j] != 0 && data[i][j] < minimumOfColumn) || minimumOfColumn == 0) minimumOfColumn = data[i][j];
+            }
+            //minimumsOfColumns[i] = minimumOfColumn;
+        }
+        return(numPositive);
+
+    }
 }

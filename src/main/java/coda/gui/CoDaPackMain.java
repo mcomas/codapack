@@ -133,7 +133,7 @@ public final class CoDaPackMain extends JFrame {
     private SetDetectionLimitMenu setDetectionLimitMenu;
     private ZeroReplacementMenu zeroReplacementMenu;
     private ZeroReplacementRMenu zeroReplacementRMenu;
-    private LogRatioEMMenu logRatioEMMenu;
+    private EM_ZeroMenu logRatioEMMenu;
     private BayesianMultRepMenu bayesianMultRepMenu;
     private EM_MissingMenu EM_MissingMenu;
     private EM_ZeroMissingMenu EM_ZeroMissingMenu;
@@ -889,12 +889,12 @@ public final class CoDaPackMain extends JFrame {
                     || !powerDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
                 powerDataMenu = new PowerDataMenu(this);
             powerDataMenu.setVisible(true);
-        } else if (title.equals(jMenuBar.ITEM_ZEROS)) {
+        /* } else if (title.equals(jMenuBar.ITEM_ZEROS)) {
             System.out.println("ITEM_ZEROS");
             if (zeroReplacementMenu == null || zeroReplacementMenu.getDataFrame() != this.getActiveDataFrame()
                     || !zeroReplacementMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
                 zeroReplacementMenu = new ZeroReplacementMenu(this);
-            zeroReplacementMenu.setVisible(true);
+            zeroReplacementMenu.setVisible(true);*/
         } else if (title.equals(jMenuBar.ITEM_ZEROS_R)) {
             System.out.println("ITEM_ZEROS_R");
             if (zeroReplacementRMenu == null || zeroReplacementRMenu.getDataFrame() != this.getActiveDataFrame()
@@ -905,7 +905,7 @@ public final class CoDaPackMain extends JFrame {
             System.out.println("ITEM_LOG_RATIO");
             if (logRatioEMMenu == null || logRatioEMMenu.getDataFrame() != this.getActiveDataFrame()
                     || !logRatioEMMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                logRatioEMMenu = new LogRatioEMMenu(this, re);
+                logRatioEMMenu = new EM_ZeroMenu(this, re);
             logRatioEMMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_BAYESIAN_MULT_REPLACE)) {
             if (bayesianMultRepMenu == null || bayesianMultRepMenu.getDataFrame() != this.getActiveDataFrame()

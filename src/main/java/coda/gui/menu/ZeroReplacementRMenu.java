@@ -18,6 +18,7 @@
  */
 package coda.gui.menu;
 
+import coda.BasicStats;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackConf;
@@ -104,7 +105,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         JFrame frame = new JFrame();
         frame.setTitle("Message");
 
-        String percentatgeDL = "frac=" + usedPercentatgeDL.getText(); // we get the percentatgeDL
+        String fracDL = usedPercentatgeDL.getText(); // we get the percentatgeDL
         String label = "label=0"; // label for default its 0
         
         // configurem si es vol agafara els maxims de les columnes
@@ -118,80 +119,39 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
         
 
         if (m >= 2) { // minimum two variables selected to do something
-            
-           
+                       
             String[] new_names = new String[m];
             for (int i = 0; i < m; i++) {
                 new_names[i] = "z_" + sel_names[i];
-            }
-            
-            int numZeros = 0;
+            }                        
 
             double data[][] = df.getNumericalData(sel_names);
-            //double minimumsOfColumns[] = new double[m]; double minimumOfColumn;
-            
-            // we search the minimum number diferent of 0 for each column
-            for(int i =0; i < data.length;i++){
-                //minimumOfColumn = 0.0;
-                for(int j=0;j < data[i].length;j++){
-                    if(data[i][j] == 0) numZeros++;
-                    //if((data[i][j] != 0 && data[i][j] < minimumOfColumn) || minimumOfColumn == 0) minimumOfColumn = data[i][j];
-                }
-                //minimumsOfColumns[i] = minimumOfColumn;
-            }
+            int numZeros = BasicStats.nZeros(data);
             
             if(numZeros > 0){ // if contains zero then we do something
                 
-                re.assign("X", data[0]);
-                re.eval("X" + " <- matrix( " + "X" + " ,nc=1)");
-                for(int i=1; i < data.length; i++){
-                    re.assign("tmp", data[i]);
-                    re.eval("X" + " <- cbind(" + "X" + ",matrix(tmp,nc=1))");
+                for(int i=0; i < data.length; i++){
+                    re.assign(sel_names[i], data[i]);
                 }
+                re.eval("X = cbind(" + String.join(",", sel_names) + ")");
                 
                 double dlevel[][] = df.getDetectionLevel(sel_names);
-                int numDlevel = 0;
-                
-                for(int i=0; i < dlevel.length; i++){
-                    for(int j=0; j < dlevel[i].length; j++){
-                        if(dlevel[i][j] > 0) numDlevel++;
-                    }
-                }
+                int numDlevel = BasicStats.nPositive(dlevel);
                 
                 if(numZeros == numDlevel){ // si tenim detection limit per tots els zeros llavors tot be
-                
-                // modificacio en el cas de que no tingui level detector agafant minim columna
-                
-                //if(takeMin){
-                    
-                //    for(int i = 0; i < data.length;i++){
-                //        for(int j = 0; j < data[i].length;j++){ // no data level 
-                //            if(data[i][j] == 0 && dlevel[i][j] == 0) dlevel[i][j] = minimumsOfColumns[i];
-                //        }
-                //    }
-                //}                
-                
-                    re.assign("DL", dlevel[0]);
-                    re.eval("DL" + " <- matrix( " + "DL" + " ,nc=1)");
-                    for(int i=1; i < dlevel.length; i++){
-                        re.assign("tmp", dlevel[i]);
-                        re.eval("DL" + " <- cbind(" + "DL" + ",matrix(tmp,nc=1))");
+                         
+                    for(int i=0; i < dlevel.length; i++){
+                        re.assign(sel_names[i], dlevel[i]);
                     }
-                    re.eval("save.image('zero_replacement_image.RData')");
-                    System.out.println("out <- zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + ")");
-                    re.eval("out <- zCompositions::multRepl(X,label=0,dl=DL," + percentatgeDL + ")");
+                    re.eval("DL = cbind(" + String.join(",", sel_names) + ")");
 
-                    String[] sout = re.eval("capture.output(out)").asStringArray();
-                    for(int i =0;i<sout.length;i++){
-                        System.out.println(sout[i].toString());
-                    }
                    
-                    re.eval("out <- t(as.matrix(out))");
-                    for(int i =0;i<sout.length;i++){
-                        System.out.println(sout[i].toString());
-                    }
-                    double resultat[][] = re.eval("(unname(out))").asDoubleMatrix();
-                    System.out.println(resultat[0].toString());
+                    String E = "RES = zCompositions::multRepl(X,label=0,dl=DL,frac=#FRAC#)";
+                    re.eval(E.replace("#FRAC#", fracDL));
+
+                   
+                    double resultat[][] = re.eval("t(as.matrix(RES))").asDoubleMatrix();
+                    
                     // put the output on dataframe
                     if (performClosure.isSelected()) {
                         double vclosureTo = Double.parseDouble(closureTo.getText());

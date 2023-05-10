@@ -137,6 +137,7 @@ public abstract class AbstractMenuDialog extends JDialog{
         else if (dfs!=null) getContentPane().add(dfs, BorderLayout.CENTER);
 
         JPanel eastPanel = new JPanel();
+        //optionsPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
         optionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
         optionsPanel.setPreferredSize(new Dimension(250,200));
         //optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
