@@ -154,7 +154,7 @@ public class EM_ZeroMissingMenu extends AbstractMenuDialog{
                     }
                     re.eval("DL = cbind(" + String.join(",", sel_names) + ")");
 
-                    re.eval("save.image('image.RData')");
+                    //re.eval("save.image('image.RData')");
                     String E = "RES = zCompositions::lrEMplus(X,dl=DL,rob=#ROB#,ini.cov='#INI.COV#',frac=#FRAC#)"
                                .replace("#FRAC#", fracDL)
                                .replace("#ROB#", rob)

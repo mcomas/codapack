@@ -113,7 +113,7 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
                 }
                 re.eval("X = cbind(" + String.join(",", sel_names) + ")");
 
-                re.eval("save.image('image.RData')");
+                //re.eval("save.image('image.RData')");
                 String E = "RES = zCompositions::cmultRepl(X,method='#METHOD#', output='#OUTPUT#')"
                             .replace("#METHOD#", method)
                             .replace("#OUTPUT#", resultFormat);
