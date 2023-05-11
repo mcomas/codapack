@@ -49,6 +49,7 @@ import javax.swing.JPanel;
 public abstract class AbstractMenuDialog extends JDialog{
     DataSelector ds;
     DataFrameSelector dfs;
+    
     public JPanel optionsPanel = new JPanel();;
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     CoDaPackMain mainApplication;
@@ -57,8 +58,27 @@ public abstract class AbstractMenuDialog extends JDialog{
     String variables[];
     String yamlFile; // variable que serveix per el path del fitxer yaml
     String helpTitle; // variable per el titol del menu
-    int WIDTH = 650;//560;
-    int HEIGHT = 500;//430;
+    int WIDTH = 650; //560;
+    int HEIGHT = 500; //430;
+    /*public AbstractMenuDialog(final CoDaPackMain mainApp, String title){
+        super(mainApp, title);        
+    }*/
+    
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups){
+        super(mainApp, title);
+        mainApplication = mainApp;
+        dfs = null;               
+        ds = new DataSelector(mainApplication.getActiveDataFrame(), groups);
+        initialize();
+    }
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, int variable_type){
+        super(mainApp, title);
+        mainApplication = mainApp;
+        dfs = null;               
+        ds = new DataSelector(mainApplication.getActiveDataFrame(), groups, variable_type);
+        initialize();
+    }
+    /*
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty, boolean categoric){
         super(mainApp, title);
         mainApplication = mainApp;
@@ -92,37 +112,28 @@ public abstract class AbstractMenuDialog extends JDialog{
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
         initialize();
     }
-    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups){
-        super(mainApp, title);
-        mainApplication = mainApp;
-        dfs = null;
-        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
-        initialize();
-    }
+    
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, String categoric){
         super(mainApp, title);
         mainApplication = mainApp;
         dfs = null;
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), categoric);
         initialize();
-    }
-    public AbstractMenuDialog(final CoDaPackMain mainApp, String title){
-        super(mainApp, title);
-        
-    }
+    }    
+    */
     public void setHelpMenuConfiguration(String yamlUrl, String helpTitle){
         
         this.yamlFile = yamlUrl;
         this.helpTitle = helpTitle;
     }
     
-    public void activeGroups(final CoDaPackMain mainApp, boolean groups){
+    /*public void activeGroups(final CoDaPackMain mainApp, boolean groups){
         System.out.println("Active Groups"+ groups);
         mainApplication = mainApp;
         dfs = null;
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
         initialize();
-    }
+    }*/
     
     private void initialize(){
         Point p = mainApplication.getLocation();
@@ -133,11 +144,10 @@ public abstract class AbstractMenuDialog extends JDialog{
         setResizable(true);
         getContentPane().setLayout(new BorderLayout());
         setSize(WIDTH,HEIGHT);
+
         if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);
         else if (dfs!=null) getContentPane().add(dfs, BorderLayout.CENTER);
 
-        JPanel eastPanel = new JPanel();
-        //optionsPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
         optionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
         optionsPanel.setPreferredSize(new Dimension(250,200));
         //optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
@@ -213,11 +223,11 @@ public abstract class AbstractMenuDialog extends JDialog{
     public DataFrameSelector getDFS() {
         return dfs;
     }
-    
+    /* 
     public void setSelectedDataName(String data1){
         ds.setSelectedName(data1);
     }
-
+*/
     public boolean[] getValidComposition(DataFrame df, String[] selectedNames){
         boolean selection[] = df.getValidCompositions(selectedNames);
         String invalid = "";

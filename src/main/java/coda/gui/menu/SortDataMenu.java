@@ -36,7 +36,7 @@ public class SortDataMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Sort Data Help Menu";
     
     public SortDataMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Sort Data Menu", false, false, true);
+        super(mainApp, "Sort Data Menu", false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         re = r;

@@ -73,7 +73,7 @@ public class ImportRDAMenu extends AbstractMenuDialog{
     
     
     public ImportRDAMenu(CoDaPackMain mainApp, JFileChooser chooseFile, ImportRDA impdf) throws ScriptException {
-        super(mainApp, "Import R Data File", false, chooseFile, impdf);
+        super(mainApp, "Import R Data File", false);
         
         //Assignem el path a l'string rf
         rf = chooseFile.getCurrentDirectory().getAbsolutePath();

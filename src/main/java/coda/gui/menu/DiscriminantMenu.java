@@ -78,7 +78,7 @@ public class DiscriminantMenu extends AbstractMenuDialog{
         super(mainApp,"Discriminant Menu", true);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
-        super.setSelectedDataName("Selected X:");
+        //super.setSelectedDataName("Selected X:");
         
         framesDiscriminantMenu = new Vector<JFrame>();
         tempsDirR = new Vector<String>();

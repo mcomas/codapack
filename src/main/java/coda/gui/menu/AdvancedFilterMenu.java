@@ -39,7 +39,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
     
     public AdvancedFilterMenu(final CoDaPackMain mainApp, Rengine r ){
         
-        super(mainApp,"Advanced Filter Menu",false, false,true);
+        super(mainApp,"Advanced Filter Menu",false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());

@@ -113,7 +113,7 @@ public class ImportXLSMenu extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import Menu");
-        setResizable(false);
+        setResizable(true);
 
         okButton.setText("OK");
         okButton.addActionListener(new ActionListener() {

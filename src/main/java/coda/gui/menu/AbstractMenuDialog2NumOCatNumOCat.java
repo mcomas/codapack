@@ -104,7 +104,7 @@ public abstract class AbstractMenuDialog2NumOCatNumOCat extends JDialog{
         p.y = p.y + (mainApplication.getHeight()-430)/2;
         setLocation(p);
 
-        setResizable(false);
+        setResizable(true);
         getContentPane().setLayout(new BorderLayout());
         setSize(WIDTH,HEIGHT);
         if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);

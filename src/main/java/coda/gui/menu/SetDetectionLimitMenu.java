@@ -35,7 +35,7 @@ import javax.swing.*;
  *
  * @author david
  */
-public class SetDetectionLimitMenu extends AbstractMenuDialogSDL{
+public class SetDetectionLimitMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Set Detection Limit.yaml";
     private static final String helpTitle = "Set Detection Limit Help";

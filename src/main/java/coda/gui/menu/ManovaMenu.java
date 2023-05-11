@@ -75,7 +75,7 @@ public class ManovaMenu extends AbstractMenuDialog{
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         re = r;
-        super.setSelectedDataName("Selected Composition:");
+        //super.setSelectedDataName("Selected Composition:");
         
         this.optionsPanel.add(residuals);
         this.optionsPanel.add(analyzeDiff);

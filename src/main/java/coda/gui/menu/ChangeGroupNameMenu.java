@@ -9,6 +9,8 @@ import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
 import coda.gui.utils.BoxDataSelector;
+import coda.gui.utils.DataSelector;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -42,7 +44,7 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public ChangeGroupNameMenu(final CoDaPackMain mainApp){
-        super(mainApp,"Change Categorical Label Menu", "categoric");
+        super(mainApp,"Change Categorical Label Menu", false, DataSelector.ONLY_CATEGORIC);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }

@@ -77,7 +77,7 @@ public class BoxplotMenu extends AbstractMenuDialog{
         super(mainApp,"Boxplot Menu",true);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
-        super.setSelectedDataName("Selected Variables:");
+        //super.setSelectedDataName("Selected Variables:");
         
         this.optionsPanel.add(new JLabel("Draw mean"));
         this.optionsPanel.add(optDrawMean);

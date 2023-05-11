@@ -36,8 +36,9 @@ generateFileName <- function(candidateName){
 
 ################# MAIN #################
 
-Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX), label = "ilr.")
+Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
 nparts=NCOL(Xt)
+colnames(Xt) = paste0('ilr.', 1:nparts)
 
 df <- cbind.data.frame(Xt,Y)
 

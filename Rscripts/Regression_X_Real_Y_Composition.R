@@ -38,12 +38,12 @@ generateFileName <- function(candidateName){
 
 ################# MAIN #################
 
-Yt <- coda.base::coordinates(Y, basis = coda.base::sbp_basis(BaseY), label = "ilr.")
+Yt <- coda.base::coordinates(Y, basis = coda.base::sbp_basis(BaseY))
 nparts=NCOL(Yt)
-
-
+colnames(Yt) = paste0('ilr.', 1:nparts)
+save.image('image.RData')
 # Linear model
-LM <- lm(as.matrix(Yt)~., data=as.data.frame(X))
+LM <- lm(as.matrix(Yt)~., data=as.data.frame(X), y = TRUE, x = TRUE)
 
 #summary(LM)
 #put names to residuals and fitted values columns
@@ -63,11 +63,11 @@ if (B2 == TRUE) {
 
 # Calculate SSR:
 FitCen <- scale(LM$fitted.values,scale=FALSE)
-sum(FitCen^2)
+#sum(FitCen^2)
 # Calculate SST:
 #YCen <- scale(Dep,scale=FALSE)
-YCen <- scale(Yt[-LM$na.action,],scale=FALSE)
-sum(YCen^2)
+YCen <- scale(LM$y,scale=FALSE)
+#sum(YCen^2)
 # Calculate R2
 r2 <- (sum(FitCen^2)/sum(YCen^2))*100
 

@@ -55,7 +55,7 @@ public class ExportRDataMenu extends AbstractMenuDialog {
     JLabel text1 = new JLabel("Data Frame name:");
     ExportRDA exportRDA;
     public ExportRDataMenu(final CoDaPackMain mainApp, ExportRDA expRDA) {
-        super(mainApp, "Export Menu", false, false, true);
+        super(mainApp, "Export Menu", false);
         exportRDA = expRDA;
         dfname = new JTextField("data", 14);
         optionsPanel.add(text1);

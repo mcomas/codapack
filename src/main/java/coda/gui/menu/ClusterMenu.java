@@ -76,7 +76,7 @@ public class ClusterMenu extends AbstractMenuDialog{
     
     public ClusterMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Cluster Menu", false);
-        super.setSelectedDataName("Select Composition:");
+        //super.setSelectedDataName("Select Composition:");
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         

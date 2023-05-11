@@ -17,44 +17,66 @@
  *  along with CoDaPack.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * DataSelector.java
- *
- * Created on 23/09/2010, 10:25:14
- */
 
 package coda.gui.utils;
 
 import coda.DataFrame;
 import coda.Variable;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 /**
  *
  * @author mcomas
  */
 public final class DataSelector extends JPanel {
+
+    private JList<String> vars_available = new JList<String>();
+    private JList<String> vars_selected = new JList<String>();
+    private JComboBox<String> var_group = new JComboBox<String>();
+
+    public static int ONLY_NUMERIC = 1;
+    public static int ALL_VARIABLES = 2;
+    public static int ONLY_CATEGORIC = 3;
+
     DataFrame df_instance;
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
     int releaseIndex = -1;
     String variables[];
     boolean groupedBy = true;
-    
-    public DataSelector(DataFrame dataFrame){
+
+    int selection_type = ONLY_NUMERIC;
+    public DataSelector(DataFrame dataFrame, boolean groups) {
+        initComponents(groups);
+        df_instance = dataFrame;
+        if(dataFrame != null)
+            setDataLists(dataFrame);
+    }
+    public DataSelector(DataFrame dataFrame, boolean groups, int variable_type) {
+        initComponents(groups);
+        selection_type = variable_type;
+        df_instance = dataFrame;
+        if(dataFrame != null)
+            setDataLists(dataFrame);
+    }
+    /*public DataSelector(DataFrame dataFrame){
         initComponents();
         df_instance = dataFrame;
         if(dataFrame != null)
@@ -62,7 +84,7 @@ public final class DataSelector extends JPanel {
     }
     public DataSelector(DataFrame dataFrame, boolean groups, boolean all) {
         initComponents();
-        groupsComboBox.setVisible(groups);
+        var_group.setVisible(groups);
         labGroups.setVisible(groups);
         df_instance = dataFrame;
         if (all == true){
@@ -75,41 +97,34 @@ public final class DataSelector extends JPanel {
     }
     public DataSelector(DataFrame dataFrame, int[]selected, boolean groups) {
         initComponents();
-        groupsComboBox.setVisible(groups);
+        var_group.setVisible(groups);
         labGroups.setVisible(groups);
         df_instance = dataFrame;
         //jList2.setModel(new DefaultListModel());
         if(dataFrame != null)
             setDataLists(dataFrame, selected);
 
-    }
-    public DataSelector(DataFrame dataFrame, boolean groups) {
-        initComponents();
-        groupsComboBox.setVisible(groups);
-        labGroups.setVisible(groups);
-        df_instance = dataFrame;
-        //jList2.setModel(new DefaultListModel());
-        //jList2.setModel(new DefaultListModel());
-        if(dataFrame != null)
-            setDataLists(dataFrame, null);
-    }
-
+    }*/
+    
+    /*
     public DataSelector(DataFrame activeDataFrame, int[] selectedData, String categoric) {
         initComponents();
-        groupsComboBox.setVisible(false);
+        var_group.setVisible(false);
         labGroups.setVisible(false);
         df_instance = activeDataFrame;
         if(activeDataFrame != null) setDataListsCat(activeDataFrame,null);
     }
+    */
     private void reorder() {
-        DefaultListModel model = (DefaultListModel) selectedList.getModel();
-        Object dragee = model.elementAt(pressIndex);
+        DefaultListModel<String> model = (DefaultListModel<String>) vars_selected.getModel();
+        String dragee = model.elementAt(pressIndex);
         model.removeElementAt(pressIndex);
         model.insertElementAt(dragee, releaseIndex);
     }
+    /* 
     public void setAllDataLists(DataFrame dataFrame, int[] selected){
-        DefaultListModel model1 = new DefaultListModel();
-        DefaultListModel model2 = new DefaultListModel();
+        DefaultListModel<String> model1 = new DefaultListModel<String>();
+        DefaultListModel<String> model2 = new DefaultListModel<String>();
         variables = new String[dataFrame.size()];
         //Iterator it = dataFrame.getNamesIterator();
         int i = -1;
@@ -129,48 +144,46 @@ public final class DataSelector extends JPanel {
                 model2.addElement(variables[i]);
             
         }
-        toSelectList.setModel(model1);
-        selectedList.setModel(model2);
+        vars_available.setModel(model1);
+        vars_selected.setModel(model2);
     }
-    public void setDataLists(DataFrame dataFrame, int[] selected){
-        DefaultListModel model1 = new DefaultListModel();
-        DefaultListModel model2 = new DefaultListModel();
+    */
+    public void setDataLists(DataFrame dataFrame){
+        DefaultListModel<String> model1 = new DefaultListModel<String>();
+        DefaultListModel<String> model2 = new DefaultListModel<String>();
+
         variables = new String[dataFrame.size()];
         //Iterator it = dataFrame.getNamesIterator();
         int i = -1;
         for(String name : dataFrame.getNames()){
-            variables[++i] = name;
-            if(((Variable)dataFrame.get(variables[i])).isText()){
-                if(((DefaultComboBoxModel)groupsComboBox.getModel()).getIndexOf(variables[i]) == -1) groupsComboBox.addItem(variables[i]);
+            //variables[++i] = name;
+            Variable variable = dataFrame.get(name);
+            if(variable.isText()){
+                var_group.addItem(name);
+                if(selection_type != ONLY_NUMERIC){
+                    model1.addElement(name);
+                }
+            }else{
+                if(selection_type != ONLY_CATEGORIC){
+                    model1.addElement(name);
+                }
             }
-            else{
-                boolean isSelected = false;
-                if(selected != null)
-                    for(int j=0;j<selected.length;j++)
-                    if(i == selected[j]){
-                        isSelected = true;
-                        break;
-                    }
-                if(!isSelected)
-                    model1.addElement(variables[i]);
-                else
-                    model2.addElement(variables[i]);
-            }
+            
         }
-        toSelectList.setModel(model1);
-        selectedList.setModel(model2);
+        vars_available.setModel(model1);
+        vars_selected.setModel(model2);
     }
-    
+    /*
     public void setDataListsCat(DataFrame dataFrame, int[] selected){
-        DefaultListModel model1 = new DefaultListModel();
-        DefaultListModel model2 = new DefaultListModel();
+        DefaultListModel<String> model1 = new DefaultListModel<String>();
+        DefaultListModel<String> model2 = new DefaultListModel<String>();
         variables = new String[dataFrame.size()];
         //Iterator it = dataFrame.getNamesIterator();
         int i = -1;
         for(String name : dataFrame.getNames()){
             variables[++i] = name;
             if(((Variable)dataFrame.get(variables[i])).isNumeric())
-                groupsComboBox.addItem(variables[i]);
+                var_group.addItem(variables[i]);
             else{
                 boolean isSelected = false;
                 if(selected != null)
@@ -185,267 +198,214 @@ public final class DataSelector extends JPanel {
                     model2.addElement(variables[i]);
             }
         }
-        toSelectList.setModel(model1);
-        selectedList.setModel(model2);
+        vars_available.setModel(model1);
+        vars_selected.setModel(model2);
     }
-    
-    public ListModel getAvailableData(){
-        return toSelectList.getModel();
+    */
+    public ListModel<String> getAvailableData(){
+        return vars_available.getModel();
     }
-    public void setSelectedData(ListModel list){
-        selectedList.setModel(list);
+    public void setSelectedData(ListModel<String> list){
+        vars_selected.setModel(list);
     }
     public String getGroupData(){
-        if(groupsComboBox.getSelectedIndex() == 0) return null;
-        else return (String) groupsComboBox.getSelectedItem();
+        if(var_group.getSelectedIndex() == 0) return null;
+        else return (String) var_group.getSelectedItem();
     }
     public String getSelectedGroup(){
-        if(groupsComboBox.getSelectedIndex() == 0) return null;
+        if(var_group.getSelectedIndex() == 0) return null;
 
-        return (String)groupsComboBox.getSelectedItem();
+        return (String)var_group.getSelectedItem();
     }
     public String[] getSelectedData(){
         //int selected[] = jList2.getModel();//getSelectedIndices();
-        DefaultListModel model = (DefaultListModel)selectedList.getModel();
+        DefaultListModel<String> model = (DefaultListModel<String>)vars_selected.getModel();
         String[] res = new String[model.size()];
         for(int i=0,m=model.size(); i<m; i++)
             res[i] = (String)model.getElementAt(i);
 
         return res;
     }
-    @SuppressWarnings("unchecked")
-    private void initComponents() {
 
-        labAvailable = new javax.swing.JLabel();
-        labSelected = new javax.swing.JLabel();
-        toSelectScrollPane = new javax.swing.JScrollPane();
-        toSelectList = new javax.swing.JList();
-        selectedScrollPane = new javax.swing.JScrollPane();
-        selectedList = new javax.swing.JList();
-        insertButton = new javax.swing.JButton();
-        removeButton = new javax.swing.JButton();
-        resetButton = new javax.swing.JButton();
-        groupsComboBox = new javax.swing.JComboBox();
-        labGroups = new javax.swing.JLabel();
+    private void initComponents(boolean groups) {
+        
+        setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints(0,0,1,1,0.5,1,GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(0,0,0,0), 40, 0);
+      
+        setBorder(BorderFactory.createTitledBorder("Select variables"));
+    
+        JPanel p_vars_available = new JPanel(new BorderLayout());
+        p_vars_available.setBorder(BorderFactory.createTitledBorder("Available"));
+        JPanel p_vars_controls = new JPanel();
+        p_vars_controls.setLayout(new BoxLayout(p_vars_controls, BoxLayout.Y_AXIS));
+        JPanel p_vars_selected = new JPanel(new BorderLayout());
+        p_vars_selected.setBorder(BorderFactory.createTitledBorder("Selected"));
 
-        setBorder(BorderFactory.createTitledBorder("Selected"));
+        
+        add(p_vars_available, c);
+        c.weightx = 0.2;
+        c.gridx = 1;
+        add(p_vars_controls, c);
+        c.weightx = 0.5;
+        c.gridx = 2;
+        add(p_vars_selected, c);
 
-        setSize(new Dimension(360, 350));
-        setMaximumSize(new Dimension(360, 350));
-        setPreferredSize(new Dimension(360, 350));
+        JScrollPane sp_vars_available = new JScrollPane();
+        sp_vars_available.setViewportView(vars_available);
+        p_vars_available.add(sp_vars_available, BorderLayout.CENTER);
 
-        labAvailable.setText("Available data:");
 
-        labSelected.setText("Selected data:");
+        JScrollPane sp_vars_selected = new JScrollPane();
+        sp_vars_selected.setViewportView(vars_selected);
+        p_vars_selected.add(sp_vars_selected, BorderLayout.CENTER);
 
-        toSelectScrollPane.setPreferredSize(new Dimension(120, 280));
-        toSelectScrollPane.setSize(new Dimension(120, 280));
+        if(groups){
+            JPanel groupPanel = new JPanel(new BorderLayout());
+            groupPanel.setBorder(BorderFactory.createTitledBorder("Group by"));
+            groupPanel.add(var_group);
+            p_vars_selected.add(groupPanel, BorderLayout.SOUTH);
+        }
 
-        toSelectList.addMouseListener(new MouseAdapter() {
+        p_vars_controls.add(Box.createRigidArea(new Dimension(10, 100)));
+
+        JButton insertButton = new JButton(">");
+        insertButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        p_vars_controls.add(insertButton);
+
+        JButton removeButton = new JButton("<");
+        removeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        p_vars_controls.add(removeButton);
+
+        p_vars_controls.add(Box.createRigidArea(new Dimension(10, 100)));
+
+        JButton resetButton = new JButton("Reset");
+        resetButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        p_vars_controls.add(resetButton);
+
+        /*
+        EVENTS
+        */
+        vars_available.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jList1MouseClicked(evt);
+                vars_available_MouseClicked(evt);
             }
         });
-        toSelectScrollPane.setViewportView(toSelectList);
 
-        selectedScrollPane.setPreferredSize(new java.awt.Dimension(120, 200));
-        selectedScrollPane.setSize(new java.awt.Dimension(120, 200));
-
-        selectedList.addMouseListener(new java.awt.event.MouseAdapter() {
+        vars_selected.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jList2MouseClicked(evt);
+                vars_selected_MouseClicked(evt);
             }
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jList2MousePressed(evt);
+                vars_selected_MousePressed(evt);
             }
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jList2MouseReleased(evt);
+                vars_selected_MouseReleased(evt);
             }
         });
-        selectedList.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        vars_selected.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             @Override
             public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jList2MouseDragged(evt);
+                vars_selected_MouseDragged(evt);
             }
         });
-        selectedScrollPane.setViewportView(selectedList);
-
-        insertButton.setText(">");
-        insertButton.setPreferredSize(new Dimension(50,30));
         insertButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 insertActionPerformed(evt);
             }
         });
-
-        removeButton.setText("<");
-        removeButton.setPreferredSize(new Dimension(50,30));
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeActionPerformed(evt);
             }
         });
-
-        resetButton.setText("Reset");
         resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetActionPerformed(evt);
             }
         });
-        groupsComboBox.setPreferredSize(new Dimension(120, 24));
-        groupsComboBox.setModel(new DefaultComboBoxModel(new String[] { "<No groups>" }));
+    }
 
-        labGroups.setText("Groups:");
-
-
-        //this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        this.setLayout(new BorderLayout());
-
-        JPanel left = new JPanel();
-        left.setPreferredSize(new Dimension(140,250));
-        left.setSize(new Dimension(140,250));
-        left.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));//new BoxLayout(left, BoxLayout.PAGE_AXIS));
-        JPanel center = new JPanel();        
-
-        center.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));        
-        //center.setLayout(new FlowLayout(FlowLayout.CENTER));
-        center.setPreferredSize(new Dimension(60,250));
-        center.setSize(new Dimension(60,250));
-
-        JPanel spacing = new JPanel();
-        spacing.setPreferredSize(new Dimension(60,100));
-        
-        JPanel right = new JPanel();
-        right.setPreferredSize(new Dimension(140,250));
-        right.setSize(new Dimension(140,250));
-        right.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));//new BoxLayout(right, BoxLayout.PAGE_AXIS));
-
-
-        left.add(labAvailable);
-        left.add(toSelectScrollPane);
-
-        center.add(spacing);
-        center.add(insertButton);
-        center.add(removeButton);
-
-        right.add(labSelected);
-        right.add(selectedScrollPane);
-        right.add(labGroups);
-        right.add(groupsComboBox);
-        right.add(resetButton);
-
-        this.add(center,BorderLayout.CENTER);
-        this.add(left,BorderLayout.WEST);
-        this.add(right,BorderLayout.EAST);
-        //this.add(left);
-        //this.add(center);
-        //this.add(right);
-        
-    }// </editor-fold>
-
-    private void jList2MousePressed(java.awt.event.MouseEvent evt) {
-        pressIndex = selectedList.locationToIndex(evt.getPoint());
+    private void vars_selected_MousePressed(java.awt.event.MouseEvent evt) {
+        pressIndex = vars_selected.locationToIndex(evt.getPoint());
 
     }
 
-    private void jList2MouseReleased(java.awt.event.MouseEvent evt) {
-        releaseIndex = selectedList.locationToIndex(evt.getPoint());
+    private void vars_selected_MouseReleased(java.awt.event.MouseEvent evt) {
+        releaseIndex = vars_selected.locationToIndex(evt.getPoint());
         if (releaseIndex != pressIndex && releaseIndex != -1) {
             reorder();
         }
     }
 
-    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {
+    private void vars_available_MouseClicked(java.awt.event.MouseEvent evt) {
         if (evt.getClickCount() == 2){
-            int index = toSelectList.locationToIndex(evt.getPoint());
+            int index = vars_available.locationToIndex(evt.getPoint());
 
-            DefaultListModel model1 = (DefaultListModel) toSelectList.getModel();
-            DefaultListModel model2 = (DefaultListModel) selectedList.getModel();
+            DefaultListModel<String> model1 = (DefaultListModel<String>) vars_available.getModel();
+            DefaultListModel<String> model2 = (DefaultListModel<String>) vars_selected.getModel();
 
-            Object dragee = model1.elementAt(index);
+            String dragee = model1.elementAt(index);
             model1.removeElementAt(index);
             model2.insertElementAt(dragee,model2.getSize());
         }
     }
 
-    private void jList2MouseClicked(java.awt.event.MouseEvent evt) {
+    private void vars_selected_MouseClicked(java.awt.event.MouseEvent evt) {
         if (evt.getClickCount() == 2){
-            int index = selectedList.locationToIndex(evt.getPoint());
+            int index = vars_selected.locationToIndex(evt.getPoint());
 
-            DefaultListModel model1 = (DefaultListModel) toSelectList.getModel();
-            DefaultListModel model2 = (DefaultListModel) selectedList.getModel();
+            DefaultListModel<String> model1 = (DefaultListModel<String>) vars_available.getModel();
+            DefaultListModel<String> model2 = (DefaultListModel<String>) vars_selected.getModel();
 
-            Object dragee = model2.elementAt(index);
+            String dragee = model2.elementAt(index);
             model2.removeElementAt(index);
             model1.insertElementAt(dragee, model1.getSize());
         }
     }
 
-    private void jList2MouseDragged(java.awt.event.MouseEvent evt) {
-        jList2MouseReleased(evt);
+    private void vars_selected_MouseDragged(java.awt.event.MouseEvent evt) {
+        vars_selected_MouseReleased(evt);
         pressIndex = releaseIndex;
     }
 
     private void resetActionPerformed(java.awt.event.ActionEvent evt) {
-        setDataLists(df_instance, null);
-//        DefaultListModel model1 = new DefaultListModel();
-//        for(int i=0; i< variables.length; i++){
-//            model1.addElement(variables[i]);
-//        }
-//        toSelectList.setModel(model1);
-//        DefaultListModel model2 = new DefaultListModel();
-//        selectedList.setModel(model2);
+        setDataLists(df_instance);
     }
 
     private void insertActionPerformed(java.awt.event.ActionEvent evt) {
-        int index[] = toSelectList.getSelectedIndices();
+        int index[] = vars_available.getSelectedIndices();
 
-        DefaultListModel model1 = (DefaultListModel) toSelectList.getModel();
-        DefaultListModel model2 = (DefaultListModel) selectedList.getModel();
+        DefaultListModel<String> model1 = (DefaultListModel<String>) vars_available.getModel();
+        DefaultListModel<String> model2 = (DefaultListModel<String>) vars_selected.getModel();
 
         int from = model2.getSize();
         for(int i=index.length-1; i>=0; i--){
-            Object ee = model1.elementAt(index[i]);
+            String ee = model1.elementAt(index[i]);
             model1.removeElementAt(index[i]);
             model2.insertElementAt(ee, from);
         }
     }
 
     private void removeActionPerformed(java.awt.event.ActionEvent evt) {
-        int index[] = selectedList.getSelectedIndices();
+        int index[] = vars_selected.getSelectedIndices();
 
-        DefaultListModel model1 = (DefaultListModel) toSelectList.getModel();
-        DefaultListModel model2 = (DefaultListModel) selectedList.getModel();
+        DefaultListModel<String> model1 = (DefaultListModel<String>) vars_available.getModel();
+        DefaultListModel<String> model2 = (DefaultListModel<String>) vars_selected.getModel();
 
         int from = model1.getSize();
         for(int i=index.length-1; i>=0; i--){
-            Object ee = model2.elementAt(index[i]);
+            String ee = model2.elementAt(index[i]);
             model2.removeElementAt(index[i]);
             model1.insertElementAt(ee, from);
         }
     }
 
-
-    // Variables declaration - do not modify
-    private javax.swing.JButton insertButton;
-    private javax.swing.JButton removeButton;
-    private javax.swing.JButton resetButton;
-    private javax.swing.JComboBox groupsComboBox;
-    private javax.swing.JLabel labAvailable;
-    private javax.swing.JLabel labSelected;
-    private javax.swing.JLabel labGroups;
-    private javax.swing.JList toSelectList;
-    private javax.swing.JList selectedList;
-    private javax.swing.JScrollPane toSelectScrollPane;
-    private javax.swing.JScrollPane selectedScrollPane;
-    // End of variables declaration
-
-    public void setSelectedName(String data1) {
+    /*public void setSelectedName(String data1) {
         this.labSelected.setText(data1);
-    }
+    }*/
 
 }
