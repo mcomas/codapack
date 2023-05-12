@@ -48,12 +48,12 @@ import javax.swing.JPanel;
  */
 public abstract class AbstractMenuDialog extends JDialog{
     DataSelector ds;
-    DataFrameSelector dfs;
+    DataFrame df;
     
     public JPanel optionsPanel = new JPanel();;
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     CoDaPackMain mainApplication;
-    ImportRDA imp_df;
+    //ImportRDA imp_df;
     boolean allowEmpty = false;
     String variables[];
     String yamlFile; // variable que serveix per el path del fitxer yaml
@@ -67,15 +67,15 @@ public abstract class AbstractMenuDialog extends JDialog{
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups){
         super(mainApp, title);
         mainApplication = mainApp;
-        dfs = null;               
-        ds = new DataSelector(mainApplication.getActiveDataFrame(), groups);
+        this.df = mainApplication.getActiveDataFrame();
+        this.ds = new DataSelector(df, groups);
         initialize();
     }
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, int variable_type){
         super(mainApp, title);
         mainApplication = mainApp;
-        dfs = null;               
-        ds = new DataSelector(mainApplication.getActiveDataFrame(), groups, variable_type);
+        this.df = mainApplication.getActiveDataFrame();              
+        this.ds = new DataSelector(df, groups, variable_type);
         initialize();
     }
     /*
@@ -146,7 +146,6 @@ public abstract class AbstractMenuDialog extends JDialog{
         setSize(WIDTH,HEIGHT);
 
         if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);
-        else if (dfs!=null) getContentPane().add(dfs, BorderLayout.CENTER);
 
         optionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
         optionsPanel.setPreferredSize(new Dimension(250,200));
@@ -165,9 +164,9 @@ public abstract class AbstractMenuDialog extends JDialog{
         JButton cancelButton = new JButton("Cancel");
         southPanel.add(cancelButton);
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dispose();
+                //dispose();
+                setVisible(false);
             }
         });
         JButton helpButton = new JButton("Help");
@@ -215,14 +214,12 @@ public abstract class AbstractMenuDialog extends JDialog{
             super.setVisible(v);
         }
     }
-    public void setVisible(boolean v, boolean b){
+    /*public void setVisible(boolean v, boolean b){
         if (b==true && v==true) super.setVisible(v);
         else if (b==false && v==false) super.setVisible(v);
-    }
+    }*/
     public abstract void acceptButtonActionPerformed();
-    public DataFrameSelector getDFS() {
-        return dfs;
-    }
+
     /* 
     public void setSelectedDataName(String data1){
         ds.setSelectedName(data1);
@@ -274,7 +271,9 @@ public abstract class AbstractMenuDialog extends JDialog{
 
         return selection;
     }
-
+    public DataFrame getDataFrame(){
+        return(df);
+    }
     public void closeMenuDialog(){        
         setVisible(false);
     }
@@ -284,9 +283,9 @@ public abstract class AbstractMenuDialog extends JDialog{
     public String[] getSelectedData(){
         return ds.getSelectedData();
     }
-    public ImportRDA getRDA() {
+    /*public ImportRDA getRDA() {
         return imp_df;
-    }
+    }*/
 }
 
 

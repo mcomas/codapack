@@ -175,6 +175,25 @@ public class BasicStats {
         }
         return percentile;
     }
+    public static double min(double[][] data){
+        double minV = Double.MAX_VALUE;
+        for(int i=0;i<data.length;i++){
+            for(int j = 0;j<data[i].length;j++){
+                if(data[i][j] > 0 & data[i][j] < minV) minV = data[i][j];
+            }
+        }
+        return(minV);
+    }
+    public static double[] colMin(double[][] data){
+        double minV[] = new double[data.length];
+        Arrays.fill(minV, Double.MAX_VALUE);
+        for(int i=0;i<data.length;i++){
+            for(int j = 0;j<data[i].length;j++){
+                if(data[i][j] > 0 & data[i][j] < minV[i]) minV[i] = data[i][j];
+            }
+        }
+        return(minV);
+    }
     /**
      *
      * @param data

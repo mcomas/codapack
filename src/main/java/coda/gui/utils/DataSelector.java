@@ -154,6 +154,7 @@ public final class DataSelector extends JPanel {
 
         variables = new String[dataFrame.size()];
         //Iterator it = dataFrame.getNamesIterator();
+        var_group.addItem("");
         int i = -1;
         for(String name : dataFrame.getNames()){
             //variables[++i] = name;

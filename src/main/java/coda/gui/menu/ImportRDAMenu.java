@@ -96,9 +96,8 @@ public class ImportRDAMenu extends AbstractMenuDialog{
     @Override
     public void acceptButtonActionPerformed() {
         //Guardem el nom de les columnes seleccionades en una taula d'strings
-        dfs = super.getDFS();
-        sel_names = dfs.getSelectedData();
-
+       
+        sel_names = ds.getSelectedData();
         if (sel_names.length > 0) {
             //Copiem els valors de prefix i suffix
             prefix = usedPrefix.getText();
@@ -111,7 +110,7 @@ public class ImportRDAMenu extends AbstractMenuDialog{
             } catch (DataFrame.DataFrameException ex) {
                 Logger.getLogger(ImportRDAMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
-            setVisible(false, false);
+            //setVisible(false, false);
             //Carreguem els dataframes seleccionats
             for (DataFrame dataf : sel_dfs) {
                 mainApplication.addDataFrameRDR(dataf);

@@ -188,6 +188,10 @@ public class CoDaPackConf {
     }
 
     public static String workingDir = System.getProperty("user.dir");
+    public static String usrFile(String fname) {
+        return (Paths.get(workingDir, fname).toString());
+    }
+
     public static String codapackDir = ".";
     public static String refusedVersion = CoDaVersion;
     public static String rScriptPath = getRScriptDefaultPath() + "/";
@@ -296,7 +300,7 @@ public class CoDaPackConf {
         return ouputColor;
     }
 
-    public static String configurationFile = tmpFile(".codapack");
+    public static String configurationFile = usrFile(".codapack");
 
     public static void saveConfiguration() {
         try {

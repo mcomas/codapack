@@ -109,7 +109,7 @@ public final class CoDaPackMain extends JFrame {
     public static String[] Rargs = {"--no-save" }; // {"--vanilla" };
     public static Rengine re = new Rengine(Rargs, false, null);
 
-    private JComboBox dataFrameSelector;
+    private JComboBox<String> dataFrameSelector;
     private final DataFrameSelectorListener dataFrameListener = new DataFrameSelectorListener();
 
     String ArchiuSeleccionat;
@@ -441,7 +441,7 @@ public final class CoDaPackMain extends JFrame {
                 // menú
                 ImportRDAMenu imprdam = new ImportRDAMenu(this, chooseFile, impdf);
                 // Fem el menú visible
-                imprdam.setVisible(true, true);
+                //imprdam.setVisible(true, true);
 
             }
             // Copiem la ruta per recordar-la
@@ -940,9 +940,11 @@ public final class CoDaPackMain extends JFrame {
                 advancedFilterMenu = new AdvancedFilterMenu(this, re);
             advancedFilterMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_SETDETECTION)) {
-            if (setDetectionLimitMenu == null || setDetectionLimitMenu.getDataFrame() != this.getActiveDataFrame()
-                    || !setDetectionLimitMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
+            if(setDetectionLimitMenu == null ||
+               !setDetectionLimitMenu.getDataFrame().getName().equals(getActiveDataFrame().name)){
+                System.out.println("setDetectionLimit created");
                 setDetectionLimitMenu = new SetDetectionLimitMenu(this);
+               }
             setDetectionLimitMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_CHANGE_CAT_NAME_GROUP)) {
             System.out.println("ITEM_CHANGE_CAT_NAME_GROUP");
@@ -977,8 +979,8 @@ public final class CoDaPackMain extends JFrame {
                 scatterplotMenu = new ScatterplotMenu(this, re);
             scatterplotMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_ZPATTERNS)) {
-            if (zpatternsMenu == null || zpatternsMenu.getDataFrame() != this.getActiveDataFrame()
-                    || !zpatternsMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
+            /*if (zpatternsMenu == null || zpatternsMenu.getDataFrame() != this.getActiveDataFrame()
+                    || !zpatternsMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))*/
                 zpatternsMenu = new ZpatternsMenu(this, re);
             zpatternsMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_GEO_MEAN_PLOT)) {
@@ -1115,7 +1117,7 @@ public final class CoDaPackMain extends JFrame {
 
     public class DataFrameSelectorListener implements ItemListener {
         public void itemStateChanged(ItemEvent ie) {
-            JComboBox combo = (JComboBox) ie.getSource();
+            JComboBox<String> combo = (JComboBox<String>) ie.getSource();
             if (activeDataFrame != combo.getSelectedIndex()) {
                 activeDataFrame = combo.getSelectedIndex();
                 dataList.setData(dataFrame.get(activeDataFrame));
@@ -1135,7 +1137,7 @@ public final class CoDaPackMain extends JFrame {
         System.out.println("Current JVM version - " + System.getProperty("java.version"));
         //re.eval("library(coda.base, lib.loc='Rlibraries')");
         //re.eval("library(zCompositions, lib.loc='Rlibraries')");
-        //re.eval("options(width=120)");
+        re.eval("options(width=10000)");
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {
@@ -1156,12 +1158,13 @@ public final class CoDaPackMain extends JFrame {
          * Congifuration file creation if it not exists. Using static class CoDaPackConf
          */
         File f = new File(CoDaPackConf.configurationFile);
-        if (f.exists())
+        System.out.println("Configuration file: " + f.getAbsolutePath());
+        if (f.exists()){            
             CoDaPackConf.loadConfiguration();
         // CoDaPackConf.saveConfiguration();
-        else
+        }else{
             CoDaPackConf.saveConfiguration();
-
+        }
         /*
          * CoDaPack connects to IMA server through a thread. Avoiding problems in IMA
          * server
