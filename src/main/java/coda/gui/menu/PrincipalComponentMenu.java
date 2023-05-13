@@ -32,6 +32,7 @@ import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputTableTwoEntries;
+import coda.gui.utils.DataSelector;
 import coda.plot.PrincipalComponent2dDisplay.PrincipalComponent2dBuilder;
 import coda.plot.PrincipalComponent3dDisplay.PrincipalComponent3dBuilder;
 import coda.plot.window.CoDaPlotWindow;
@@ -54,7 +55,7 @@ public class PrincipalComponentMenu extends AbstractMenuDialog{
     ArrayList<String> names;
 
     public PrincipalComponentMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Principal Component Menu", true);
+        super(mainApp, "Principal Component Menu", new DataSelector(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }

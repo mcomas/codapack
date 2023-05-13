@@ -22,6 +22,8 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public ZeroReplacementMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Non-parametric multiplicative zero replacement Menu", false);
+        super(mainApp, "Non-parametric multiplicative zero replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
         
         usedPercentatgeDL =  new JTextField(5);
         usedPercentatgeDL.setText("0.65");

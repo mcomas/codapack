@@ -34,6 +34,7 @@ import coda.gui.output.OutputILRPartition;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputVector;
 import coda.gui.utils.BinaryPartitionSelect;
+import coda.gui.utils.DataSelector;
 import coda.plot.DendrogramDisplay.DendrogramBuilder;
 import coda.plot.window.DendrogramWindow;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class DendrogramMenu extends AbstractMenuDialogWithILR{
     private static final String helpTitle = "Balance Dendogram Help Menu";
     
     public DendrogramMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Balance Dendrogram Menu", true);
+        super(mainApp, "Balance Dendrogram Menu", new DataSelector(mainApp.getActiveDataFrame(), true));
         super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");

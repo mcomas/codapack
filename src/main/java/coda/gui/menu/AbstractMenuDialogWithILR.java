@@ -25,6 +25,8 @@
 package coda.gui.menu;
 
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector;
+
 import java.util.StringTokenizer;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -41,8 +43,8 @@ public abstract class AbstractMenuDialogWithILR extends AbstractMenuDialog{
     JTextArea areaPart = new JTextArea(5, 5);
     JRadioButton part;
     JRadioButton base;
-    public AbstractMenuDialogWithILR(CoDaPackMain main, String text, boolean groups){
-        super(main,text, groups);
+    public AbstractMenuDialogWithILR(CoDaPackMain main, String text, DataSelector dataSelector){
+        super(main,text, dataSelector);
         optionsPanel.add(new JLabel("Defined partition:"));
         JScrollPane jScrollPane1 = new JScrollPane();
         jScrollPane1.setPreferredSize(new java.awt.Dimension(185, 150));

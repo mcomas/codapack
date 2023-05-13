@@ -56,21 +56,21 @@ public abstract class AbstractMenuDialog extends JDialog{
     //ImportRDA imp_df;
     boolean allowEmpty = false;
     String variables[];
+
     String yamlFile; // variable que serveix per el path del fitxer yaml
     String helpTitle; // variable per el titol del menu
+
     int WIDTH = 650; //560;
     int HEIGHT = 500; //430;
-    /*public AbstractMenuDialog(final CoDaPackMain mainApp, String title){
-        super(mainApp, title);        
-    }*/
     
-    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups){
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, DataSelector dataSelector){
         super(mainApp, title);
         mainApplication = mainApp;
         this.df = mainApplication.getActiveDataFrame();
-        this.ds = new DataSelector(df, groups);
+        this.ds = dataSelector;
         initialize();
     }
+    /*
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, int variable_type){
         super(mainApp, title);
         mainApplication = mainApp;
@@ -78,6 +78,7 @@ public abstract class AbstractMenuDialog extends JDialog{
         this.ds = new DataSelector(df, groups, variable_type);
         initialize();
     }
+    */
     /*
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty, boolean categoric){
         super(mainApp, title);
@@ -135,7 +136,7 @@ public abstract class AbstractMenuDialog extends JDialog{
         initialize();
     }*/
     
-    private void initialize(){
+    protected void initialize(){
         Point p = mainApplication.getLocation();
         p.x = p.x + (mainApplication.getWidth()-520)/2;
         p.y = p.y + (mainApplication.getHeight()-430)/2;

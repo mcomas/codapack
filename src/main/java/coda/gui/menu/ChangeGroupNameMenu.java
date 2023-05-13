@@ -44,7 +44,7 @@ public class ChangeGroupNameMenu extends AbstractMenuDialog{
     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     
     public ChangeGroupNameMenu(final CoDaPackMain mainApp){
-        super(mainApp,"Change Categorical Label Menu", false, DataSelector.ONLY_CATEGORIC);
+        super(mainApp,"Change Categorical Label Menu", new DataSelector(mainApp.getActiveDataFrame(), false, DataSelector.ONLY_CATEGORIC));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }

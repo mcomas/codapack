@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package coda.gui.menu;
 
 import coda.BasicStats;
@@ -11,65 +6,40 @@ import coda.Variable;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
-import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import coda.gui.utils.DataSelector;
+
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 import org.apache.batik.swing.JSVGCanvas;
 
-/**
- * ZpatternsMenu -> X numerica i Y numerica positiva amb opci� de retornar text, crear dataframe, afegir variables i  mostrar grafics
- * @author Guest2
- */
-public class ZpatternsMenu extends AbstractMenuDialog{
+
+public class ZeroPatternsMenu extends AbstractMenuRBasedDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.zPatterns.yaml";
     private static final String helpTitle = "zPatterns Help Menu";
     Rengine re;
-
-    DataFrame df;
     
     JCheckBox B1 = new JCheckBox("Include means");
     JCheckBox B2 = new JCheckBox("Include %");
     JCheckBox B3 = new JCheckBox("Add pattern", true);
     
+    // It should be common to all R calling AbstractRBasedMenuDialog
     String script_file = "zpatterns.R";
     int PLOT_WIDTH = 850;
     int PLOT_HEIGHT = 500;
     
-    public ZpatternsMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Zpatterns Plot Menu",false);
+    public ZeroPatternsMenu(final CoDaPackMain mainApp, Rengine r){
+        super(mainApp,"Zpatterns Plot Menu", new DataSelector(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
@@ -298,9 +268,7 @@ public class ZpatternsMenu extends AbstractMenuDialog{
 
     }
 */
-    public DataFrame getDataFrame() {
-        return this.df;
-    }
+
     
     /*public ArrayList<String> getDataFrameNames(){
         return this.names;

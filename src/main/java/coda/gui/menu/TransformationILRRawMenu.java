@@ -23,6 +23,8 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector;
+
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -39,7 +41,7 @@ public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
     ArrayList<String> names;
 
     public TransformationILRRawMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ILR-Raw Transform Menu", false);
+        super(mainApp, "ILR-Raw Transform Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");

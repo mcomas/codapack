@@ -22,6 +22,7 @@ package coda.gui.menu;
 import coda.*;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -34,17 +35,17 @@ import javax.swing.*;
  *
  * @author david
  */
-public class SetDetectionLimitMenu extends AbstractMenuDialog{
+public class ZeroDetectionLimitMenu extends AbstractMenuDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Set Detection Limit.yaml";
     private static final String helpTitle = "Set Detection Limit Help";
-      
+    
     JRadioButton B1 = new JRadioButton("Detection Limit", true);
     JTextField P1 = new JTextField("0.01", 5);
     JRadioButton B2 = new JRadioButton("Column minimum");
     JRadioButton B3 = new JRadioButton("Overall minimum");
     
-    public SetDetectionLimitMenu(CoDaPackMain mainApp) {
-        super(mainApp, "Set Detection Limit", false);
+    public ZeroDetectionLimitMenu(CoDaPackMain mainApp) {
+        super(mainApp, "Set Detection Limit", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));

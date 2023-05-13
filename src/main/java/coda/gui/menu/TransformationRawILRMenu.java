@@ -25,6 +25,8 @@ import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputILRPartition;
 import coda.gui.utils.BinaryPartitionSelect;
+import coda.gui.utils.DataSelector;
+
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -41,7 +43,7 @@ public class TransformationRawILRMenu extends AbstractMenuDialogWithILR{
     ArrayList<String> names;
 
     public TransformationRawILRMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Raw-ILR Transform Menu", false);
+        super(mainApp, "Raw-ILR Transform Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");

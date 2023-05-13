@@ -14,6 +14,8 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import coda.gui.utils.DataSelector;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -47,7 +49,7 @@ import org.rosuda.JRI.Rengine;
  * EM_MissingMenu -> X numerica i positiva amb opci� de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class EM_MissingMenu extends AbstractMenuDialog{
+public class MissingEMMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
@@ -68,8 +70,8 @@ public class EM_MissingMenu extends AbstractMenuDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Logratio-EM missing Replacement.yaml";
     private static final String helpTitle = "Logratio-EM missing replacement Help Menu";
     
-    public EM_MissingMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Logratio-EM missing replacement Menu", false);
+    public MissingEMMenu(final CoDaPackMain mainApp, Rengine r){
+        super(mainApp, "Logratio-EM missing replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         

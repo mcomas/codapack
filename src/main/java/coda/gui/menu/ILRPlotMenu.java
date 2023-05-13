@@ -30,6 +30,7 @@ import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputILRPartition;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.utils.BinaryPartitionSelect;
+import coda.gui.utils.DataSelector;
 import coda.plot.RealPlot2dDisplay.RealPlot2dBuilder;
 import coda.plot.RealPlot3dDisplay.RealPlot3dBuilder;
 import coda.plot.window.CoDaPlotWindow;
@@ -45,7 +46,7 @@ public class ILRPlotMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
 
     public ILRPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ILR Plot Menu", true);
+        super(mainApp, "ILR Plot Menu", new DataSelector(mainApp.getActiveDataFrame(), true));
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");

@@ -33,6 +33,7 @@ import coda.plot.window.Biplot3dWindow;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputTableTwoEntries;
+import coda.gui.utils.DataSelector;
 import coda.plot.Biplot2dDisplay.Biplot2dBuilder;
 import coda.plot.Biplot3dDisplay.Biplot3dBuilder;
 import coda.plot.window.Biplot2dWindow;
@@ -55,7 +56,7 @@ public class Biplot3dMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public Biplot3dMenu(final CoDaPackMain mainApp){
-        super(mainApp, " CLR Biplot Menu", true);
+        super(mainApp, " CLR Biplot Menu", new DataSelector(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         coordinates = new JCheckBox("Add coordinates", false);

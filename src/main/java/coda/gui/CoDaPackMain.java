@@ -130,13 +130,13 @@ public final class CoDaPackMain extends JFrame {
     private CalculateNewVarMenu calculateNewVarMenu;
     private PerturbateDataMenu perturbateDataMenu;
     private PowerDataMenu powerDataMenu;
-    private SetDetectionLimitMenu setDetectionLimitMenu;
+    private ZeroDetectionLimitMenu setDetectionLimitMenu;
     private ZeroReplacementMenu zeroReplacementMenu;
     private ZeroReplacementRMenu zeroReplacementRMenu;
-    private EM_ZeroMenu logRatioEMMenu;
+    private ZeroEMMenu logRatioEMMenu;
     private BayesianMultRepMenu bayesianMultRepMenu;
-    private EM_MissingMenu EM_MissingMenu;
-    private EM_ZeroMissingMenu EM_ZeroMissingMenu;
+    private MissingEMMenu EM_MissingMenu;
+    private ZeroMissingEMMenu EM_ZeroMissingMenu;
     private SortDataMenu sortDataMenu;
     private FilterMenu filterMenu;
     private AdvancedFilterMenu advancedFilterMenu;
@@ -154,7 +154,7 @@ public final class CoDaPackMain extends JFrame {
     private PrincipalComponentMenu principalComponentMenu;
     private PredictiveRegionMenu predictiveRegionMenu;
     private ConfidenceRegionMenu confidenceRegionMenu;
-    private ZpatternsMenu zpatternsMenu;
+    private ZeroPatternsMenu zpatternsMenu;
     private BoxplotMenu boxplotMenu;
     private ScatterplotMenu scatterplotMenu;
     private GeoMeanPlotMenu geoMeanPlotMenu;
@@ -905,7 +905,7 @@ public final class CoDaPackMain extends JFrame {
             System.out.println("ITEM_LOG_RATIO");
             if (logRatioEMMenu == null || logRatioEMMenu.getDataFrame() != this.getActiveDataFrame()
                     || !logRatioEMMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                logRatioEMMenu = new EM_ZeroMenu(this, re);
+                logRatioEMMenu = new ZeroEMMenu(this, re);
             logRatioEMMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_BAYESIAN_MULT_REPLACE)) {
             if (bayesianMultRepMenu == null || bayesianMultRepMenu.getDataFrame() != this.getActiveDataFrame()
@@ -915,12 +915,12 @@ public final class CoDaPackMain extends JFrame {
         } else if (title.equals(jMenuBar.ITEM_EM_MISSING)) {
             if (EM_MissingMenu == null || EM_MissingMenu.getDataFrame() != this.getActiveDataFrame()
                     || !EM_MissingMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                EM_MissingMenu = new EM_MissingMenu(this, re);
+                EM_MissingMenu = new MissingEMMenu(this, re);
             EM_MissingMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_EM_ZERO_MISSING)) {
             if (EM_ZeroMissingMenu == null || EM_ZeroMissingMenu.getDataFrame() != this.getActiveDataFrame()
                     || !EM_ZeroMissingMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                EM_ZeroMissingMenu = new EM_ZeroMissingMenu(this, re);
+                EM_ZeroMissingMenu = new ZeroMissingEMMenu(this, re);
             EM_ZeroMissingMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_SORT_DATA)) {
             if (sortDataMenu == null || sortDataMenu.getDataFrame() != this.getActiveDataFrame()
@@ -943,7 +943,7 @@ public final class CoDaPackMain extends JFrame {
             if(setDetectionLimitMenu == null ||
                !setDetectionLimitMenu.getDataFrame().getName().equals(getActiveDataFrame().name)){
                 System.out.println("setDetectionLimit created");
-                setDetectionLimitMenu = new SetDetectionLimitMenu(this);
+                setDetectionLimitMenu = new ZeroDetectionLimitMenu(this);
                }
             setDetectionLimitMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_CHANGE_CAT_NAME_GROUP)) {
@@ -981,7 +981,7 @@ public final class CoDaPackMain extends JFrame {
         } else if (title.equals(jMenuBar.ITEM_ZPATTERNS)) {
             /*if (zpatternsMenu == null || zpatternsMenu.getDataFrame() != this.getActiveDataFrame()
                     || !zpatternsMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))*/
-                zpatternsMenu = new ZpatternsMenu(this, re);
+                zpatternsMenu = new ZeroPatternsMenu(this, re);
             zpatternsMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_GEO_MEAN_PLOT)) {
             if (geoMeanPlotMenu == null || geoMeanPlotMenu.getDataFrame() != this.getActiveDataFrame()

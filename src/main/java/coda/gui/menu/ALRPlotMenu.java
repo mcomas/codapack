@@ -29,6 +29,7 @@ import coda.DataFrame;
 import coda.Utils;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
+import coda.gui.utils.DataSelector;
 import coda.plot.RealPlot2dDisplay.RealPlot2dBuilder;
 import coda.plot.RealPlot3dDisplay.RealPlot3dBuilder;
 import coda.plot.window.CoDaPlotWindow;
@@ -43,7 +44,7 @@ public class ALRPlotMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
 
     public ALRPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ALR Plot Menu", true);
+        super(mainApp, "ALR Plot Menu", new DataSelector(mainApp.getActiveDataFrame(), true));
     }
     @Override
     public void acceptButtonActionPerformed() {

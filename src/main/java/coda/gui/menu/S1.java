@@ -14,6 +14,7 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
 import coda.gui.utils.BinaryPartitionSelect;
+import coda.gui.utils.DataSelector;
 import coda.gui.utils.FileNameExtensionFilter;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -73,7 +74,7 @@ public class S1 extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
     
     public S1(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "S1 menu", false);
+        super(mainApp, "S1 menu", new DataSelector(mainApp.getActiveDataFrame(), false));
         re = r;
         
         /* options configuration */

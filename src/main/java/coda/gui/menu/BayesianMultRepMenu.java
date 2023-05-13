@@ -14,6 +14,8 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import coda.gui.utils.DataSelector;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -69,7 +71,7 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Bayesian Multiplicative zero Replacement Help Menu";
     
     public BayesianMultRepMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Bayesian Multiplicative zero Replacement Menu", false);
+        super(mainApp, "Bayesian Multiplicative zero Replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         

@@ -31,6 +31,8 @@ import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputNormalityTest;
 import coda.gui.utils.BinaryPartitionSelect;
+import coda.gui.utils.DataSelector;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class NormalityTestMenu extends AbstractMenuDialogWithILR{
     private static final String helpTitle = "Log-Ratio Normality Test Help";
 
     public NormalityTestMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Log-Ratio Normality Test", false);
+        super(mainApp, "Log-Ratio Normality Test", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");

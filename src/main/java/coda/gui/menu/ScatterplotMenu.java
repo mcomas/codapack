@@ -14,6 +14,8 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputText;
+import coda.gui.utils.DataSelector;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -74,7 +76,7 @@ public class ScatterplotMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Scatterplot Help Menu";
     
     public ScatterplotMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Scatterplot Menu",true);
+        super(mainApp,"Scatterplot Menu",new DataSelector(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         

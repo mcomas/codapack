@@ -34,6 +34,8 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputSingleValue;
 import coda.gui.output.OutputText;
 import coda.gui.output.OutputVariationArray;
+import coda.gui.utils.DataSelector;
+
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -60,7 +62,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public CompStatsSummaryMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Numerical Summary", true);
+        super(mainApp, "Numerical Summary", new DataSelector(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         centerCheck = new JCheckBox("Center", true);

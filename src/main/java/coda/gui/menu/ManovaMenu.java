@@ -13,6 +13,8 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import coda.gui.utils.DataSelector;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -71,7 +73,7 @@ public class ManovaMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Manova Help Menu";
     
     public ManovaMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Manova Menu",true);
+        super(mainApp,"Manova Menu",new DataSelector(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         re = r;
@@ -319,7 +321,7 @@ public class ManovaMenu extends AbstractMenuDialog{
                     try {
                         img = ImageIO.read(new File(tempsDirR[position]));
                     } catch (IOException ex) {
-                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ZeroPatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     ImageIcon icon = new ImageIcon(img);
                     Image image = icon.getImage();

@@ -13,6 +13,8 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import coda.gui.utils.DataSelector;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -60,7 +62,7 @@ public class AtypMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Atipicality Index Help Menu";
     
     public AtypMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Atyp Menu", false);
+        super(mainApp, "Atyp Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         

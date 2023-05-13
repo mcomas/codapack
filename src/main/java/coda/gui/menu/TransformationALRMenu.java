@@ -22,6 +22,7 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector;
 import coda.gui.CoDaPackConf;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
@@ -45,7 +46,7 @@ public class TransformationALRMenu extends AbstractMenuDialog{
     ArrayList<String> names;
 
     public TransformationALRMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ALR Transform Menu", false);
+        super(mainApp, "ALR Transform Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JPanel opt = new JPanel();

@@ -30,8 +30,7 @@ import coda.ext.jama.Matrix;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
-
-
+import coda.gui.utils.DataSelector;
 import coda.plot2.PlotUtils;
 import coda.plot2.TernaryPlot2dDisplay;
 import coda.plot2.TernaryPlot3dDisplay;
@@ -65,7 +64,7 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public ConfidenceRegionMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Center Confidence Region Menu", true);//, false, true, false);
+        super(mainApp, "Center Confidence Region Menu", new DataSelector(mainApp.getActiveDataFrame(), true));//, false, true, false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         predLevel =  new JTextField("0.90 0.95 0.99", 14);

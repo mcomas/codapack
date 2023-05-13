@@ -28,6 +28,7 @@ import coda.DataFrame;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
+import coda.gui.utils.DataSelector;
 import coda.plot.window.CoDaPlotWindow;
 import coda.plot.window.TernaryPlot3dWindow;
 import coda.plot.TernaryPlot2dDisplay;
@@ -51,7 +52,7 @@ public class TernaryPlotMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public TernaryPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Ternary/Quaternary Plot Menu", true);//, false, true, false);
+        super(mainApp, "Ternary/Quaternary Plot Menu", new DataSelector(mainApp.getActiveDataFrame(), true));//, false, true, false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }

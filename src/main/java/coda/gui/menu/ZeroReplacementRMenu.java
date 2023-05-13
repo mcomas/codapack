@@ -23,6 +23,8 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class ZeroReplacementRMenu extends AbstractMenuDialog {
      */
     public ZeroReplacementRMenu(final CoDaPackMain mainApp, Rengine r) {
 
-        super(mainApp, "Non parametric zero replacement", false);
+        super(mainApp, "Non parametric zero replacement", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
 
