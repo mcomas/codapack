@@ -272,6 +272,10 @@ public abstract class AbstractMenuDialog extends JDialog{
 
         return selection;
     }
+    public void updateMenuDialog(){
+        df = mainApplication.getActiveDataFrame();
+        ds.updateDataLists(df);
+    }
     public DataFrame getDataFrame(){
         return(df);
     }
@@ -284,9 +288,6 @@ public abstract class AbstractMenuDialog extends JDialog{
     public String[] getSelectedData(){
         return ds.getSelectedData();
     }
-    /*public ImportRDA getRDA() {
-        return imp_df;
-    }*/
 }
 
 

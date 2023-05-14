@@ -17,6 +17,7 @@ import coda.gui.output.OutputText;
 import coda.gui.utils.DataSelector;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -29,6 +30,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -49,20 +53,10 @@ import org.rosuda.JRI.Rengine;
  * EM_MissingMenu -> X numerica i positiva amb opci� de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class MissingEMMenu extends AbstractMenuDialog{
+public class MissingEMMenu extends AbstractMenuRBasedDialog{
+
     
-    Rengine re;
-    DataFrame df;
-    JFrame frameEM_MissingMenu;
-    JFrame[] framesEM_MissingMenu;
-    JFileChooser chooser;
-    String tempDirR;
-    String[] tempsDirR;
-    ArrayList<String> names;
-    
-    /* options var */
-    
-    JCheckBox B1 = new JCheckBox("Robust");
+    JCheckBox P1 = new JCheckBox("Robust");
     //JTextField P1 = new JTextField(10);
     
     
@@ -71,21 +65,25 @@ public class MissingEMMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Logratio-EM missing replacement Help Menu";
     
     public MissingEMMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Logratio-EM missing replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Logratio-EM missing replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
-        re = r;
         
         /* options configuration */
+        this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
         
-        this.optionsPanel.add(B1);
-        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
+        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        PB1.setMaximumSize(new Dimension(1000, 32));
+        PB1.add(P1);
+
+        this.optionsPanel.add(Box.createRigidArea(new Dimension(15,15)));
+        this.optionsPanel.add(PB1);
     }
     
     @Override
     public void acceptButtonActionPerformed(){
         
         String rob = "FALSE";
-        if(B1.isSelected()) rob = "TRUE";
+        if(P1.isSelected()) rob = "TRUE";
 
         df = mainApplication.getActiveDataFrame();        
         String sel_names[] = super.ds.getSelectedData();
@@ -133,14 +131,5 @@ public class MissingEMMenu extends AbstractMenuDialog{
             JOptionPane.showMessageDialog(null,"Please select at least two columns");
         }
     }
-    
-
-    public DataFrame getDataFrame() {
-        return this.df;
-    }
-    
-    public ArrayList<String> getDataFrameNames(){
-        return this.names;
-    }
-    
+        
 }

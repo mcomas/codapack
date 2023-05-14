@@ -51,17 +51,27 @@ public class ZeroDetectionLimitMenu extends AbstractMenuDialog{
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
 
         JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        PB1.setMaximumSize(new Dimension(1000, 32));
         PB1.add(B1);
+        PB1.add(Box.createHorizontalStrut(10));
         PB1.add(P1);
-        PB1.setMaximumSize(new Dimension(1000, 30));
+
+        JPanel PB2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        PB2.setMaximumSize(new Dimension(1000, 32));
+        PB2.add(B2);
+
+        JPanel PB3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        PB3.setMaximumSize(new Dimension(1000, 32));
+        PB3.add(B3);
+
         PB1.setAlignmentX(0);
-        B2.setAlignmentX(0);
-        B3.setAlignmentX(0);
+        PB2.setAlignmentX(0);
+        PB3.setAlignmentX(0);
         
         this.optionsPanel.add(Box.createRigidArea(new Dimension(15,15)));
         this.optionsPanel.add(PB1);
-        this.optionsPanel.add(B2);
-        this.optionsPanel.add(B3);
+        this.optionsPanel.add(PB2);
+        this.optionsPanel.add(PB3);
 
         ButtonGroup group = new ButtonGroup();
         group.add(B1);

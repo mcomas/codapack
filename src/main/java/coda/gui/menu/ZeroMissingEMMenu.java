@@ -6,43 +6,23 @@
 package coda.gui.menu;
 
 import coda.BasicStats;
-import coda.DataFrame;
-import coda.Variable;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import static coda.gui.CoDaPackMain.outputPanel;
-import coda.gui.output.OutputElement;
-import coda.gui.output.OutputForR;
-import coda.gui.output.OutputText;
 import coda.gui.utils.DataSelector;
 
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.Toolkit;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Vector;
+
 import javax.swing.Box;
-import javax.swing.ImageIcon;
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -50,71 +30,68 @@ import org.rosuda.JRI.Rengine;
  * @author Guest2
  */
 public class ZeroMissingEMMenu extends AbstractMenuDialog{
-    
-    Rengine re;
-    DataFrame df;
-    JFrame frameEM_ZeroMissingMenu;
-    JFrame[] framesEM_ZeroMissingMenu;
-    JFileChooser chooser;
-    String tempDirR;
-    String[] tempsDirR;
-    ArrayList<String> names;
-    
-    /* options var */
-    
-    JTextField DLProportion = new JTextField("0.65");
-    double percentatgeDL = 0.65;
-    
-    JCheckBox robOption = new JCheckBox("Robust");
-    String[] iniCovOptions = {"multRepl","complete.obs"};
-    JComboBox<String> iniCovList = new JComboBox<String>(iniCovOptions);
-
-    //JCheckBox performMax;
-    //JLabel lmax = new JLabel("Use minimum on detection limit");    
-    JTextField dlProportion = new JTextField(5);
-    
-    public static final long serialVersionUID = 1L;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Logratio-EM Zero-Missing Replacement.yaml";
     private static final String helpTitle = "Logratio-EM zero & missing replacement Help Menu";
+    Rengine re;
     
+    JCheckBox P1 = new JCheckBox("Robust");
+
+    String[] iniCovOptions = {"multRepl","complete.obs"};
+    JComboBox<String> B1 = new JComboBox<String>(iniCovOptions); 
+    
+    JTextField B2 = new JTextField("0.65", 5);
+    
+    public static final long serialVersionUID = 1L;
+   
     public ZeroMissingEMMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Logratio-EM zero & missing replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         /* options configuration */
+        this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
+
+        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        PB1.setMaximumSize(new Dimension(1000, 32));
+        PB1.add(P1);
+
+
+        JPanel PB2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        PB2.setMaximumSize(new Dimension(1000, 32));
+        PB2.add(new JLabel("IniCov"));
+        PB2.add(Box.createHorizontalStrut(10));
+        PB2.add(B1);
         
-        optionsPanel.add(robOption);
-        JPanel covPanel = new JPanel();
-        covPanel.add(new JLabel("IniCov"));
-        covPanel.add(iniCovList);
-        optionsPanel.add(covPanel);
-        
-        
-        iniCovList.addActionListener(new ActionListener(){
+        JPanel PB3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        PB3.setMaximumSize(new Dimension(1000, 32));        
+        PB3.add(new JLabel("DL proportion"));  
+        PB3.add(Box.createHorizontalStrut(10));
+        PB3.add(B2);
+
+        PB1.setAlignmentX(0);
+        PB2.setAlignmentX(0);
+        PB3.setAlignmentX(0);
+
+        this.optionsPanel.add(Box.createRigidArea(new Dimension(15,15)));
+        optionsPanel.add(PB1);
+        optionsPanel.add(PB2);
+        optionsPanel.add(PB3);
+  
+        B1.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
                 JComboBox comboBox = (JComboBox) event.getSource();
                 Object selected = comboBox.getSelectedItem();
                 if(selected.toString().equals("multRepl")){
-                    dlProportion.setEnabled(true);
+                    B2.setEnabled(true);
+                    PB3.setVisible(true);
                 }
                 else{
-                    dlProportion.setEnabled(false);
+                    B2.setEnabled(false);
+                    PB3.setVisible(false);
                 }
             }
         });
-        JPanel dlPanel = new JPanel();
-        dlPanel.add(new JLabel("DL proportion"));  
-        dlProportion.setText("0.65");
-        dlProportion.setEnabled(true);
-        dlPanel.add(dlProportion);
-        optionsPanel.add(iniCovList);
 
-        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
-        //performMax = new JCheckBox("Min result", false);
-        //performMax.setSelected(true);
-        //optionsPanel.add(lmax);
-        //optionsPanel.add(performMax);
     }
     
     @Override
@@ -122,9 +99,9 @@ public class ZeroMissingEMMenu extends AbstractMenuDialog{
         
         // Geting options
         String rob = "FALSE";
-        if(robOption.isSelected()) rob = "TRUE";
-        String iniCov = iniCovList.getSelectedItem().toString();
-        String fracDL = dlProportion.getText();
+        if(P1.isSelected()) rob = "TRUE";
+        String iniCov = B1.getSelectedItem().toString();
+        String fracDL = B2.getText();
 
         df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData();
@@ -184,14 +161,6 @@ public class ZeroMissingEMMenu extends AbstractMenuDialog{
         else{
             JOptionPane.showMessageDialog(null,"Please select data");
         }
-    }
-
-    public DataFrame getDataFrame(){
-        return this.df;
-    }
-    
-    public ArrayList<String> getDataFrameNames(){
-        return this.names;
     }
     
 }

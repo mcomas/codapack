@@ -30,6 +30,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -59,7 +63,6 @@ public final class DataSelector extends JPanel {
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
     int releaseIndex = -1;
-    String variables[];
     boolean groupedBy = true;
 
     int selection_type = ONLY_NUMERIC;
@@ -152,12 +155,9 @@ public final class DataSelector extends JPanel {
         DefaultListModel<String> model1 = new DefaultListModel<String>();
         DefaultListModel<String> model2 = new DefaultListModel<String>();
 
-        variables = new String[dataFrame.size()];
-        //Iterator it = dataFrame.getNamesIterator();
         var_group.addItem("");
-        int i = -1;
+        int i = 0;
         for(String name : dataFrame.getNames()){
-            //variables[++i] = name;
             Variable variable = dataFrame.get(name);
             if(variable.isText()){
                 var_group.addItem(name);
@@ -171,6 +171,43 @@ public final class DataSelector extends JPanel {
             }
             
         }
+        vars_available.setModel(model1);
+        vars_selected.setModel(model2);
+    }
+    public void updateDataLists(DataFrame dataFrame){
+        List<String> selected_vars = Arrays.asList(this.getSelectedData());
+        String select_group_by = this.getSelectedGroup();
+
+        DefaultListModel<String> model1 = new DefaultListModel<String>();
+        DefaultListModel<String> model2 = new DefaultListModel<String>();
+        var_group.removeAllItems();
+        var_group.addItem("");
+        for(String name : dataFrame.getNames()){
+            Variable variable = dataFrame.get(name);
+            if(variable.isText()){
+                var_group.addItem(name);
+
+                if(select_group_by != null && select_group_by.equals(name)){
+                    var_group.setSelectedItem(name);
+                }
+                if(selection_type != ONLY_NUMERIC){
+                    if(selected_vars.contains(name)){
+                        model2.addElement(name);
+                    }else{
+                        model1.addElement(name);
+                    }
+                }
+            }else{
+                if(selection_type != ONLY_CATEGORIC){
+                    if(selected_vars.contains(name)){
+                        model2.addElement(name);
+                    }else{
+                        model1.addElement(name);
+                    }
+                }
+            }
+        }
+        
         vars_available.setModel(model1);
         vars_selected.setModel(model2);
     }

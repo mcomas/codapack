@@ -188,7 +188,9 @@ public class CoDaPackConf {
     }
 
     public static String workingDir = System.getProperty("user.dir");
+    public static String recentFiles = Paths.get(workingDir, ".recent_files").toString();
     public static String usrFile(String fname) {
+        System.out.println(Paths.get(workingDir, fname).toString());
         return (Paths.get(workingDir, fname).toString());
     }
 

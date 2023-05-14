@@ -895,32 +895,47 @@ public final class CoDaPackMain extends JFrame {
                     || !zeroReplacementMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
                 zeroReplacementMenu = new ZeroReplacementMenu(this);
             zeroReplacementMenu.setVisible(true);*/
+        } else if (title.equals(jMenuBar.ITEM_ZPATTERNS)) {
+
+            if (zpatternsMenu == null) zpatternsMenu = new ZeroPatternsMenu(this, re);
+            else zpatternsMenu.updateMenuDialog();
+
+            zpatternsMenu.setVisible(true);
+        } else if (title.equals(jMenuBar.ITEM_SETDETECTION)) {
+            
+            if (setDetectionLimitMenu == null) setDetectionLimitMenu = new ZeroDetectionLimitMenu(this);
+            else setDetectionLimitMenu.updateMenuDialog();
+
+            setDetectionLimitMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_ZEROS_R)) {
-            System.out.println("ITEM_ZEROS_R");
-            if (zeroReplacementRMenu == null || zeroReplacementRMenu.getDataFrame() != this.getActiveDataFrame()
-                    || !zeroReplacementRMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                zeroReplacementRMenu = new ZeroReplacementRMenu(this, re);
+            
+            if(zeroReplacementRMenu == null) zeroReplacementRMenu = new ZeroReplacementRMenu(this, re);
+            else zeroReplacementMenu.updateMenuDialog();
+          
             zeroReplacementRMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_LOG_RATIO)) {
-            System.out.println("ITEM_LOG_RATIO");
-            if (logRatioEMMenu == null || logRatioEMMenu.getDataFrame() != this.getActiveDataFrame()
-                    || !logRatioEMMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                logRatioEMMenu = new ZeroEMMenu(this, re);
+
+            if (logRatioEMMenu == null) logRatioEMMenu = new ZeroEMMenu(this, re);
+            else logRatioEMMenu.updateMenuDialog();
+
             logRatioEMMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_BAYESIAN_MULT_REPLACE)) {
-            if (bayesianMultRepMenu == null || bayesianMultRepMenu.getDataFrame() != this.getActiveDataFrame()
-                    || !bayesianMultRepMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                bayesianMultRepMenu = new BayesianMultRepMenu(this, re);
+
+            if (bayesianMultRepMenu == null) bayesianMultRepMenu = new BayesianMultRepMenu(this, re);
+            else bayesianMultRepMenu.updateMenuDialog();
+            
             bayesianMultRepMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_EM_MISSING)) {
-            if (EM_MissingMenu == null || EM_MissingMenu.getDataFrame() != this.getActiveDataFrame()
-                    || !EM_MissingMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                EM_MissingMenu = new MissingEMMenu(this, re);
+
+            if (EM_MissingMenu == null) EM_MissingMenu = new MissingEMMenu(this, re);
+            else EM_MissingMenu.updateMenuDialog();
+
             EM_MissingMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_EM_ZERO_MISSING)) {
-            if (EM_ZeroMissingMenu == null || EM_ZeroMissingMenu.getDataFrame() != this.getActiveDataFrame()
-                    || !EM_ZeroMissingMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                EM_ZeroMissingMenu = new ZeroMissingEMMenu(this, re);
+
+            if (EM_ZeroMissingMenu == null) EM_ZeroMissingMenu = new ZeroMissingEMMenu(this, re);
+            else EM_ZeroMissingMenu.updateMenuDialog();
+        
             EM_ZeroMissingMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_SORT_DATA)) {
             if (sortDataMenu == null || sortDataMenu.getDataFrame() != this.getActiveDataFrame()
@@ -939,13 +954,6 @@ public final class CoDaPackMain extends JFrame {
                     || !advancedFilterMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
                 advancedFilterMenu = new AdvancedFilterMenu(this, re);
             advancedFilterMenu.setVisible(true);
-        } else if (title.equals(jMenuBar.ITEM_SETDETECTION)) {
-            if(setDetectionLimitMenu == null ||
-               !setDetectionLimitMenu.getDataFrame().getName().equals(getActiveDataFrame().name)){
-                System.out.println("setDetectionLimit created");
-                setDetectionLimitMenu = new ZeroDetectionLimitMenu(this);
-               }
-            setDetectionLimitMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_CHANGE_CAT_NAME_GROUP)) {
             System.out.println("ITEM_CHANGE_CAT_NAME_GROUP");
             if (changeGroupNameMenu == null || changeGroupNameMenu.getDataFrame() != this.getActiveDataFrame()
@@ -978,12 +986,7 @@ public final class CoDaPackMain extends JFrame {
                     || !scatterplotMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
                 scatterplotMenu = new ScatterplotMenu(this, re);
             scatterplotMenu.setVisible(true);
-        } else if (title.equals(jMenuBar.ITEM_ZPATTERNS)) {
-            /*if (zpatternsMenu == null || zpatternsMenu.getDataFrame() != this.getActiveDataFrame()
-                    || !zpatternsMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))*/
-                zpatternsMenu = new ZeroPatternsMenu(this, re);
-            zpatternsMenu.setVisible(true);
-        } else if (title.equals(jMenuBar.ITEM_GEO_MEAN_PLOT)) {
+        }  else if (title.equals(jMenuBar.ITEM_GEO_MEAN_PLOT)) {
             if (geoMeanPlotMenu == null || geoMeanPlotMenu.getDataFrame() != this.getActiveDataFrame()
                     || !geoMeanPlotMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
                 geoMeanPlotMenu = new GeoMeanPlotMenu(this, re);
@@ -1135,6 +1138,8 @@ public final class CoDaPackMain extends JFrame {
          * Look and Feel: change appearence according to OS
          */
         System.out.println("Current JVM version - " + System.getProperty("java.version"));
+
+        CoDaPackConf.workingDir = System.getProperty("user.dir");
         //re.eval("library(coda.base, lib.loc='Rlibraries')");
         //re.eval("library(zCompositions, lib.loc='Rlibraries')");
         re.eval("options(width=10000)");

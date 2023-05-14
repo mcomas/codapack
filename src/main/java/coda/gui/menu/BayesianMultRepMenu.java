@@ -17,6 +17,7 @@ import coda.gui.output.OutputText;
 import coda.gui.utils.DataSelector;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -28,6 +29,9 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -46,19 +50,11 @@ import org.rosuda.JRI.Rengine;
  * BayesianMultRepMenu -> X numerica i positiva amb opcio de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class BayesianMultRepMenu extends AbstractMenuDialog{
+public class BayesianMultRepMenu extends AbstractMenuRBasedDialog{
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Bayesian-multiplicative zero replacement.yaml";
+    private static final String helpTitle = "Bayesian Multiplicative zero Replacement Help Menu";
     
-    Rengine re;
-    DataFrame df;
-    JFrame frameBayesianMultRepMenu;
-    JFrame[] framesBayesianMultRepMenu;
-    JFileChooser chooser;
-    String tempDirR;
-    String[] tempsDirR;
-    ArrayList<String> names;
-    
-    /* options var */
-    
+        
     String[] P1Options = {"GBM","SQ","BL","CZM"};
     String[] P2Options = {"prop","p-counts"};
     
@@ -67,25 +63,28 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
     
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Bayesian-multiplicative zero replacement.yaml";
-    private static final String helpTitle = "Bayesian Multiplicative zero Replacement Help Menu";
     
     public BayesianMultRepMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Bayesian Multiplicative zero Replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Bayesian Multiplicative zero Replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
-        re = r;
+
+        this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
         
         /* options configuration */
-        JPanel methodPanel = new JPanel();
-        methodPanel.add(new JLabel("Method: "));
-        methodPanel.add(P1ComboOptions);
-        JPanel resultPanel = new JPanel();
-        resultPanel.add(new JLabel("Output: "));
-        resultPanel.add(P2ComboOptions);
-        
-        this.optionsPanel.add(methodPanel);
-        this.optionsPanel.add(resultPanel);
-        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
+        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        PB1.setMaximumSize(new Dimension(1000, 32));        
+        PB1.add(new JLabel("Method"));  
+        PB1.add(Box.createHorizontalStrut(10));
+        PB1.add(P1ComboOptions);
+
+        JPanel PB2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        PB2.setMaximumSize(new Dimension(1000, 32));        
+        PB2.add(new JLabel("Output"));  
+        PB2.add(Box.createHorizontalStrut(10));
+        PB2.add(P2ComboOptions);
+
+        this.optionsPanel.add(PB1);
+        this.optionsPanel.add(PB2);
     }
     
     @Override
@@ -136,17 +135,10 @@ public class BayesianMultRepMenu extends AbstractMenuDialog{
             
             
         }else{
-            JOptionPane.showMessageDialog(null,"Please select minimum two variables");
+            JOptionPane.showMessageDialog(this,"Please select minimum two variables");
         }
     }
- 
-    public DataFrame getDataFrame() {
-        return this.df;
-    }
-    
-    public ArrayList<String> getDataFrameNames(){
-        return this.names;
-    }
+
     
     
 }

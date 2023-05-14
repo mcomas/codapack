@@ -11,6 +11,7 @@ import coda.gui.output.OutputText;
 import coda.gui.utils.DataSelector;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.io.File;
 import java.util.Arrays;
 
@@ -19,6 +20,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 import org.apache.batik.swing.JSVGCanvas;
@@ -34,30 +37,39 @@ public class ZeroPatternsMenu extends AbstractMenuRBasedDialog{
     JCheckBox B3 = new JCheckBox("Add pattern", true);
     
     // It should be common to all R calling AbstractRBasedMenuDialog
-    String script_file = "zpatterns.R";
-    int PLOT_WIDTH = 850;
-    int PLOT_HEIGHT = 500;
+    
     
     public ZeroPatternsMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"Zpatterns Plot Menu", new DataSelector(mainApp.getActiveDataFrame(), false), r);
+        script_file = "zpatterns.R";
+
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
  
-        B1.setAlignmentX(0);
-        B2.setAlignmentX(0);
-        B3.setAlignmentX(0);
+        JPanel B1Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        B1Panel.setMaximumSize(new Dimension(1000, 32));
+        B1Panel.add(B1);
+
+        JPanel B2Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        B2Panel.setMaximumSize(new Dimension(1000, 32));
+        B2Panel.add(B2);
+
+        JPanel B3Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        B3Panel.setMaximumSize(new Dimension(1000, 32));
+        B3Panel.add(B3);
+
+        B1Panel.setAlignmentX(0);
+        B2Panel.setAlignmentX(0);
+        B3Panel.setAlignmentX(0);
         //pP1.setAlignmentX(0);
 
         this.optionsPanel.add(Box.createRigidArea(new Dimension(15,15)));
-        this.optionsPanel.add(B1);
-        this.optionsPanel.add(B2);
-        this.optionsPanel.add(B3);
+        this.optionsPanel.add(B1Panel);
+        this.optionsPanel.add(B2Panel);
+        this.optionsPanel.add(B3Panel);
 
-        // this.optionsPanel.add(pP1);
-
-        // this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     @Override
@@ -84,17 +96,9 @@ public class ZeroPatternsMenu extends AbstractMenuRBasedDialog{
                 re.eval("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
 
 
+                captureROutput();
                 //re.eval("save.image('image.RData')");
-                String url = CoDaPackConf.rScriptPath + script_file;
-                System.out.println(url);
-
-                re.eval("error = tryCatch(source('%s'), error = function(e) e$message)".formatted(url));
-                String errorMessage = re.eval("error").asString();
-                if(errorMessage == null){
-                    showText();
-                    createVariables();
-                    showGraphics();
-                }
+               
                 /*
                 if(errorMessage[0].equals("NULL")){
                     // executem totes les accions possibles
@@ -125,91 +129,11 @@ public class ZeroPatternsMenu extends AbstractMenuRBasedDialog{
     }
 
     
-    void showText(){
-        
-        REXP result;
-        String[] sortida;
-        
-        /* header output */
-        
-        outputPanel.addOutput(new OutputText("Zpatterns Plot:"));
-        
-        /* R output */        
-        String outputString[] = re.eval("unlist(cdp_res[['text']])").asStringArray();
-        System.out.println(Arrays.toString(outputString));
-        outputPanel.addOutput(new OutputForR(outputString));
-
-    }
     
-    void createDataFrame(){
-        int nDataFrames = re.eval("length(cdp_res$dataframe)").asInt();
-        for(int i=0; i < nDataFrames; i++){
-            int nVariables = re.eval("length(cdp_res$dataframe[[" + String.valueOf(i+1) + "]])").asInt();
-            DataFrame newDataFrame = new DataFrame();
-            for(int j=0; j < nVariables; j++){
-                String varName = re.eval("names(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "])").asString();
-                String isNumeric = re.eval("class(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asString();
-                if(isNumeric.equals("numeric")){ /* crear una variable numerica */
-                    double[] data = re.eval("as.numeric(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asDoubleArray();
-                    newDataFrame.addData(varName, data);
-                }
-                else{ /* crear una variable categorica */
-                    String[] data = re.eval("as.character(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asStringArray();
-                    newDataFrame.addData(varName, new Variable(varName,data));
-                }
-            }
-            
-            String dataFrameName = re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString();
-            
-            while(!mainApplication.isDataFrameNameAvailable(dataFrameName)){
-                dataFrameName += "c";
-            }
-            
-            newDataFrame.setName(dataFrameName);
-            mainApplication.addDataFrame(newDataFrame);
-        }
-    }
     
-    void showGraphics(){
-        
-        String fnames[] = re.eval("cdp_res$graph").asStringArray();
-        System.out.println(Arrays.toString(fnames));
-        for(String fname: fnames){
-            JSVGCanvas c = new JSVGCanvas();
-            String uri = new File(fname).toURI().toString();
-            c.setURI(uri);
-            JFrame jf = new JFrame();
-            jf.setSize(PLOT_WIDTH,PLOT_HEIGHT);
-            jf.getContentPane().add(c);
-            jf.setVisible(true);
-        }
-        /*
-        for(int i=0; i < numberOfGraphics; i++){
-            tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
-            tempsDirR.add(tempDirR);
-            plotZpatternsMenu(this.framesZpatternsMenu.size());
-        }  
-        */
-    }
     
-    void createVariables(){
-        
-        int numberOfNewVar = re.eval("length(colnames(cdp_res$new_data))").asInt(); /* numero de columnes nomes*/
-        
-        for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("colnames(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
-            String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[["+ String.valueOf(i+1) +"]]))").asString();
-            if(isNumeric.equals("TRUE")){
-                double[] data = re.eval("as.numeric(cdp_res$new_data[," + String.valueOf(i+1) + "])").asDoubleArray();
-                df.addData(varName,data);
-            }
-            else{ // categoric
-                String[] data = re.eval("as.character(cdp_res$new_data[," + String.valueOf(i+1) + "])").asStringArray();
-                df.addData(varName, new Variable(varName,data));
-            }
-            mainApplication.updateDataFrame(df);
-        }
-    }
+    
+    
     /*
     private void plotZpatternsMenu(int position) throws IOException {
 
