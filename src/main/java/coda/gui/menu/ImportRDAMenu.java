@@ -25,6 +25,7 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
+import coda.DataFrame.DataFrameException;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
 import coda.gui.utils.DataSelector1to1;
@@ -73,11 +74,11 @@ public class ImportRDAMenu extends AbstractMenuDialog{
     String rf;
     
     
-    public ImportRDAMenu(CoDaPackMain mainApp, JFileChooser chooseFile, ImportRDA impdf) throws ScriptException {
-        super(mainApp, "Import R Data File", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
+    public ImportRDAMenu(CoDaPackMain mainApp, ImportRDA importRDA) throws ScriptException, DataFrameException {
+        super(mainApp, "Import R Data File", new DataSelector1to1(importRDA.df_names));
         
         //Assignem el path a l'string rf
-        rf = chooseFile.getCurrentDirectory().getAbsolutePath();
+        rf = importRDA.cf.getCurrentDirectory().getAbsolutePath();
         //assignem mida als quadres de text
         usedPrefix = new JTextField(8);
         usedSuffix = new JTextField(8);
@@ -90,7 +91,7 @@ public class ImportRDAMenu extends AbstractMenuDialog{
         //posem el quadre de text suffix
         optionsPanel.add(usedSuffix);
         //Guardem un punter al ImportRDA
-        imp_df = impdf;
+        imp_df = importRDA;
         
     }
 
@@ -111,7 +112,7 @@ public class ImportRDAMenu extends AbstractMenuDialog{
             } catch (DataFrame.DataFrameException ex) {
                 Logger.getLogger(ImportRDAMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //setVisible(false, false);
+            setVisible(false);
             //Carreguem els dataframes seleccionats
             for (DataFrame dataf : sel_dfs) {
                 mainApplication.addDataFrameRDR(dataf);

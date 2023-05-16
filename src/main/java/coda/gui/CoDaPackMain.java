@@ -21,6 +21,7 @@ package coda.gui;
 
 import coda.gui.menu.AddToHTMLJavaScript;
 import coda.DataFrame;
+import coda.DataFrame.DataFrameException;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import coda.gui.CoDaPackMain.UpdateConnection;
@@ -678,9 +679,16 @@ public final class CoDaPackMain extends JFrame {
                 ImportRDA impdf = new ImportRDA(chooseFile, re);
                 // Creem una nova instància ImportRDAMenu, serà l'encarregada de gestionar el
                 // menú
-                ImportRDAMenu imprdam = new ImportRDAMenu(this, chooseFile, impdf);
+                ImportRDAMenu imprdam;
+                try {
+                    imprdam = new ImportRDAMenu(this, impdf);
+                    imprdam.setVisible(true);
+                } catch (DataFrameException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
                 // Fem el menú visible
-                //imprdam.setVisible(true, true);
+                
 
             }
             // Copiem la ruta per recordar-la
@@ -1290,10 +1298,10 @@ public final class CoDaPackMain extends JFrame {
                 principalComponentMenu = new PrincipalComponentMenu(this);
             principalComponentMenu.setVisible(true);
             */
-        } else if (title.equals(jMenuBar.ITEM_FORCE_UPDATE)) {
-            CoDaPackConf.refusedVersion = CoDaPackConf.CoDaVersion;
-            UpdateConnection uc = new UpdateConnection(this);
-            new Thread(uc).start();
+        // } else if (title.equals(jMenuBar.ITEM_FORCE_UPDATE)) {
+        //     CoDaPackConf.refusedVersion = CoDaPackConf.CoDaVersion;
+        //     UpdateConnection uc = new UpdateConnection(this);
+        //     new Thread(uc).start();
         } else if (title.equals(jMenuBar.ITEM_ABOUT)) {
             new CoDaPackAbout(this).setVisible(true);
         } else if (title.equals(jMenuBar.R_TEST)) {
@@ -1333,13 +1341,13 @@ public final class CoDaPackMain extends JFrame {
             new S3(this, re).setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_MODEL_S4)) {
             new S4(this, re).setVisible(true);
-        } else if (title.equals(jMenuBar.ITEM_MODEL_AddtoHTMLJavaScript)) {
-            try {
-                new AddToHTMLJavaScript(this, re).setVisible(true);
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        // } else if (title.equals(jMenuBar.ITEM_MODEL_AddtoHTMLJavaScript)) {
+        //     try {
+        //         new AddToHTMLJavaScript(this, re).setVisible(true);
+        //     } catch (FileNotFoundException e) {
+        //         // TODO Auto-generated catch block
+        //         e.printStackTrace();
+        //     }
         } else if (title.equals(jMenuBar.ITEM_MODEL_CPM)) {
             new CrearMenuPersonal(this, re).setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_MODEL_PM)) {
@@ -1375,7 +1383,8 @@ public final class CoDaPackMain extends JFrame {
      * @param args the command line arguments
      */
     static boolean is_R_available(){
-        return(false);
+        System.out.println("R_HOME =" + System.getenv("R_HOME"));
+        return(true);
     }
     public static boolean R_available = false;
     public static void main(String args[]) throws Exception {

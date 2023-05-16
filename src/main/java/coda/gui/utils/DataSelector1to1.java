@@ -22,22 +22,20 @@ package coda.gui.utils;
 
 import coda.DataFrame;
 import coda.Variable;
+import coda.DataFrame.DataFrameException;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -59,23 +57,33 @@ public final class DataSelector1to1 extends DataSelector {
     public static int ALL_VARIABLES = 2;
     public static int ONLY_CATEGORIC = 3;
 
-    DataFrame df_instance;
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
     int releaseIndex = -1;
     boolean groupedBy = true;
 
     int selection_type = ONLY_NUMERIC;
+    public DataSelector1to1(String names[]) throws DataFrameException{
+        initComponents(false);
+        ds_dataFrame = new DataFrame();
+        for(String name: names) ds_dataFrame.add(new Variable(name));
+        selection_type = ONLY_NUMERIC;
+
+        setDataLists(ds_dataFrame);
+    }
     public DataSelector1to1(DataFrame dataFrame, boolean groups) {
         initComponents(groups);
-        df_instance = dataFrame;
+        ds_dataFrame = dataFrame;
+        selection_type = ONLY_NUMERIC;
+
         if(dataFrame != null)
-            setDataLists(dataFrame);
+            setDataLists(dataFrame);            
     }
     public DataSelector1to1(DataFrame dataFrame, boolean groups, int variable_type) {
         initComponents(groups);
+        ds_dataFrame = dataFrame;
         selection_type = variable_type;
-        df_instance = dataFrame;
+
         if(dataFrame != null)
             setDataLists(dataFrame);
     }
@@ -102,13 +110,13 @@ public final class DataSelector1to1 extends DataSelector {
                 if(selection_type != ONLY_CATEGORIC){
                     model1.addElement(name);
                 }
-            }
-            
+            }            
         }
         vars_available.setModel(model1);
         vars_selected.setModel(model2);
     }
-    public void updateDataLists(DataFrame dataFrame){
+    public void updateDataLists(DataFrame dataFrame){        
+
         List<String> selected_vars = Arrays.asList(this.getSelectedData());
         String select_group_by = this.getSelectedGroup();
 
@@ -144,6 +152,7 @@ public final class DataSelector1to1 extends DataSelector {
         
         vars_available.setModel(model1);
         vars_selected.setModel(model2);
+        ds_dataFrame = dataFrame;
     }
     public ListModel<String> getAvailableData(){
         return vars_available.getModel();
@@ -327,7 +336,7 @@ public final class DataSelector1to1 extends DataSelector {
     }
 
     private void resetActionPerformed(java.awt.event.ActionEvent evt) {
-        setDataLists(df_instance);
+        setDataLists(ds_dataFrame);
     }
 
     private void insertActionPerformed(java.awt.event.ActionEvent evt) {

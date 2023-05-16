@@ -148,11 +148,11 @@
             <version>3.11</version>
         </dependency>
 
-      <!--<dependency>
-    <groupId>org.renjin</groupId>
-    <artifactId>renjin-script-engine</artifactId>
-    <version>3.5-beta76</version>
-</dependency>-->
+      <dependency>
+         <groupId>org.renjin</groupId>
+         <artifactId>renjin-script-engine</artifactId>
+         <version>3.5-beta76</version>
+      </dependency>
 
       <dependency>
          <groupId>org.apache.poi</groupId>
@@ -248,12 +248,10 @@
       </dependency>
    </dependencies>
    <repositories>
-   <!--
       <repository>
          <id>bedatadriven</id>
          <name>bedatadriven public repo</name>
          <url>https://nexus.bedatadriven.com/content/groups/public/</url>
       </repository>
-      -->
    </repositories>
 </project>

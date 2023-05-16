@@ -74,6 +74,7 @@ CoDaPack Menu:
             id: "CompStatsSummary"
         - Classical Statistics Summary:
             id: "ClasStatsSummary"
+        - Separator
         - Multivariate Analysis:
             - Regression:
                 - X real, Y composition:

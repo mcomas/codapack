@@ -245,8 +245,8 @@ public class CoDaPackMenu extends JMenuBar {
 
     public JMenu menuHelp;
     public final String ITEM_HELP = "Help";
-    public JMenuItem itemForceUpdate;
-    public final String ITEM_FORCE_UPDATE = "Check for Updates";
+    // public JMenuItem itemForceUpdate;
+    // public final String ITEM_FORCE_UPDATE = "Check for Updates";
     public JMenuItem itemAbout;
     public final String ITEM_ABOUT = "About";
     public JMenuItem itemR_Test;
@@ -264,64 +264,12 @@ public class CoDaPackMenu extends JMenuBar {
     public final String ITEM_MODEL_S3 = "Model S3";
     public JMenuItem itemModelS4;
     public final String ITEM_MODEL_S4 = "Model S4";
-    public JMenuItem itemModelAddtoHTMLJavaScript;
-    public final String ITEM_MODEL_AddtoHTMLJavaScript = "Add to HTML JavaScript";
-    /*
-     * public JMenuItem itemModelCrearMenu;
-     * public final String ITEM_MODEL_CPM = "Crear Personal Menu";
-     * public JMenu itemModelPM;
-     * public final String ITEM_MODEL_PM = "Personal Menu";
-     */
 
-    ArrayList<JMenuItem> PersonalMenuItems = new ArrayList<JMenuItem>();
-    ArrayList<String> NomsMenuItems = new ArrayList<String>();
+    // public JMenuItem itemModelAddtoHTMLJavaScript;
+    // public final String ITEM_MODEL_AddtoHTMLJavaScript = "Add to HTML JavaScript";
 
-    public String active_path = null;
 
-    private void crearPersonalMenu() {
-        try {
-            File archivo = new File("./" + nomPersonalDirectory);
-            // System.out.println("Current directory path using canonical path method :- " +
-            // archivo);
-            String canonicalPath = new File("./" + nomPersonalDirectory).getCanonicalPath();
-            // System.out.println("Current directory path using canonical path method :- " +
-            // canonicalPath);
-
-            /*
-             * String usingSystemProperty = System.getProperty("user.dir");
-             * System.out.println("Current directory path using system property:- " +
-             * usingSystemProperty);
-             */
-            if (!archivo.exists()) {
-                JOptionPane.showMessageDialog(null, "Configuration file does not exist!!");
-
-            } else {
-                if (archivo.isFile()) {
-                    JOptionPane.showMessageDialog(null, "El archiu " + canonicalPath + " es un archiu");
-
-                } else {
-                    // ------------
-
-                    // File dir = new File(".");
-                    FileFilter fileFilter = new RegexFileFilter("^(.*?)");
-                    File[] files = archivo.listFiles(fileFilter);
-                    for (File file : files) {
-                        String nomArchiu = file.toString().substring(nomPersonalDirectory.length() + 3);
-
-                        JMenuItem JmenuItemAux = new JMenuItem();
-                        PersonalMenuItems.add(JmenuItemAux);
-                        NomsMenuItems.add(nomArchiu);
-
-                    }
-                    // ------------
-
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("IOException Occured" + e.getMessage());
-        }
-
-    }
+ 
 
 
     private JMenuItem addJMenuItem(JMenu menu, JMenuItem item, String title) {
@@ -547,9 +495,10 @@ public class CoDaPackMenu extends JMenuBar {
         itemModelPM = new JMenu();
 
         menuHelp = new JMenu();
-        itemForceUpdate = new JMenuItem();
+        //itemForceUpdate = new JMenuItem();
         itemAbout = new JMenuItem();
         itemR_Test = new JMenuItem();
+        if(!CoDaPackMain.R_available) itemR_Test.setEnabled(false);
 
         menuDevelopment = new JMenu();
         itemModelS0 = new JMenuItem();
@@ -557,7 +506,7 @@ public class CoDaPackMenu extends JMenuBar {
         itemModelS2 = new JMenuItem();
         itemModelS3 = new JMenuItem();
         itemModelS4 = new JMenuItem();
-        itemModelAddtoHTMLJavaScript = new JMenuItem();
+        //itemModelAddtoHTMLJavaScript = new JMenuItem();
 
 
         menuFile.setText(ITEM_FILE);
@@ -619,109 +568,14 @@ public class CoDaPackMenu extends JMenuBar {
             JOptionPane.showMessageDialog(null, "The file is not available");
         } catch (JSONException ex) {
             System.out.println(ex.getMessage());
-        }
-        
-        /*
-        Iterator it =  codapack_menu.sortedKeys();
-        while(it.hasNext()){
-            System.out.println(it.next().toString());
-        }
-            
-        }
-*/
+        }        
 
-        /*
-        menuData.setText(ITEM_DATA);
-        menuTransforms.setText(ITEM_TRANS);
-        menuData.add(menuTransforms);
-        addJMenuItem(menuTransforms, itemTransformALR, ITEM_RAW_ALR);
-        addJMenuItem(menuTransforms, itemTransformCLR, ITEM_RAW_CLR);
-        addJMenuItem(menuTransforms, itemTransformRawILR, ITEM_T_RAW_ILR);
-        addJMenuItem(menuTransforms, itemTransformILRRaw, ITEM_T_ILR_RAW);
-        menuData.addSeparator();
-        menuOperations.setText(ITEM_OPER);
-        menuData.add(menuOperations);
-        addJMenuItem(menuOperations, itemCenter, ITEM_CENTER);
-        addJMenuItem(menuOperations, itemClosure, ITEM_CLOSURE);
-        addJMenuItem(menuOperations, itemPerturbate, ITEM_PERTURBATE);
-        addJMenuItem(menuOperations, itemPower, ITEM_POWER);
-        menuData.addSeparator();
-        menuManipulate.setText(ITEM_MANI);
-        menuData.add(menuManipulate);
-        addJMenuItem(menuManipulate, itemDiscretize, ITEM_DISCRETIZE);
-        addJMenuItem(menuManipulate, itemCalculateNewVar, ITEM_CALCULATE_NEW_VAR);
-        addJMenuItem(menuManipulate, itemSortData, ITEM_SORT_DATA);
-        addJMenuItem(menuManipulate, itemCategorizeVariables, ITEM_CAT_VAR);
-        addJMenuItem(menuManipulate, itemNumerizeVariables, ITEM_NUM_VAR);
-        addJMenuItem(menuManipulate, itemChangeCategoricalNameGroup, ITEM_CHANGE_CAT_NAME_GROUP);
-        menuData.addSeparator();
-        menuFilters.setText(ITEM_FILT);
-        menuData.add(menuFilters);
-        addJMenuItem(menuFilters, itemFilter, ITEM_FILTER);
-        addJMenuItem(menuFilters, itemAdvFilter, ITEM_ADV_FILTER);
-        menuData.addSeparator();
-        addJMenuItem(menuData, itemCreateFrame, ITEM_CREATE_FRAME);
-        addJMenuItem(menuData, itemAddVariables, ITEM_ADD_VAR);
-        addJMenuItem(menuData, itemDeleteVariables, ITEM_DEL_VAR);
-        // addJMenuItem(menuData, itemAmalgamation, ITEM_AMALGAM);
-        // 
-        add(menuData);
+        menuHelp.setText(ITEM_HELP);
+        //addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
+        addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
+        addJMenuItem(menuHelp, itemR_Test, R_TEST);
+        add(menuHelp);
 
-        menuIrregularData.setText(ITEM_IRREG_DATA);
-        addJMenuItem(menuIrregularData, zPatternsPlot, ITEM_ZPATTERNS);
-        addJMenuItem(menuIrregularData, itemSetDetectionLimit, ITEM_SETDETECTION);
-        addJMenuItem(menuIrregularData, itemZerosR, ITEM_ZEROS_R);
-        //addJMenuItem(menuIrregularData, itemZeros, ITEM_ZEROS);
-        addJMenuItem(menuIrregularData, itemLogRatio, ITEM_LOG_RATIO);
-        addJMenuItem(menuIrregularData, itemBayesianMultReplace, ITEM_BAYESIAN_MULT_REPLACE);
-        menuIrregularData.addSeparator();
-        addJMenuItem(menuIrregularData, itemEM_Missing, ITEM_EM_MISSING);
-        
-        addJMenuItem(menuIrregularData, itemEM_Zero_Missing, ITEM_EM_ZERO_MISSING);
-        menuIrregularData.addSeparator();
-        addJMenuItem(menuIrregularData, itemAtipicalityIndex, ITEM_ATIP_INDEX);
-
-        add(menuIrregularData);
-
-        menuStatistics.setText(ITEM_STATS);
-        addJMenuItem(menuStatistics, itemCompStatsSummary, ITEM_COMP_STATS_SUMMARY);
-        addJMenuItem(menuStatistics, itemClasStatsSummary, ITEM_CLAS_STATS_SUMMARY);
-        menuMultiAnalysis.setText(ITEM_MULTI_ANALYSIS);
-        menuStatistics.add(menuMultiAnalysis);
-        menuRegression.setText(ITEM_REGRESSION);
-        menuMultiAnalysis.add(menuRegression);
-        addJMenuItem(menuRegression, item_Reg_XReal_YComp, ITEM_REG_XREAL_YCOMP);
-        addJMenuItem(menuRegression, item_Reg_XComp_YReal, ITEM_REG_XCOMP_YREAL);
-        // addJMenuItem(menuRegression,item_Reg_XComp_YComp,ITEM_REG_XCOMP_YCOMP);
-        menuCluster.setText(ITEM_CLUSTER);
-        menuMultiAnalysis.add(menuCluster);
-        addJMenuItem(menuCluster, item_Clust_Kmeans, ITEM_CLUST_KMEANS);
-        addJMenuItem(menuMultiAnalysis, item_Manova, ITEM_MANOVA);
-        addJMenuItem(menuMultiAnalysis, item_Disc_Analysis, ITEM_DISC_ANALYSIS);
-        menuStatistics.addSeparator();
-        addJMenuItem(menuStatistics, itemNormalityTest, ITEM_NORM_TEST);
-        addJMenuItem(menuStatistics, itemClasUniNormTest, ITEM_CLAS_UNI_NORM_TEST);
-        add(menuStatistics);
-
-        menuGraphs.setText(ITEM_GRAPHS);
-        addJMenuItem(menuGraphs, itemTernaryPlot, ITEM_TERNARY_PLOT);
-        addJMenuItem(menuGraphs, itemEmptyTernaryPlot, ITEM_EMPTY_TERNARY_PLOT);
-        addJMenuItem(menuGraphs, principalComponentPlot, ITEM_PC_PLOT);
-        addJMenuItem(menuGraphs, predictiveRegionPlot, ITEM_PRED_REG_PLOT);
-        addJMenuItem(menuGraphs, confidenceRegionPlot, ITEM_CONF_REG_PLOT);
-        menuGraphs.addSeparator();
-        addJMenuItem(menuGraphs, itemBoxplot, ITEM_BOXPLOT);
-        addJMenuItem(menuGraphs, itemScatterplot, ITEM_SCATTERPLOT);
-        addJMenuItem(menuGraphs, itemGeoMeanPlot, ITEM_GEO_MEAN_PLOT);
-        // addJMenuItem(menuGraphs, itemALRPlot, ITEM_ALR_PLOT);
-        // addJMenuItem(menuGraphs, itemCLRPlot, ITEM_CLR_PLOT);
-        // addJMenuItem(menuGraphs, itemILRPlot, ITEM_ILR_PLOT);
-        menuGraphs.addSeparator();
-        addJMenuItem(menuGraphs, itemBiPlot, ITEM_BIPLOT);
-        addJMenuItem(menuGraphs, itemIlrBiPlot, ITEM_ILR_BIPLOT);
-        addJMenuItem(menuGraphs, itemDendrogramPlot, ITEM_DENDROGRAM_PLOT);
-        add(menuGraphs);
-*/
 
 /*
         personalMenu.setText(ITEM_PERSONALMENU);
@@ -738,11 +592,7 @@ public class CoDaPackMenu extends JMenuBar {
         add(personalMenu);
 */
 
-        menuHelp.setText(ITEM_HELP);
-        addJMenuItem(menuHelp, itemForceUpdate, ITEM_FORCE_UPDATE);
-        addJMenuItem(menuHelp, itemAbout, ITEM_ABOUT);
-        addJMenuItem(menuHelp, itemR_Test, R_TEST);
-        add(menuHelp);
+
 
         menuDevelopment.setText(ITEM_DEVELOPMENT);
         addJMenuItem(menuDevelopment, itemModelS0, ITEM_MODEL_S0);
@@ -750,7 +600,8 @@ public class CoDaPackMenu extends JMenuBar {
         addJMenuItem(menuDevelopment, itemModelS2, ITEM_MODEL_S2);
         addJMenuItem(menuDevelopment, itemModelS3, ITEM_MODEL_S3);
         addJMenuItem(menuDevelopment, itemModelS4, ITEM_MODEL_S4);
-        addJMenuItem(menuDevelopment, itemModelAddtoHTMLJavaScript, ITEM_MODEL_AddtoHTMLJavaScript);
+        //addJMenuItem(menuDevelopment, itemModelAddtoHTMLJavaScript, ITEM_MODEL_AddtoHTMLJavaScript);
+
         /*
          * addJMenuItem(menuDevelopment,itemModelCrearMenu, ITEM_MODEL_CPM);
          * itemModelPM.setText(ITEM_MODEL_PM);
@@ -792,4 +643,62 @@ public class CoDaPackMenu extends JMenuBar {
         this.repaint();
         super.updateUI();
     }
+
+
+       /*
+     * public JMenuItem itemModelCrearMenu;
+     * public final String ITEM_MODEL_CPM = "Crear Personal Menu";
+     * public JMenu itemModelPM;
+     * public final String ITEM_MODEL_PM = "Personal Menu";
+     */
+
+     ArrayList<JMenuItem> PersonalMenuItems = new ArrayList<JMenuItem>();
+     ArrayList<String> NomsMenuItems = new ArrayList<String>();
+ 
+     public String active_path = null;
+ 
+     private void crearPersonalMenu() {
+         try {
+             File archivo = new File("./" + nomPersonalDirectory);
+             // System.out.println("Current directory path using canonical path method :- " +
+             // archivo);
+             String canonicalPath = new File("./" + nomPersonalDirectory).getCanonicalPath();
+             // System.out.println("Current directory path using canonical path method :- " +
+             // canonicalPath);
+ 
+             /*
+              * String usingSystemProperty = System.getProperty("user.dir");
+              * System.out.println("Current directory path using system property:- " +
+              * usingSystemProperty);
+              */
+             if (!archivo.exists()) {
+                 JOptionPane.showMessageDialog(null, "Configuration file does not exist!!");
+ 
+             } else {
+                 if (archivo.isFile()) {
+                     JOptionPane.showMessageDialog(null, "El archiu " + canonicalPath + " es un archiu");
+ 
+                 } else {
+                     // ------------
+ 
+                     // File dir = new File(".");
+                     FileFilter fileFilter = new RegexFileFilter("^(.*?)");
+                     File[] files = archivo.listFiles(fileFilter);
+                     for (File file : files) {
+                         String nomArchiu = file.toString().substring(nomPersonalDirectory.length() + 3);
+ 
+                         JMenuItem JmenuItemAux = new JMenuItem();
+                         PersonalMenuItems.add(JmenuItemAux);
+                         NomsMenuItems.add(nomArchiu);
+ 
+                     }
+                     // ------------
+ 
+                 }
+             }
+         } catch (IOException e) {
+             System.out.println("IOException Occured" + e.getMessage());
+         }
+ 
+     }
 }

@@ -209,7 +209,7 @@ public abstract class AbstractMenuDialog extends JDialog{
     }
     @Override
     public void setVisible(boolean v){
-        if(mainApplication.getActiveDataFrame() == null && !allowEmpty){
+        if(ds.ds_dataFrame == null){
             JOptionPane.showMessageDialog(this, "No data available");
             this.dispose();
         }else{

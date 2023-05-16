@@ -56,10 +56,10 @@ public class ImportRDA {
     //ScriptEngine engine;
     
     String fname;
-    String[] df_names;
+    public String[] df_names;
     //Creem la llista de dataFrames que contindrà els data frames seleccionats
     ArrayList<DataFrame> sel_dfs = new ArrayList<DataFrame>();
-    JFileChooser cf;
+    public JFileChooser cf;
     String prefix = null;
     String suffix = null;
 
