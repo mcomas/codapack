@@ -7,7 +7,7 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
         
         super(mainApp,
               "Advanced Filter Menu",
-              new DataSelector(mainApp.getActiveDataFrame(), false));
+              new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());

@@ -23,7 +23,7 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -64,12 +64,12 @@ public class ZeroReplacementRMenu extends AbstractMenuRBasedDialog {
      */
     public ZeroReplacementRMenu(final CoDaPackMain mainApp, Rengine r) {
 
-        super(mainApp, "Non parametric zero replacement", new DataSelector(mainApp.getActiveDataFrame(), false), r);
+        super(mainApp, "Non parametric zero replacement", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
       
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
 
-        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB1.setMaximumSize(new Dimension(1000, 32));
         PB1.add(new JLabel("DL proportion"));  
         PB1.add(Box.createHorizontalStrut(10));

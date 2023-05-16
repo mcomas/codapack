@@ -24,7 +24,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackConf;
 import java.util.ArrayList;
 import javax.swing.JLabel;
@@ -46,7 +46,7 @@ public class ClosureDataMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public ClosureDataMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Subcomposition/closure Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Subcomposition/closure Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         closureTo =  new JTextField(5);

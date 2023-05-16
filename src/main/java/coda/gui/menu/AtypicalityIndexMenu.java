@@ -24,7 +24,7 @@ import coda.DataFrame;
 import coda.Utils;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputAtipicality;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -34,14 +34,14 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class AtipicalityIndexMenu extends AbstractMenuDialog{
+public class AtypicalityIndexMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     JLabel text1 = new JLabel("Threshold:");
     JTextField  thresholdField;
     DataFrame df;
 
-    public AtipicalityIndexMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Atipicality Index Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+    public AtypicalityIndexMenu(final CoDaPackMain mainApp){
+        super(mainApp, "Atipicality Index Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
 
         thresholdField  = new JTextField("     0.95");
         optionsPanel.add(text1);

@@ -31,7 +31,7 @@ import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.utils.BinaryPartitionSelect;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.plot.Biplot2dDisplay;
 import coda.plot.Biplot3dDisplay;
 import coda.plot.window.CoDaPlotWindow;
@@ -45,7 +45,7 @@ import javax.swing.JOptionPane;
  *
  * @author mcomas
  */
-public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
+public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.ILR-CLR Plot.yaml";
@@ -55,8 +55,8 @@ public class ILRCLRPlotMenu extends AbstractMenuDialogWithILR{
     DataFrame df;
     ArrayList<String> names;
     
-    public ILRCLRPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ILR/CLR Plot Menu", new DataSelector(mainApp.getActiveDataFrame(), true));
+    public ILRCLRBiplotMenu(final CoDaPackMain mainApp){
+        super(mainApp, "ILR/CLR Plot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpConfig(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");

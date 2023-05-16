@@ -13,7 +13,7 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -73,7 +73,7 @@ public class ManovaMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Manova Help Menu";
     
     public ManovaMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Manova Menu",new DataSelector(mainApp.getActiveDataFrame(), true));
+        super(mainApp,"Manova Menu",new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         re = r;

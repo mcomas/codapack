@@ -7,7 +7,7 @@ package coda.gui.menu;
 
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     
     public CalculateNewVarMenu(final CoDaPackMain mainApp, Rengine r){
     //public CalculateNewVarMenu(final ParaProbarMiMenu mainApp, Rengine r){
-        super(mainApp, "Calculate new Variable Menu", new DataSelector(mainApp.getActiveDataFrame(), false));//----?
+        super(mainApp, "Calculate new Variable Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));//----?
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());

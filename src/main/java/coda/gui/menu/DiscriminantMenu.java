@@ -14,7 +14,7 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
 import coda.gui.utils.BoxDataSelector;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -77,7 +77,7 @@ public class DiscriminantMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Discriminant Help Menu";
     
     public DiscriminantMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Discriminant Menu", new DataSelector(mainApp.getActiveDataFrame(), true));
+        super(mainApp,"Discriminant Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         //super.setSelectedDataName("Selected X:");

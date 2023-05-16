@@ -26,6 +26,7 @@ package coda.gui;
 import java.io.File;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,6 +37,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 
+import coda.ext.json.JSONArray;
+import coda.ext.json.JSONException;
+import coda.ext.json.JSONObject;
+import coda.ext.json.JSONString;
+
 /**
  *
  * @author marc
@@ -45,6 +51,8 @@ public class CoDaPackMenu extends JMenuBar {
      * Defining actions
      */
     String nomPersonalDirectory = "menus_personalitzables";
+
+    public HashMap<String,String> item_key = new HashMap<>();
 
     public JMenu menuFile;
     public final String ITEM_FILE = "File";
@@ -90,6 +98,7 @@ public class CoDaPackMenu extends JMenuBar {
     public JMenuItem itemQuit;
     public final String ITEM_QUIT = "Quit CoDaPack";
 
+    /*
     public JMenu menuData;
     public final String ITEM_DATA = "Data";
     public JMenu menuTransforms;
@@ -221,6 +230,7 @@ public class CoDaPackMenu extends JMenuBar {
     public final String ITEM_SCATTERPLOT = "Scatterplot 2D/3D";
     public JMenuItem itemGeoMeanPlot;
     public final String ITEM_GEO_MEAN_PLOT = "Geometric mean barplot";
+    */
 
     public JMenu personalMenu;
     public final String ITEM_PERSONALMENU = "My Personal Menu";
@@ -312,6 +322,7 @@ public class CoDaPackMenu extends JMenuBar {
         }
 
     }
+
 
     private JMenuItem addJMenuItem(JMenu menu, JMenuItem item, String title) {
         // item.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I,
@@ -471,9 +482,40 @@ public class CoDaPackMenu extends JMenuBar {
         copyRecentFiles();
         loadRecentFiles();
     }
+    public void fill_menu(JMenu super_menu, JSONArray json_array) throws JSONException{
+        for(int i=0;i<json_array.length();i++){
+            if(json_array.get(i) instanceof String){
+                super_menu.addSeparator();
+                continue;
+            }
+            JSONObject json_submenu = json_array.getJSONObject(i);
+            String name = (String)json_submenu.keys().next();
+            
+            if(json_submenu.get(name) instanceof JSONObject){
+                JSONObject json_obj = json_submenu.getJSONObject(name);
+                String id = json_obj.getString("id");
+                item_key.put(name, id);
+                JMenuItem mi = new JMenuItem();
+                if(json_obj.has("code") && json_obj.getString("code").equals("r")){
+                    mi.setEnabled(false);
+                }
+                addJMenuItem(super_menu, mi, name);  
 
+                //System.out.println(name + "item menu");
+            }else{
+                JMenu sub_menu = new JMenu(name);
+                fill_menu(sub_menu, json_submenu.getJSONArray(name));
+                super_menu.add(sub_menu);
+                
+                //System.out.println(name + "Array");
+            }
+        }
+
+    }
     public CoDaPackMenu() {
         this.recentFile = new HashMap<String, JMenuItem>();
+
+        
 
         menuFile = new JMenu();
         itemOpen = new JMenuItem();
@@ -497,74 +539,7 @@ public class CoDaPackMenu extends JMenuBar {
         itemConfiguration = new JMenuItem();
         itemQuit = new JMenuItem();
 
-        menuData = new JMenu();
-        menuTransforms = new JMenu();
-        itemTransformALR = new JMenuItem();
-        itemTransformCLR = new JMenuItem();
-        itemTransformRawILR = new JMenuItem();
-        itemTransformILRRaw = new JMenuItem();
-        menuOperations = new JMenu();
-        itemCenter = new JMenuItem();
-        itemClosure = new JMenuItem();
-        itemPerturbate = new JMenuItem();
-        itemPower = new JMenuItem();
-        menuManipulate = new JMenu();
-        itemDiscretize = new JMenuItem();
-        itemCalculateNewVar = new JMenuItem();
-        itemSortData = new JMenuItem();
-        itemCategorizeVariables = new JMenuItem();
-        itemNumerizeVariables = new JMenuItem();
-        itemChangeCategoricalNameGroup = new JMenuItem();
-        menuFilters = new JMenu();
-        itemFilter = new JMenuItem();
-        itemAdvFilter = new JMenuItem();
         
-        itemCreateFrame = new JMenuItem();
-        itemAddVariables = new JMenuItem();
-        itemDeleteVariables = new JMenuItem();
-
-        menuIrregularData = new JMenu();
-        zPatternsPlot = new JMenuItem();
-        itemSetDetectionLimit = new JMenuItem();
-        itemZerosR = new JMenuItem();
-        // itemZeros = new JMenuItem(); 
-        itemLogRatio = new JMenuItem();
-        itemBayesianMultReplace = new JMenuItem();
-        itemEM_Missing = new JMenuItem();
-        itemEM_Zero_Missing = new JMenuItem();
-        itemAtipicalityIndex = new JMenuItem();
-
-        menuStatistics = new JMenu();
-        itemCompStatsSummary = new JMenuItem();
-        itemClasStatsSummary = new JMenuItem();
-        menuMultiAnalysis = new JMenu();
-        menuRegression = new JMenu();
-        item_Reg_XReal_YComp = new JMenuItem();
-        item_Reg_XComp_YReal = new JMenuItem();
-        item_Reg_XComp_YComp = new JMenuItem();
-        menuCluster = new JMenu();
-        item_Clust_Kmeans = new JMenuItem();
-        item_Manova = new JMenuItem();
-        item_Disc_Analysis = new JMenuItem();
-        itemNormalityTest = new JMenuItem();
-        itemClasUniNormTest = new JMenuItem();
-
-        menuGraphs = new JMenu();
-        itemTernaryPlot = new JMenuItem();
-        itemEmptyTernaryPlot = new JMenuItem();
-        itemBiPlot = new JMenuItem();
-        itemIlrBiPlot = new JMenuItem();
-        itemDendrogramPlot = new JMenuItem();
-        itemALRPlot = new JMenuItem();
-        itemCLRPlot = new JMenuItem();
-        itemILRPlot = new JMenuItem();
-        principalComponentPlot = new JMenuItem();
-        predictiveRegionPlot = new JMenuItem();
-        confidenceRegionPlot = new JMenuItem();
-        itemBoxplot = new JMenuItem();
-        itemScatterplot = new JMenuItem();
-        itemGeoMeanPlot = new JMenuItem();
-
         personalMenu = new JMenu();
         itemModelCrearMenu = new JMenuItem();
         itemModelImportarMenu = new JMenuItem();
@@ -583,8 +558,7 @@ public class CoDaPackMenu extends JMenuBar {
         itemModelS3 = new JMenuItem();
         itemModelS4 = new JMenuItem();
         itemModelAddtoHTMLJavaScript = new JMenuItem();
-        // itemModelCrearMenu = new JMenuItem();
-        // itemModelPM = new JMenu();
+
 
         menuFile.setText(ITEM_FILE);
         addJMenuItem(menuFile, itemOpen, ITEM_OPEN);
@@ -621,6 +595,42 @@ public class CoDaPackMenu extends JMenuBar {
         menuFile.addSeparator();
         add(menuFile);
 
+
+        FileReader file;
+        JSONObject codapack_menu = null;
+        try {
+            
+            file = new FileReader("codapack_structure.json");
+            BufferedReader br = new BufferedReader(file);
+            codapack_menu = new JSONObject(br.readLine());
+            file.close();
+            //System.out.println("JSON read");
+            //System.out.println(codapack_menu.toString(2));
+            JSONArray json_array = codapack_menu.getJSONArray("CoDaPack Menu");
+            for(int i = 0; i < json_array.length(); i++){
+                JSONObject json_item = json_array.getJSONObject(i);
+                String name_item = (String)json_item.keys().next();
+                JMenu menu_item = new JMenu(name_item);
+                fill_menu(menu_item, json_item.getJSONArray(name_item));
+                add(menu_item);
+            }
+         
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "The file is not available");
+        } catch (JSONException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+        /*
+        Iterator it =  codapack_menu.sortedKeys();
+        while(it.hasNext()){
+            System.out.println(it.next().toString());
+        }
+            
+        }
+*/
+
+        /*
         menuData.setText(ITEM_DATA);
         menuTransforms.setText(ITEM_TRANS);
         menuData.add(menuTransforms);
@@ -666,6 +676,7 @@ public class CoDaPackMenu extends JMenuBar {
         addJMenuItem(menuIrregularData, itemBayesianMultReplace, ITEM_BAYESIAN_MULT_REPLACE);
         menuIrregularData.addSeparator();
         addJMenuItem(menuIrregularData, itemEM_Missing, ITEM_EM_MISSING);
+        
         addJMenuItem(menuIrregularData, itemEM_Zero_Missing, ITEM_EM_ZERO_MISSING);
         menuIrregularData.addSeparator();
         addJMenuItem(menuIrregularData, itemAtipicalityIndex, ITEM_ATIP_INDEX);
@@ -710,6 +721,7 @@ public class CoDaPackMenu extends JMenuBar {
         addJMenuItem(menuGraphs, itemIlrBiPlot, ITEM_ILR_BIPLOT);
         addJMenuItem(menuGraphs, itemDendrogramPlot, ITEM_DENDROGRAM_PLOT);
         add(menuGraphs);
+*/
 
 /*
         personalMenu.setText(ITEM_PERSONALMENU);

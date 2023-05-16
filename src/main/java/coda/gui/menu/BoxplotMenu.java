@@ -14,7 +14,7 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -76,7 +76,7 @@ public class BoxplotMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Boxplot Help Menu";
     
     public BoxplotMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Boxplot Menu",new DataSelector(mainApp.getActiveDataFrame(), true));
+        super(mainApp,"Boxplot Menu",new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         //super.setSelectedDataName("Selected Variables:");

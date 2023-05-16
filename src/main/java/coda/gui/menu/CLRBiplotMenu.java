@@ -33,7 +33,7 @@ import coda.plot.window.Biplot3dWindow;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputTableTwoEntries;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.plot.Biplot2dDisplay.Biplot2dBuilder;
 import coda.plot.Biplot3dDisplay.Biplot3dBuilder;
 import coda.plot.window.Biplot2dWindow;
@@ -46,7 +46,7 @@ import javax.swing.JOptionPane;
  *
  * @author mcomas
  */
-public class Biplot3dMenu extends AbstractMenuDialog{
+public class CLRBiplotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Biplot.yaml";
@@ -55,8 +55,8 @@ public class Biplot3dMenu extends AbstractMenuDialog{
     DataFrame df;
     ArrayList<String> names;
     
-    public Biplot3dMenu(final CoDaPackMain mainApp){
-        super(mainApp, " CLR Biplot Menu", new DataSelector(mainApp.getActiveDataFrame(), true));
+    public CLRBiplotMenu(final CoDaPackMain mainApp){
+        super(mainApp, " CLR Biplot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         coordinates = new JCheckBox("Add coordinates", false);

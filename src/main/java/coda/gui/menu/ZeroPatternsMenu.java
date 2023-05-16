@@ -8,7 +8,7 @@ import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -40,7 +40,7 @@ public class ZeroPatternsMenu extends AbstractMenuRBasedDialog{
     
     
     public ZeroPatternsMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Zpatterns Plot Menu", new DataSelector(mainApp.getActiveDataFrame(), false), r);
+        super(mainApp,"Zpatterns Plot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
         script_file = "zpatterns.R";
 
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
@@ -48,15 +48,15 @@ public class ZeroPatternsMenu extends AbstractMenuRBasedDialog{
         
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
  
-        JPanel B1Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel B1Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         B1Panel.setMaximumSize(new Dimension(1000, 32));
         B1Panel.add(B1);
 
-        JPanel B2Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel B2Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         B2Panel.setMaximumSize(new Dimension(1000, 32));
         B2Panel.add(B2);
 
-        JPanel B3Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel B3Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         B3Panel.setMaximumSize(new Dimension(1000, 32));
         B3Panel.add(B3);
 

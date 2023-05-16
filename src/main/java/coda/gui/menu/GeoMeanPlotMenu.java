@@ -14,7 +14,7 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputPlotHeader;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -62,7 +62,7 @@ public class GeoMeanPlotMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Geometric mean barplot Help Menu";
     
     public GeoMeanPlotMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Geometric mean barplot Menu", new DataSelector(mainApp.getActiveDataFrame(), true));
+        super(mainApp, "Geometric mean barplot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         

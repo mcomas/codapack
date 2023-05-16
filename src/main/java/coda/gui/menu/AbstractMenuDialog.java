@@ -20,9 +20,10 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
+import coda.gui.utils.DataSelector;
 import coda.io.ImportRDA;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -60,10 +61,10 @@ public abstract class AbstractMenuDialog extends JDialog{
     String yamlFile; // variable que serveix per el path del fitxer yaml
     String helpTitle; // variable per el titol del menu
 
-    int WIDTH = 650; //560;
+    int WIDTH = 850; //560;
     int HEIGHT = 500; //430;
     
-    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, DataSelector dataSelector){
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, DataSelector1to1 dataSelector){
         super(mainApp, title);
         mainApplication = mainApp;
         this.df = mainApplication.getActiveDataFrame();
@@ -149,7 +150,7 @@ public abstract class AbstractMenuDialog extends JDialog{
         if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);
 
         optionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
-        optionsPanel.setPreferredSize(new Dimension(250,200));
+        optionsPanel.setPreferredSize(new Dimension(300,200));
         //optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
         //eastPanel.add(optionsPanel);
         getContentPane().add(optionsPanel, BorderLayout.EAST);

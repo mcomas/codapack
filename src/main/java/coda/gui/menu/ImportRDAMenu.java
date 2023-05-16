@@ -27,7 +27,7 @@ package coda.gui.menu;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.io.ImportData;
 import coda.io.ImportRDA;
 import java.awt.Point;
@@ -74,7 +74,7 @@ public class ImportRDAMenu extends AbstractMenuDialog{
     
     
     public ImportRDAMenu(CoDaPackMain mainApp, JFileChooser chooseFile, ImportRDA impdf) throws ScriptException {
-        super(mainApp, "Import R Data File", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Import R Data File", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         
         //Assignem el path a l'string rf
         rf = chooseFile.getCurrentDirectory().getAbsolutePath();

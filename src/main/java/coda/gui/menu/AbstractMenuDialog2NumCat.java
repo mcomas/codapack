@@ -20,7 +20,7 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
 import coda.gui.utils.DataSelector2NumCat;

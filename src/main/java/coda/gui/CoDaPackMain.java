@@ -107,7 +107,7 @@ public final class CoDaPackMain extends JFrame {
      * VARIABLE R
      */
     public static String[] Rargs = {"--no-save" }; // {"--vanilla" };
-    public static Rengine re = new Rengine(Rargs, false, null);
+    public static Rengine re = null;
 
     private JComboBox<String> dataFrameSelector;
     private final DataFrameSelectorListener dataFrameListener = new DataFrameSelectorListener();
@@ -147,20 +147,20 @@ public final class CoDaPackMain extends JFrame {
     private ClusterMenu clusterMenu;
     private ManovaMenu manovaMenu;
     private DiscriminantMenu discriminantMenu;
-    private NormalityTestMenu normalityTestMenu;
+    private LogRatioNormalityTestMenu logRatioNormalityTestMenu;
     // private AtipicalityIndexMenu atipicalityIndexMenu;
-    private AtypMenu atypMenu;
-    private TernaryPlotMenu ternaryPlotMenu;
-    private PrincipalComponentMenu principalComponentMenu;
-    private PredictiveRegionMenu predictiveRegionMenu;
-    private ConfidenceRegionMenu confidenceRegionMenu;
+    private AtypicalityIndexRBasedMenu atypicalityIndexRBasedMenu;
+    private TernaryQuaternaryPlotMenu ternaryQuaternaryPlotMenu;
+    private TernaryQuaternaryPCPlotMenu ternaryQuaternaryPCPlotMenu;
+    private PredictiveRegionPlotMenu predictiveRegionPlotMenu;
+    private CenterConfidenceRegionPlotMenu centerConfidenceRegionPlotMenu;
     private ZeroPatternsMenu zpatternsMenu;
     private BoxplotMenu boxplotMenu;
     private ScatterplotMenu scatterplotMenu;
     private GeoMeanPlotMenu geoMeanPlotMenu;
-    private Biplot3dMenu biplot3dMenu;
-    private ILRCLRPlotMenu iLRCLRPlotMenu;
-    private DendrogramMenu dendrogramMenu;
+    private CLRBiplotMenu cLRBiplotMenu;
+    private ILRCLRBiplotMenu iLRCLRBiplotMenu;
+    private BalanceDendrogramMenu balanceDendrogramMenu;
     private ClasUniNormTestMenu clasUniNormTestMenu;
     private ChangeGroupNameMenu changeGroupNameMenu;
     private ConfigurationMenu configurationMenu;
@@ -401,14 +401,253 @@ public final class CoDaPackMain extends JFrame {
         return dataFrame.get(activeDataFrame);
     }
 
-    public void eventCoDaPack(String action) throws ScriptException {
-        String title = action;
+    public void eventCoDaPack(String title) throws ScriptException {    
+        if(jMenuBar.item_key.containsKey(title)){
+            System.out.println(title + " with key " + jMenuBar.item_key.get(title));
+            eventCoDaPackWithKey(jMenuBar.item_key.get(title));
+        }else{
+            //System.out.println(title + " default menu");
+            eventCoDaPackDefault(title);
+        }
+    }
+    public void eventCoDaPackWithKey(String key){
+        switch(key){
+            case "TransformationALR":
+                if(transformationALRMenu == null) transformationALRMenu = new TransformationALRMenu(this);
+                transformationALRMenu.updateMenuDialog();
+                transformationALRMenu.setVisible(true);
+
+                break;
+            case "TransformationCLR":
+                if(transformationCLRMenu == null) transformationCLRMenu = new TransformationCLRMenu(this);
+                transformationCLRMenu.updateMenuDialog();
+                transformationCLRMenu.setVisible(true);
+
+                break;
+            case "TransformationRawILR":
+                if(transformationRawILRMenu == null) transformationRawILRMenu = new TransformationRawILRMenu(this);
+                transformationRawILRMenu.updateMenuDialog();
+                transformationRawILRMenu.setVisible(true);
+                break;
+            case "TransformationILRRaw":
+                if(transformationILRRawMenu == null) transformationILRRawMenu = new TransformationILRRawMenu(this);
+                transformationILRRawMenu.updateMenuDialog();
+                transformationILRRawMenu.setVisible(true);
+                break;
+            case "CenterData":
+                if(centerDataMenu == null) centerDataMenu = new CenterDataMenu(this);
+                centerDataMenu.updateMenuDialog();
+                centerDataMenu.setVisible(true);
+                break;
+            case "ClosureData":
+                if(closureDataMenu == null) closureDataMenu = new ClosureDataMenu(this);
+                closureDataMenu.updateMenuDialog();
+                closureDataMenu.setVisible(true);
+                break;
+            case "PerturbateData":
+                if(perturbateDataMenu == null) perturbateDataMenu = new PerturbateDataMenu(this);
+                perturbateDataMenu.updateMenuDialog();
+                perturbateDataMenu.setVisible(true);
+                break;
+            case "PowerData":
+                if(powerDataMenu == null) powerDataMenu = new PowerDataMenu(this);
+                powerDataMenu.updateMenuDialog();
+                powerDataMenu.setVisible(true);
+                break;
+            // case "Discretize":
+            //     if(discretizeMenu == null) discretizeMenu = new DiscretizeMenu(this);
+            //     discretizeMenu.updateMenuDialog();
+            //     discretizeMenu.setVisible(true);
+            // case "CalculateNewVar":
+            //     if(calculateNewVarMenu == null) calculateNewVarMenu = new CalculateNewVarMenu(this);
+            //     calculateNewVarMenu.updateMenuDialog();
+            //     calculateNewVarMenu.setVisible(true);
+            // case "SortData":
+            //     if(sortDataMenu == null) sortDataMenu = new SortDataMenu(this);
+            //     sortDataMenu.updateMenuDialog();
+            //     sortDataMenu.setVisible(true);
+            // case "Numeric2Categoric":
+            //     if(numeric2CategoricMenu == null) numeric2CategoricMenu = new Numeric2CategoricMenu(this);
+            //     numeric2CategoricMenu.updateMenuDialog();
+            //     numeric2CategoricMenu.setVisible(true);
+            // case "Categoric2Numeric":
+            //     if(categoric2NumericMenu == null) categoric2NumericMenu = new Categoric2NumericMenu(this);
+            //     categoric2NumericMenu.updateMenuDialog();
+            //     categoric2NumericMenu.setVisible(true);
+            case "ChangeGroupName":
+                if(changeGroupNameMenu == null) changeGroupNameMenu = new ChangeGroupNameMenu(this);
+                changeGroupNameMenu.updateMenuDialog();
+                changeGroupNameMenu.setVisible(true);
+                break;
+            case "Filter":
+                if(filterMenu == null) filterMenu = new FilterMenu(this);
+                filterMenu.updateMenuDialog();
+                filterMenu.setVisible(true);
+                break;
+            // case "AdvancedFilter":
+            //     if(advancedFilterMenu == null) advancedFilterMenu = new AdvancedFilterMenu(this);
+            //     advancedFilterMenu.updateMenuDialog();
+            //     advancedFilterMenu.setVisible(true);
+            // case "CreateNewTable":
+            //     if(createNewTableMenu == null) createNewTableMenu = new CreateNewTableMenu(this);
+            //     createNewTableMenu.updateMenuDialog();
+            //     createNewTableMenu.setVisible(true);
+            // case "AddNumericVariables":
+            //     if(addNumericVariablesMenu == null) addNumericVariablesMenu = new AddNumericVariablesMenu(this);
+            //     addNumericVariablesMenu.updateMenuDialog();
+            //     addNumericVariablesMenu.setVisible(true);
+            // case "DeleteVariables":
+            //     if(deleteVariablesMenu == null) deleteVariablesMenu = new DeleteVariablesMenu(this);
+            //     deleteVariablesMenu.updateMenuDialog();
+            //     deleteVariablesMenu.setVisible(true);
+            // case "ZeroPatterns":
+            //     if(zeroPatternsMenu == null) zeroPatternsMenu = new ZeroPatternsMenu(this);
+            //     zeroPatternsMenu.updateMenuDialog();
+            //     zeroPatternsMenu.setVisible(true);
+            // case "SetDetectionLimit":
+            //     if(setDetectionLimitMenu == null) setDetectionLimitMenu = new SetDetectionLimitMenu(this);
+            //     setDetectionLimitMenu.updateMenuDialog();
+            //     setDetectionLimitMenu.setVisible(true);
+            // case "NonParametricZeroReplacement":
+            //     if(nonParametricZeroReplacementMenu == null) nonParametricZeroReplacementMenu = new NonParametricZeroReplacementMenu(this);
+            //     nonParametricZeroReplacementMenu.updateMenuDialog();
+            //     nonParametricZeroReplacementMenu.setVisible(true);
+            // case "LogRatioEMZeroReplacement":
+            //     if(logRatioEMZeroReplacementMenu == null) logRatioEMZeroReplacementMenu = new LogRatioEMZeroReplacementMenu(this);
+            //     logRatioEMZeroReplacementMenu.updateMenuDialog();
+            //     logRatioEMZeroReplacementMenu.setVisible(true);
+            // case "BayesianMultiplicativeZeroReplacement":
+            //     if(bayesianMultiplicativeZeroReplacementMenu == null) bayesianMultiplicativeZeroReplacementMenu = new BayesianMultiplicativeZeroReplacementMenu(this);
+            //     bayesianMultiplicativeZeroReplacementMenu.updateMenuDialog();
+            //     bayesianMultiplicativeZeroReplacementMenu.setVisible(true);
+            // case "LogRatioEMMissingReplacement":
+            //     if(logRatioEMMissingReplacementMenu == null) logRatioEMMissingReplacementMenu = new LogRatioEMMissingReplacementMenu(this);
+            //     logRatioEMMissingReplacementMenu.updateMenuDialog();
+            //     logRatioEMMissingReplacementMenu.setVisible(true);
+            // case "LogRatioEMZeroMissingReplacementenu":
+            //     if(logRatioEMZeroMissingReplacementenuMenu == null) logRatioEMZeroMissingReplacementenuMenu = new LogRatioEMZeroMissingReplacementenuMenu(this);
+            //     logRatioEMZeroMissingReplacementenuMenu.updateMenuDialog();
+            //     logRatioEMZeroMissingReplacementenuMenu.setVisible(true);
+            // case "AtypicalityIndex":
+            //     if(atypicalityIndexMenu == null) atypicalityIndexMenu = new AtypicalityIndexMenu(this);
+            //     atypicalityIndexMenu.updateMenuDialog();
+            //     atypicalityIndexMenu.setVisible(true);
+            case "CompStatsSummary":
+                if(compStatsSummaryMenu == null) compStatsSummaryMenu = new CompStatsSummaryMenu(this);
+                compStatsSummaryMenu.updateMenuDialog();
+                compStatsSummaryMenu.setVisible(true);
+                break;
+            case "ClasStatsSummary":
+                if(clasStatsSummaryMenu == null) clasStatsSummaryMenu = new ClasStatsSummaryMenu(this);
+                clasStatsSummaryMenu.updateMenuDialog();
+                clasStatsSummaryMenu.setVisible(true);
+                break;
+            // case "XRealYCompositionRegression":
+            //     if(xRealYCompositionRegressionMenu == null) xRealYCompositionRegressionMenu = new XRealYCompositionRegressionMenu(this);
+            //     xRealYCompositionRegressionMenu.updateMenuDialog();
+            //     xRealYCompositionRegressionMenu.setVisible(true);
+            // case "XCompositionYRealRegression":
+            //     if(xCompositionYRealRegressionMenu == null) xCompositionYRealRegressionMenu = new XCompositionYRealRegressionMenu(this);
+            //     xCompositionYRealRegressionMenu.updateMenuDialog();
+            //     xCompositionYRealRegressionMenu.setVisible(true);
+            // case "KMeans":
+            //     if(kMeansMenu == null) kMeansMenu = new KMeansMenu(this);
+            //     kMeansMenu.updateMenuDialog();
+            //     kMeansMenu.setVisible(true);
+            // case "Manova":
+            //     if(manovaMenu == null) manovaMenu = new ManovaMenu(this);
+            //     manovaMenu.updateMenuDialog();
+            //     manovaMenu.setVisible(true);
+            // case "DiscriminantAnalysis":
+            //     if(discriminantAnalysisMenu == null) discriminantAnalysisMenu = new DiscriminantAnalysisMenu(this);
+            //     discriminantAnalysisMenu.updateMenuDialog();
+            //     discriminantAnalysisMenu.setVisible(true);
+            case "LogRatioNormalityTest":
+                if(logRatioNormalityTestMenu == null) logRatioNormalityTestMenu = new LogRatioNormalityTestMenu(this);
+                logRatioNormalityTestMenu.updateMenuDialog();
+                logRatioNormalityTestMenu.setVisible(true);
+                break;
+            // case "ClassicalUniveraiteNormalityTest":
+            //     if(classicalUniveraiteNormalityTestMenu == null) classicalUniveraiteNormalityTestMenu = new ClassicalUniveraiteNormalityTestMenu(this);
+            //     classicalUniveraiteNormalityTestMenu.updateMenuDialog();
+            //     classicalUniveraiteNormalityTestMenu.setVisible(true);
+            case "TernaryQuaternaryPlot":
+                if(ternaryQuaternaryPlotMenu == null) ternaryQuaternaryPlotMenu = new TernaryQuaternaryPlotMenu(this);
+                ternaryQuaternaryPlotMenu.updateMenuDialog();
+                ternaryQuaternaryPlotMenu.setVisible(true);
+                break;
+            case "TernaryQuaternaryPlotEmpty":
+                String names[] = { "X", "Y", "Z" };
+                TernaryPlot2dDisplay display = new TernaryPlot2dDisplay(names);
+
+                double definedGrid[] = { 0.01, 0.05, 0.10, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99 };
+                Ternary2dObject gridObject = new Ternary2dGridObject(display, definedGrid);
+                display.addCoDaObject(gridObject);
+                double center[] = { 1, 1, 1 };
+
+                TernaryPlot2dWindow frame = new TernaryPlot2dWindow(this.getActiveDataFrame(), display,
+                        "Ternary/Quaternary Plot -- Testing version",
+                        CoDaPackConf.helpPath + "Graphs.Ternary-Quaternary Plot-Empty.yaml",
+                        "Ternary/Quaternary Plot Empty Help Menu");
+                frame.setLocationRelativeTo(this);
+                frame.setCenter(center);
+                frame.setVisible(true);
+                break;
+            case "TernaryQuaternaryPCPlot":
+                if(ternaryQuaternaryPCPlotMenu == null) ternaryQuaternaryPCPlotMenu = new TernaryQuaternaryPCPlotMenu(this);
+                ternaryQuaternaryPCPlotMenu.updateMenuDialog();
+                ternaryQuaternaryPCPlotMenu.setVisible(true);
+                break;
+            case "PredictiveRegionPlot":
+                if(predictiveRegionPlotMenu == null) predictiveRegionPlotMenu = new PredictiveRegionPlotMenu(this);
+                predictiveRegionPlotMenu.updateMenuDialog();
+                predictiveRegionPlotMenu.setVisible(true);
+                break;
+            case "CenterConfidenceRegionPlot":
+                if(centerConfidenceRegionPlotMenu == null) centerConfidenceRegionPlotMenu = new CenterConfidenceRegionPlotMenu(this);
+                centerConfidenceRegionPlotMenu.updateMenuDialog();
+                centerConfidenceRegionPlotMenu.setVisible(true);
+                break;
+            // case "Boxplot":
+            //     if(boxplotMenu == null) boxplotMenu = new BoxplotMenu(this);
+            //     boxplotMenu.updateMenuDialog();
+            //     boxplotMenu.setVisible(true);
+            // case "Scatterlot2d3d":
+            //     if(scatterlot2d3dMenu == null) scatterlot2d3dMenu = new Scatterlot2d3dMenu(this);
+            //     scatterlot2d3dMenu.updateMenuDialog();
+            //     scatterlot2d3dMenu.setVisible(true);
+            // case "GeometricMeanBarplot":
+            //     if(geometricMeanBarplotMenu == null) geometricMeanBarplotMenu = new GeometricMeanBarplotMenu(this);
+            //     geometricMeanBarplotMenu.updateMenuDialog();
+            //     geometricMeanBarplotMenu.setVisible(true);
+            case "CLRBiplot":
+                if(cLRBiplotMenu == null) cLRBiplotMenu = new CLRBiplotMenu(this);
+                cLRBiplotMenu.updateMenuDialog();
+                cLRBiplotMenu.setVisible(true);
+                break;
+            case "ILRCLRBiplot":
+                if(iLRCLRBiplotMenu == null) iLRCLRBiplotMenu = new ILRCLRBiplotMenu(this);
+                iLRCLRBiplotMenu.updateMenuDialog();
+                iLRCLRBiplotMenu.setVisible(true);
+                break;
+            case "BalanceDendrogram":
+                if(balanceDendrogramMenu == null) balanceDendrogramMenu = new BalanceDendrogramMenu(this);
+                balanceDendrogramMenu.updateMenuDialog();
+                balanceDendrogramMenu.setVisible(true);
+                break;
+            default:
+                System.out.println("key: " + key + " does not match");
+        }
+    }
+    public void eventCoDaPackDefault(String title) throws ScriptException{
         String ruta = CoDaPackConf.workingDir; // fillRecentPath();
         JFileChooser chooseFile = new JFileChooser(ruta);
         if (title.equals(jMenuBar.ITEM_IMPORT_XLS)) {
+            /*
             JOptionPane.showMessageDialog(this,
                     "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names don't follow this rule, you can correct it on the data table of CoDaPack.",
                     "Warning", JOptionPane.WARNING_MESSAGE);
+            */
             chooseFile.resetChoosableFileFilters();
             chooseFile.setFileFilter(
                     new FileNameExtensionFilter("Excel files", "xls", "xlsx"));
@@ -623,8 +862,8 @@ public final class CoDaPackMain extends JFrame {
             jMenuBar.fillRecentFiles();
             jMenuBar.saveRecentFile(imp.getParameters());
             // jMenuBar.addRecentFile(imp.getParameters());
-        } else if ("format:codapack".equals(action.split("\\?")[0])) {
-            CoDaPackImporter imp = new CoDaPackImporter().setParameters(action);
+        } else if ("format:codapack".equals(title.split("\\?")[0])) {
+            CoDaPackImporter imp = new CoDaPackImporter().setParameters(title);
             ArrayList<DataFrame> dfs = imp.importDataFrames();
             for (DataFrame df : dfs) {
                 addDataFrame(df);
@@ -780,6 +1019,7 @@ public final class CoDaPackMain extends JFrame {
             if (configurationMenu == null)
                 configurationMenu = new ConfigurationMenu(this);
             configurationMenu.setVisible(true);
+        /*
         } else if (title.equals(jMenuBar.ITEM_CREATE_FRAME)) {
             System.out.println("Create Frame");
             new DataFrameCreator(this);
@@ -889,12 +1129,12 @@ public final class CoDaPackMain extends JFrame {
                     || !powerDataMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
                 powerDataMenu = new PowerDataMenu(this);
             powerDataMenu.setVisible(true);
-        /* } else if (title.equals(jMenuBar.ITEM_ZEROS)) {
-            System.out.println("ITEM_ZEROS");
-            if (zeroReplacementMenu == null || zeroReplacementMenu.getDataFrame() != this.getActiveDataFrame()
-                    || !zeroReplacementMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
-                zeroReplacementMenu = new ZeroReplacementMenu(this);
-            zeroReplacementMenu.setVisible(true);*/
+        // } else if (title.equals(jMenuBar.ITEM_ZEROS)) {
+         //   System.out.println("ITEM_ZEROS");
+         //   if (zeroReplacementMenu == null || zeroReplacementMenu.getDataFrame() != this.getActiveDataFrame()
+         //           || !zeroReplacementMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
+         //       zeroReplacementMenu = new ZeroReplacementMenu(this);
+        //    zeroReplacementMenu.setVisible(true);
         } else if (title.equals(jMenuBar.ITEM_ZPATTERNS)) {
 
             if (zpatternsMenu == null) zpatternsMenu = new ZeroPatternsMenu(this, re);
@@ -1049,6 +1289,7 @@ public final class CoDaPackMain extends JFrame {
                     || !principalComponentMenu.getDataFrameNames().equals(this.getActiveDataFrame().getNames()))
                 principalComponentMenu = new PrincipalComponentMenu(this);
             principalComponentMenu.setVisible(true);
+            */
         } else if (title.equals(jMenuBar.ITEM_FORCE_UPDATE)) {
             CoDaPackConf.refusedVersion = CoDaPackConf.CoDaVersion;
             UpdateConnection uc = new UpdateConnection(this);
@@ -1133,6 +1374,10 @@ public final class CoDaPackMain extends JFrame {
     /**
      * @param args the command line arguments
      */
+    static boolean is_R_available(){
+        return(false);
+    }
+    public static boolean R_available = false;
     public static void main(String args[]) throws Exception {
         /*
          * Look and Feel: change appearence according to OS
@@ -1142,7 +1387,12 @@ public final class CoDaPackMain extends JFrame {
         CoDaPackConf.workingDir = System.getProperty("user.dir");
         //re.eval("library(coda.base, lib.loc='Rlibraries')");
         //re.eval("library(zCompositions, lib.loc='Rlibraries')");
-        re.eval("options(width=10000)");
+        R_available = is_R_available();
+        if(R_available){
+            re = new Rengine(Rargs, false, null);
+            re.eval("options(width=10000)");
+        }
+        
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {

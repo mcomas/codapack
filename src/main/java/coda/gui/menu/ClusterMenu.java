@@ -13,7 +13,7 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -77,7 +77,7 @@ public class ClusterMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Cluster Help Menu";
     
     public ClusterMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Cluster Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Cluster Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         //super.setSelectedDataName("Select Composition:");
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;

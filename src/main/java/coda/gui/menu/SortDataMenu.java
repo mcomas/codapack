@@ -13,7 +13,7 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +38,7 @@ public class SortDataMenu extends AbstractMenuDialog{
     private static final String helpTitle = "Sort Data Help Menu";
     
     public SortDataMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Sort Data Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Sort Data Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         re = r;

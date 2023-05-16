@@ -14,7 +14,7 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -65,13 +65,13 @@ public class MissingEMMenu extends AbstractMenuRBasedDialog{
     private static final String helpTitle = "Logratio-EM missing replacement Help Menu";
     
     public MissingEMMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Logratio-EM missing replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false), r);
+        super(mainApp, "Logratio-EM missing replacement Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         /* options configuration */
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
         
-        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB1.setMaximumSize(new Dimension(1000, 32));
         PB1.add(P1);
 

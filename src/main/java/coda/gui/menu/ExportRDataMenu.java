@@ -28,7 +28,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.ExportRDA;
 
@@ -56,7 +56,7 @@ public class ExportRDataMenu extends AbstractMenuDialog {
     JLabel text1 = new JLabel("Data Frame name:");
     ExportRDA exportRDA;
     public ExportRDataMenu(final CoDaPackMain mainApp, ExportRDA expRDA) {
-        super(mainApp, "Export Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Export Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         exportRDA = expRDA;
         dfname = new JTextField("data", 14);
         optionsPanel.add(text1);

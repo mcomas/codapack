@@ -6,44 +6,18 @@
 package coda.gui.menu;
 
 import coda.BasicStats;
-import coda.DataFrame;
-import coda.Variable;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import static coda.gui.CoDaPackMain.outputPanel;
-import coda.gui.output.OutputElement;
-import coda.gui.output.OutputForR;
-import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -65,19 +39,19 @@ public class BayesianMultRepMenu extends AbstractMenuRBasedDialog{
     public static final long serialVersionUID = 1L;
     
     public BayesianMultRepMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Bayesian Multiplicative zero Replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false), r);
+        super(mainApp, "Bayesian Multiplicative zero Replacement Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
         
         /* options configuration */
-        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB1.setMaximumSize(new Dimension(1000, 32));        
         PB1.add(new JLabel("Method"));  
         PB1.add(Box.createHorizontalStrut(10));
         PB1.add(P1ComboOptions);
 
-        JPanel PB2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB2.setMaximumSize(new Dimension(1000, 32));        
         PB2.add(new JLabel("Output"));  
         PB2.add(Box.createHorizontalStrut(10));
@@ -96,7 +70,6 @@ public class BayesianMultRepMenu extends AbstractMenuRBasedDialog{
 
         df = mainApplication.getActiveDataFrame();
         String[] sel_names = ds.getSelectedData();
-        
         
         if(sel_names.length >= 2){
             
@@ -132,13 +105,10 @@ public class BayesianMultRepMenu extends AbstractMenuRBasedDialog{
             }else{
                 JOptionPane.showMessageDialog(this,"Please select a variable that contains some 0");
             }
-            
-            
+
         }else{
             JOptionPane.showMessageDialog(this,"Please select minimum two variables");
         }
     }
-
-    
     
 }

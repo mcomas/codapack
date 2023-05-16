@@ -9,7 +9,7 @@ import coda.BasicStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -42,24 +42,24 @@ public class ZeroEMMenu extends AbstractMenuRBasedDialog{
     JTextField B2 = new JTextField("0.65", 5);
   
     public ZeroEMMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Logratio-EM zero Replacement Menu", new DataSelector(mainApp.getActiveDataFrame(), false), r);
+        super(mainApp, "Logratio-EM zero Replacement Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         /* options configuration */
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
 
-        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB1.setMaximumSize(new Dimension(1000, 32));
         PB1.add(P1);
 
 
-        JPanel PB2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB2.setMaximumSize(new Dimension(1000, 32));
         PB2.add(new JLabel("IniCov"));
         PB2.add(Box.createHorizontalStrut(10));
         PB2.add(B1);
         
-        JPanel PB3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB3.setMaximumSize(new Dimension(1000, 32));        
         PB3.add(new JLabel("DL proportion"));  
         PB3.add(Box.createHorizontalStrut(10));

@@ -19,7 +19,7 @@
 
 package coda.gui.menu;
 
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.io.File;
 import java.util.Arrays;
@@ -48,7 +48,7 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
     int PLOT_HEIGHT = 500;
 
     String script_file;
-    public AbstractMenuRBasedDialog(final CoDaPackMain mainApp, String title, DataSelector dataSelector, Rengine r){
+    public AbstractMenuRBasedDialog(final CoDaPackMain mainApp, String title, DataSelector1to1 dataSelector, Rengine r){
         super(mainApp, title, dataSelector);
         re = r;
     }

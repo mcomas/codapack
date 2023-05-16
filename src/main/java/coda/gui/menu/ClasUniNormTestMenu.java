@@ -11,7 +11,7 @@ import coda.gui.CoDaPackMain;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.util.ArrayList;
 import javax.swing.JComboBox;
@@ -38,7 +38,7 @@ public class ClasUniNormTestMenu extends AbstractMenuDialog{
     
     public ClasUniNormTestMenu(final CoDaPackMain mainApp, Rengine r){
         
-        super(mainApp, "Classical Univariate Normality Test Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Classical Univariate Normality Test Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         

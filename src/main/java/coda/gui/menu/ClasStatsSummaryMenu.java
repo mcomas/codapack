@@ -33,7 +33,7 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputSingleValue;
 import coda.gui.output.OutputTableTwoEntries;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.util.ArrayList;
 import javax.swing.JCheckBox;
@@ -59,7 +59,7 @@ public class ClasStatsSummaryMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public ClasStatsSummaryMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Numerical Summary", new DataSelector(mainApp.getActiveDataFrame(), true));
+        super(mainApp, "Numerical Summary", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         meanCheck = new JCheckBox("Mean", true);

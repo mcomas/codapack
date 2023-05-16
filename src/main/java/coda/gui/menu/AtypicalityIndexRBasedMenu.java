@@ -13,7 +13,7 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -43,7 +43,7 @@ import org.rosuda.JRI.Rengine;
  * AtypMenu -> X numerica i positiva amb opci� de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class AtypMenu extends AbstractMenuDialog{
+public class AtypicalityIndexRBasedMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
@@ -61,8 +61,8 @@ public class AtypMenu extends AbstractMenuDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Atipicality Index.yaml";
     private static final String helpTitle = "Atipicality Index Help Menu";
     
-    public AtypMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Atyp Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+    public AtypicalityIndexRBasedMenu(final CoDaPackMain mainApp, Rengine r){
+        super(mainApp, "Atyp Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         

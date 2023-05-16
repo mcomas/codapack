@@ -22,7 +22,7 @@ package coda.gui.menu;
 import coda.*;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -45,22 +45,22 @@ public class ZeroDetectionLimitMenu extends AbstractMenuDialog{
     JRadioButton B3 = new JRadioButton("Overall minimum");
     
     public ZeroDetectionLimitMenu(CoDaPackMain mainApp) {
-        super(mainApp, "Set Detection Limit", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Set Detection Limit", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
 
-        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB1.setMaximumSize(new Dimension(1000, 32));
         PB1.add(B1);
         PB1.add(Box.createHorizontalStrut(10));
         PB1.add(P1);
 
-        JPanel PB2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB2.setMaximumSize(new Dimension(1000, 32));
         PB2.add(B2);
 
-        JPanel PB3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel PB3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         PB3.setMaximumSize(new Dimension(1000, 32));
         PB3.add(B3);
 

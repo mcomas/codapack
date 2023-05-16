@@ -30,7 +30,7 @@ import coda.ext.jama.Matrix;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.plot2.PlotUtils;
 import coda.plot2.TernaryPlot2dDisplay;
 import coda.plot2.TernaryPlot3dDisplay;
@@ -52,19 +52,18 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class ConfidenceRegionMenu extends AbstractMenuDialog{
+public class PredictiveRegionPlotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Center Confidence Region.yaml";
-    private static final String helpTitle = "Center Confidence Region Help Menu";
-    
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Predictive Region.yaml";
+    private static final String helpTitle = "Predictive Region Help Menu";
     JTextField predLevel;
-    JLabel text1 = new JLabel("Confidence level");
+    JLabel text1 = new JLabel("Predictive level");
     DataFrame df;
     ArrayList<String> names;
     
-    public ConfidenceRegionMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Center Confidence Region Menu", new DataSelector(mainApp.getActiveDataFrame(), true));//, false, true, false);
+    public PredictiveRegionPlotMenu(final CoDaPackMain mainApp){
+        super(mainApp, "Predictive Region Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));//, false, true, false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         predLevel =  new JTextField("0.90 0.95 0.99", 14);
@@ -84,57 +83,37 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
 
         for(int i=0;i<v.length;i++) confidence[i] = Double.parseDouble(v[i]);
 
-        if(selectedNames.length == 3){// || selectedNames.length == 4){
+        if(selectedNames.length == 3 ){//|| selectedNames.length == 4){
             df = mainApplication.getActiveDataFrame();
             boolean[] selection = getValidComposition(df, selectedNames);
             int [] mapping = df.getMapingToData(selectedNames, selection);
             double[][] data = df.getNumericalData(selectedNames, mapping);         
 
             String groupedBy = ds.getSelectedGroup();
-            int[] groups = null;
-            String[] categories = null;
-
 
             CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("Confidence region", selectedNames));
+                    new OutputPlotHeader("Predictive region", selectedNames));
 
-            if(groupedBy != null){
-                /*
-                 * Obtaining the groups and the categories for non lost data
-                 */
-                groups  = coda.Utils.reduceData(df.getDefinedGroup(groupedBy), selection);
-                categories =  coda.Utils.getCategories(df.getCategoricalData(groupedBy), selection);
-
-            }            
             if(selectedNames.length == 3){
-
                 TernaryPlot2dDisplay display = new TernaryPlot2dDisplay(selectedNames);
 
                 double definedGrid[] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
                 Ternary2dObject gridObject = new Ternary2dGridObject(display, definedGrid);
                 display.addCoDaObject(gridObject);
+                double transData[][] = new Matrix(data).transpose().getArray();
+                Ternary2dObject dataObject = new Ternary2dDataObject(display, transData);
+                dataObject.setColor(new Color(70, 70, 200));
+                display.addCoDaObject(dataObject);
 
-                double xdata[][] = null;
-
-                int limit = categories == null ? 1 : categories.length;
-                for(int gr=0;gr<limit;gr++){
-
-                    if(categories == null) xdata = data;
-                    else xdata = coda.Utils.reduceData(data, groups, gr);
-
-                    double transData[][] = new Matrix(xdata).transpose().getArray();
-                    Ternary2dObject dataObject = new Ternary2dDataObject(display, transData);
-                    dataObject.setColor(new coda.plot.CoDaDisplayConfiguration().getColor("data",gr));
-                    display.addCoDaObject(dataObject);
-
-                    for(int i=0;i<confidence.length;i++){
-                        Ternary2dObject curveObject = new Ternary2dCurveObject(display,
-                                PlotUtils.confidenceRegion2d(xdata, confidence[i]));
-                        curveObject.setColor(Color.red);//coda.plot.CoDaDisplayConfiguration.getColor("data",gr));
-                        display.addCoDaObject(curveObject);
-                    }
+                for(int i=0;i<confidence.length;i++){
+                    Ternary2dObject curveObject = new Ternary2dCurveObject(display,
+                            PlotUtils.predictiveRegion2d(data, confidence[i]));
+                    curveObject.setColor(Color.black);                    
+                    display.addCoDaObject(curveObject);
                 }
-                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Center Confidence Region", this.yamlFile, this.helpTitle);
+
+                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Predictive Region", this.yamlFile, this.helpTitle);
+                plot.setLocationRelativeTo(mainApplication);
                 plot.setCenter(CoDaStats.center(data));
                 plot.setVisible(true);
             }else{// selectedNames.length == 4
@@ -156,14 +135,13 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
                             PlotUtils.predictiveRegion2d(data, confidence[i]));
                     curveObject.setColor(Color.black);
                     display.addCoDaObject(curveObject);
-                     * */
+                     */
                 }
-
 
                 /*
                 TernaryPlot3dBuilder builder = new TernaryPlot3dBuilder(selectedNames, data);
                 builder.mapping(mapping);
-
+                
                 if(groupedBy != null){
                     builder.groups(coda.Utils.reduceData(
                             df.getDefinedGroup(groupedBy),
@@ -172,8 +150,9 @@ public class ConfidenceRegionMenu extends AbstractMenuDialog{
                 }
                 TernaryPlot3dDisplay display = builder.build();
                 plot = new TernaryPlot3dWindow(display, "Ternary Plot 3d");
+                plot.setLocationRelativeTo(mainApplication);
                  * */
-
+                
             }
             
             setVisible(false);

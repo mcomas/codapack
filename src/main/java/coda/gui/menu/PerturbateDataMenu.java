@@ -24,7 +24,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackConf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,7 +55,7 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
     
     
     public PerturbateDataMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Perturbate Data Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Perturbate Data Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         perturbateWith =  new JTextField(" <parts separated by spaces> ", 16);

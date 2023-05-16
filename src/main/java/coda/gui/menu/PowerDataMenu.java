@@ -24,7 +24,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackConf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,7 +52,7 @@ public class PowerDataMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public PowerDataMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Power transformation Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Power transformation Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         powerWith =  new JTextField(5);

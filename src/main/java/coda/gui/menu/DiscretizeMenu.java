@@ -26,7 +26,7 @@ package coda.gui.menu;
 import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public DiscretizeMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Discretize/Segment Menu", new DataSelector(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Discretize/Segment Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
