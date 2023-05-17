@@ -70,6 +70,8 @@ public class XCompositionYRealRegressionMenu extends AbstractMenuRBasedDialog{
     
     public XCompositionYRealRegressionMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp,"X composition Y real regression Menu", new DataSelector1to2(mainApp.getActiveDataFrame(), false), r);
+        script_file = "Regression_X_Composition_Y_Real.R";
+
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
     
         ((DataSelector1to2)ds).setTextA("Compositional explanatory");
@@ -125,31 +127,9 @@ public class XCompositionYRealRegressionMenu extends AbstractMenuRBasedDialog{
             // Create matrices
             addMatrixToR(X, vX, "X");
             addMatrixToR(Y, vY, "Y");
+            constructParametersToR();
 
-            constructParametersToR();        
-                this.dispose();
-                
-            // executem script d'R
-            
-            String url = CoDaPackConf.rScriptPath + "Regression_X_Composition_Y_Real.R";
-                
-                re.eval("tryCatch({error <- \"NULL\";source(\"" + url + "\")}, error = function(e){ error <<- e$message})");
-                
-                String[] errorMessage = re.eval("error").asStringArray();
-
-                if(errorMessage[0].equals("NULL")){
-                    /* executem totes les accions possibles */
-                    showText();
-                    createVariables();
-                    createDataFrame();
-                    showGraphics();
-                }
-                else{
-                    OutputElement type = new OutputText("Error in R:");
-                    outputPanel.addOutput(type);
-                    OutputElement outElement = new OutputForR(errorMessage);
-                    outputPanel.addOutput(outElement);
-                }
+            captureROutput();
         }
         else{
             if(X.length <= 1) JOptionPane.showMessageDialog(null, "Select at least two parts");
