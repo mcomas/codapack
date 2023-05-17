@@ -5,104 +5,42 @@
 # BaseX: Matrix containing SBP
 # Menu S3
 
-################# LIBRARIES #################
-
-#library(ggplot2)
-library(coda.base)
-#library(plyr)
-
-#load("L:/CoDaCourse/CoDaCourse 17/Material/LABS 2017/Scripts 2018/CoDaLabs/Scripts CoDaPack/activ_arctic.RData")
-#Y <- as.data.frame(darctic[,5])
-#head(Y)
-#X <- as.data.frame(darctic[,2:4])
-#head(X)
-#B1 <- as.logical(TRUE)
-#B2 <- as.logical(TRUE)
-#BaseX = matrix(c(1, 1, -1, 1, -1, 0), ncol = 2)
-
-################# FUNCTIONS #################
-
-generateFileName <- function(candidateName){
-  name = candidateName
-  nameFile = paste(name, ".svg", sep = "")
-
-  while(file.exists(nameFile)){
-    name = paste(name, "c", sep = "")
-    nameFile = paste(name, ".svg", sep = "")
-  }
-
-  return(nameFile)
-}
-
 ################# MAIN #################
+#save.image(file = 'image_XY_reg.RData')
 
-Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
-nparts=NCOL(Xt)
-colnames(Xt) = paste0('ilr.', 1:nparts)
+H <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
+colnames(H) = paste0('ilr.', 1:ncol(H))
 
-df <- cbind.data.frame(Xt,Y)
+str_y = colnames(Y)
+if(ncol(Y) > 1) str_y = sprintf("cbind(%s)", paste(colnames(Y), collapse=','))
+str_x = paste(colnames(H), collapse='+')
+str_frm = sprintf("%s ~ %s", str_y, str_x)
 
-# Linear model
-#rm(formul)
-#formul <- paste(colnames(df[nparts+1]),"~",colnames(df[1]),"+",sep="")
-#for(n in 2:nparts) {
-#  formul <- paste(formul,colnames(df[n]), collapse= "+",sep="")
-formul <- paste(colnames(df[nparts+1]),"~",colnames(df[1]),sep="")
-if (nparts > 1)
-{
-  for(n in 2:nparts) {
-    formul <- paste(formul,"+",colnames(df[n]), sep="")
-  }
-}
-#rm(LM)
-LM <- lm(as.formula(formul),data=df)
+. = as.data.frame(cbind(Y,H))
+LM = eval(parse(text = sprintf("lm(%s, .)", str_frm)))
 
 #summary(LM)
 
-# Create graphs
-# Create graphs
-graphnames <- list()
-name <- generateFileName(paste(tempdir(),'Plots_of_residuals',sep="\\"))
-svg(name)
+
+graphname <- sprintf("%s.svg", tempfile())
+svg(graphname, width = PLOT_WIDTH, height = PLOT_HEIGTH)
 oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
-plot(LM,sub.caption=formul)  # Plot the model information
+plot(LM,sub.caption=deparse(as.formula(LM)))  # Plot the model information
 par(oldpar)
 dev.off()
-graphnames[1] <- name
 
-#rm(DF)
-DF  <-  data.frame()
-#head(DF)
-#if (B1 == TRUE) {
-#  if(plyr::empty(DF)){
-#    DF <- as.data.frame(LM$residuals)
-#  } else{
-#    DF <- cbind.data.frame(DF, LM$residuals)
-#  }
-#}
-if (B1 == TRUE) {
-    DF <- as.data.frame(LM$residuals)
-    names(DF) <-("residuals")
-}
-if (B2 == TRUE) {
-  if(plyr::empty(DF)){
-    DF <- as.data.frame(LM$fitted.values)
-    names(DF) <-("fitted.values")
-  } else{
-    DF <- cbind.data.frame(DF, LM$fitted.values)
-    names(DF) <-(c("residuals","fitted.values"))
-  }
-}
 
-text_output = gsub("as.formula(formul)", formul, capture.output(summary(LM)), fixed = TRUE)
+new_data  <-  list()
+if(B1) new_data[['residuals']] = LM$residuals
+if(B2) new_data[['fitted.values']] = LM$fitted.values
+
+text_output = capture.output(summary(LM))
 text_output = gsub("[‘’]", "'", text_output)
 
 # Ooutput
 cdp_res = list(
   'text' = list(text_output),
   'dataframe' = list('coefficients' = LM$coefficients),
-  'graph' = graphnames,
-  'new_data' = DF
+  'graph' = graphname,
+  'new_data' = new_data
 )
-
-

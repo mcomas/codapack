@@ -41,6 +41,7 @@ import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import coda.ext.json.JSONString;
+import coda.gui.menu.RBasedGenericMenu;
 
 /**
  *
@@ -97,6 +98,8 @@ public class CoDaPackMenu extends JMenuBar {
     public final String ITEM_CONF = "Configuration";
     public JMenuItem itemQuit;
     public final String ITEM_QUIT = "Quit CoDaPack";
+
+    CoDaPackMain mainApplication;
 
     /*
     public JMenu menuData;
@@ -445,7 +448,20 @@ public class CoDaPackMenu extends JMenuBar {
                 item_key.put(name, id);
                 JMenuItem mi = new JMenuItem();
                 if(json_obj.has("code") && json_obj.getString("code").equals("r")){
-                    mi.setEnabled(false);
+                    if(!CoDaPackMain.R_available){
+                        mi.setEnabled(false);
+                    }
+                    if(json_obj.has("script") & json_obj.has("controls")){
+                        JSONArray json_controls = json_obj.getJSONArray("controls");
+                        String Rscript = json_obj.getString("script");
+                        System.out.println(json_controls.toString());                    
+                        mainApplication.dynamicMenus.put(id, 
+                            new RBasedGenericMenu(mainApplication, 
+                                                  CoDaPackMain.re, 
+                                                  name,
+                                                  Rscript,
+                                                  json_controls));
+                    }
                 }
                 addJMenuItem(super_menu, mi, name);  
 
@@ -460,7 +476,10 @@ public class CoDaPackMenu extends JMenuBar {
         }
 
     }
-    public CoDaPackMenu() {
+    public CoDaPackMenu(CoDaPackMain mainApp){
+
+        mainApplication = mainApp;
+
         this.recentFile = new HashMap<String, JMenuItem>();
 
         

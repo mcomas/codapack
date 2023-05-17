@@ -48,7 +48,7 @@ import static org.apache.commons.lang3.math.NumberUtils.isNumber;
  *
  * @author Guest2
  */
-public class DataFrameCreator extends JFrame{
+public class CreateNewTableMenu extends JFrame{
     
     JTable table;
     JPanel panel;
@@ -58,7 +58,7 @@ public class DataFrameCreator extends JFrame{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Create New Table.yaml";
     private static final String helpTitle = "Create New Table Help";
     
-    public DataFrameCreator(final CoDaPackMain mainApp){
+    public CreateNewTableMenu(final CoDaPackMain mainApp){
     //public DataFrameCreator(final ParaProbarMiMenu mainApp){
                 panel = new JPanel();
                 panel.add(new JLabel("Use first row to set variable names"));

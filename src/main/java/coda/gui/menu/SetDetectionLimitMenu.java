@@ -35,7 +35,7 @@ import javax.swing.*;
  *
  * @author david
  */
-public class ZeroDetectionLimitMenu extends AbstractMenuDialog{
+public class SetDetectionLimitMenu extends AbstractMenuDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Set Detection Limit.yaml";
     private static final String helpTitle = "Set Detection Limit Help";
     
@@ -44,7 +44,7 @@ public class ZeroDetectionLimitMenu extends AbstractMenuDialog{
     JRadioButton B2 = new JRadioButton("Column minimum");
     JRadioButton B3 = new JRadioButton("Overall minimum");
     
-    public ZeroDetectionLimitMenu(CoDaPackMain mainApp) {
+    public SetDetectionLimitMenu(CoDaPackMain mainApp) {
         super(mainApp, "Set Detection Limit", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 

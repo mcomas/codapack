@@ -116,7 +116,10 @@ public final class DataSelector1to1 extends DataSelector {
         vars_selected.setModel(model2);
     }
     public void updateDataLists(DataFrame dataFrame){        
-
+        if(ds_dataFrame == null){
+            setDataLists(dataFrame);
+        }
+        
         List<String> selected_vars = Arrays.asList(this.getSelectedData());
         String select_group_by = this.getSelectedGroup();
 

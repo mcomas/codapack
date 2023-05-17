@@ -49,6 +49,13 @@ CoDaPack Menu:
         - Zero-Patterns:
             id: "ZeroPatterns"
             code: "r"
+            script: "zpatterns.R"
+            controls:
+                - boolean: "Include means"
+                - boolean: "Include %"
+                - boolean: 
+                    label: "Add Pattern"
+                    value: true
         - Set Detection Limit:
             id: "SetDetectionLimit"
         - Non-Parametric Zero Replacement:
@@ -64,10 +71,10 @@ CoDaPack Menu:
             id: "LogRatioEMMissingReplacement"
             code: "r"
         - Log-Ratio EM Zero & Missing Replacement:
-            id: "LogRatioEMZeroMissingReplacementenu"
+            id: "LogRatioEMZeroMissingReplacement"
             code: "r"
         - Atypicality Index:
-            id: "AtypicalityIndex"
+            id: "AtypicalityIndexRBased"
             code: "r"
     - Statistics:
         - Compositional Statistics Summary:
@@ -87,6 +94,17 @@ CoDaPack Menu:
                 - K-means:
                     id: "KMeans"
                     code: "r"
+                    script: "kmeans.R"
+                    controls:
+                        - options:
+                            label: "Number clusters"
+                            options_controls:
+                                - Fixed:
+                                    - numeric: "Clusters"
+                                - Optimal:
+                                    - numeric: "Maximum"
+                                    - select: ["Calinski index", "Average Silhouette"]
+                        - string: "Cluster name"
             - Manova:
                 id: "Manova"
                 code: "r"

@@ -19,10 +19,12 @@
 
 package coda.gui.menu;
 
+import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 
@@ -48,9 +50,21 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
     int PLOT_HEIGHT = 500;
 
     String script_file;
-    public AbstractMenuRBasedDialog(final CoDaPackMain mainApp, String title, DataSelector1to1 dataSelector, Rengine r){
+    public AbstractMenuRBasedDialog(final CoDaPackMain mainApp, String title, DataSelector dataSelector, Rengine r){
         super(mainApp, title, dataSelector);
         re = r;
+    }
+    public void addMatrixToR(double data[][], String col_names[], String name){
+        String vnames[] = new String[data.length];
+        for(int i=0; i < data.length; i++){
+            vnames[i] = ".cdp_x"+i;
+            re.assign(vnames[i], data[i]);
+        }
+        re.eval("%s = cbind(%s)".formatted(name, String.join(",", vnames)));
+
+        for(int i = 0; i < col_names.length; i++) col_names[i] = "'" + col_names[i] + "'";
+        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names)));
+        re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
     }
     void showText(){
         

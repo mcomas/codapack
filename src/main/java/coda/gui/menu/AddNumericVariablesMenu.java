@@ -24,7 +24,6 @@
 
 package coda.gui.menu;
 
-import coda.gui.utils.BoxDataSelector;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
@@ -35,56 +34,74 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
  * @author mcomas
  */
-public class DeleteMenu extends JDialog{
+public class AddNumericVariablesMenu extends CoDaPackDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Delete Variables.yaml";
-    private static final String helpTitle = "Delete variables Help";
+    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Add Numerical Variables.yaml";
+    private static final String helpTitle = "Add numeric variables Help Menu";
     
-    BoxDataSelector ds;
     DataFrame df;
-    public DeleteMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Delete variables");
-
+    JTextField textNames;
+    JTextArea textData;
+    
+    public AddNumericVariablesMenu(final CoDaPackMain mainApp){
+        super(mainApp, "Add numeric variables");
         Point p = mainApp.getLocation();
         p.x = p.x + (mainApp.getWidth()-520)/2;
         p.y = p.y + (mainApp.getHeight()-430)/2;
         setLocation(p);
         
-        setSize(190,370);
+        setSize(500,370);
         df = mainApp.getActiveDataFrame();
-        ds = new BoxDataSelector(df);
+       
         getContentPane().setLayout(new BorderLayout());
 
-        getContentPane().add(ds, BorderLayout.CENTER);
-        
-        JPanel southPanel = new JPanel();
+        JPanel north = new JPanel();
+        north.setLayout(new BorderLayout());
+        north.add(new JLabel(" Variable names "), BorderLayout.WEST);
+        textNames = new JTextField();
+        north.add(textNames, BorderLayout.CENTER);
+        getContentPane().add(north, BorderLayout.NORTH);
 
+        JPanel center = new JPanel();
+        center.setLayout(new BorderLayout());
+        center.add(new JLabel(" Data "), BorderLayout.NORTH);
+        textData = new JTextArea(5, 5);
+        JScrollPane scroll = new JScrollPane();
+        scroll.setViewportView(textData);
+        center.add(scroll, BorderLayout.CENTER);
+        getContentPane().add(center, BorderLayout.CENTER);
+
+        JPanel south = new JPanel();
         JButton accept = new JButton("Accept");
-        southPanel.add(accept);
+        south.add(accept);
+        getContentPane().add(south, BorderLayout.SOUTH);
         accept.addActionListener(new java.awt.event.ActionListener() {
             
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                String selected[] = ds.getSelectedData();
-                int n = selected.length;
-                for(int i=0;i<n;i++){
-                    try {
-                        df.remove(selected[i]);
-                    } catch (DataFrame.DataFrameException ex) {
-                        Logger.getLogger(DeleteMenu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                String names[] = getNames();
+                double[][] data = getData(names.length);
+
+                if(df == null){
+                    df = new DataFrame();
+                    mainApp.addDataFrame(df);
                 }
+                df.addData(names, data);
                 mainApp.updateDataFrame(df);
                 setVisible(false);
             }
@@ -92,7 +109,7 @@ public class DeleteMenu extends JDialog{
         });
         
         JButton helpButton = new JButton("Help");
-        southPanel.add(helpButton);
+        south.add(helpButton);
         helpButton.addActionListener(new java.awt.event.ActionListener(){
             public void actionPerformed(java.awt.event.ActionEvent evt){
                 JDialog dialog = new JDialog();
@@ -125,16 +142,37 @@ public class DeleteMenu extends JDialog{
                 }
             }
         });
-        
-        getContentPane().add(southPanel, BorderLayout.SOUTH);
     }
-    @Override
-    public void setVisible(boolean v){
-        if(df == null){
-            JOptionPane.showMessageDialog(this, "No data available");
-            this.dispose();
+    public String[] getNames(){
+        StringTokenizer tok = new StringTokenizer(textNames.getText());
+        int size = tok.countTokens();
+        String names[] = new String[size];
+        int i = 0;
+        while( tok.hasMoreTokens()){
+            names[i++] = tok.nextToken();
+        }
+        return names;
+    }
+    public double[][] getData(int ncol){
+        StringTokenizer tok = new StringTokenizer(textData.getText());
+        double[][] data;
+        int e = tok.countTokens();        
+        if( e % ncol == 0 ){
+            int nrow = e / ncol;
+            data = new double[ncol][nrow];
+            for(int i=0;i<nrow;i++){
+                for(int j=0;j<ncol;j++){
+                    String str = tok.nextToken();
+                    str = str.replace(",", ".");
+                    data[j][i] = Double.valueOf(str);
+                }
+            }
+            while(tok.hasMoreTokens()){
+                String item = tok.nextToken();
+            }
+            return data;
         }else{
-            super.setVisible(v);
+            return null;
         }
     }
 }

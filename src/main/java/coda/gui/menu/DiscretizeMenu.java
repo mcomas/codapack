@@ -42,7 +42,7 @@ import org.rosuda.JRI.Rengine;
  *
  * @author Guest2
  */
-public class DiscretizeMenu extends AbstractMenuDialog{
+public class DiscretizeMenu extends AbstractMenuRBasedDialog{
     
     Rengine re;
     JPanel panel;
@@ -64,7 +64,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public DiscretizeMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Discretize/Segment Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Discretize/Segment Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         

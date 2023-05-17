@@ -53,7 +53,7 @@ import org.rosuda.JRI.Rengine;
  * EM_MissingMenu -> X numerica i positiva amb opci� de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class MissingEMMenu extends AbstractMenuRBasedDialog{
+public class LogRatioEMMissingReplacementMenu extends AbstractMenuRBasedDialog{
 
     
     JCheckBox P1 = new JCheckBox("Robust");
@@ -64,7 +64,7 @@ public class MissingEMMenu extends AbstractMenuRBasedDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Logratio-EM missing Replacement.yaml";
     private static final String helpTitle = "Logratio-EM missing replacement Help Menu";
     
-    public MissingEMMenu(final CoDaPackMain mainApp, Rengine r){
+    public LogRatioEMMissingReplacementMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Logratio-EM missing replacement Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         

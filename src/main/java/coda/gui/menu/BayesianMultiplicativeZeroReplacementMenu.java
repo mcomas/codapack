@@ -24,7 +24,7 @@ import org.rosuda.JRI.Rengine;
  * BayesianMultRepMenu -> X numerica i positiva amb opcio de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class BayesianMultRepMenu extends AbstractMenuRBasedDialog{
+public class BayesianMultiplicativeZeroReplacementMenu extends AbstractMenuRBasedDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Bayesian-multiplicative zero replacement.yaml";
     private static final String helpTitle = "Bayesian Multiplicative zero Replacement Help Menu";
     
@@ -38,7 +38,7 @@ public class BayesianMultRepMenu extends AbstractMenuRBasedDialog{
     
     public static final long serialVersionUID = 1L;
     
-    public BayesianMultRepMenu(final CoDaPackMain mainApp, Rengine r){
+    public BayesianMultiplicativeZeroReplacementMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Bayesian Multiplicative zero Replacement Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 

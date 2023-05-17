@@ -64,7 +64,7 @@ public abstract class AbstractMenuDialog extends JDialog{
     int WIDTH = 850; //560;
     int HEIGHT = 500; //430;
     
-    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, DataSelector1to1 dataSelector){
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, DataSelector dataSelector){
         super(mainApp, title);
         mainApplication = mainApp;
         this.df = mainApplication.getActiveDataFrame();
@@ -136,7 +136,12 @@ public abstract class AbstractMenuDialog extends JDialog{
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
         initialize();
     }*/
-    
+    public void reLocate(){
+        Point p = mainApplication.getLocation();
+        p.x = p.x + (mainApplication.getWidth()-520)/2;
+        p.y = p.y + (mainApplication.getHeight()-430)/2;
+        setLocation(p);
+    }
     protected void initialize(){
         Point p = mainApplication.getLocation();
         p.x = p.x + (mainApplication.getWidth()-520)/2;
