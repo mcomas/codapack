@@ -69,9 +69,9 @@
    </build>
    <dependencies>
       <dependency>
-         <groupId>com.googlecode.json-simple</groupId>
-         <artifactId>json-simple</artifactId>
-         <version>1.1.1</version>
+         <groupId>javax.json</groupId>
+         <artifactId>javax.json-api</artifactId>
+         <version>1.1.4</version>
       </dependency>
       <dependency>
          <groupId>org.jyaml</groupId>
