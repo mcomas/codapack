@@ -36,6 +36,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import coda.gui.DataList;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
@@ -91,6 +92,7 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
             showText();
             createVariables();
             showGraphics();
+            createDataFrame();
         }else{
             OutputElement type = new OutputText("Error in R:");
             CoDaPackMain.outputPanel.addOutput(type);
@@ -123,23 +125,25 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
             }
             
             newDataFrame.setName(dataFrameName);
+            DataFrame current = mainApplication.getActiveDataFrame();
             mainApplication.addDataFrame(newDataFrame);
+            mainApplication.updateDataFrame(current);
         }
     }
 
     void createVariables(){
         
-        int numberOfNewVar = re.eval("length(colnames(cdp_res$new_data))").asInt(); /* numero de columnes nomes*/
+        int numberOfNewVar = re.eval("length(cdp_res$new_data)").asInt(); /* numero de columnes nomes*/
         
         for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("colnames(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
+            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
             String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[["+ String.valueOf(i+1) +"]]))").asString();
             if(isNumeric.equals("TRUE")){
-                double[] data = re.eval("as.numeric(cdp_res$new_data[," + String.valueOf(i+1) + "])").asDoubleArray();
+                double[] data = re.eval("as.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asDoubleArray();
                 df.addData(varName,data);
             }
             else{ // categoric
-                String[] data = re.eval("as.character(cdp_res$new_data[," + String.valueOf(i+1) + "])").asStringArray();
+                String[] data = re.eval("as.character(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asStringArray();
                 df.addData(varName, new Variable(varName,data));
             }
             mainApplication.updateDataFrame(df);
@@ -149,15 +153,17 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
     void showGraphics(){
         
         String fnames[] = re.eval("cdp_res$graph").asStringArray();
-        System.out.println(Arrays.toString(fnames));
-        for(String fname: fnames){
-            JSVGCanvas c = new JSVGCanvas();
-            String uri = new File(fname).toURI().toString();
-            c.setURI(uri);
-            JFrame jf = new JFrame();
-            jf.setSize(PLOT_WIDTH,PLOT_HEIGHT);
-            jf.getContentPane().add(c);
-            jf.setVisible(true);
+        if(fnames != null){
+            System.out.println(Arrays.toString(fnames));
+            for(String fname: fnames){
+                JSVGCanvas c = new JSVGCanvas();
+                String uri = new File(fname).toURI().toString();
+                c.setURI(uri);
+                JFrame jf = new JFrame();
+                jf.setSize(PLOT_WIDTH,PLOT_HEIGHT);
+                jf.getContentPane().add(c);
+                jf.setVisible(true);
+            }
         }
         /*
         for(int i=0; i < numberOfGraphics; i++){

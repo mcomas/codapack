@@ -96,15 +96,28 @@ CoDaPack Menu:
                     code: "r"
                     script: "kmeans.R"
                     controls:
-                        - options:
-                            label: "Number clusters"
-                            options_controls:
-                                - Fixed:
-                                    - numeric: "Clusters"
-                                - Optimal:
-                                    - numeric: "Maximum"
-                                    - select: ["Calinski index", "Average Silhouette"]
+                        - label: "Number of clusters"
+                        - numeric: "Mininum"
+                        - numeric: "Maximum"
+                        - select: 
+                            name: "Optimality"
+                            values: ["Calinski index", "Average Silhouette"]
                         - string: "Cluster name"
+            # - Cluster:
+            #     - K-means:
+            #         id: "KMeans"
+            #         code: "r"
+            #         script: "kmeans.R"
+            #         controls:
+            #             - options:
+            #                 label: "Number clusters"
+            #                 options_controls:
+            #                     - Fixed:
+            #                         - numeric: "Clusters"
+            #                     - Optimal:
+            #                         - numeric: "Maximum"
+            #                         - select: ["Calinski index", "Average Silhouette"]
+            #             - string: "Cluster name"
             - Manova:
                 id: "Manova"
                 code: "r"

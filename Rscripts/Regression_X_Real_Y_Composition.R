@@ -6,103 +6,61 @@
 # Menu S3
 
 ################# LIBRARIES #################
+H <- coda.base::coordinates(Y, basis = coda.base::sbp_basis(BaseY))
+colnames(H) = paste0('ilr.', 1:ncol(H))
 
-#library(ggplot2)
-library(coda.base)
-#library(plyr)
+str_y = colnames(H)
+if(ncol(H) > 1) str_y = sprintf("cbind(%s)", paste(colnames(H), collapse=','))
+str_x = paste(colnames(X), collapse='+')
+str_frm = sprintf("%s ~ %s", str_y, str_x)
 
-#load("L:/CoDaCourse/CoDaCourse 17/Material/LABS 2017/Scripts 2018/CoDaLabs/Scripts CoDaPack/activ_arctic.RData")
-#Y <- as.data.frame(darctic[,2:4])
-#head(Y)
-#X <- as.data.frame(darctic[,5])
-#head(X)
-#B1 <- as.logical(TRUE)
-#B2 <- as.logical(TRUE)
-#BaseY = matrix(c(1, 1, -1, 1, -1, 0), ncol = 2)
+. = as.data.frame(cbind(H,X))
+LM = eval(parse(text = sprintf("lm(%s, .)", str_frm)))
 
-#Yt <- coda.base::coordinates(Y, basis = "ilr", label = "ilr.", sparse_basis = FALSE)
+R2 = sum(scale(LM$fitted.values, scale = FALSE)^2) / sum(scale(H, scale = FALSE)^2) 
 
-################# FUNCTIONS #################
+B = coef(LM)
+S = sqrt(diag(vcov(LM)))
+P = 2*pt(-abs(B/S), LM$df.residual)
+O = sprintf("% 0.6f (%0.6f) p=%s", B, S, ifelse(P<0.0001, "<0.0001", sprintf("%0.5f", P)))
+dim(O) = dim(B)
+colnames(O) = colnames(B)
+rownames(O) = rownames(B)
 
-generateFileName <- function(candidateName){
-  name = candidateName
-  nameFile = paste(name, ".svg", sep = "")
+RES = unlist(anova(LM, update(LM, .~1), test = 'Wilks')[2,c('approx F', 'num Df' , 'den Df' ,'Pr(>F)')])
+output = gsub("\"", "", capture.output(O))
+output = c("", "Coefficients:", output)
+output = c(deparse(LM$call), output)
+output = c("Call:", output)
+output = c(output, "---", "")
+output = c(output, sprintf("Multiple R-squared:  %0.3f", R2))
+output = c(output, sprintf("F-statistic (Wilks' approx.): %0.3f on %d and %d DF,  p-value: %0.5f", RES[1], RES[2], RES[3], RES[4]))
+cat(output, sep ='\n')
 
-  while(file.exists(nameFile)){
-    name = paste(name, "c", sep = "")
-    nameFile = paste(name, ".svg", sep = "")
-  }
+new_data = list()
+if (B1 == TRUE) new_data = c(new_data, setNames(apply(LM$residuals, 2, identity, simplify = FALSE), paste0('r.', colnames(H))))
+if (B2 == TRUE) new_data = c(new_data, setNames(apply(LM$fitted.values, 2, identity, simplify = FALSE), paste0('f.', colnames(H))))
 
-  return(nameFile)
-}
 
-################# MAIN #################
 
-Yt <- coda.base::coordinates(Y, basis = coda.base::sbp_basis(BaseY))
-nparts=NCOL(Yt)
-colnames(Yt) = paste0('ilr.', 1:nparts)
-save.image('image.RData')
-# Linear model
-LM <- lm(as.matrix(Yt)~., data=as.data.frame(X), y = TRUE, x = TRUE)
 
-#summary(LM)
-#put names to residuals and fitted values columns
-if (B1 == TRUE) {
-  for (n in 1:nparts)
-  {
-    colnames(LM$residuals)[n] <- paste(names(Yt[n]),".r",sep="")
-  }
-}
 
-if (B2 == TRUE) {
-  for (n in 1:nparts)
-  {
-    colnames(LM$fitted.values)[n] <- paste(names(Yt[n]),".f",sep="")
-  }
-}
+# # Create graphs
+# graphnames <- list()
+# for (n in 1:nparts)
+# {
+#   name <- generateFileName(paste(tempdir(),paste("Plots_of_residuals_",names(H[n]),sep=""),sep="\\"))
+#   svg(name)
+#   LM.temp <- lm(as.matrix(H[n])~as.matrix(X))
+#   oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
+#   title <- paste(names(H[n])," ~ ",names(X))
+#   plot(LM.temp,sub.caption=title)  # Plot the model information
+#   par(oldpar)
+#   dev.off()
+#   graphnames[n] <- name
+# }
 
-# Calculate SSR:
-FitCen <- scale(LM$fitted.values,scale=FALSE)
-#sum(FitCen^2)
-# Calculate SST:
-#YCen <- scale(Dep,scale=FALSE)
-YCen <- scale(LM$y,scale=FALSE)
-#sum(YCen^2)
-# Calculate R2
-r2 <- (sum(FitCen^2)/sum(YCen^2))*100
 
-# Create graphs
-graphnames <- list()
-for (n in 1:nparts)
-{
-  name <- generateFileName(paste(tempdir(),paste("Plots_of_residuals_",names(Yt[n]),sep=""),sep="\\"))
-  svg(name)
-  LM.temp <- lm(as.matrix(Yt[n])~as.matrix(X))
-  oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
-  title <- paste(names(Yt[n])," ~ ",names(X))
-  plot(LM.temp,sub.caption=title)  # Plot the model information
-  par(oldpar)
-  dev.off()
-  graphnames[n] <- name
-}
-
-#rm(DF)
-DF <- data.frame()
-#head(DF)
-if (B1 == TRUE) {
-  if(plyr::empty(DF)){
-    DF <- as.data.frame(LM$residuals)
-  } else{
-    DF <- cbind.data.frame(DF, LM$residuals)
-  }
-}
-if (B2 == TRUE) {
-  if(plyr::empty(DF)){
-    DF <- as.data.frame(LM$fitted.values)
-  } else{
-    DF <- cbind.data.frame(DF, LM$fitted.values)
-  }
-}
 
 #PART NOVA. ARA TE EN COMPTE ELS NOMS DE TOTES LES X I TRANSPOSA COEFICIENTS PER PODER-LOS INVERTIR
 NDF<-as.data.frame(as.factor(c("intercept",names(X))))
@@ -113,11 +71,10 @@ NDF=cbind.data.frame(NDF,LM$coefficients)
 
 # Ooutput
 cdp_res = list(
-  'text' = list(gsub("[‘’]", "'", capture.output(summary(LM))),
-                capture.output(cat(sprintf("Overall R² = %0.4f", r2)))),
-#  'dataframe' = list('coefficients' = LM$coefficients),
+  'text' = output,
   'dataframe' = list('coefficients' = NDF),
-  'graph' = graphnames,
-  'new_data' = data.frame(DF)
+  'graph' = list(), #graphnames,
+  'new_data' = new_data
 )
 
+save.image("imgf.RData")

@@ -11,40 +11,20 @@
       <maven.compiler.target>1.17</maven.compiler.target>
    </properties>
    <build>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>com.github.akman</groupId>
+               <artifactId>jpackage-maven-plugin</artifactId>
+               <version>0.1.5</version>
+            </plugin>
+         </plugins>
+      </pluginManagement>
       <plugins>
-         <!--
-         <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.0.0</version>
-            <configuration>
-               <archive>
-                  <manifest>
-                     <packageName>CoDaPack</packageName>
-                     <mainClass>coda.gui.CoDaPackMain</mainClass>
-                  </manifest>
-                  <manifestEntries>
-                     <Built-By>CoDaPack team</Built-By>
-                  </manifestEntries>
-               </archive>
-               <descriptorRefs>
-                  <descriptorRef>jar-with-dependencies</descriptorRef>
-               </descriptorRefs>
-            </configuration>
-            <executions>
-               <execution>
-                  <id>make-assembly</id>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>single</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
-         -->
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>1.4.0</version>
+            <version>3.1.0</version>
             <configuration>
                <executable>java</executable>
                <arguments>
@@ -56,76 +36,43 @@
                </arguments>
             </configuration>
          </plugin>
-         <!-- Windows application -->
-         <!--
-         <plugin>
-            <groupId>com.akathist.maven.plugins.launch4j</groupId>
-            <artifactId>launch4j-maven-plugin</artifactId>
-            <version>1.5.2</version>
-            <executions>
-               <execution>
-                  <id>l4j-gui</id>
-                  <phase>none</phase>
-                  <goals>
-                     <goal>launch4j</goal>
-                  </goals>
-                  <configuration>
-                     <headerType>gui</headerType>
-                     <outfile>target/CoDaPack.exe</outfile>
-                     <jar>target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</jar>
-                     <dontWrapJar>false</dontWrapJar>
-                     <errTitle>Error in launch4j plugin</errTitle>
-                     <classPath>
-                        <mainClass>coda.gui.CoDaPackMain</mainClass>
-                     </classPath>
-                     <icon>src/main/resources/icon.ico</icon>
-                     <jre>
-                        <minVersion>1.8.0</minVersion>
-                        <maxVersion />
-                        <initialHeapSize>1024</initialHeapSize>
-                        <maxHeapSize>8192</maxHeapSize>
-                     </jre>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
-         -->
-         <!-- Mac application -->
-         <!--
-         <plugin>
-            <groupId>sh.tak.appbundler</groupId>
-            <artifactId>appbundle-maven-plugin</artifactId>
-            <version>1.2.0</version>
-            <configuration>
-               <mainClass>coda.gui.CoDaPackMain</mainClass>
-               <iconFile>src/main/resources/icons.icns</iconFile>
-               ## <jrePath>/Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/</jrePath> 
-               <generateDiskImageFile>true</generateDiskImageFile>
-            </configuration>
-            <executions>
-               <execution>
-                  <phase>none</phase>
-                  <goals>
-                     <goal>bundle</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
-         -->
 
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.1</version>
+            <version>3.11.0</version>
             <configuration>
                 <source>17</source>
                 <target>17</target>
                 <fork>true</fork>			
             </configuration>
          </plugin>
+         
+         <!--
+         <plugin>         
+            <groupId>com.github.akman</groupId>
+            <artifactId>jpackage-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <phase>verify</phase>
+                  <goals>
+                  <goal>jpackage</goal>
+                  </goals>
+                  <configuration>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         -->
+         
       </plugins>
    </build>
    <dependencies>
+      <dependency>
+         <groupId>com.googlecode.json-simple</groupId>
+         <artifactId>json-simple</artifactId>
+         <version>1.1.1</version>
+      </dependency>
       <dependency>
          <groupId>org.jyaml</groupId>
          <artifactId>jyaml</artifactId>

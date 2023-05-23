@@ -50,14 +50,7 @@ import org.rosuda.JRI.Rengine;
  */
 public class XCompositionYRealRegressionMenu extends AbstractMenuRBasedDialog{
     
-    DataFrame df;
-    JFrame frameLM2;
-    Vector<JFrame> framesLM2;
-    JFileChooser chooser;
-    String tempDirR;
-    Vector<String> tempsDirR;
     ILRMenu ilrX;
-    ArrayList<String> names;
     
     /* options var */
     
@@ -74,13 +67,11 @@ public class XCompositionYRealRegressionMenu extends AbstractMenuRBasedDialog{
 
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
     
-        ((DataSelector1to2)ds).setTextA("Compositional explanatory");
-        ((DataSelector1to2)ds).setTextB("Real response");
+        ((DataSelector1to2)ds).setTextA("Explanatory composition");
+        ((DataSelector1to2)ds).setTextB("Response");
         
         //super.setSelectedDataNames("Selected X:", "Selected Y:");
         
-        framesLM2 = new Vector<JFrame>();
-        tempsDirR = new Vector<String>();
         
         /* options configuration */
         
@@ -95,7 +86,6 @@ public class XCompositionYRealRegressionMenu extends AbstractMenuRBasedDialog{
         
         this.optionsPanel.add(B1);
         this.optionsPanel.add(B2);
-        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
     
     public void configureILRX(){
@@ -130,12 +120,14 @@ public class XCompositionYRealRegressionMenu extends AbstractMenuRBasedDialog{
             constructParametersToR();
 
             captureROutput();
+            setVisible(false);
         }
         else{
             if(X.length <= 1) JOptionPane.showMessageDialog(null, "Select at least two parts");
             else if(!allXpositive) JOptionPane.showMessageDialog(null, "Some value in X is not positive");
             else JOptionPane.showMessageDialog(null, "Only one response variable");
         }
+        
     }
     
     void constructParametersToR(){

@@ -13,6 +13,7 @@ import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
 import coda.gui.utils.DataSelector1to1;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.File;
@@ -133,14 +134,35 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                     }
 
                     break;
+                case "select":
+                    System.out.println("Menu select line");
+                    String name = json_obj.getJSONObject(type).getString("name");
+                    JSONArray values = json_obj.getJSONObject(type).getJSONArray("values");
+                    String str_v[] = new String[values.length()];
+                    for(int j =0;j<values.length();j++) str_v[j] = values.getString(j);
+                    //System.out.println(Arrays.toString(str_v));
+                    //System.out.println(json_obj.get(type).toString());
+                    optionsPanel.add(new CDP_Select(name, str_v));
+                    break;
                 case "string":
                     System.out.println("string");
                     break;
+                case "label":
+                    optionsPanel.add(new CDP_Label(json_obj.getString(type)));                    
+                    break;
                 case "numeric":
-                    System.out.println("numeric");
+                    optionsPanel.add(new CDP_Numeric(json_obj.getString(type)));
+                    // JTextField Tnum = new JTextField("", 5);
+                    // JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                    // Pnum.setMaximumSize(new Dimension(1000, 32));
+                    // String Lnum = json_obj.getString(type);        
+                    // Pnum.add(new JLabel(Lnum));  
+                    // Pnum.add(Box.createHorizontalStrut(10));
+                    // Pnum.add(Tnum);
+                    // optionsPanel.add(Pnum);
+                    // System.out.println("numeric submenu");
                     break;
                 case "boolean":
-                    System.out.println("boolean");
                     String label = null;
                     boolean checked = false;
                     if(json_obj.get(type) instanceof JSONObject){
@@ -149,14 +171,7 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                     }else{
                         label = json_obj.getString(type);
                     }
-                    JPanel BPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-                    BPanel.setMaximumSize(new Dimension(1000, 32));
-                    JCheckBox B = new JCheckBox(label);
-                    B.setSelected(checked);
-                    Barray.add(B);
-                    BPanel.add(B);
-                    BPanel.setAlignmentX(0);
-                    optionsPanel.add(BPanel);
+                    optionsPanel.add(new CDP_Boolean(label, checked));
                     break;
             }
         }
@@ -185,7 +200,67 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
         */
 
     }
-    
+    private class CDP_Line extends JPanel{
+        static int MAX_SIZE = 300;
+        String R_expression_value;
+        public CDP_Line(){            
+            setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+            setMaximumSize(new Dimension(MAX_SIZE, 35));
+            //setBackground(new Color(100,100,100));
+            //add(Box.createRigidArea(new Dimension(MAX_SIZE, 5)));
+            add(Box.createHorizontalStrut(10));
+            
+        }
+    }
+    private class CDP_Label extends CDP_Line{        
+        public CDP_Label(String label){  
+            JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                        
+            JLabel L  = new JLabel(label);                    
+            Plab.add(L);
+            add(Plab);
+        }
+    }
+    private class CDP_Select extends CDP_Line{        
+        public CDP_Select(String label, String values[]){  
+            JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            JPanel Pcb = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+
+            JComboBox cb = new JComboBox(values);
+            
+            Plab.add(new JLabel(label));
+            Pcb.add(cb);
+            add(Plab);  
+            add(Box.createHorizontalStrut(5));
+            add(Pcb);
+        }
+    }
+    private class CDP_Numeric extends CDP_Line{
+
+        public CDP_Numeric(String vname){
+            JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+
+            JTextField Tnum = new JTextField("", 7);
+            Plab.add(new JLabel(vname));
+            Pnum.add(Tnum);
+            add(Plab);  
+            add(Box.createHorizontalStrut(5));
+            add(Pnum);
+            //add(new Box.Filler(new Dimension(0, 35), new Dimension(MAX_SIZE, 35), new Dimension(MAX_SIZE, 35)));
+        }
+
+    }
+    private class CDP_Boolean extends CDP_Line{
+        public CDP_Boolean(String vname, boolean checked){
+            JPanel Pbool = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            JCheckBox Bbool = new JCheckBox(vname);
+            Bbool.setSelected(checked);
+            Pbool.add(Bbool);
+            add(Pbool);
+
+        }
+    }
     @Override
     public void acceptButtonActionPerformed(){
         
