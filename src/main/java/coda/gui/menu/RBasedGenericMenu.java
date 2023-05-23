@@ -145,13 +145,29 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                     optionsPanel.add(new CDP_Select(name, str_v));
                     break;
                 case "string":
-                    System.out.println("string");
+                    String str_label = null;
+                    String str_value = "";
+                    if(json_obj.get(type) instanceof JSONObject){
+                        str_label = json_obj.getJSONObject(type).getString("name");
+                        str_value = json_obj.getJSONObject(type).getString("value");
+                    }else{
+                        str_label = json_obj.getString(type);
+                    }
+                    optionsPanel.add(new CDP_String(str_label, str_value));
                     break;
                 case "label":
                     optionsPanel.add(new CDP_Label(json_obj.getString(type)));                    
                     break;
                 case "numeric":
-                    optionsPanel.add(new CDP_Numeric(json_obj.getString(type)));
+                    String num_label = null;
+                    String num_value = "";
+                    if(json_obj.get(type) instanceof JSONObject){
+                        num_label = json_obj.getJSONObject(type).getString("name");
+                        num_value = json_obj.getJSONObject(type).getString("value");
+                    }else{
+                        num_label = json_obj.getString(type);
+                    }
+                    optionsPanel.add(new CDP_Numeric(num_label, num_value));
                     // JTextField Tnum = new JTextField("", 5);
                     // JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
                     // Pnum.setMaximumSize(new Dimension(1000, 32));
@@ -244,6 +260,46 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
             JTextField Tnum = new JTextField("", 7);
             Plab.add(new JLabel(vname));
             Pnum.add(Tnum);
+            add(Plab);  
+            add(Box.createHorizontalStrut(5));
+            add(Pnum);
+            //add(new Box.Filler(new Dimension(0, 35), new Dimension(MAX_SIZE, 35), new Dimension(MAX_SIZE, 35)));
+        }
+        public CDP_Numeric(String vname, String value){
+            JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+
+            JTextField Tnum = new JTextField(value, 7);
+            Plab.add(new JLabel(vname));
+            Pnum.add(Tnum);
+            add(Plab);  
+            add(Box.createHorizontalStrut(5));
+            add(Pnum);
+            //add(new Box.Filler(new Dimension(0, 35), new Dimension(MAX_SIZE, 35), new Dimension(MAX_SIZE, 35)));
+        }
+
+    }
+    private class CDP_String extends CDP_Line{
+
+        public CDP_String(String vname){
+            JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+
+            JTextField Tnum = new JTextField("", 7);
+            Plab.add(new JLabel(vname));
+            Pnum.add(Tnum);
+            add(Plab);  
+            add(Box.createHorizontalStrut(5));
+            add(Pnum);
+            //add(new Box.Filler(new Dimension(0, 35), new Dimension(MAX_SIZE, 35), new Dimension(MAX_SIZE, 35)));
+        }
+        public CDP_String(String vname, String value){
+            JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+
+            JTextField Tstr = new JTextField(value, 7);
+            Plab.add(new JLabel(vname));
+            Pnum.add(Tstr);
             add(Plab);  
             add(Box.createHorizontalStrut(5));
             add(Pnum);

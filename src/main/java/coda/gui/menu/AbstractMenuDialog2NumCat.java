@@ -20,11 +20,9 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
-import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
 import coda.gui.utils.DataSelector2NumCat;
-import coda.gui.utils.DataSelector2NumCatONum;
 import coda.io.ImportRDA;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -110,7 +108,7 @@ public abstract class AbstractMenuDialog2NumCat extends JDialog{
         if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);
         else if (dfs!=null) getContentPane().add(dfs, BorderLayout.CENTER);
 
-        JPanel eastPanel = new JPanel();
+        //JPanel eastPanel = new JPanel();
         optionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
         optionsPanel.setPreferredSize(new Dimension(250,200));
         //optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));

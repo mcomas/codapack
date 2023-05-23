@@ -97,12 +97,18 @@ CoDaPack Menu:
                     script: "kmeans.R"
                     controls:
                         - label: "Number of clusters"
-                        - numeric: "Mininum"
-                        - numeric: "Maximum"
+                        - numeric: 
+                            name: "Mininum"
+                            value: 2
+                        - numeric: 
+                            name: "Maximum"
+                            value: 10
                         - select: 
                             name: "Optimality"
                             values: ["Calinski index", "Average Silhouette"]
-                        - string: "Cluster name"
+                        - string: 
+                            name: "Cluster name"
+                            value: "clust"
             # - Cluster:
             #     - K-means:
             #         id: "KMeans"
