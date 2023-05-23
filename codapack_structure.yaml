@@ -49,7 +49,7 @@ CoDaPack Menu:
         - Zero-Patterns:
             id: "ZeroPatterns"
             code: "r"
-            script: "zpatterns.R"
+            script: "cdp_zpatterns.R"
             controls:
                 - boolean: "Include means"
                 - boolean: "Include %"
@@ -73,9 +73,17 @@ CoDaPack Menu:
         - Log-Ratio EM Zero & Missing Replacement:
             id: "LogRatioEMZeroMissingReplacement"
             code: "r"
+        # - Atypicality Index:
+        #     id: "AtypicalityIndexRBased"
+        #     code: "r"
         - Atypicality Index:
-            id: "AtypicalityIndexRBased"
+            id: "Outliers"
             code: "r"
+            script: "cdp_outliers.R"
+            controls:
+                - numeric:
+                    name: "Confidence level"
+                    value: 0.95
     - Statistics:
         - Compositional Statistics Summary:
             id: "CompStatsSummary"
@@ -94,7 +102,7 @@ CoDaPack Menu:
                 - K-means:
                     id: "KMeans"
                     code: "r"
-                    script: "kmeans.R"
+                    script: "cdp_kmeans.R"
                     controls:
                         - label: "Number of clusters"
                         - numeric: 

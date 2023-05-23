@@ -1,50 +1,37 @@
 package coda.gui.menu;
 
-import coda.BasicStats;
-import coda.DataFrame;
-import coda.Variable;
 import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
-import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import static coda.gui.CoDaPackMain.outputPanel;
-import coda.gui.output.OutputForR;
-import coda.gui.output.OutputText;
 import coda.gui.utils.DataSelector1to1;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
-import org.apache.batik.swing.JSVGCanvas;
 
 
 public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
     private static final String yamlUrl = null;
     private static final String helpTitle = null;
-    Rengine re;
-    
-    // JCheckBox B1 = new JCheckBox("Include means");
-    // JCheckBox B2 = new JCheckBox("Include %");
-    // JCheckBox B3 = new JCheckBox("Add pattern", true);
-    
-    // It should be common to all R calling AbstractRBasedMenuDialog
+    private Rengine re;
+    private int iVar = 0;
+    private ArrayList<RConversion> cdp_lines = new ArrayList<RConversion>();
+
+    public void addCDP_Line(RConversion cdpLine){
+        CDP_Line cdpl = (CDP_Line)cdpLine;
+        optionsPanel.add(cdpl);
+        cdp_lines.add(cdpLine);
+    }
     
     ArrayList<JCheckBox> Barray = new ArrayList<JCheckBox>();
     public RBasedGenericMenu(final CoDaPackMain mainApp, 
@@ -142,7 +129,7 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                     for(int j =0;j<values.length();j++) str_v[j] = values.getString(j);
                     //System.out.println(Arrays.toString(str_v));
                     //System.out.println(json_obj.get(type).toString());
-                    optionsPanel.add(new CDP_Select(name, str_v));
+                    addCDP_Line(new CDP_Select(name, str_v));
                     break;
                 case "string":
                     String str_label = null;
@@ -153,10 +140,10 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                     }else{
                         str_label = json_obj.getString(type);
                     }
-                    optionsPanel.add(new CDP_String(str_label, str_value));
+                    addCDP_Line(new CDP_String(str_label, str_value));
                     break;
                 case "label":
-                    optionsPanel.add(new CDP_Label(json_obj.getString(type)));                    
+                    addCDP_Line(new CDP_Label(json_obj.getString(type)));                    
                     break;
                 case "numeric":
                     String num_label = null;
@@ -167,7 +154,7 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                     }else{
                         num_label = json_obj.getString(type);
                     }
-                    optionsPanel.add(new CDP_Numeric(num_label, num_value));
+                    addCDP_Line(new CDP_Numeric(num_label, num_value));
                     // JTextField Tnum = new JTextField("", 5);
                     // JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
                     // Pnum.setMaximumSize(new Dimension(1000, 32));
@@ -187,7 +174,7 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                     }else{
                         label = json_obj.getString(type);
                     }
-                    optionsPanel.add(new CDP_Boolean(label, checked));
+                    addCDP_Line(new CDP_Boolean(label, checked));
                     break;
             }
         }
@@ -216,9 +203,12 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
         */
 
     }
-    private class CDP_Line extends JPanel{
+    interface RConversion{
+        public boolean addVariableToR();
+    }
+
+    private abstract class CDP_Line extends JPanel{
         static int MAX_SIZE = 300;
-        String R_expression_value;
         public CDP_Line(){            
             setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
             setMaximumSize(new Dimension(MAX_SIZE, 35));
@@ -227,8 +217,9 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
             add(Box.createHorizontalStrut(10));
             
         }
+        
     }
-    private class CDP_Label extends CDP_Line{        
+    private class CDP_Label extends CDP_Line implements RConversion{        
         public CDP_Label(String label){  
             JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
                         
@@ -236,13 +227,20 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
             Plab.add(L);
             add(Plab);
         }
+
+        @Override
+        public boolean addVariableToR(){
+            System.out.println("# Nothing to include");
+            return(true);
+        }
     }
-    private class CDP_Select extends CDP_Line{        
+    private class CDP_Select extends CDP_Line implements RConversion{   
+        JComboBox<String> cb;
         public CDP_Select(String label, String values[]){  
             JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
             JPanel Pcb = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 
-            JComboBox cb = new JComboBox(values);
+            cb = new JComboBox<String>(values);
             
             Plab.add(new JLabel(label));
             Pcb.add(cb);
@@ -250,76 +248,95 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
             add(Box.createHorizontalStrut(5));
             add(Pcb);
         }
-    }
-    private class CDP_Numeric extends CDP_Line{
 
-        public CDP_Numeric(String vname){
-            JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-            JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        @Override
+        public boolean addVariableToR() {
+            String V = (String) cb.getSelectedItem();
 
-            JTextField Tnum = new JTextField("", 7);
-            Plab.add(new JLabel(vname));
-            Pnum.add(Tnum);
-            add(Plab);  
-            add(Box.createHorizontalStrut(5));
-            add(Pnum);
-            //add(new Box.Filler(new Dimension(0, 35), new Dimension(MAX_SIZE, 35), new Dimension(MAX_SIZE, 35)));
+            String EXP = "V%d = '%s'".formatted(++iVar, V);
+            System.out.println(EXP);
+            re.eval(EXP);
+            return(true);
         }
+    }
+    private class CDP_Numeric extends CDP_Line implements RConversion{
+        JTextField Tnum;
         public CDP_Numeric(String vname, String value){
             JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
             JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 
-            JTextField Tnum = new JTextField(value, 7);
+            Tnum = new JTextField(value, 7);
             Plab.add(new JLabel(vname));
             Pnum.add(Tnum);
             add(Plab);  
             add(Box.createHorizontalStrut(5));
             add(Pnum);
             //add(new Box.Filler(new Dimension(0, 35), new Dimension(MAX_SIZE, 35), new Dimension(MAX_SIZE, 35)));
+        }
+        @Override
+        public boolean addVariableToR() {
+            String V = Tnum.getText();
+
+            String EXP = "V%d = as.numeric(%s)".formatted(++iVar, V);
+            System.out.println(EXP);
+            re.eval(EXP);
+            return(true);
         }
 
     }
-    private class CDP_String extends CDP_Line{
-
-        public CDP_String(String vname){
-            JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-            JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-
-            JTextField Tnum = new JTextField("", 7);
-            Plab.add(new JLabel(vname));
-            Pnum.add(Tnum);
-            add(Plab);  
-            add(Box.createHorizontalStrut(5));
-            add(Pnum);
-            //add(new Box.Filler(new Dimension(0, 35), new Dimension(MAX_SIZE, 35), new Dimension(MAX_SIZE, 35)));
-        }
+    private class CDP_String extends CDP_Line implements RConversion{
+        JTextField Tstr;
         public CDP_String(String vname, String value){
             JPanel Plab = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-            JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            JPanel Pstr = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 
-            JTextField Tstr = new JTextField(value, 7);
+            Tstr = new JTextField(value, 7);
             Plab.add(new JLabel(vname));
-            Pnum.add(Tstr);
+            Pstr.add(Tstr);
             add(Plab);  
             add(Box.createHorizontalStrut(5));
-            add(Pnum);
+            add(Pstr);
             //add(new Box.Filler(new Dimension(0, 35), new Dimension(MAX_SIZE, 35), new Dimension(MAX_SIZE, 35)));
+        }
+        @Override
+        public boolean addVariableToR() {
+            String V = Tstr.getText();
+
+            String EXP = "V%d = '%s'".formatted(++iVar, V);
+            System.out.println(EXP);
+            re.eval(EXP);
+            return(true);
         }
 
     }
-    private class CDP_Boolean extends CDP_Line{
+    private class CDP_Boolean extends CDP_Line implements RConversion{
+        JCheckBox Bbool;
         public CDP_Boolean(String vname, boolean checked){
             JPanel Pbool = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-            JCheckBox Bbool = new JCheckBox(vname);
+            Bbool = new JCheckBox(vname);
             Bbool.setSelected(checked);
             Pbool.add(Bbool);
             add(Pbool);
 
         }
+
+        @Override
+        public boolean addVariableToR() {
+            String V = "FALSE";
+            if(Bbool.isSelected()) V = "TRUE";
+
+            String EXP = "V%d = %s".formatted(++iVar, V);
+            System.out.println(EXP);
+            re.eval(EXP);
+            return(true);
+        }
     }
     @Override
     public void acceptButtonActionPerformed(){
-        
+        iVar = 0;
+        for(RConversion cdpLine: cdp_lines){
+            cdpLine.addVariableToR();
+        }
         df = mainApplication.getActiveDataFrame();
         String sel_names[] = super.ds.getSelectedData();
 
@@ -329,11 +346,6 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
         }
         re.eval("X = cbind(" + String.join(",", sel_names) + ")");
         re.eval("X[is.nan(X)] = NA_real_");
-
-        for(int i = 0; i < Barray.size(); i++){
-            JCheckBox B = Barray.get(i);
-            re.eval("B%d = %s".formatted(i+1, B.isSelected() ? "TRUE": "FALSE"));
-        }
 
         re.eval("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
         re.eval("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
