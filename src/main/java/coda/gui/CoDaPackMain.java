@@ -133,8 +133,8 @@ public final class CoDaPackMain extends JFrame {
     private PerturbateDataMenu perturbateDataMenu;
     private PowerDataMenu powerDataMenu;
     private SetDetectionLimitMenu setDetectionLimitMenu;
-    private ZeroReplacementMenu zeroReplacementMenu;
-    private NonParametricZeroReplacementMenu nonParametricZeroReplacementMenu;
+    private ZeroReplacementOldMenu zeroReplacementMenu;
+    private NonParametricZeroReplacementOldMenu nonParametricZeroReplacementMenu;
     private LogRatioEMZeroReplacementMenu logRatioEMZeroReplacementMenu;
     private BayesianMultiplicativeZeroReplacementMenu bayesianMultiplicativeZeroReplacementMenu;
     private LogRatioEMMissingReplacementMenu logRatioEMMissingReplacementMenu;
@@ -146,7 +146,7 @@ public final class CoDaPackMain extends JFrame {
     private ClasStatsSummaryMenu clasStatsSummaryMenu;
     private XRealYCompositionRegressionMenu xRealYCompositionRegressionMenu;
     private XCompositionYRealRegressionMenu xCompositionYRealRegressionMenu;
-    private KMeansMenu kMeansMenu;
+    private KMeansOldMenu kMeansMenu;
     private ManovaMenu manovaMenu;
     private DiscriminantMenu discriminantMenu;
     private LogRatioNormalityTestMenu logRatioNormalityTestMenu;
@@ -521,11 +521,11 @@ public final class CoDaPackMain extends JFrame {
                 setDetectionLimitMenu.updateMenuDialog();
                 setDetectionLimitMenu.setVisible(true);
                 break;
-            case "NonParametricZeroReplacement":
-                if(nonParametricZeroReplacementMenu == null) nonParametricZeroReplacementMenu = new NonParametricZeroReplacementMenu(this, re);
-                nonParametricZeroReplacementMenu.updateMenuDialog();
-                nonParametricZeroReplacementMenu.setVisible(true);
-                break;
+            // case "NonParametricZeroReplacementOld":
+            //     if(nonParametricZeroReplacementMenu == null) nonParametricZeroReplacementMenu = new NonParametricZeroReplacementOldMenu(this, re);
+            //     nonParametricZeroReplacementMenu.updateMenuDialog();
+            //     nonParametricZeroReplacementMenu.setVisible(true);
+            //     break;
             case "LogRatioEMZeroReplacement":
                 if(logRatioEMZeroReplacementMenu == null) logRatioEMZeroReplacementMenu = new LogRatioEMZeroReplacementMenu(this, re);
                 logRatioEMZeroReplacementMenu.updateMenuDialog();
@@ -546,11 +546,11 @@ public final class CoDaPackMain extends JFrame {
                 logRatioEMZeroMissingReplacementMenu.updateMenuDialog();
                 logRatioEMZeroMissingReplacementMenu.setVisible(true);
                 break;
-            case "AtypicalityIndexRBased":
-                if(atypicalityIndexRBasedMenu == null) atypicalityIndexRBasedMenu = new AtypicalityIndexRBasedMenu(this, re);
-                atypicalityIndexRBasedMenu.updateMenuDialog();
-                atypicalityIndexRBasedMenu.setVisible(true);
-                break;
+            // case "AtypicalityIndexRBased":
+            //     if(atypicalityIndexRBasedMenu == null) atypicalityIndexRBasedMenu = new AtypicalityIndexRBasedMenu(this, re);
+            //     atypicalityIndexRBasedMenu.updateMenuDialog();
+            //     atypicalityIndexRBasedMenu.setVisible(true);
+            //     break;
             case "CompStatsSummary":
                 if(compStatsSummaryMenu == null) compStatsSummaryMenu = new CompStatsSummaryMenu(this);
                 compStatsSummaryMenu.updateMenuDialog();
@@ -571,11 +571,11 @@ public final class CoDaPackMain extends JFrame {
                 xCompositionYRealRegressionMenu.updateMenuDialog();
                 xCompositionYRealRegressionMenu.setVisible(true);
                 break;
-            case "KMeans":
-                if(kMeansMenu == null) kMeansMenu = new KMeansMenu(this, re);
-                kMeansMenu.updateMenuDialog();
-                kMeansMenu.setVisible(true);
-                break;
+            // case "KMeans":
+            //     if(kMeansMenu == null) kMeansMenu = new KMeansOldMenu(this, re);
+            //     kMeansMenu.updateMenuDialog();
+            //     kMeansMenu.setVisible(true);
+            //     break;
             // case "Manova":
             //     if(manovaMenu == null) manovaMenu = new ManovaMenu(this);
             //     manovaMenu.updateMenuDialog();

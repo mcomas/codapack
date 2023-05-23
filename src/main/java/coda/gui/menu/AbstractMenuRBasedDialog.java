@@ -63,8 +63,9 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
         }
         re.eval("%s = cbind(%s)".formatted(name, String.join(",", vnames)));
 
-        for(int i = 0; i < col_names.length; i++) col_names[i] = "'" + col_names[i] + "'";
-        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names)));
+        String col_names_ext[] = new String[col_names.length];
+        for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
+        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names_ext)));
         re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
     }
     void showText(){
@@ -74,7 +75,7 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
         
         /* header output */
         
-        CoDaPackMain.outputPanel.addOutput(new OutputText("Zpatterns Plot:"));
+        //CoDaPackMain.outputPanel.addOutput(new OutputText("Zpatterns Plot:"));
         
         /* R output */        
         String outputString[] = re.eval("unlist(cdp_res[['text']])").asStringArray();

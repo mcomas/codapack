@@ -1,5 +1,6 @@
 package coda.gui.menu;
 
+import coda.BasicStats;
 import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
@@ -341,11 +342,20 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
         String sel_names[] = super.ds.getSelectedData();
 
         double[][] data = df.getNumericalData(sel_names);
-        for(int i=0; i < data.length; i++){
-            re.assign(sel_names[i], data[i]);
-        }
-        re.eval("X = cbind(" + String.join(",", sel_names) + ")");
-        re.eval("X[is.nan(X)] = NA_real_");
+        addMatrixToR(data, sel_names, "X");
+
+        // for(int i=0; i < data.length; i++){
+        //     re.assign(sel_names[i], data[i]);
+        // }
+        // re.eval("X = cbind(" + String.join(",", sel_names) + ")");
+        // re.eval("X[is.nan(X)] = NA_real_");
+
+        double dlevel[][] = df.getDetectionLevel(sel_names);
+        addMatrixToR(dlevel, sel_names, "DL");
+        // for(int i=0; i < data.length; i++){
+        //     re.assign(sel_names[i], dlevel[i]);
+        // }
+        // re.eval("DL = cbind(" + String.join(",", sel_names) + ")");
 
         re.eval("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
         re.eval("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));

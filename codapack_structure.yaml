@@ -58,9 +58,17 @@ CoDaPack Menu:
                     value: true
         - Set Detection Limit:
             id: "SetDetectionLimit"
+        # - Non-Parametric Zero Replacement:
+        #     id: "NonParametricZeroReplacementOld"
+        #     code: "r"
         - Non-Parametric Zero Replacement:
             id: "NonParametricZeroReplacement"
             code: "r"
+            script: "cdp_nonparametric_zero_repl.R"
+            controls:
+                - numeric:
+                    name: "DL proportion"
+                    value: 0.65
         - Log-Ratio EM Zero Replacement:
             id: "LogRatioEMZeroReplacement"
             code: "r"

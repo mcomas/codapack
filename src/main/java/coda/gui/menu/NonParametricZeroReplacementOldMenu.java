@@ -47,7 +47,7 @@ import org.rosuda.JRI.Rengine;
  *
  * @author Guest2
  */
-public class NonParametricZeroReplacementMenu extends AbstractMenuRBasedDialog {
+public class NonParametricZeroReplacementOldMenu extends AbstractMenuRBasedDialog {
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular Data. Non-Parametric Zero Replacement.yaml";
     private static final String helpTitle = "Non parametric zero replacement Help Menu";
@@ -62,7 +62,7 @@ public class NonParametricZeroReplacementMenu extends AbstractMenuRBasedDialog {
     /**
      * *** METODES DE CLASSE ****
      */
-    public NonParametricZeroReplacementMenu(final CoDaPackMain mainApp, Rengine r) {
+    public NonParametricZeroReplacementOldMenu(final CoDaPackMain mainApp, Rengine r) {
 
         super(mainApp, "Non parametric zero replacement", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);

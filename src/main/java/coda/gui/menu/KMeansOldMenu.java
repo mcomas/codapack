@@ -50,7 +50,7 @@ import org.rosuda.JRI.Rengine;
  * ClusterMenu -> X numerica i positiva amb opci� de retornar text, crear dataframe, afegir variables i  mostrar grafics
  * @author Guest2
  */
-public class KMeansMenu extends AbstractMenuDialog{
+public class KMeansOldMenu extends AbstractMenuDialog{
     
     Rengine re;
     DataFrame df;
@@ -76,7 +76,7 @@ public class KMeansMenu extends AbstractMenuDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Multivariate Analysis.Cluster.K-Means Versio silhouette.yaml";
     private static final String helpTitle = "Cluster Help Menu";
     
-    public KMeansMenu(final CoDaPackMain mainApp, Rengine r){
+    public KMeansOldMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Cluster Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         //super.setSelectedDataName("Select Composition:");
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
@@ -221,7 +221,7 @@ public class KMeansMenu extends AbstractMenuDialog{
                             try {
                                 showGraphics();
                             } catch (IOException ex) {
-                                Logger.getLogger(KMeansMenu.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(KMeansOldMenu.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                         else{
@@ -356,7 +356,7 @@ private void plotClusterMenu(int position) throws IOException, IOException {
             menuItem = new JMenuItem("Export");
             JMenu submenuExport = new JMenu("Export");
             menuItem = new JMenuItem("Export As SVG");
-            menuItem.addActionListener(new KMeansMenu.FileChooserAction(position));
+            menuItem.addActionListener(new KMeansOldMenu.FileChooserAction(position));
             submenuExport.add(menuItem);
             menuItem = new JMenuItem("Export As JPEG");
             //submenuExport.add(menuItem);
@@ -367,7 +367,7 @@ private void plotClusterMenu(int position) throws IOException, IOException {
             menuItem = new JMenuItem("Export As Postscripts");
             //submenuExport.add(menuItem);
             menuItem = new JMenuItem("Quit");
-            menuItem.addActionListener(new KMeansMenu.quitListener(position));
+            menuItem.addActionListener(new KMeansOldMenu.quitListener(position));
             menu.add(submenuExport);
             menu.add(menuItem);
             framesClusterMenu.elementAt(position).setJMenuBar(menuBar);

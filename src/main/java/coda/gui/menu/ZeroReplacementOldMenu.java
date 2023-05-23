@@ -35,7 +35,7 @@ import javax.swing.JTextField;
  *
  * @author mcomas
  */
-public class ZeroReplacementMenu extends AbstractMenuDialog{
+public class ZeroReplacementOldMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
     JTextField closure = new JTextField("1.0");
     double percentatgeDL = 0.65;
@@ -47,7 +47,7 @@ public class ZeroReplacementMenu extends AbstractMenuDialog{
     DataFrame df;
     ArrayList<String> names;
     
-    public ZeroReplacementMenu(final CoDaPackMain mainApp){
+    public ZeroReplacementOldMenu(final CoDaPackMain mainApp){
         super(mainApp, "Non-parametric multiplicative zero replacement Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         
         usedPercentatgeDL =  new JTextField(5);
