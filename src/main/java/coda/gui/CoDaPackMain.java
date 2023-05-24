@@ -133,12 +133,6 @@ public final class CoDaPackMain extends JFrame {
     private PerturbateDataMenu perturbateDataMenu;
     private PowerDataMenu powerDataMenu;
     private SetDetectionLimitMenu setDetectionLimitMenu;
-    private ZeroReplacementOldMenu zeroReplacementMenu;
-    private NonParametricZeroReplacementOldMenu nonParametricZeroReplacementMenu;
-    private LogRatioEMZeroReplacementMenu logRatioEMZeroReplacementMenu;
-    private BayesianMultiplicativeZeroReplacementMenu bayesianMultiplicativeZeroReplacementMenu;
-    private LogRatioEMMissingReplacementMenu logRatioEMMissingReplacementMenu;
-    private LogRatioEMZeroMissingReplacementMenu logRatioEMZeroMissingReplacementMenu;
     private SortDataMenu sortDataMenu;
     private FilterMenu filterMenu;
     private AdvancedFilterMenu advancedFilterMenu;
@@ -151,12 +145,10 @@ public final class CoDaPackMain extends JFrame {
     private DiscriminantMenu discriminantMenu;
     private LogRatioNormalityTestMenu logRatioNormalityTestMenu;
     // private AtipicalityIndexMenu atipicalityIndexMenu;
-    private AtypicalityIndexRBasedMenu atypicalityIndexRBasedMenu;
     private TernaryQuaternaryPlotMenu ternaryQuaternaryPlotMenu;
     private TernaryQuaternaryPCPlotMenu ternaryQuaternaryPCPlotMenu;
     private PredictiveRegionPlotMenu predictiveRegionPlotMenu;
     private CenterConfidenceRegionPlotMenu centerConfidenceRegionPlotMenu;
-    private ZeroPatternsMenu zeroPatternsMenu;
     private BoxplotMenu boxplotMenu;
     private ScatterplotMenu scatterplotMenu;
     private GeoMeanPlotMenu geoMeanPlotMenu;
@@ -511,11 +503,11 @@ public final class CoDaPackMain extends JFrame {
             case "DeleteVariables":
                 new DeleteVariablesMenu(this).setVisible(true);
                 break;
-            case "ZeroPatterns":
-                if(zeroPatternsMenu == null) zeroPatternsMenu = new ZeroPatternsMenu(this, re);
-                zeroPatternsMenu.updateMenuDialog();
-                zeroPatternsMenu.setVisible(true);
-                break;
+            // case "ZeroPatterns":
+            //     if(zeroPatternsMenu == null) zeroPatternsMenu = new ZeroPatternsMenu(this, re);
+            //     zeroPatternsMenu.updateMenuDialog();
+            //     zeroPatternsMenu.setVisible(true);
+            //     break;
             case "SetDetectionLimit":
                 if(setDetectionLimitMenu == null) setDetectionLimitMenu = new SetDetectionLimitMenu(this);
                 setDetectionLimitMenu.updateMenuDialog();
@@ -526,26 +518,26 @@ public final class CoDaPackMain extends JFrame {
             //     nonParametricZeroReplacementMenu.updateMenuDialog();
             //     nonParametricZeroReplacementMenu.setVisible(true);
             //     break;
-            case "LogRatioEMZeroReplacement":
-                if(logRatioEMZeroReplacementMenu == null) logRatioEMZeroReplacementMenu = new LogRatioEMZeroReplacementMenu(this, re);
-                logRatioEMZeroReplacementMenu.updateMenuDialog();
-                logRatioEMZeroReplacementMenu.setVisible(true);
-                break;
-            case "BayesianMultiplicativeZeroReplacement":
-                if(bayesianMultiplicativeZeroReplacementMenu == null) bayesianMultiplicativeZeroReplacementMenu = new BayesianMultiplicativeZeroReplacementMenu(this, re);
-                bayesianMultiplicativeZeroReplacementMenu.updateMenuDialog();
-                bayesianMultiplicativeZeroReplacementMenu.setVisible(true);
-                break;
-            case "LogRatioEMMissingReplacement":
-                if(logRatioEMMissingReplacementMenu == null) logRatioEMMissingReplacementMenu = new LogRatioEMMissingReplacementMenu(this, re);
-                logRatioEMMissingReplacementMenu.updateMenuDialog();
-                logRatioEMMissingReplacementMenu.setVisible(true);
-                break;
-            case "LogRatioEMZeroMissingReplacement":
-                if(logRatioEMZeroMissingReplacementMenu == null) logRatioEMZeroMissingReplacementMenu = new LogRatioEMZeroMissingReplacementMenu(this, re);
-                logRatioEMZeroMissingReplacementMenu.updateMenuDialog();
-                logRatioEMZeroMissingReplacementMenu.setVisible(true);
-                break;
+            // case "LogRatioEMZeroReplacement":
+            //     if(logRatioEMZeroReplacementMenu == null) logRatioEMZeroReplacementMenu = new LogRatioEMZeroReplacementMenu(this, re);
+            //     logRatioEMZeroReplacementMenu.updateMenuDialog();
+            //     logRatioEMZeroReplacementMenu.setVisible(true);
+            //     break;
+            // case "BayesianMultiplicativeZeroReplacement":
+            //     if(bayesianMultiplicativeZeroReplacementMenu == null) bayesianMultiplicativeZeroReplacementMenu = new BayesianMultiplicativeZeroReplacementMenu(this, re);
+            //     bayesianMultiplicativeZeroReplacementMenu.updateMenuDialog();
+            //     bayesianMultiplicativeZeroReplacementMenu.setVisible(true);
+            //     break;
+            // case "LogRatioEMMissingReplacement":
+            //     if(logRatioEMMissingReplacementMenu == null) logRatioEMMissingReplacementMenu = new LogRatioEMMissingReplacementMenu(this, re);
+            //     logRatioEMMissingReplacementMenu.updateMenuDialog();
+            //     logRatioEMMissingReplacementMenu.setVisible(true);
+            //     break;
+            // case "LogRatioEMZeroMissingReplacement":
+            //     if(logRatioEMZeroMissingReplacementMenu == null) logRatioEMZeroMissingReplacementMenu = new LogRatioEMZeroMissingReplacementMenu(this, re);
+            //     logRatioEMZeroMissingReplacementMenu.updateMenuDialog();
+            //     logRatioEMZeroMissingReplacementMenu.setVisible(true);
+            //     break;
             // case "AtypicalityIndexRBased":
             //     if(atypicalityIndexRBasedMenu == null) atypicalityIndexRBasedMenu = new AtypicalityIndexRBasedMenu(this, re);
             //     atypicalityIndexRBasedMenu.updateMenuDialog();

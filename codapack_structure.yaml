@@ -58,9 +58,7 @@ CoDaPack Menu:
                     value: true
         - Set Detection Limit:
             id: "SetDetectionLimit"
-        # - Non-Parametric Zero Replacement:
-        #     id: "NonParametricZeroReplacementOld"
-        #     code: "r"
+        - Separator
         - Non-Parametric Zero Replacement:
             id: "NonParametricZeroReplacement"
             code: "r"
@@ -69,9 +67,14 @@ CoDaPack Menu:
                 - numeric:
                     name: "DL proportion"
                     value: 0.65
-        - Log-Ratio EM Zero Replacement (old):
-            id: "LogRatioEMZeroReplacement"
+        - Bayesian Multiplicative Zero Replacement:
+            id: "BayesianMultiplicativeZeroReplacement"
             code: "r"
+            script: "cdp_bayesian_multiplicative_repl.R"
+            controls:
+                - select:
+                    name: "Method"
+                    values: ["GBM", "SQ", "BL", "CZM"]
         - Log-Ratio EM Zero Replacement:
             id: "LogRatioEMZeroReplacement"
             code: "r"
@@ -84,22 +87,13 @@ CoDaPack Menu:
                     name: "DL proportion"
                     value: 0.65
                 - boolean: "Robust"
-        - Bayesian Multiplicative Zero Replacement:
-            id: "BayesianMultiplicativeZeroReplacement"
-            code: "r"
-        - Log-Ratio EM Missing Replacement (old):
-            id: "LogRatioEMMissingReplacement"
-            code: "r"
-        - Log-Ratio EM Missing Replacement:
+        - Log-Ratio EM Missing Imputation:
             id: "LogRatioEMMissingReplacement"
             code: "r"
             script: "cdp_lrnormal_missing.R"
             controls:
                 - boolean: "Robust"
-        - Log-Ratio EM Zero & Missing Replacement (old):
-            id: "LogRatioEMZeroMissingReplacement"
-            code: "r"
-        - Log-Ratio EM Zero & Missing Replacement:
+        - Log-Ratio EM Zero  Repl. & Missing Imp.:
             id: "LogRatioEMZeroMissingReplacement"
             code: "r"
             script: "cdp_lrnormal_zero_repl_missing.R"
@@ -111,9 +105,7 @@ CoDaPack Menu:
                     name: "DL proportion"
                     value: 0.65
                 - boolean: "Robust"
-        # - Atypicality Index:
-        #     id: "AtypicalityIndexRBased"
-        #     code: "r"
+        - Separator
         - Atypicality Index:
             id: "Outliers"
             code: "r"

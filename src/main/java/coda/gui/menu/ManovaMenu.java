@@ -321,7 +321,7 @@ public class ManovaMenu extends AbstractMenuDialog{
                     try {
                         img = ImageIO.read(new File(tempsDirR[position]));
                     } catch (IOException ex) {
-                        Logger.getLogger(ZeroPatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     }
                     ImageIcon icon = new ImageIcon(img);
                     Image image = icon.getImage();
