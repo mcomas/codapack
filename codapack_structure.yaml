@@ -69,18 +69,48 @@ CoDaPack Menu:
                 - numeric:
                     name: "DL proportion"
                     value: 0.65
+        - Log-Ratio EM Zero Replacement (old):
+            id: "LogRatioEMZeroReplacement"
+            code: "r"
         - Log-Ratio EM Zero Replacement:
             id: "LogRatioEMZeroReplacement"
             code: "r"
+            script: "cdp_lrnormal_zero_repl.R"
+            controls:
+                - select:
+                    name: "Initial Cov"
+                    values: ["multRepl", "complete.obs"]
+                - numeric: 
+                    name: "DL proportion"
+                    value: 0.65
+                - boolean: "Robust"
         - Bayesian Multiplicative Zero Replacement:
             id: "BayesianMultiplicativeZeroReplacement"
+            code: "r"
+        - Log-Ratio EM Missing Replacement (old):
+            id: "LogRatioEMMissingReplacement"
             code: "r"
         - Log-Ratio EM Missing Replacement:
             id: "LogRatioEMMissingReplacement"
             code: "r"
+            script: "cdp_lrnormal_missing.R"
+            controls:
+                - boolean: "Robust"
+        - Log-Ratio EM Zero & Missing Replacement (old):
+            id: "LogRatioEMZeroMissingReplacement"
+            code: "r"
         - Log-Ratio EM Zero & Missing Replacement:
             id: "LogRatioEMZeroMissingReplacement"
             code: "r"
+            script: "cdp_lrnormal_zero_repl_missing.R"
+            controls:
+                - select:
+                    name: "Initial Cov"
+                    values: ["multRepl", "complete.obs"]
+                - numeric: 
+                    name: "DL proportion"
+                    value: 0.65
+                - boolean: "Robust"
         # - Atypicality Index:
         #     id: "AtypicalityIndexRBased"
         #     code: "r"
