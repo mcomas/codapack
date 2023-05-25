@@ -60,11 +60,11 @@ public final class DataSelector1to1 extends DataSelector {
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
     int releaseIndex = -1;
-    boolean groupedBy = true;
 
     int selection_type = ONLY_NUMERIC;
     public DataSelector1to1(String names[]) throws DataFrameException{
-        initComponents(false);
+        group_by = false;
+        initComponents();
         ds_dataFrame = new DataFrame();
         for(String name: names) ds_dataFrame.add(new Variable(name));
         selection_type = ONLY_NUMERIC;
@@ -72,7 +72,8 @@ public final class DataSelector1to1 extends DataSelector {
         setDataLists(ds_dataFrame);
     }
     public DataSelector1to1(DataFrame dataFrame, boolean groups) {
-        initComponents(groups);
+        group_by = groups;
+        initComponents();
         ds_dataFrame = dataFrame;
         selection_type = ONLY_NUMERIC;
 
@@ -80,7 +81,8 @@ public final class DataSelector1to1 extends DataSelector {
             setDataLists(dataFrame);            
     }
     public DataSelector1to1(DataFrame dataFrame, boolean groups, int variable_type) {
-        initComponents(groups);
+        group_by = groups;
+        initComponents();
         ds_dataFrame = dataFrame;
         selection_type = variable_type;
 
@@ -163,10 +165,6 @@ public final class DataSelector1to1 extends DataSelector {
     public void setSelectedData(ListModel<String> list){
         vars_selected.setModel(list);
     }
-    public String getGroupData(){
-        if(var_group.getSelectedIndex() == 0) return null;
-        else return (String) var_group.getSelectedItem();
-    }
     public String getSelectedGroup(){
         if(var_group.getSelectedIndex() == 0) return null;
 
@@ -181,7 +179,7 @@ public final class DataSelector1to1 extends DataSelector {
         return res;
     }
 
-    private void initComponents(boolean groups) {
+    private void initComponents() {
         
         //setLayout(new GridBagLayout());
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -224,7 +222,7 @@ public final class DataSelector1to1 extends DataSelector {
         sp_vars_selected.setViewportView(vars_selected);
         p_vars_selected.add(sp_vars_selected, BorderLayout.CENTER);
 
-        if(groups){
+        if(group_by){
             JPanel groupPanel = new JPanel(new BorderLayout());
             groupPanel.setBorder(BorderFactory.createTitledBorder("Group by"));
             var_group.setPrototypeDisplayValue("XXXXXXXXXXXX");

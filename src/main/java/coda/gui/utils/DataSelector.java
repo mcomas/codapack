@@ -7,6 +7,8 @@ import coda.DataFrame;
 
 public abstract class DataSelector extends JPanel {
 
+    public boolean group_by;
+
     public DataFrame ds_dataFrame;
 
     public abstract void updateDataLists(DataFrame dataFrame);

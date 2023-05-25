@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.rosuda.JRI.Rengine;
+import org.rosuda.REngine.REXPNull;
 
 
 public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
@@ -27,7 +28,6 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
     private Rengine re;
     private int iVar = 0;
     private ArrayList<RConversion> cdp_lines = new ArrayList<RConversion>();
-
     public void addCDP_Line(RConversion cdpLine){
         CDP_Line cdpl = (CDP_Line)cdpLine;
         optionsPanel.add(cdpl);
@@ -39,8 +39,9 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                              Rengine r, 
                              String title,
                              String Rscript, 
-                             JSONArray controls) throws JSONException{
-        super(mainApp, title + " Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
+                             JSONArray controls,
+                             boolean groups) throws JSONException{
+        super(mainApp, title + " Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), groups), r);   
         script_file = Rscript;
 
         // super.setHelpMenuConfiguration(yamlUrl, helpTitle);
@@ -156,15 +157,6 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                         num_label = json_obj.getString(type);
                     }
                     addCDP_Line(new CDP_Numeric(num_label, num_value));
-                    // JTextField Tnum = new JTextField("", 5);
-                    // JPanel Pnum = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-                    // Pnum.setMaximumSize(new Dimension(1000, 32));
-                    // String Lnum = json_obj.getString(type);        
-                    // Pnum.add(new JLabel(Lnum));  
-                    // Pnum.add(Box.createHorizontalStrut(10));
-                    // Pnum.add(Tnum);
-                    // optionsPanel.add(Pnum);
-                    // System.out.println("numeric submenu");
                     break;
                 case "boolean":
                     String label = null;
@@ -334,6 +326,8 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
     }
     @Override
     public void acceptButtonActionPerformed(){
+        re.eval("rm(list = ls())");
+
         iVar = 0;
         for(RConversion cdpLine: cdp_lines){
             cdpLine.addVariableToR();
@@ -356,7 +350,14 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
         //     re.assign(sel_names[i], dlevel[i]);
         // }
         // re.eval("DL = cbind(" + String.join(",", sel_names) + ")");
-
+        if(ds.group_by){
+            String sel_group = ds.getSelectedGroup();
+            if(sel_group != null){
+                String group[] = df.getCategoricalData(sel_group);
+                re.assign("GROUP", group);
+            }
+        }
+        
         re.eval("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
         re.eval("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
 

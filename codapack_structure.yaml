@@ -188,12 +188,26 @@ CoDaPack Menu:
         - Boxplot:
             id: "Boxplot"
             code: "r"
-        - Scatterplot 2d/3d:
-            id: "Scatterlot2d3d"
+            script: "cdp_boxplot.R"
+            options: ["groups"]
+            controls:
+                - boolean: "Add geometric mean"
+                - boolean: "Add arithmetic mean"
+        - Scatterplot:
+            id: "ScatterPlot"
+            code: "r"
+            script: "cdp_scatterplot.R"
+            options: ["groups"]
+            controls: []
+        - Geometric Mean Barplot (Old):
+            id: "GeometricMeanBarplotOld"
             code: "r"
         - Geometric Mean Barplot:
             id: "GeometricMeanBarplot"
             code: "r"
+            script: "cdp_geometric_mean_barplot.R"
+            options: ["groups"]
+            controls: []
         - CLR-biplot:
             id: "CLRBiplot"
         - ILR/CLR-biplot:

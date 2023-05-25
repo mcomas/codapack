@@ -31,6 +31,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -447,6 +449,7 @@ public class CoDaPackMenu extends JMenuBar {
                 String id = json_obj.getString("id");
                 item_key.put(name, id);
                 JMenuItem mi = new JMenuItem();
+                boolean groups = false;
                 if(json_obj.has("code") && json_obj.getString("code").equals("r")){
                     if(!CoDaPackMain.R_available){
                         mi.setEnabled(false);
@@ -454,13 +457,27 @@ public class CoDaPackMenu extends JMenuBar {
                     if(json_obj.has("script") & json_obj.has("controls")){
                         JSONArray json_controls = json_obj.getJSONArray("controls");
                         String Rscript = json_obj.getString("script");
+                        if(json_obj.has("options")){
+                            ArrayList<String> loptions = new ArrayList<String>();
+                            if(json_obj.get("options") instanceof String){
+                                loptions.add(json_obj.getString("options"));
+                            }else{
+                                System.out.println(json_obj.get("options").toString());
+                                JSONArray options = json_obj.getJSONArray("options");
+                                for(int j = 0; j<options.length(); i++) loptions.add(options.getString(i));
+                            }
+                            if(loptions.contains("groups")){
+                                groups = true;
+                            }
+                        }
                         System.out.println(json_controls.toString());                    
                         mainApplication.dynamicMenus.put(id, 
                             new RBasedGenericMenu(mainApplication, 
                                                   CoDaPackMain.re, 
                                                   name,
                                                   Rscript,
-                                                  json_controls));
+                                                  json_controls,
+                                                  groups));
                     }
                 }
                 addJMenuItem(super_menu, mi, name);  

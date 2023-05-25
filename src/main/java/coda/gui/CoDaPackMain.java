@@ -149,9 +149,8 @@ public final class CoDaPackMain extends JFrame {
     private TernaryQuaternaryPCPlotMenu ternaryQuaternaryPCPlotMenu;
     private PredictiveRegionPlotMenu predictiveRegionPlotMenu;
     private CenterConfidenceRegionPlotMenu centerConfidenceRegionPlotMenu;
-    private BoxplotMenu boxplotMenu;
     private ScatterplotMenu scatterplotMenu;
-    private GeoMeanPlotMenu geoMeanPlotMenu;
+    private GeometricMeanBarPlotMenu geometricMeanBarPlotMenu;
     private CLRBiplotMenu cLRBiplotMenu;
     private ILRCLRBiplotMenu iLRCLRBiplotMenu;
     private BalanceDendrogramMenu balanceDendrogramMenu;
@@ -623,18 +622,11 @@ public final class CoDaPackMain extends JFrame {
                 centerConfidenceRegionPlotMenu.updateMenuDialog();
                 centerConfidenceRegionPlotMenu.setVisible(true);
                 break;
-            // case "Boxplot":
-            //     if(boxplotMenu == null) boxplotMenu = new BoxplotMenu(this);
-            //     boxplotMenu.updateMenuDialog();
-            //     boxplotMenu.setVisible(true);
-            // case "Scatterlot2d3d":
-            //     if(scatterlot2d3dMenu == null) scatterlot2d3dMenu = new Scatterlot2d3dMenu(this);
-            //     scatterlot2d3dMenu.updateMenuDialog();
-            //     scatterlot2d3dMenu.setVisible(true);
-            // case "GeometricMeanBarplot":
-            //     if(geometricMeanBarplotMenu == null) geometricMeanBarplotMenu = new GeometricMeanBarplotMenu(this);
-            //     geometricMeanBarplotMenu.updateMenuDialog();
-            //     geometricMeanBarplotMenu.setVisible(true);
+            case "GeometricMeanBarplotOld":
+                if(geometricMeanBarPlotMenu == null) geometricMeanBarPlotMenu = new GeometricMeanBarPlotMenu(this, re);
+                geometricMeanBarPlotMenu.updateMenuDialog();
+                geometricMeanBarPlotMenu.setVisible(true);
+                break;
             case "CLRBiplot":
                 if(cLRBiplotMenu == null) cLRBiplotMenu = new CLRBiplotMenu(this);
                 cLRBiplotMenu.updateMenuDialog();

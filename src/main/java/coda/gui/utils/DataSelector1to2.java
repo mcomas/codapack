@@ -65,7 +65,6 @@ public final class DataSelector1to2 extends DataSelector {
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
     int releaseIndex = -1;
-    boolean groupedBy = true;
 
     JLabel label_varA = new JLabel("A variables");
     JLabel label_varB = new JLabel("B variables");
