@@ -162,17 +162,36 @@ CoDaPack Menu:
             #                         - numeric: "Maximum"
             #                         - select: ["Calinski index", "Average Silhouette"]
             #             - string: "Cluster name"
+            - Manova (Old):
+                id: "ManovaOld"
+                code: "r"
             - Manova:
                 id: "Manova"
                 code: "r"
+                script: "cdp_manova.R"
+                options: ["groups"]
+                controls:
+                    - boolean: "Residuals"
+                    - boolean: "Test pairs"
+                    - select:
+                        name: "Test"
+                        values: ["Pillai", "Wilks", "Hotelling-Lawley", "Roy", "Spherical"]
             - Discriminant Analysis:
                 id: "DiscriminantAnalysis"
                 code: "r"
         - Log-Ratio Normality Test:
             id: "LogRatioNormalityTest"
-        - Classical Univariate Normality Test:
-            id: "ClassicalUniveraiteNormalityTest"
+        # - Univariate Normality Test (Old):
+        #     id: "UnivariateNormalityTestOld"
+        #     code: "r"
+        - Univariate Normality Test:
+            id: "UnivariateNormalityTest"
             code: "r"
+            script: "cdp_univariate_normality_test.R"
+            controls:
+                - select:
+                    name: "Method"
+                    values: ["Shapiro-Wilk", "Kolmogorov-Smirnov"]
     - Graphs:
         - Ternary/Quaternary Plot:
             id: "TernaryQuaternaryPlot"
@@ -199,9 +218,6 @@ CoDaPack Menu:
             script: "cdp_scatterplot.R"
             options: ["groups"]
             controls: []
-        - Geometric Mean Barplot (Old):
-            id: "GeometricMeanBarplotOld"
-            code: "r"
         - Geometric Mean Barplot:
             id: "GeometricMeanBarplot"
             code: "r"

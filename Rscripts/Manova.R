@@ -1,3 +1,4 @@
+save.image('Rscripts/Manova.RData')
 ################################
 # Script for compositional manova
 # X: Compositional Matrix
@@ -21,7 +22,8 @@ if (is.factor(Y) == FALSE) {
 
 nOrig <- length(X)
 nobs <- nrow(X)
-Xt <- coda.base::coordinates(X, basis = "ilr", label = "ilr.")
+Xt <- coda.base::coordinates(X, basis = "ilr")
+names(Xt) = paste0('ilr.', 1:ncol(Xt))
 #Xt <- coda.base::coordinates(X, basis = coda.base::sbp_basis(BaseX))
 nparts=length(Xt)
 for (n in 1:nparts)

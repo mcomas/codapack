@@ -150,11 +150,11 @@ public final class CoDaPackMain extends JFrame {
     private PredictiveRegionPlotMenu predictiveRegionPlotMenu;
     private CenterConfidenceRegionPlotMenu centerConfidenceRegionPlotMenu;
     private ScatterplotMenu scatterplotMenu;
-    private GeometricMeanBarPlotMenu geometricMeanBarPlotMenu;
+    // private GeometricMeanBarPlotMenu geometricMeanBarPlotMenu;
     private CLRBiplotMenu cLRBiplotMenu;
     private ILRCLRBiplotMenu iLRCLRBiplotMenu;
     private BalanceDendrogramMenu balanceDendrogramMenu;
-    private ClasUniNormTestMenu clasUniNormTestMenu;
+    private UnivariateNormalityTestMenu univariateNormalityTestMenu;
     private ChangeGroupNameMenu changeGroupNameMenu;
     private ConfigurationMenu configurationMenu;
 
@@ -567,10 +567,11 @@ public final class CoDaPackMain extends JFrame {
             //     kMeansMenu.updateMenuDialog();
             //     kMeansMenu.setVisible(true);
             //     break;
-            // case "Manova":
-            //     if(manovaMenu == null) manovaMenu = new ManovaMenu(this);
-            //     manovaMenu.updateMenuDialog();
-            //     manovaMenu.setVisible(true);
+            case "ManovaOld":
+                if(manovaMenu == null) manovaMenu = new ManovaMenu(this, re);
+                manovaMenu.updateMenuDialog();
+                manovaMenu.setVisible(true);
+                break;
             // case "DiscriminantAnalysis":
             //     if(discriminantAnalysisMenu == null) discriminantAnalysisMenu = new DiscriminantAnalysisMenu(this);
             //     discriminantAnalysisMenu.updateMenuDialog();
@@ -581,10 +582,11 @@ public final class CoDaPackMain extends JFrame {
                 logRatioNormalityTestMenu.updateMenuDialog();
                 logRatioNormalityTestMenu.setVisible(true);
                 break;
-            // case "ClassicalUniveraiteNormalityTest":
-            //     if(classicalUniveraiteNormalityTestMenu == null) classicalUniveraiteNormalityTestMenu = new ClassicalUniveraiteNormalityTestMenu(this);
-            //     classicalUniveraiteNormalityTestMenu.updateMenuDialog();
-            //     classicalUniveraiteNormalityTestMenu.setVisible(true);
+            case "UnivariateNormalityTestOld":
+                if(univariateNormalityTestMenu == null) univariateNormalityTestMenu = new UnivariateNormalityTestMenu(this, re);
+                univariateNormalityTestMenu.updateMenuDialog();
+                univariateNormalityTestMenu.setVisible(true);
+                break;
             case "TernaryQuaternaryPlot":
                 if(ternaryQuaternaryPlotMenu == null) ternaryQuaternaryPlotMenu = new TernaryQuaternaryPlotMenu(this);
                 ternaryQuaternaryPlotMenu.updateMenuDialog();
@@ -622,11 +624,11 @@ public final class CoDaPackMain extends JFrame {
                 centerConfidenceRegionPlotMenu.updateMenuDialog();
                 centerConfidenceRegionPlotMenu.setVisible(true);
                 break;
-            case "GeometricMeanBarplotOld":
-                if(geometricMeanBarPlotMenu == null) geometricMeanBarPlotMenu = new GeometricMeanBarPlotMenu(this, re);
-                geometricMeanBarPlotMenu.updateMenuDialog();
-                geometricMeanBarPlotMenu.setVisible(true);
-                break;
+            // case "GeometricMeanBarplotOld":
+            //     if(geometricMeanBarPlotMenu == null) geometricMeanBarPlotMenu = new GeometricMeanBarPlotMenu(this, re);
+            //     geometricMeanBarPlotMenu.updateMenuDialog();
+            //     geometricMeanBarPlotMenu.setVisible(true);
+            //     break;
             case "CLRBiplot":
                 if(cLRBiplotMenu == null) cLRBiplotMenu = new CLRBiplotMenu(this);
                 cLRBiplotMenu.updateMenuDialog();
