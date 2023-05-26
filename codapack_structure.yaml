@@ -176,9 +176,20 @@ CoDaPack Menu:
                     - select:
                         name: "Test"
                         values: ["Pillai", "Wilks", "Hotelling-Lawley", "Roy", "Spherical"]
+            - Discriminant Analysis (Old):
+                id: "DiscriminantAnalysisOld"
+                code: "r"
             - Discriminant Analysis:
                 id: "DiscriminantAnalysis"
                 code: "r"
+                script: "cdp_discriminant_analysis.R"
+                options: ["groups"]
+                controls:
+                    - boolean: "Uniform prior"
+                    - boolean: "Discriminant score"
+                    - boolean: "Posterior probability"
+                    - boolean: "Maximum posterior classification"
+
         - Log-Ratio Normality Test:
             id: "LogRatioNormalityTest"
         # - Univariate Normality Test (Old):

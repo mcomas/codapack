@@ -142,7 +142,7 @@ public final class CoDaPackMain extends JFrame {
     private XCompositionYRealRegressionMenu xCompositionYRealRegressionMenu;
     private KMeansOldMenu kMeansMenu;
     private ManovaMenu manovaMenu;
-    private DiscriminantMenu discriminantMenu;
+    private DiscriminantAnalysisMenu discriminantAnalysisMenu;
     private LogRatioNormalityTestMenu logRatioNormalityTestMenu;
     // private AtipicalityIndexMenu atipicalityIndexMenu;
     private TernaryQuaternaryPlotMenu ternaryQuaternaryPlotMenu;
@@ -572,11 +572,11 @@ public final class CoDaPackMain extends JFrame {
                 manovaMenu.updateMenuDialog();
                 manovaMenu.setVisible(true);
                 break;
-            // case "DiscriminantAnalysis":
-            //     if(discriminantAnalysisMenu == null) discriminantAnalysisMenu = new DiscriminantAnalysisMenu(this);
-            //     discriminantAnalysisMenu.updateMenuDialog();
-            //     discriminantAnalysisMenu.setVisible(true);
-            //     break;
+            case "DiscriminantAnalysisOld":
+                if(discriminantAnalysisMenu == null) discriminantAnalysisMenu = new DiscriminantAnalysisMenu(this, re);
+                discriminantAnalysisMenu.updateMenuDialog();
+                discriminantAnalysisMenu.setVisible(true);
+                break;
             case "LogRatioNormalityTest":
                 if(logRatioNormalityTestMenu == null) logRatioNormalityTestMenu = new LogRatioNormalityTestMenu(this);
                 logRatioNormalityTestMenu.updateMenuDialog();
