@@ -162,9 +162,9 @@ CoDaPack Menu:
             #                         - numeric: "Maximum"
             #                         - select: ["Calinski index", "Average Silhouette"]
             #             - string: "Cluster name"
-            - Manova (Old):
-                id: "ManovaOld"
-                code: "r"
+            # - Manova (Old):
+            #     id: "ManovaOld"
+            #     code: "r"
             - Manova:
                 id: "Manova"
                 code: "r"
@@ -176,9 +176,9 @@ CoDaPack Menu:
                     - select:
                         name: "Test"
                         values: ["Pillai", "Wilks", "Hotelling-Lawley", "Roy", "Spherical"]
-            - Discriminant Analysis (Old):
-                id: "DiscriminantAnalysisOld"
-                code: "r"
+            # - Discriminant Analysis (Old):
+            #     id: "DiscriminantAnalysisOld"
+            #     code: "r"
             - Discriminant Analysis:
                 id: "DiscriminantAnalysis"
                 code: "r"

@@ -10,23 +10,26 @@ if(V1){
 }
 
 lda1 = MASS::lda(x = H, grouping = as.factor(GROUP), prior = prior)
-plda1 <- predict(lda1, H)
+lda1_coda = lda1
+lda1_coda$means = coda.base::composition(lda1$means, coda.base::basis(H))
+lda1_coda$scaling = t(coda.base::composition(t(lda1$scaling), coda.base::basis(H)))
 
-lda1.dfunc = sprintf("Discriminant function:\n\n%s = 0", paste(sprintf("%0.3f ln %s", coda.base::basis(H) %*% coef(lda1), colnames(X)), collapse = '+'))
-lda1.dfunc = gsub("+-", "-", lda1.dfunc, fixed = TRUE)
+
+
+lda1.dfunc = sprintf("\nDiscriminant function:\n%s = 0", paste(sprintf("%0.3f ln %s", coda.base::basis(H) %*% coef(lda1), colnames(X)), collapse = ' + '))
+lda1.dfunc = gsub("+ -", "- ", lda1.dfunc, fixed = TRUE)
 
 lda1cv = MASS::lda(H, GROUP, prior = prior, CV = TRUE)
 
-
-sortida <- paste(capture.output(lda1))
+sortida <- paste(capture.output(lda1_coda))
 sortida = c(sortida, lda1.dfunc)
 ct <- table(GROUP, lda1cv$class)
 
-sortida <- c(sortida,"Cross table:")
+sortida <- c(sortida,"\nLOOCV table:")
 sortida <- c(sortida,capture.output(ct))
 # sortida <- c(sortida,capture.output(prop.table(ct, 1)))
 # sortida <- c(sortida,capture.output(prop.table(ct)))
-sortida <- c(sortida,sprintf("Accuracy:\n\n (%s)/%d = %.4f", 
+sortida <- c(sortida,sprintf("\nAccuracy: (%s)/%d = %.4f", 
                              paste(diag(ct), collapse = '+'),
                              sum(ct),
                              sum(diag(prop.table(ct)))))
@@ -36,6 +39,8 @@ sortida <- c(sortida,sprintf("Accuracy:\n\n (%s)/%d = %.4f",
 #   P1t <- coda.base::coordinates(Z, basis = coda.base::sbp_basis(BaseX), label = 'ilr.')
 #   DF1 <- as.data.frame(predict(lda1,newdata=P1t))
 # }
+
+plda1 = predict(lda1, H)
 DF = NULL
 if(V2){
   DF = as.data.frame(plda1$x)

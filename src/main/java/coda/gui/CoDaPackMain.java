@@ -567,16 +567,16 @@ public final class CoDaPackMain extends JFrame {
             //     kMeansMenu.updateMenuDialog();
             //     kMeansMenu.setVisible(true);
             //     break;
-            case "ManovaOld":
-                if(manovaMenu == null) manovaMenu = new ManovaMenu(this, re);
-                manovaMenu.updateMenuDialog();
-                manovaMenu.setVisible(true);
-                break;
-            case "DiscriminantAnalysisOld":
-                if(discriminantAnalysisMenu == null) discriminantAnalysisMenu = new DiscriminantAnalysisMenu(this, re);
-                discriminantAnalysisMenu.updateMenuDialog();
-                discriminantAnalysisMenu.setVisible(true);
-                break;
+            // case "ManovaOld":
+            //     if(manovaMenu == null) manovaMenu = new ManovaMenu(this, re);
+            //     manovaMenu.updateMenuDialog();
+            //     manovaMenu.setVisible(true);
+            //     break;
+            // case "DiscriminantAnalysisOld":
+            //     if(discriminantAnalysisMenu == null) discriminantAnalysisMenu = new DiscriminantAnalysisMenu(this, re);
+            //     discriminantAnalysisMenu.updateMenuDialog();
+            //     discriminantAnalysisMenu.setVisible(true);
+            //     break;
             case "LogRatioNormalityTest":
                 if(logRatioNormalityTestMenu == null) logRatioNormalityTestMenu = new LogRatioNormalityTestMenu(this);
                 logRatioNormalityTestMenu.updateMenuDialog();
