@@ -53,10 +53,6 @@ public final class DataSelector1to1 extends DataSelector {
     private JList<String> vars_selected = new JList<String>();
     private JComboBox<String> var_group = new JComboBox<String>();
 
-    public static int ONLY_NUMERIC = 1;
-    public static int ALL_VARIABLES = 2;
-    public static int ONLY_CATEGORIC = 3;
-
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
     int releaseIndex = -1;

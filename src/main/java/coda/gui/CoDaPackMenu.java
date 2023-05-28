@@ -44,6 +44,9 @@ import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import coda.ext.json.JSONString;
 import coda.gui.menu.RBasedGenericMenu;
+import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
+import coda.gui.utils.DataSelector1to2;
 
 /**
  *
@@ -450,6 +453,7 @@ public class CoDaPackMenu extends JMenuBar {
                 item_key.put(name, id);
                 JMenuItem mi = new JMenuItem();
                 boolean groups = false;
+                boolean two_selectors = false;
                 if(json_obj.has("code") && json_obj.getString("code").equals("r")){
                     if(!CoDaPackMain.R_available){
                         mi.setEnabled(false);
@@ -469,15 +473,33 @@ public class CoDaPackMenu extends JMenuBar {
                             if(loptions.contains("groups")){
                                 groups = true;
                             }
+                            if(loptions.contains("2selectors")){
+                                two_selectors = true;
+                            }
+
                         }
-                        System.out.println(json_controls.toString());                    
-                        mainApplication.dynamicMenus.put(id, 
-                            new RBasedGenericMenu(mainApplication, 
-                                                  CoDaPackMain.re, 
-                                                  name,
-                                                  Rscript,
-                                                  json_controls,
-                                                  groups));
+                        System.out.println(json_controls.toString());
+                        if(two_selectors){
+                            DataSelector1to2 ds12 = new DataSelector1to2(mainApplication.getActiveDataFrame(), groups);
+                            if(json_obj.has("textA")) ds12.setTextA(json_obj.getString("textA"));
+                            if(json_obj.has("textB")) ds12.setTextB(json_obj.getString("textB"));
+                            mainApplication.dynamicMenus.put(id, 
+                                new RBasedGenericMenu(mainApplication, 
+                                                    CoDaPackMain.re, 
+                                                    name,
+                                                    Rscript,
+                                                    json_controls,
+                                                    ds12));
+                        }else{
+                            mainApplication.dynamicMenus.put(id, 
+                                new RBasedGenericMenu(mainApplication, 
+                                                    CoDaPackMain.re, 
+                                                    name,
+                                                    Rscript,
+                                                    json_controls,
+                                                    new DataSelector1to1(mainApplication.getActiveDataFrame(), groups)));
+                        }
+                        
                     }
                 }
                 addJMenuItem(super_menu, mi, name);  

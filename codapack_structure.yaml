@@ -122,9 +122,20 @@ CoDaPack Menu:
         - Separator
         - Multivariate Analysis:
             - Regression:
-                - X real, Y composition:
-                    id: "XRealYCompositionRegression"
+                - X real, Y composition (old):
+                    id: "XRealYCompositionRegressionOld"
                     code: "r"
+                - X real, Y composition:
+                    id: "RegressionCoDaResponse"
+                    code: "r"
+                    script: "cdp_regression_coda_response.R"
+                    options: ["2selectors"]
+                    textA: "Explanatory"
+                    textB: "Compositional response"
+                    controls:
+                        - basis: 
+                            name: "Response basis"
+                            selector: "Y"
                 - X composition, Y real:
                     id: "XCompositionYRealRegression"
                     code: "r"

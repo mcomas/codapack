@@ -5,18 +5,30 @@ import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
+import coda.gui.utils.DataSelector1to2;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import org.rosuda.JRI.Rengine;
 import org.rosuda.REngine.REXPNull;
@@ -39,16 +51,19 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                              Rengine r, 
                              String title,
                              String Rscript, 
-                             JSONArray controls,
-                             boolean groups) throws JSONException{
-        super(mainApp, title + " Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), groups), r);   
+                             JSONArray controls, 
+                             DataSelector dataSelector) throws JSONException{
+        super(mainApp, title + " Menu", dataSelector, r); 
+        build_optionPanel(r, Rscript, controls);
+     }
+
+     void build_optionPanel(Rengine r, String Rscript, JSONArray controls) throws JSONException{
         script_file = Rscript;
 
         // super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         re = r;
         
         this.optionsPanel.setLayout(new BoxLayout(this.optionsPanel, BoxLayout.PAGE_AXIS));
- 
         optionsPanel.add(Box.createRigidArea(new Dimension(15,15)));
         for(int i=0;i<controls.length();i++){
             JSONObject json_obj = controls.getJSONObject(i);
@@ -158,6 +173,17 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                     }
                     addCDP_Line(new CDP_Numeric(num_label, num_value));
                     break;
+                case "basis":
+                    System.out.println("Basis menu");
+                    addCDP_Line(new CDP_Basis(json_obj.getJSONObject(type).getString("name")));
+                    // addCDP_Line(new CDP_Basis(json_obj.getJSONObject(type).getString("name")));
+                    // panel.add(new JLabel("Defined partition:"));
+                    // JScrollPane jScrollPane1 = new JScrollPane();
+                    // jScrollPane1.setPreferredSize(new Dimension(185,150));
+                    
+                    // jScrollPane1.setViewportView(areaPart);
+                    // panel.add(jScrollPane1);
+                    break;
                 case "boolean":
                     String label = null;
                     boolean checked = false;
@@ -171,6 +197,7 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                     break;
             }
         }
+        optionsPanel.add(new Box.Filler(new Dimension(0, 0), new Dimension(850, 500), new Dimension(1200, 1000)));
         /*
         JPanel B1Panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         B1Panel.setMaximumSize(new Dimension(1000, 32));
@@ -210,7 +237,14 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
             add(Box.createHorizontalStrut(10));
             
         }
-        
+        public CDP_Line(int VSIZE){            
+            setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+            setMaximumSize(new Dimension(MAX_SIZE, VSIZE));
+            //setBackground(new Color(100,100,100));
+            //add(Box.createRigidArea(new Dimension(MAX_SIZE, 5)));
+            add(Box.createHorizontalStrut(10));
+            
+        }
     }
     private class CDP_Label extends CDP_Line implements RConversion{        
         public CDP_Label(String label){  
@@ -324,6 +358,56 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
             return(true);
         }
     }
+    private class CDP_Basis extends CDP_Line implements RConversion{
+        JTextArea basis;
+        public CDP_Basis(String vname){
+            super(100);
+            
+            JPanel PBasis = new JPanel();
+            PBasis.setBackground(Color.CYAN);
+            PBasis.setLayout(new BoxLayout(PBasis, BoxLayout.PAGE_AXIS));
+            // Plab.add(new JLabel(vname));
+
+            basis = new JTextArea(20, 20);
+
+            JScrollPane sp = new JScrollPane();
+            sp.setSize(new java.awt.Dimension(185,40));
+            sp.setMaximumSize(new Dimension(MAX_SIZE, 40));
+            sp.setViewportBorder(BorderFactory.createLineBorder(Color.black));
+            sp.setViewportView(basis);
+            
+            JLabel lbl1 = new JLabel(vname);
+            JPanel p1 = new JPanel();
+            p1.setOpaque(false);
+            p1.setLayout(new BorderLayout(0, 0));
+            p1.add(lbl1, BorderLayout.CENTER);
+
+            // JLabel l = new JLabel(vname, SwingConstants.LEFT);
+            // l.setOpaque(true);
+            // l.setBackground(Color.MAGENTA);
+            // l.setAlignmentX();
+            // l.setHorizontalAlignment(0);
+            PBasis.add(p1);
+            PBasis.add(sp);
+
+            JButton b1 = new JButton("Default");
+            JButton b2 = new JButton("Manual");
+            JPanel p3 = new JPanel();
+            p3.add(b1);
+            p3.add(b2);
+
+            PBasis.add(p3);
+            PBasis.add(new Box.Filler(new Dimension(0, 0), new Dimension(MAX_SIZE, 120), new Dimension(MAX_SIZE, 120)));
+            
+            add(PBasis);
+            
+        }
+        @Override
+        public boolean addVariableToR() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'addVariableToR'");
+        }
+    }
     @Override
     public void acceptButtonActionPerformed(){
         re.eval("rm(list = ls())");
@@ -335,9 +419,15 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
         df = mainApplication.getActiveDataFrame();
         String sel_names[] = super.ds.getSelectedData();
 
-        double[][] data = df.getNumericalData(sel_names);
-        addMatrixToR(data, sel_names, "X");
+        double[][] dataX = df.getNumericalData(sel_names);
+        addMatrixToR(dataX, sel_names, "X");
 
+        if(ds instanceof DataSelector1to2){
+            
+            String sel_namesY[] = ((DataSelector1to2)ds).getSelectedDataB();
+            double[][] dataY = df.getNumericalData(sel_namesY);
+            addMatrixToR(dataY, sel_namesY, "Y");
+        }
         // for(int i=0; i < data.length; i++){
         //     re.assign(sel_names[i], data[i]);
         // }

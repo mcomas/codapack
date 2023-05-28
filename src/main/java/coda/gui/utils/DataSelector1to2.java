@@ -206,7 +206,8 @@ public final class DataSelector1to2 extends DataSelector {
         return result;
     }
     public String[] getSelectedData(){     
-        return concat(getSelectedDataA(), getSelectedDataB());
+        return(getSelectedDataA());
+        //return concat(getSelectedDataA(), getSelectedDataB());
     }
     public String[] getSelectedDataA(){
         DefaultListModel<String> modelA = (DefaultListModel<String>)varsA_selected.getModel();
