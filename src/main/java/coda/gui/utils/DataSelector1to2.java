@@ -218,7 +218,7 @@ public final class DataSelector1to2 extends DataSelector {
     }
     public String[] getSelectedDataB(){
         DefaultListModel<String> modelB = (DefaultListModel<String>)varsB_selected.getModel();
-            String[] resB = new String[modelB.size()];
+        String[] resB = new String[modelB.size()];
         for(int i=0,m=modelB.size(); i<m; i++)
             resB[i] = (String)modelB.getElementAt(i);        
         return resB;

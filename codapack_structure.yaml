@@ -136,9 +136,34 @@ CoDaPack Menu:
                         - basis: 
                             name: "Response basis"
                             selector: "Y"
-                - X composition, Y real:
-                    id: "XCompositionYRealRegression"
+                        - boolean: "Residuals"
+                        - boolean: "Fitted values"
+                - X composition, Y real (old):
+                    id: "XCompositionYRealRegressionOld"
                     code: "r"
+                - X composition, Y real:
+                    id: "RegressionCoDaExplanaotory"
+                    code: "r"
+                    script: "cdp_regression_coda_explanatory.R"
+                    options: ["2selectors"]
+                    textA: "Compositional explanatory"
+                    textB: "Response"
+                    controls:
+                        - basis: 
+                            name: "Explanatory basis"
+                            selector: "X"
+                        - boolean: "Residuals"
+                        - boolean: "Fitted values"
+                - X real, Y real:
+                    id: "RegressionReal"
+                    code: "r"
+                    script: "cdp_regression_real.R"
+                    options: ["2selectors"]
+                    textA: "Explanatory variables"
+                    textB: "Response variables"
+                    controls:
+                        - boolean: "Residuals"
+                        - boolean: "Fitted values"
             - Cluster:
                 - K-means:
                     id: "KMeans"

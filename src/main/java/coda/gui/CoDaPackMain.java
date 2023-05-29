@@ -557,7 +557,7 @@ public final class CoDaPackMain extends JFrame {
                 //xRealYCompositionRegressionMenu.updateMenuDialog();
                 xRealYCompositionRegressionMenu.setVisible(true);
                 break;
-            case "XCompositionYRealRegression":
+            case "XCompositionYRealRegressionOld":
                 if(xCompositionYRealRegressionMenu == null) xCompositionYRealRegressionMenu = new XCompositionYRealRegressionMenu(this, re);
                 xCompositionYRealRegressionMenu.updateMenuDialog();
                 xCompositionYRealRegressionMenu.setVisible(true);
