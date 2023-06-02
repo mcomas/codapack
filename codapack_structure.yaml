@@ -265,6 +265,12 @@ CoDaPack Menu:
             script: "cdp_scatterplot.R"
             options: ["groups"]
             controls: []
+        - Mosaic plot:
+            id: "MosaicPlot"
+            code: "r"
+            script: "cdp_mosaic_plot.R"
+            options: ["groups", "only_categoric"]
+            controls: []
         - Geometric Mean Barplot:
             id: "GeometricMeanBarplot"
             code: "r"

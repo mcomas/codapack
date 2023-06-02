@@ -57,7 +57,6 @@ public final class DataSelector1to1 extends DataSelector {
     int pressIndex = -1;
     int releaseIndex = -1;
 
-    int selection_type = ONLY_NUMERIC;
     public DataSelector1to1(String names[]) throws DataFrameException{
         group_by = false;
         initComponents();

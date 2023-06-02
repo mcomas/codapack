@@ -454,6 +454,7 @@ public class CoDaPackMenu extends JMenuBar {
                 JMenuItem mi = new JMenuItem();
                 boolean groups = false;
                 boolean two_selectors = false;
+                int variable_type = DataSelector.ONLY_NUMERIC;
                 if(json_obj.has("code") && json_obj.getString("code").equals("r")){
                     if(!CoDaPackMain.R_available){
                         mi.setEnabled(false);
@@ -461,14 +462,14 @@ public class CoDaPackMenu extends JMenuBar {
                     if(json_obj.has("script") & json_obj.has("controls")){
                         JSONArray json_controls = json_obj.getJSONArray("controls");
                         String Rscript = json_obj.getString("script");
+                        System.out.println(json_controls.toString());
                         if(json_obj.has("options")){
                             ArrayList<String> loptions = new ArrayList<String>();
                             if(json_obj.get("options") instanceof String){
                                 loptions.add(json_obj.getString("options"));
                             }else{
-                                System.out.println(json_obj.get("options").toString());
                                 JSONArray options = json_obj.getJSONArray("options");
-                                for(int j = 0; j<options.length(); i++) loptions.add(options.getString(i));
+                                for(int j = 0; j<options.length(); j++) loptions.add(options.getString(j));
                             }
                             if(loptions.contains("groups")){
                                 groups = true;
@@ -476,11 +477,16 @@ public class CoDaPackMenu extends JMenuBar {
                             if(loptions.contains("2selectors")){
                                 two_selectors = true;
                             }
-
+                            if(loptions.contains("all_variables")){
+                                variable_type = DataSelector.ALL_VARIABLES;
+                            }
+                            if(loptions.contains("only_categoric")){
+                                variable_type = DataSelector.ONLY_CATEGORIC;
+                            }
                         }
-                        System.out.println(json_controls.toString());
+                        
                         if(two_selectors){
-                            DataSelector1to2 ds12 = new DataSelector1to2(mainApplication.getActiveDataFrame(), groups);
+                            DataSelector1to2 ds12 = new DataSelector1to2(mainApplication.getActiveDataFrame(), groups, variable_type);
                             if(json_obj.has("textA")) ds12.setTextA(json_obj.getString("textA"));
                             if(json_obj.has("textB")) ds12.setTextB(json_obj.getString("textB"));
                             mainApplication.dynamicMenus.put(id, 
@@ -497,7 +503,7 @@ public class CoDaPackMenu extends JMenuBar {
                                                     name,
                                                     Rscript,
                                                     json_controls,
-                                                    new DataSelector1to1(mainApplication.getActiveDataFrame(), groups)));
+                                                    new DataSelector1to1(mainApplication.getActiveDataFrame(), groups, variable_type)));
                         }
                         
                     }

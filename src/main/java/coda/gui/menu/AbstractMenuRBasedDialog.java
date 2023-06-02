@@ -68,6 +68,19 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
         re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names_ext)));
         re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
     }
+    public void addMatrixToR(String data[][], String col_names[], String name){
+        String vnames[] = new String[data.length];
+        for(int i=0; i < data.length; i++){
+            vnames[i] = ".cdp_x"+i;
+            re.assign(vnames[i], data[i]);
+        }
+        re.eval("%s = cbind(%s)".formatted(name, String.join(",", vnames)));
+
+        String col_names_ext[] = new String[col_names.length];
+        for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
+        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names_ext)));
+        re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
+    }
     void showText(){
         
         REXP result;

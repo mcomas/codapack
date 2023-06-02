@@ -776,8 +776,15 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
         df = mainApplication.getActiveDataFrame();
         String sel_names[] = super.ds.getSelectedData();
 
-        double[][] dataX = df.getNumericalData(sel_names);
-        addMatrixToR(dataX, sel_names, "X");
+        if(ds.selection_type == DataSelector.ONLY_NUMERIC){
+            double[][] dataX = df.getNumericalData(sel_names);
+            addMatrixToR(dataX, sel_names, "X");
+        }
+        if(ds.selection_type == DataSelector.ONLY_CATEGORIC){
+            String[][] dataX = df.getCategoricalData(sel_names);
+            addMatrixToR(dataX, sel_names, "X");
+        }
+        
 
         if(ds instanceof DataSelector1to2){
             

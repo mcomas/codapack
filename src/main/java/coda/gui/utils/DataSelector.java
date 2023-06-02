@@ -10,7 +10,8 @@ public abstract class DataSelector extends JPanel {
     public static int ONLY_NUMERIC = 1;
     public static int ALL_VARIABLES = 2;
     public static int ONLY_CATEGORIC = 3;
-    
+    public int selection_type = ONLY_NUMERIC;
+
     public boolean group_by;
 
     public DataFrame ds_dataFrame;

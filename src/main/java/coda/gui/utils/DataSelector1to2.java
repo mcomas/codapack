@@ -68,7 +68,7 @@ public final class DataSelector1to2 extends DataSelector {
 
     JLabel label_varA = new JLabel("A variables");
     JLabel label_varB = new JLabel("B variables");
-    int selection_type = ONLY_NUMERIC;
+    
     public DataSelector1to2(String names[]) throws DataFrameException{
         initComponents(false);
         ds_dataFrame = new DataFrame();
