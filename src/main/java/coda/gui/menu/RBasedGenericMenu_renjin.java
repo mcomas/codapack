@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.script.ScriptEngine;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -46,7 +47,7 @@ import org.rosuda.JRI.Rengine;
 import org.rosuda.REngine.REXPNull;
 
 
-public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
+public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog{
     private static final String yamlUrl = null;
     private static final String helpTitle = null;
     private Rengine re;
@@ -59,15 +60,15 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
     }
     RBasedGenericMenu mainClass = null;
     ArrayList<JCheckBox> Barray = new ArrayList<JCheckBox>();
-    public RBasedGenericMenu(final CoDaPackMain mainApp, 
-                             RScriptEngine r, 
-                             String title,
-                             String Rscript, 
-                             JSONArray controls, 
-                             DataSelector dataSelector) throws JSONException{
+    public RBasedGenericMenu_renjin(final CoDaPackMain mainApp,
+                                     RScriptEngine r,
+                                     String title,
+                                     String Rscript,
+                                     JSONArray controls,
+                                     DataSelector dataSelector) throws JSONException{
         super(mainApp, title + " Menu", dataSelector, r); 
         System.out.println("Controls: " + controls.toString());
-        mainClass = this;
+        // mainClass = this;
         build_optionPanel(r, Rscript, controls);
      }
 

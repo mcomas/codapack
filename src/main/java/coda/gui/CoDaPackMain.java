@@ -35,11 +35,14 @@ import coda.io.CoDaPackImporter;
 import coda.io.ExportData;
 import coda.io.ExportRDA;
 import coda.io.ImportRDA;
+import coda.io.ImportRDA_renjin;
 import coda.io.WorkspaceIO;
 import coda.plot2.TernaryPlot2dDisplay;
 import coda.plot2.objects.Ternary2dGridObject;
 import coda.plot2.objects.Ternary2dObject;
 import coda.plot2.window.TernaryPlot2dWindow;
+import coda.util.RScriptEngine;
+
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -109,7 +112,7 @@ public final class CoDaPackMain extends JFrame {
      * VARIABLE R
      */
     public static String[] Rargs = {"--no-save" }; // {"--vanilla" };
-    public static Rengine re = null;
+    public static RScriptEngine re = null;
 
     private JComboBox<String> dataFrameSelector;
     private final DataFrameSelectorListener dataFrameListener = new DataFrameSelectorListener();
@@ -672,9 +675,10 @@ public final class CoDaPackMain extends JFrame {
                 CoDaPackConf.workingDir = ruta;
             }
         } else if (title.equals(jMenuBar.ITEM_IMPORT_RDA)) {
-            JOptionPane.showMessageDialog(this,
-                    "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names don't follow this rule, you can correct it on the data table of CoDaPack.",
-                    "Warning", JOptionPane.WARNING_MESSAGE);
+            // JOptionPane.showMessageDialog(this,
+            //         "Be aware that data must have valid variable names. A valid variable name consists of letters, numbers and the dot or underline characters.\nThe variable name must start with a letter or the dot not followed by a number.\nIf your variable names don't follow this rule, you can correct it on the data table of CoDaPack.",
+            //         "Warning", JOptionPane.WARNING_MESSAGE);
+            
             // Aquí tractem l'event IMPORT_RDA
             chooseFile.resetChoosableFileFilters();
             // Filtrem per llegir només els arxius RDA
@@ -684,12 +688,15 @@ public final class CoDaPackMain extends JFrame {
             if (chooseFile.showOpenDialog(jSplitPane) == JFileChooser.APPROVE_OPTION) {
                 // Creem una nova instància ImportRDA, serà l'encarregada de mostrar i obrir els
                 // dataframes
-                ImportRDA impdf = new ImportRDA(chooseFile, re);
+                
+                //ImportRDA impdf = new ImportRDA(chooseFile.getSelectedFile().getAbsolutePath(), re);
+                ImportRDA_renjin impRDA_Renjin = new ImportRDA_renjin(chooseFile.getSelectedFile().getAbsolutePath());
+                ImportRDA impRDA = new ImportRDA(chooseFile.getSelectedFile().getAbsolutePath(), re);
                 // Creem una nova instància ImportRDAMenu, serà l'encarregada de gestionar el
                 // menú
                 ImportRDAMenu imprdam;
                 try {
-                    imprdam = new ImportRDAMenu(this, impdf);
+                    imprdam = new ImportRDAMenu(this, impRDA_Renjin);
                     imprdam.setVisible(true);
                 } catch (DataFrameException e) {
                     // TODO Auto-generated catch block
@@ -1406,7 +1413,7 @@ public final class CoDaPackMain extends JFrame {
         //re.eval("library(zCompositions, lib.loc='Rlibraries')");
         R_available = is_R_available();
         if(R_available){
-            re = new Rengine(Rargs, false, null);
+            re = new RScriptEngine(Rargs, false, null);
             re.eval("options(width=10000)");
         }
         

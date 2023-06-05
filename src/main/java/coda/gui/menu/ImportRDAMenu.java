@@ -24,32 +24,16 @@
  */
 package coda.gui.menu;
 
-import coda.DataFrame;
-import coda.DataFrame.DataFrameException;
-import coda.gui.CoDaPackMain;
-import coda.gui.utils.DataFrameSelector;
-import coda.gui.utils.DataSelector1to1;
-import coda.io.ImportData;
-import coda.io.ImportRDA;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
+import javax.script.ScriptException;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+
+import coda.DataFrame;
+import coda.DataFrame.DataFrameException;
+import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector1to1;
+import coda.io.Importer;
 
 /**
  *
@@ -68,17 +52,16 @@ public class ImportRDAMenu extends AbstractMenuDialog{
     JLabel l_usedSuffix = new JLabel("Suffix");
     //Creem el vector d'strings que contindrà el nom dels dataframes seleccionats
     String[] sel_names;
-    ArrayList<DataFrame> sel_dfs = new ArrayList<DataFrame>();
-    ImportRDA imp_df;
+    // ArrayList<DataFrame> sel_dfs = new ArrayList<DataFrame>();
+    DataFrame df = null;
+    Importer imp_df;
     //Guardem la ruta a l'arxiu en un string
-    String rf;
     
     
-    public ImportRDAMenu(CoDaPackMain mainApp, ImportRDA importRDA) throws ScriptException, DataFrameException {
-        super(mainApp, "Import R Data File", new DataSelector1to1(importRDA.df_names));
+    public ImportRDAMenu(CoDaPackMain mainApp, Importer importRDA) throws ScriptException, DataFrameException {
+        super(mainApp, "Import R Data File", new DataSelector1to1(importRDA.getAvailableDataFramesNames()));
         
-        //Assignem el path a l'string rf
-        rf = importRDA.cf.getCurrentDirectory().getAbsolutePath();
+ 
         //assignem mida als quadres de text
         usedPrefix = new JTextField(8);
         usedSuffix = new JTextField(8);
@@ -100,25 +83,26 @@ public class ImportRDAMenu extends AbstractMenuDialog{
         //Guardem el nom de les columnes seleccionades en una taula d'strings
        
         sel_names = ds.getSelectedData();
-        if (sel_names.length > 0) {
+        if (sel_names.length == 1) {
             //Copiem els valors de prefix i suffix
             prefix = usedPrefix.getText();
             suffix = usedSuffix.getText();
 
             try {
-                sel_dfs = imp_df.getDfSelected(sel_names, prefix, suffix);
-            } catch (ScriptException ex) {
-                Logger.getLogger(ImportRDAMenu.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (DataFrame.DataFrameException ex) {
-                Logger.getLogger(ImportRDAMenu.class.getName()).log(Level.SEVERE, null, ex);
+                df = imp_df.importDataFrame(sel_names[0]);
+            } catch (DataFrameException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
             setVisible(false);
             //Carreguem els dataframes seleccionats
-            for (DataFrame dataf : sel_dfs) {
-                mainApplication.addDataFrameRDR(dataf);
-            }
+            df.setName(prefix + sel_names[0] + suffix);
+            mainApplication.addDataFrameRDR(df);
+            // for (DataFrame dataf : sel_dfs) {
+            //     mainApplication.addDataFrameRDR(dataf);
+            // }
         }else{
-            JOptionPane.showMessageDialog(this, "Select at least one Data Frame");
+            JOptionPane.showMessageDialog(this, "Select one Data Frame");
         }
     }
 

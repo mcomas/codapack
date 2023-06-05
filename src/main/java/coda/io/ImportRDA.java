@@ -26,6 +26,8 @@ package coda.io;
 
 import coda.DataFrame;
 import coda.Variable;
+import coda.DataFrame.DataFrameException;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -49,7 +51,7 @@ import org.rosuda.JRI.Rengine;
  *
  * @author david
  */
-public class ImportRDA {
+public class ImportRDA implements Importer{
     
     Rengine re;
     //ScriptEngineManager manager;
@@ -58,19 +60,16 @@ public class ImportRDA {
     String fname;
     public String[] df_names;
     //Creem la llista de dataFrames que contindrà els data frames seleccionats
-    ArrayList<DataFrame> sel_dfs = new ArrayList<DataFrame>();
-    public JFileChooser cf;
+    // ArrayList<DataFrame> sel_dfs = new ArrayList<DataFrame>();
     String prefix = null;
     String suffix = null;
 
     //El constructor
-    public ImportRDA(JFileChooser chooseFile, Rengine r) throws ScriptException{
+    public ImportRDA(String fpath, Rengine r){
         //manager = new ScriptEngineManager(); //Static ?
         //engine = manager.getEngineByName("Renjin");
         re = r;        
-        cf = chooseFile;
-        df_names = getDataFramesNames(chooseFile.getSelectedFile().getAbsolutePath().replace("\\", "/"));
-        
+        fname = fpath.replace("\\", "/");        
     }
     public String[] getDataFramesNames(String filename){
             
@@ -90,22 +89,86 @@ public class ImportRDA {
 
     }
 
-    //Aquest mètode és l'encarregat d'obrir els dataframes seleccionats
-    public ArrayList<DataFrame> getDfSelected(String[] sel_names, String pre, String su) throws DataFrame.DataFrameException, ScriptException {
-        int d=0;
-        prefix = pre;
-        suffix = su;
-        for (String sel_name : sel_names){
-            for (String name : df_names) {
-                if (sel_name.equals(name)){
-                    String titledf = name;
-                    if (prefix!=null && suffix!=null) titledf=prefix+name+suffix;
-                    else if (prefix!=null) titledf=prefix+name;
-                    else if (suffix!=null) titledf=name+suffix;
+    // //Aquest mètode és l'encarregat d'obrir els dataframes seleccionats
+    // public ArrayList<DataFrame> getDfSelected(String[] sel_names, String pre, String su) throws DataFrame.DataFrameException, ScriptException {
+    //     int d=0;
+    //     prefix = pre;
+    //     suffix = su;
+    //     for (String sel_name : sel_names){
+    //         for (String name : df_names) {
+    //             if (sel_name.equals(name)){
+    //                 String titledf = name;
+    //                 if (prefix!=null && suffix!=null) titledf=prefix+name+suffix;
+    //                 else if (prefix!=null) titledf=prefix+name;
+    //                 else if (suffix!=null) titledf=name+suffix;
 
-                    DataFrame dataf = new DataFrame(titledf);
+    //                 DataFrame dataf = new DataFrame(titledf);
+    //                 String E1 = "(d <- get('#DFNAME#', envir = etreball))";
+    //                 RList df = re.eval(E1.replace("#DFNAME#", name)).asList();                
+    //                 for(String j: df.keys()){
+    //                     REXP var = df.at(j);
+    //                     System.out.println(var.getType());
+    //                     int itype = var.getType();
+    //                     // https://www.rforge.net/org/doc/constant-values.html#org.rosuda.JRI.REXP.XT_NULL
+    //                     if(itype == REXP.XT_ARRAY_INT ||      // 32
+    //                        itype == REXP.XT_ARRAY_DOUBLE    // 33
+    //                         ){ // numeric
+    //                         String varname = j;
+    //                         double[] vardouble = var.asDoubleArray();
+    //                         System.out.println(vardouble.length);
+    //                         Variable vardf = new Variable(varname,vardouble);
+    //                         Variable vardfin = dataf.add(vardf);
+    //                     }
+    //                     if(itype == REXP.XT_ARRAY_BOOL_INT ||  // 37
+    //                        itype == REXP.XT_ARRAY_BOOL){       // 36
+    //                         String varname = j;
+    //                         double[] varinteger = Arrays.stream(var.asIntArray()).asDoubleStream().toArray();
+    //                         Variable vardf = new Variable(varname,varinteger);
+    //                         Variable vardfin = dataf.add(vardf);
+    //                     }
+    //                     if(itype == REXP.XT_ARRAY_STR){
+    //                         String varname = j;
+    //                         String[] varstring = var.asStringArray();
+                            
+    //                         System.out.println(varstring.length);
+    //                         Variable vardf = new Variable(varname,varstring);
+    //                         Variable vardfin = dataf.add(vardf);
+                           
+                            
+    //                     }
+    //                     if(itype == REXP.XT_FACTOR){
+    //                         String varname = j;
+    //                         String[] varstring = re.eval("as.character(d[['" + varname + "']])").asStringArray();
+    //                         System.out.println(varstring.length);
+    //                         Variable vardf = new Variable(varname,varstring);
+    //                         Variable vardfin = dataf.add(vardf);
+    //                     }
+                        
+    //                 }
+    //                 sel_dfs.add(dataf);
+                  
+    //             }
+    //         }
+    //     }
+    //     return sel_dfs;
+    // }
+    @Override
+    public String[] getAvailableDataFramesNames() {
+        // TODO Auto-generated method stub
+        re.eval("etreball = new.env()");
+        String E1 = "load('#PATH#', envir = etreball)";
+        re.eval(E1.replace("#PATH#", fname));
+        re.eval("CDP_nms = ls(envir = etreball)");
+        re.eval("CDP_x = sapply(lapply(CDP_nms, get, envir = etreball), is.data.frame)");
+        String[] sdf = re.eval("CDP_nms[CDP_x==TRUE]").asStringArray();        
+        return sdf;    
+    }
+
+    @Override
+    public DataFrame importDataFrame(String df_name) throws DataFrameException {
+                    DataFrame dataf = new DataFrame();
                     String E1 = "(d <- get('#DFNAME#', envir = etreball))";
-                    RList df = re.eval(E1.replace("#DFNAME#", name)).asList();                
+                    RList df = re.eval(E1.replace("#DFNAME#", df_name)).asList();                
                     for(String j: df.keys()){
                         REXP var = df.at(j);
                         System.out.println(var.getType());
@@ -135,7 +198,6 @@ public class ImportRDA {
                             Variable vardf = new Variable(varname,varstring);
                             Variable vardfin = dataf.add(vardf);
                            
-                            
                         }
                         if(itype == REXP.XT_FACTOR){
                             String varname = j;
@@ -146,12 +208,7 @@ public class ImportRDA {
                         }
                         
                     }
-                    sel_dfs.add(dataf);
-                  
-                }
-            }
-        }
-        return sel_dfs;
+        return dataf;
     }
     
 }

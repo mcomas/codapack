@@ -15,6 +15,7 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
 import coda.gui.utils.DataSelector1to2;
+import coda.util.RScriptEngine;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -61,7 +62,7 @@ public class XCompositionYRealRegressionMenu extends AbstractMenuRBasedDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Multivariate Analysis.Regression.X Composition Y Real.yaml";
     private static final String helpTitle = "X composition Y real regression Help Menu";
     
-    public XCompositionYRealRegressionMenu(final CoDaPackMain mainApp, Rengine r){
+    public XCompositionYRealRegressionMenu(final CoDaPackMain mainApp, RScriptEngine r){
         super(mainApp,"X composition Y real regression Menu", new DataSelector1to2(mainApp.getActiveDataFrame(), false), r);
         script_file = "Regression_X_Composition_Y_Real.R";
 

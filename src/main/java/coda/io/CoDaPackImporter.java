@@ -49,12 +49,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author marc
  */
-public class CoDaPackImporter implements Importer {
+public class CoDaPackImporter {
     String fname;
     String ruta = CoDaPackConf.workingDir;
     ArrayList<DataFrame> dfs = new ArrayList<DataFrame>();
 
-    @Override
     public CoDaPackImporter setParameters(Component frame) {
         JFileChooser chooseFile = new JFileChooser(ruta);
         chooseFile.setFileFilter(
@@ -114,7 +113,6 @@ public class CoDaPackImporter implements Importer {
         return dataFrame;
     }
 
-    @Override
     public DataFrame importDataFrame() {
         int i = 0;
         FileReader file;
@@ -154,14 +152,12 @@ public class CoDaPackImporter implements Importer {
         return dfs;
     }
 
-    @Override
     public String getParameters() {
         String conf = "format:codapack";
         conf += "?" + fname;
         return conf;
     }
 
-    @Override
     public CoDaPackImporter setParameters(String pars) {
         String parameters[] = pars.split("\\?");
         if ("format:codapack".equals(parameters[0])) {

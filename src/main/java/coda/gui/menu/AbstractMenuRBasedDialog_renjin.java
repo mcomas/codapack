@@ -21,13 +21,11 @@ package coda.gui.menu;
 
 import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
-import coda.util.RScriptEngine;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import javax.script.ScriptEngine;
 import javax.swing.JFrame;
 
 import org.apache.batik.swing.JSVGCanvas;
@@ -46,14 +44,14 @@ import coda.gui.output.OutputText;
  *
  * @author mcomas
  */
-public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
-    RScriptEngine re;
+public abstract class AbstractMenuRBasedDialog_renjin extends AbstractMenuDialog{
+    Rengine re;
 
     int PLOT_WIDTH = 850;
     int PLOT_HEIGHT = 500;
 
     String script_file;
-    public AbstractMenuRBasedDialog(final CoDaPackMain mainApp, String title, DataSelector dataSelector, RScriptEngine r){
+    public AbstractMenuRBasedDialog_renjin(final CoDaPackMain mainApp, String title, DataSelector dataSelector, Rengine r){
         super(mainApp, title, dataSelector);
         re = r;
     }
