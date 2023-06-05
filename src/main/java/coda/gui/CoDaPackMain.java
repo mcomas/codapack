@@ -461,17 +461,17 @@ public final class CoDaPackMain extends JFrame {
                 powerDataMenu.setVisible(true);
                 break;
             case "Discretize":
-                if(discretizeMenu == null) discretizeMenu = new DiscretizeMenu(this, re);
+                if(discretizeMenu == null) discretizeMenu = new DiscretizeMenu(this);
                 discretizeMenu.updateMenuDialog();
                 discretizeMenu.setVisible(true);
                 break;
             case "CalculateNewVar":
-                if(calculateNewVarMenu == null) calculateNewVarMenu = new CalculateNewVarMenu(this, re);
+                if(calculateNewVarMenu == null) calculateNewVarMenu = new CalculateNewVarMenu(this);
                 calculateNewVarMenu.updateMenuDialog();
                 calculateNewVarMenu.setVisible(true);
                 break;
             case "SortData":
-                if(sortDataMenu == null) sortDataMenu = new SortDataMenu(this, re);
+                if(sortDataMenu == null) sortDataMenu = new SortDataMenu(this);
                 sortDataMenu.updateMenuDialog();
                 sortDataMenu.setVisible(true);
                 break;
@@ -492,7 +492,7 @@ public final class CoDaPackMain extends JFrame {
                 filterMenu.setVisible(true);
                 break;
             case "AdvancedFilter":
-                if(advancedFilterMenu == null) advancedFilterMenu = new AdvancedFilterMenu(this, re);
+                if(advancedFilterMenu == null) advancedFilterMenu = new AdvancedFilterMenu(this);
                 advancedFilterMenu.updateMenuDialog();
                 advancedFilterMenu.setVisible(true);
                 break;
@@ -555,16 +555,16 @@ public final class CoDaPackMain extends JFrame {
                 clasStatsSummaryMenu.updateMenuDialog();
                 clasStatsSummaryMenu.setVisible(true);
                 break;
-            case "XRealYCompositionRegressionOld":
-                if(xRealYCompositionRegressionMenu == null) xRealYCompositionRegressionMenu = new XRealYCompositionRegressionMenu(this, re);
-                //xRealYCompositionRegressionMenu.updateMenuDialog();
-                xRealYCompositionRegressionMenu.setVisible(true);
-                break;
-            case "XCompositionYRealRegressionOld":
-                if(xCompositionYRealRegressionMenu == null) xCompositionYRealRegressionMenu = new XCompositionYRealRegressionMenu(this, re);
-                xCompositionYRealRegressionMenu.updateMenuDialog();
-                xCompositionYRealRegressionMenu.setVisible(true);
-                break;
+            // case "XRealYCompositionRegressionOld":
+            //     if(xRealYCompositionRegressionMenu == null) xRealYCompositionRegressionMenu = new XRealYCompositionRegressionMenu(this, re);
+            //     //xRealYCompositionRegressionMenu.updateMenuDialog();
+            //     xRealYCompositionRegressionMenu.setVisible(true);
+            //     break;
+            // case "XCompositionYRealRegressionOld":
+            //     if(xCompositionYRealRegressionMenu == null) xCompositionYRealRegressionMenu = new XCompositionYRealRegressionMenu(this, re);
+            //     xCompositionYRealRegressionMenu.updateMenuDialog();
+            //     xCompositionYRealRegressionMenu.setVisible(true);
+            //     break;
             // case "KMeans":
             //     if(kMeansMenu == null) kMeansMenu = new KMeansOldMenu(this, re);
             //     kMeansMenu.updateMenuDialog();
@@ -1129,7 +1129,7 @@ public final class CoDaPackMain extends JFrame {
      */
     static boolean is_R_available(){
         System.out.println("R_HOME =" + System.getenv("R_HOME"));
-        return(true);
+        return(false);
     }
     public static boolean R_available = false;
     public static void main(String args[]) throws Exception {

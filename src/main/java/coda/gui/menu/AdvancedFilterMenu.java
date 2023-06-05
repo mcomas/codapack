@@ -14,11 +14,19 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import org.renjin.script.RenjinScriptEngineFactory;
+import org.renjin.sexp.DoubleVector;
+import org.renjin.sexp.IntVector;
+import org.renjin.sexp.LogicalVector;
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
@@ -28,182 +36,94 @@ import org.rosuda.JRI.Rengine;
  */
 public class AdvancedFilterMenu extends AbstractMenuDialog{
     
-    Rengine re;
-    JFrame frame;
-    JPanel pane;
-    DataFrame df;
-    ArrayList<String> names;
+    ScriptEngine re;
+
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Filters.Advanced Filter.yaml";
     private static final String helpTitle = "Advanced Filter Help Menu";
     
-    public AdvancedFilterMenu(final CoDaPackMain mainApp, Rengine r ){
+    public AdvancedFilterMenu(final CoDaPackMain mainApp){
         
         super(mainApp,
               "Advanced Filter Menu",
               new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
-        re = r;
-        this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
+        re = (new RenjinScriptEngineFactory()).getScriptEngine();
     }
     
     @Override
     public void acceptButtonActionPerformed(){
         
-        df = mainApplication.getActiveDataFrame();
+        DataFrame df = mainApplication.getActiveDataFrame();
         
         String selectedNames[] = ds.getSelectedData();
         
-        if(selectedNames.length > 0){ // minimum one variable
+        if(selectedNames.length > 0){
             
-            boolean exit = false;
-            JLabel labelMessage = new JLabel("Following selected order, use x1 to x" + String.valueOf(selectedNames.length) + " instead of variable names to build the expression to subset");
-            boolean goodExpression = false, goodName = false;
-            String expression = null, dataFrameNewName = null;
+            JLabel labelMessage = new JLabel("Use x1 to x" + String.valueOf(selectedNames.length) + " names for variables");
             
-            while(!exit){
+            JPanel panel = new JPanel();
+            panel.add(labelMessage);
+            panel.add(new JLabel(""));
+            panel.add(new JLabel("Enter expression: "));
+            JTextField expressionField, nameField;
+            expressionField = new JTextField(20);
+            nameField = new JTextField(20);
+            panel.add(expressionField);
+            panel.setLayout(new GridLayout(0,2,2,2));
+            panel.add(new JLabel("New table name: "));
+            panel.add(nameField);
                 
-                pane = new JPanel();
-                pane.setLayout(new GridLayout(0,2,2,2));
-                pane.add(labelMessage);
-                pane.add(new JLabel(""));
-                JTextField expressionField, dataFrameName;
-                if(goodExpression) expressionField = new JTextField(expression,20);
-                else expressionField = new JTextField(20);
-                if(goodName) dataFrameName = new JTextField(dataFrameNewName,20);
-                else dataFrameName = new JTextField(20);
-                pane.add(new JLabel("R expression to subset: "));
-                pane.add(expressionField);
-                pane.add(new JLabel("New table name: "));
-                pane.add(dataFrameName);
-                
-                int answer = JOptionPane.showConfirmDialog(frame, pane, "Advanced Filter Menu", JOptionPane.OK_CANCEL_OPTION);
+               
+                boolean ask_expresion = true;
+                while(ask_expresion){
 
-                // respostes
-
-                if(answer == JOptionPane.OK_OPTION){
-
-                    expression = expressionField.getText();
-                    dataFrameNewName = dataFrameName.getText();
-
-                    if(expression.length() != 0 && dataFrameNewName.length() != 0){
-                        
-                        for(int i=0; i < selectedNames.length;i++){
-                            re.eval("x" + String.valueOf(i+1) + " <- NULL");
-                            if(df.get(selectedNames[i]).isNumeric()){
-                                for(double j : df.get(selectedNames[i]).getNumericalData()){
-                                    re.eval("x" + String.valueOf(i+1) + " <- c(x" + String.valueOf(i+1) + "," + String.valueOf(j) + ")");
+                    int answer = JOptionPane.showConfirmDialog(this, panel, "Create new Variable", JOptionPane.OK_CANCEL_OPTION);                    
+                    if(answer == JOptionPane.OK_OPTION){
+                        if(expressionField.getText().length() == 0 || nameField.getText().length() == 0){
+                            JOptionPane.showMessageDialog(null, "Some field empty");
+                        }else if(mainApplication.getActiveDataFrame().getNames().contains(nameField.getText())){
+                            JOptionPane.showMessageDialog(null, "This name is not available");
+                        }else{
+                            for(int i=0; i < selectedNames.length;i++){                                
+                                if(df.get(selectedNames[i]).isNumeric()){
+                                    re.put("x" + String.valueOf(i+1), df.get(selectedNames[i]).getNumericalData());
+                                }
+                                else{ // categorical data
+                                    re.put("x" + String.valueOf(i+1), df.get(selectedNames[i]).getTextData());
                                 }
                             }
-                            else{ // categorical data
-                                for(String j : df.get(selectedNames[i]).getTextData()){
-                                    re.eval("x" + String.valueOf(i+1) + " <- c(x" + String.valueOf(i+1) + ",'" + j + "')");
-                                }
-                            }
-                        }
-                        
-                        String dataFrameString = "mydf <- data.frame(";
-                        for(int i=0; i < selectedNames.length;i++){
-                            dataFrameString += "x" + String.valueOf(i+1);
-                            if(i != selectedNames.length-1) dataFrameString += ",";
-                        }
-                        
-                        dataFrameString +=")";
-                        
-                        re.eval(dataFrameString); // we create the dataframe in R
-                        
-                        // cal fer el subset
-                        
-                        re.eval ("newdata <- subset(mydf," + expression + ")");
-                        
-                       REXP rexp = re.eval("out <- capture.output(newdata)");
-                       REXP rexp2 = re.eval("is.logical(" + expression +")");
-                        
-                        if(rexp != null && rexp2 != null){
-                            
-                            goodExpression = true;
-                        
-                            String[] out = re.eval("out").asStringArray();
-                            
-                            if(!out[1].equals("<0 rows> (or 0-length row.names)")){
-                        
-                                int numberofdata  = df.getMaxVariableLength(); // numero de files
-                                Vector<Integer> validRows = new Vector<Integer>();
-                                Vector<Integer> rowsToDelete = new Vector<Integer>();
-
-                                for(int i = 1; i < out.length; i++){
-                                    Matcher matcher = Pattern.compile("\\d+").matcher(out[i]);
-                                    matcher.find();
-                                    validRows.add(Integer.valueOf(matcher.group())-1);
-                                }
-
-                                for(int i=0; i < numberofdata; i++){
-                                    if(!validRows.contains(i)) rowsToDelete.add(i);
-                                }
-
-                                int[] resRowsToDelete = new int[rowsToDelete.size()];
-                                for(int i=0; i < rowsToDelete.size();i++) resRowsToDelete[i] = rowsToDelete.elementAt(i);
-
-                                DataFrame filtredDataFrame = new DataFrame(df);
-                                filtredDataFrame.subFrame(resRowsToDelete);
-                                
-                                // put name
-                                
-                                if(mainApplication.isDataFrameNameAvailable(dataFrameNewName)){
-                                    goodName = true;
-                                    goodExpression = true;
-                                    exit = true;
-                                    filtredDataFrame.setName(dataFrameNewName);
+                            String expression = expressionField.getText();
+                            try {
+                                if(re.eval(expression) instanceof LogicalVector){
+                                    int[] res = ((IntVector)re.eval("which(!%s)-1L".formatted(expression))).toIntArray();
+                                    DataFrame filtredDataFrame = new DataFrame(df);
+                                    filtredDataFrame.subFrame(res);
+                                    filtredDataFrame.setName(nameField.getText());
                                     mainApplication.addDataFrame(filtredDataFrame);
-                                    this.dispose();
+                                    ask_expresion = false;
+                                }else{
+                                    JOptionPane.showMessageDialog(null, "Result should be numeric");
                                 }
-                                else{
-                                    goodName = false;
-                                    goodExpression = true;
-                                    JOptionPane.showMessageDialog(null, "This table name is not available");
-                                }
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null, "No data for this expression");
+                                
+                            } catch (ScriptException e) {
+                                JOptionPane.showMessageDialog(null, "Invalid expression");
                             }
                         }
-                        else{
-                            goodExpression = false;
-                            goodName = true;
-                            JOptionPane.showMessageDialog(null, "Invalid expression");
-                        }
-                       
-                    }
-                    else{
-                        if(expression.length() == 0){
-                            if(dataFrameNewName.length() != 0 && mainApplication.isDataFrameNameAvailable(dataFrameNewName)){
-                                goodName = true;
-                            }
-                            JOptionPane.showMessageDialog(null, "Please put some expression");
-                        }
-                        else{
-                            goodExpression = true;
-                            JOptionPane.showMessageDialog(null, "Please put some table name");
-                        }
-                    }
+                    }else{
+                        ask_expresion = false;
+                    }                
                 }
-                else{
-                    exit = true;
-                }
+                this.dispose();
             }
-            
-        }
         else{
-            JOptionPane.showMessageDialog(null, "No data available");
+            JOptionPane.showMessageDialog(null,"Please select one variable");
         }
     }
     
     public DataFrame getDataFrame(){
         return this.df;
     }
-    
-    public ArrayList<String> getDataFrameNames(){
-        return this.names;
-    }
+
 }

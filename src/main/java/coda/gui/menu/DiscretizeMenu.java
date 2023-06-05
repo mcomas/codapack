@@ -31,21 +31,27 @@ import coda.util.RScriptEngine;
 import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import org.rosuda.JRI.Rengine;
+
+import org.renjin.script.RenjinScriptEngineFactory;
+import org.renjin.sexp.DoubleVector;
+import org.renjin.sexp.StringVector;
 
 /**
  *
  * @author Guest2
  */
-public class DiscretizeMenu extends AbstractMenuRBasedDialog{
+public class DiscretizeMenu extends AbstractMenuDialog{
     
-    Rengine re;
+    ScriptEngine re;
     JPanel panel;
     
     public static final long serialVersionUID = 1L;
@@ -64,11 +70,11 @@ public class DiscretizeMenu extends AbstractMenuRBasedDialog{
     DataFrame df;
     ArrayList<String> names;
     
-    public DiscretizeMenu(final CoDaPackMain mainApp, RScriptEngine r){
-        super(mainApp, "Discretize/Segment Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false), r);
+    public DiscretizeMenu(final CoDaPackMain mainApp){
+        super(mainApp, "Discretize/Segment Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
-        re = r;
         
+        re = (new RenjinScriptEngineFactory()).getScriptEngine();
         optionsPanel.add(methodLabel);
         optionsPanel.add(optionsList);
         optionsPanel.add(breaksLabel);
@@ -92,7 +98,7 @@ public class DiscretizeMenu extends AbstractMenuRBasedDialog{
             
             this.dispose();
             
-            re.assign("x", df.get(sel_names[0]).getNumericalData());
+            re.put("x", df.get(sel_names[0]).getNumericalData());
             String EXP = "res <- cut(x, breaks=#BREAKS#, include.lowest = TRUE)";
 
             if(optionsList.getSelectedItem().toString().equals("fixed")){
@@ -140,13 +146,21 @@ public class DiscretizeMenu extends AbstractMenuRBasedDialog{
                 EXP = EXP.replace("#BREAKS#", "{cl = sort(kmeans(x,#NINT#,nstart=100)$centers[,]); c(min(x), cl[-1] - diff(cl)/2, max(x))}");
             }
             System.out.println(EXP.replace("#NINT#", breaksField.getText()));
-            re.eval(EXP.replace("#NINT#", breaksField.getText()));
+            
 
-            
-            double[] res = re.eval("as.numeric(res)").asDoubleArray();
-            
-            String[] resString = new String[df.get(sel_names[0]).size()]; /* creem una variable per guardar els noms */
-            String[] resIntervals = re.eval("as.character(res)").asStringArray();
+            double[] res = null;
+            String[] resString = null;
+            String[] resIntervals = null;
+            try {
+                re.eval(EXP.replace("#NINT#", breaksField.getText()));
+                res = ((DoubleVector)re.eval("as.numeric(res)")).toDoubleArray();
+                resString = new String[df.get(sel_names[0]).size()]; /* creem una variable per guardar els noms */
+                resIntervals = ((StringVector)re.eval("as.character(res)")).toArray();
+            } catch (ScriptException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
             for(int i=0; i < resIntervals.length;i++) resString[i] = resIntervals[i];
             
             if(namesOptionCheckBox.isSelected()){

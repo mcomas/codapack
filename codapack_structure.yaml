@@ -20,11 +20,9 @@ CoDaPack Menu:
                 id: "PowerData"
         - Manipulate:
             - Discretize/Segment Variable:
-                id: "Discretize"
-                code: "r"
+                id: "Discretize"     
             - Calculate New Variable:
                 id: "CalculateNewVar"
-                code: "r"
             - Sort Data:
                 id: "SortData"
             - Numeric to Categoric:
@@ -38,10 +36,8 @@ CoDaPack Menu:
                 id: "Filter"
             - Advanced Filter:
                 id: "AdvancedFilter"
-                code: "r"
         - Create New Table:
             id: "CreateNewTable"
-            code: "r"
         - Add Numeric Variables:
             id: "AddNumericVariables"            
         - Delete Variables:
@@ -123,9 +119,9 @@ CoDaPack Menu:
         - Separator
         - Multivariate Analysis:
             - Regression:
-                - X real, Y composition (old):
-                    id: "XRealYCompositionRegressionOld"
-                    code: "r"
+                # - X real, Y composition (old):
+                #     id: "XRealYCompositionRegressionOld"
+                #     code: "r"
                 - X real, Y composition:
                     id: "RegressionCoDaResponse"
                     code: "r"
@@ -139,9 +135,9 @@ CoDaPack Menu:
                             selector: "Y"
                         - boolean: "Residuals"
                         - boolean: "Fitted values"
-                - X composition, Y real (old):
-                    id: "XCompositionYRealRegressionOld"
-                    code: "r"
+                # - X composition, Y real (old):
+                #     id: "XCompositionYRealRegressionOld"
+                #     code: "r"
                 - X composition, Y real:
                     id: "RegressionCoDaExplanaotory"
                     code: "r"

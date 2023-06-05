@@ -13,14 +13,21 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
-import org.rosuda.JRI.Rengine;
+
+import org.renjin.script.RenjinScriptEngineFactory;
+import org.renjin.sexp.IntVector;
+import org.renjin.sexp.StringVector;
 
 /**
  *
@@ -28,7 +35,7 @@ import org.rosuda.JRI.Rengine;
  */
 public class SortDataMenu extends AbstractMenuDialog{
     
-    Rengine re;
+    ScriptEngine re;
     DataFrame df;
     JCheckBox decSort;
     ArrayList<String> names;
@@ -37,11 +44,11 @@ public class SortDataMenu extends AbstractMenuDialog{
     private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Sort Data.yaml";
     private static final String helpTitle = "Sort Data Help Menu";
     
-    public SortDataMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp, "Sort Data Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
+    public SortDataMenu(final CoDaPackMain mainApp){
+        super(mainApp, "Sort Data Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false, DataSelector.ALL_VARIABLES));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
-        re = r;
+        re = (new RenjinScriptEngineFactory()).getScriptEngine();
         decSort = new JCheckBox("Decreasing sort",false);
         this.optionsPanel.add(decSort);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
@@ -59,61 +66,26 @@ public class SortDataMenu extends AbstractMenuDialog{
             
             // create dataframe on r
             
-            int auxPos = 0;
-            
-            for(int i=0; i < df.size(); i++){
-                if(vSelectedNames.contains(df.get(i).getName())){
-                    re.eval("x" + String.valueOf(auxPos+1) + " <- NULL");
-                    if(df.get(i).isNumeric()){
-                        for(double j: df.get(i).getNumericalData()){
-                            re.eval("x" + String.valueOf(auxPos+1) + " <- c(x" + String.valueOf(auxPos+1) + "," + String.valueOf(j) + ")");
-                        }
-                    }
-                    else{
-                        for(String j: df.get(i).getTextData()){
-                            re.eval("x" + String.valueOf(auxPos+1) + " <- c(x" + String.valueOf(auxPos+1) + ",'" + j + "')");
-                        }
-                    }
-                    auxPos++;
+            int auxPos = 1;
+            String vnames[] = new String[selectedNames.length];
+            for(int i = 0; i < selectedNames.length; i++, auxPos++){
+                String vname = selectedNames[i];
+                vnames[i] = "x" + String.valueOf(auxPos);
+                if(df.get(vname).isNumeric()){
+                    re.put("x" + String.valueOf(auxPos), df.get(vname).getNumericalData());
+                }else{
+                    re.put("x" + String.valueOf(auxPos), df.get(vname).getTextData());
                 }
             }
-            
-            String dataFrameString = "mydf <- data.frame(";
-            for(int i=0; i < selectedNames.length; i++){
-                dataFrameString += "x" + String.valueOf(i+1);
-                if(i != selectedNames.length-1) dataFrameString += ",";
+            String vars = String.join(",", vnames);
+            String decreasing = "FALSE";
+            if(decSort.isSelected()){
+                decreasing = "TRUE";
+
             }
-            
-            dataFrameString += ")";
-            re.eval(dataFrameString); // here we create the dataframe in R
-            
-            // the dataframe was created on R with the name mydf
-            // now we do the sort in R
-            String orderInstruction = "tryCatch({error <- \"NULL\";order(";
-            
-            if(this.decSort.isSelected()){
-                for(int i=0; i < selectedNames.length;i++){
-                    orderInstruction += "-mydf$x" + String.valueOf(i+1);
-                    if(i != selectedNames.length-1) orderInstruction += ",";
-                }
-            }
-            else{
-                for(int i=0; i < selectedNames.length;i++){
-                    orderInstruction += "mydf$x" + String.valueOf(i+1);
-                    if(i != selectedNames.length-1) orderInstruction += ",";
-                }
-            }
-            
-            orderInstruction += ")}, error = function(e){error <<- e$message})";
-            
-            int [] orderSort = re.eval(orderInstruction).asIntArray();
-            
-            String[] errorMessage = re.eval("error").asStringArray();
-            
-            // new we create the new dataframe with the new order
-            
-            if(errorMessage[0].equals("NULL")){
-            
+            int[] orderSort;
+            try {
+                orderSort = ((IntVector)re.eval("order(%s, decreasing = %s)".formatted(vars, decreasing))).toIntArray();
                 DataFrame newDf = new DataFrame();
 
                 // we add the variables ordereds by the orderSort
@@ -127,12 +99,10 @@ public class SortDataMenu extends AbstractMenuDialog{
 
                 newDf.setName(nameDf);
                 mainApplication.addDataFrame(newDf);
-            }
-            else{ // s'ha produit un error
-                OutputElement type = new OutputText("Error in R:");
-                outputPanel.addOutput(type);
-                OutputElement outElement = new OutputForR(errorMessage);
-                outputPanel.addOutput(outElement);
+
+            } catch (ScriptException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
             
             this.dispose();
