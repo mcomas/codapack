@@ -48,8 +48,35 @@
             </configuration>
          </plugin>
          
-         <!--
-         <plugin>         
+          <!-- <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.6.0</version>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <packageName>CoDaPack</packageName>
+                     <mainClass>coda.gui.CoDaPackMain</mainClass>
+                  </manifest>
+                  <manifestEntries>
+                     <Built-By>CoDaPack team</Built-By>
+                  </manifestEntries>
+               </archive>
+               <descriptorRefs>
+                  <descriptorRef>jar-with-dependencies</descriptorRef>
+               </descriptorRefs>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>make-assembly</id>
+                  <phase>package</phase> 
+                  <goals>
+                  <goal>single</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin> -->
+
+         <!-- <plugin>         
             <groupId>com.github.akman</groupId>
             <artifactId>jpackage-maven-plugin</artifactId>
             <executions>
@@ -62,8 +89,8 @@
                   </configuration>
                </execution>
             </executions>
-         </plugin>
-         -->
+         </plugin> -->
+         
          
       </plugins>
    </build>
@@ -155,23 +182,23 @@
       <dependency>
          <groupId>org.openjfx</groupId>
          <artifactId>javafx</artifactId>
-         <version>20</version>
+         <version>17</version>
          <type>pom</type>
      </dependency>
      <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
-      <version>20</version>
+      <version>17</version>
    </dependency>
    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
-      <version>20</version>
+      <version>17</version>
   </dependency>
   <dependency>
    <groupId>org.openjfx</groupId>
    <artifactId>javafx-controls</artifactId>
-   <version>20</version>
+   <version>17</version>
 </dependency>
   
       <!--

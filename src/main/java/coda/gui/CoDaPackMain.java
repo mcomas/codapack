@@ -19,30 +19,6 @@
 
 package coda.gui;
 
-import coda.gui.menu.AddToHTMLJavaScript;
-import coda.DataFrame;
-import coda.DataFrame.DataFrameException;
-import coda.ext.json.JSONException;
-import coda.ext.json.JSONObject;
-import coda.gui.CoDaPackMain.UpdateConnection;
-import coda.gui.CoDaPackMenu.CoDaPackMenuListener;
-import coda.gui.menu.*;
-import coda.gui.output.OutputElement;
-import coda.gui.output.OutputForR;
-import coda.gui.table.TablePanel;
-import coda.gui.utils.FileNameExtensionFilter;
-import coda.io.CoDaPackImporter;
-import coda.io.ExportData;
-import coda.io.ExportRDA;
-import coda.io.ImportRDA;
-import coda.io.ImportRDA_renjin;
-import coda.io.WorkspaceIO;
-import coda.plot2.TernaryPlot2dDisplay;
-import coda.plot2.objects.Ternary2dGridObject;
-import coda.plot2.objects.Ternary2dObject;
-import coda.plot2.window.TernaryPlot2dWindow;
-import coda.util.RScriptEngine;
-
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -51,12 +27,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 //import java.net.URL;
@@ -65,6 +38,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.script.ScriptException;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -80,8 +54,67 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-// R LIBRARIES
-import org.rosuda.JRI.*;
+import org.rosuda.JRI.Rengine;
+
+import coda.DataFrame;
+import coda.DataFrame.DataFrameException;
+import coda.ext.json.JSONException;
+import coda.gui.CoDaPackMenu.CoDaPackMenuListener;
+import coda.gui.menu.AddNumericVariablesMenu;
+import coda.gui.menu.AddToPersonalMenu;
+import coda.gui.menu.AdvancedFilterMenu;
+import coda.gui.menu.BalanceDendrogramMenu;
+import coda.gui.menu.CLRBiplotMenu;
+import coda.gui.menu.CalculateNewVarMenu;
+import coda.gui.menu.Categoric2NumericMenu;
+import coda.gui.menu.CenterConfidenceRegionPlotMenu;
+import coda.gui.menu.CenterDataMenu;
+import coda.gui.menu.ChangeGroupNameMenu;
+import coda.gui.menu.ClasStatsSummaryMenu;
+import coda.gui.menu.ClosureDataMenu;
+import coda.gui.menu.CompStatsSummaryMenu;
+import coda.gui.menu.ConfigurationMenu;
+import coda.gui.menu.CrearMenuPersonal;
+import coda.gui.menu.CreateNewTableMenu;
+import coda.gui.menu.DeleteVariablesMenu;
+import coda.gui.menu.DiscretizeMenu;
+import coda.gui.menu.ExportPersonalMenu;
+import coda.gui.menu.ExportRDataMenu;
+import coda.gui.menu.FilterMenu;
+import coda.gui.menu.ILRCLRBiplotMenu;
+import coda.gui.menu.ImportCSVMenu;
+import coda.gui.menu.ImportRDAMenu;
+import coda.gui.menu.ImportXLSMenu;
+import coda.gui.menu.LogRatioNormalityTestMenu;
+import coda.gui.menu.Numeric2CategoricMenu;
+import coda.gui.menu.PerturbateDataMenu;
+import coda.gui.menu.PowerDataMenu;
+import coda.gui.menu.PredictiveRegionPlotMenu;
+import coda.gui.menu.RBasedGenericMenu;
+import coda.gui.menu.SetDetectionLimitMenu;
+import coda.gui.menu.SortDataMenu;
+import coda.gui.menu.T1;
+import coda.gui.menu.TernaryQuaternaryPCPlotMenu;
+import coda.gui.menu.TernaryQuaternaryPlotMenu;
+import coda.gui.menu.TransformationALRMenu;
+import coda.gui.menu.TransformationCLRMenu;
+import coda.gui.menu.TransformationILRRawMenu;
+import coda.gui.menu.TransformationRawILRMenu;
+import coda.gui.output.OutputElement;
+import coda.gui.output.OutputForR;
+import coda.gui.table.TablePanel;
+import coda.gui.utils.FileNameExtensionFilter;
+import coda.io.CoDaPackImporter;
+import coda.io.ExportData;
+import coda.io.ExportRDA;
+import coda.io.ImportRDA;
+import coda.io.ImportRDA_renjin;
+import coda.io.WorkspaceIO;
+import coda.plot2.TernaryPlot2dDisplay;
+import coda.plot2.objects.Ternary2dGridObject;
+import coda.plot2.objects.Ternary2dObject;
+import coda.plot2.window.TernaryPlot2dWindow;
+import coda.util.RScriptEngine;
 
 /**
  *
@@ -141,23 +174,14 @@ public final class CoDaPackMain extends JFrame {
     private AdvancedFilterMenu advancedFilterMenu;
     private CompStatsSummaryMenu compStatsSummaryMenu;
     private ClasStatsSummaryMenu clasStatsSummaryMenu;
-    private XRealYCompositionRegressionMenu xRealYCompositionRegressionMenu;
-    private XCompositionYRealRegressionMenu xCompositionYRealRegressionMenu;
-    private KMeansOldMenu kMeansMenu;
-    private ManovaMenu manovaMenu;
-    private DiscriminantAnalysisMenu discriminantAnalysisMenu;
     private LogRatioNormalityTestMenu logRatioNormalityTestMenu;
-    // private AtipicalityIndexMenu atipicalityIndexMenu;
     private TernaryQuaternaryPlotMenu ternaryQuaternaryPlotMenu;
     private TernaryQuaternaryPCPlotMenu ternaryQuaternaryPCPlotMenu;
     private PredictiveRegionPlotMenu predictiveRegionPlotMenu;
     private CenterConfidenceRegionPlotMenu centerConfidenceRegionPlotMenu;
-    private ScatterplotMenu scatterplotMenu;
-    // private GeometricMeanBarPlotMenu geometricMeanBarPlotMenu;
     private CLRBiplotMenu cLRBiplotMenu;
     private ILRCLRBiplotMenu iLRCLRBiplotMenu;
     private BalanceDendrogramMenu balanceDendrogramMenu;
-    private UnivariateNormalityTestMenu univariateNormalityTestMenu;
     private ChangeGroupNameMenu changeGroupNameMenu;
     private ConfigurationMenu configurationMenu;
 
@@ -422,13 +446,11 @@ public final class CoDaPackMain extends JFrame {
                 if(transformationALRMenu == null) transformationALRMenu = new TransformationALRMenu(this);
                 transformationALRMenu.updateMenuDialog();
                 transformationALRMenu.setVisible(true);
-
                 break;
             case "TransformationCLR":
                 if(transformationCLRMenu == null) transformationCLRMenu = new TransformationCLRMenu(this);
                 transformationCLRMenu.updateMenuDialog();
                 transformationCLRMenu.setVisible(true);
-
                 break;
             case "TransformationRawILR":
                 if(transformationRawILRMenu == null) transformationRawILRMenu = new TransformationRawILRMenu(this);
@@ -505,46 +527,11 @@ public final class CoDaPackMain extends JFrame {
             case "DeleteVariables":
                 new DeleteVariablesMenu(this).setVisible(true);
                 break;
-            // case "ZeroPatterns":
-            //     if(zeroPatternsMenu == null) zeroPatternsMenu = new ZeroPatternsMenu(this, re);
-            //     zeroPatternsMenu.updateMenuDialog();
-            //     zeroPatternsMenu.setVisible(true);
-            //     break;
             case "SetDetectionLimit":
                 if(setDetectionLimitMenu == null) setDetectionLimitMenu = new SetDetectionLimitMenu(this);
                 setDetectionLimitMenu.updateMenuDialog();
                 setDetectionLimitMenu.setVisible(true);
                 break;
-            // case "NonParametricZeroReplacementOld":
-            //     if(nonParametricZeroReplacementMenu == null) nonParametricZeroReplacementMenu = new NonParametricZeroReplacementOldMenu(this, re);
-            //     nonParametricZeroReplacementMenu.updateMenuDialog();
-            //     nonParametricZeroReplacementMenu.setVisible(true);
-            //     break;
-            // case "LogRatioEMZeroReplacement":
-            //     if(logRatioEMZeroReplacementMenu == null) logRatioEMZeroReplacementMenu = new LogRatioEMZeroReplacementMenu(this, re);
-            //     logRatioEMZeroReplacementMenu.updateMenuDialog();
-            //     logRatioEMZeroReplacementMenu.setVisible(true);
-            //     break;
-            // case "BayesianMultiplicativeZeroReplacement":
-            //     if(bayesianMultiplicativeZeroReplacementMenu == null) bayesianMultiplicativeZeroReplacementMenu = new BayesianMultiplicativeZeroReplacementMenu(this, re);
-            //     bayesianMultiplicativeZeroReplacementMenu.updateMenuDialog();
-            //     bayesianMultiplicativeZeroReplacementMenu.setVisible(true);
-            //     break;
-            // case "LogRatioEMMissingReplacement":
-            //     if(logRatioEMMissingReplacementMenu == null) logRatioEMMissingReplacementMenu = new LogRatioEMMissingReplacementMenu(this, re);
-            //     logRatioEMMissingReplacementMenu.updateMenuDialog();
-            //     logRatioEMMissingReplacementMenu.setVisible(true);
-            //     break;
-            // case "LogRatioEMZeroMissingReplacement":
-            //     if(logRatioEMZeroMissingReplacementMenu == null) logRatioEMZeroMissingReplacementMenu = new LogRatioEMZeroMissingReplacementMenu(this, re);
-            //     logRatioEMZeroMissingReplacementMenu.updateMenuDialog();
-            //     logRatioEMZeroMissingReplacementMenu.setVisible(true);
-            //     break;
-            // case "AtypicalityIndexRBased":
-            //     if(atypicalityIndexRBasedMenu == null) atypicalityIndexRBasedMenu = new AtypicalityIndexRBasedMenu(this, re);
-            //     atypicalityIndexRBasedMenu.updateMenuDialog();
-            //     atypicalityIndexRBasedMenu.setVisible(true);
-            //     break;
             case "CompStatsSummary":
                 if(compStatsSummaryMenu == null) compStatsSummaryMenu = new CompStatsSummaryMenu(this);
                 compStatsSummaryMenu.updateMenuDialog();
@@ -555,40 +542,10 @@ public final class CoDaPackMain extends JFrame {
                 clasStatsSummaryMenu.updateMenuDialog();
                 clasStatsSummaryMenu.setVisible(true);
                 break;
-            // case "XRealYCompositionRegressionOld":
-            //     if(xRealYCompositionRegressionMenu == null) xRealYCompositionRegressionMenu = new XRealYCompositionRegressionMenu(this, re);
-            //     //xRealYCompositionRegressionMenu.updateMenuDialog();
-            //     xRealYCompositionRegressionMenu.setVisible(true);
-            //     break;
-            // case "XCompositionYRealRegressionOld":
-            //     if(xCompositionYRealRegressionMenu == null) xCompositionYRealRegressionMenu = new XCompositionYRealRegressionMenu(this, re);
-            //     xCompositionYRealRegressionMenu.updateMenuDialog();
-            //     xCompositionYRealRegressionMenu.setVisible(true);
-            //     break;
-            // case "KMeans":
-            //     if(kMeansMenu == null) kMeansMenu = new KMeansOldMenu(this, re);
-            //     kMeansMenu.updateMenuDialog();
-            //     kMeansMenu.setVisible(true);
-            //     break;
-            // case "ManovaOld":
-            //     if(manovaMenu == null) manovaMenu = new ManovaMenu(this, re);
-            //     manovaMenu.updateMenuDialog();
-            //     manovaMenu.setVisible(true);
-            //     break;
-            // case "DiscriminantAnalysisOld":
-            //     if(discriminantAnalysisMenu == null) discriminantAnalysisMenu = new DiscriminantAnalysisMenu(this, re);
-            //     discriminantAnalysisMenu.updateMenuDialog();
-            //     discriminantAnalysisMenu.setVisible(true);
-            //     break;
             case "LogRatioNormalityTest":
                 if(logRatioNormalityTestMenu == null) logRatioNormalityTestMenu = new LogRatioNormalityTestMenu(this);
                 logRatioNormalityTestMenu.updateMenuDialog();
                 logRatioNormalityTestMenu.setVisible(true);
-                break;
-            case "UnivariateNormalityTestOld":
-                if(univariateNormalityTestMenu == null) univariateNormalityTestMenu = new UnivariateNormalityTestMenu(this, re);
-                univariateNormalityTestMenu.updateMenuDialog();
-                univariateNormalityTestMenu.setVisible(true);
                 break;
             case "TernaryQuaternaryPlot":
                 if(ternaryQuaternaryPlotMenu == null) ternaryQuaternaryPlotMenu = new TernaryQuaternaryPlotMenu(this);
@@ -627,11 +584,6 @@ public final class CoDaPackMain extends JFrame {
                 centerConfidenceRegionPlotMenu.updateMenuDialog();
                 centerConfidenceRegionPlotMenu.setVisible(true);
                 break;
-            // case "GeometricMeanBarplotOld":
-            //     if(geometricMeanBarPlotMenu == null) geometricMeanBarPlotMenu = new GeometricMeanBarPlotMenu(this, re);
-            //     geometricMeanBarPlotMenu.updateMenuDialog();
-            //     geometricMeanBarPlotMenu.setVisible(true);
-            //     break;
             case "CLRBiplot":
                 if(cLRBiplotMenu == null) cLRBiplotMenu = new CLRBiplotMenu(this);
                 cLRBiplotMenu.updateMenuDialog();
@@ -1128,8 +1080,13 @@ public final class CoDaPackMain extends JFrame {
      * @param args the command line arguments
      */
     static boolean is_R_available(){
-        System.out.println("R_HOME =" + System.getenv("R_HOME"));
-        return(false);
+        // System.out.println("R_HOME =" + System.getenv("R_HOME"));
+        if(System.getenv("R_HOME") == null) return(false);
+        return(Rengine.versionCheck());
+        // for(String v: System.getenv().keySet()){
+        //     System.out.println(v + " = " + System.getenv(v));
+        // }
+        // return(true);
     }
     public static boolean R_available = false;
     public static void main(String args[]) throws Exception {

@@ -119,9 +119,6 @@ CoDaPack Menu:
         - Separator
         - Multivariate Analysis:
             - Regression:
-                # - X real, Y composition (old):
-                #     id: "XRealYCompositionRegressionOld"
-                #     code: "r"
                 - X real, Y composition:
                     id: "RegressionCoDaResponse"
                     code: "r"
@@ -135,9 +132,6 @@ CoDaPack Menu:
                             selector: "Y"
                         - boolean: "Residuals"
                         - boolean: "Fitted values"
-                # - X composition, Y real (old):
-                #     id: "XCompositionYRealRegressionOld"
-                #     code: "r"
                 - X composition, Y real:
                     id: "RegressionCoDaExplanaotory"
                     code: "r"
@@ -180,24 +174,6 @@ CoDaPack Menu:
                         - string: 
                             name: "Cluster name"
                             value: "clust"
-            # - Cluster:
-            #     - K-means:
-            #         id: "KMeans"
-            #         code: "r"
-            #         script: "kmeans.R"
-            #         controls:
-            #             - options:
-            #                 label: "Number clusters"
-            #                 options_controls:
-            #                     - Fixed:
-            #                         - numeric: "Clusters"
-            #                     - Optimal:
-            #                         - numeric: "Maximum"
-            #                         - select: ["Calinski index", "Average Silhouette"]
-            #             - string: "Cluster name"
-            # - Manova (Old):
-            #     id: "ManovaOld"
-            #     code: "r"
             - Manova:
                 id: "Manova"
                 code: "r"
@@ -209,9 +185,6 @@ CoDaPack Menu:
                     - select:
                         name: "Test"
                         values: ["Pillai", "Wilks", "Hotelling-Lawley", "Roy", "Spherical"]
-            # - Discriminant Analysis (Old):
-            #     id: "DiscriminantAnalysisOld"
-            #     code: "r"
             - Discriminant Analysis:
                 id: "DiscriminantAnalysis"
                 code: "r"
@@ -225,9 +198,6 @@ CoDaPack Menu:
 
         - Log-Ratio Normality Test:
             id: "LogRatioNormalityTest"
-        # - Univariate Normality Test (Old):
-        #     id: "UnivariateNormalityTestOld"
-        #     code: "r"
         - Univariate Normality Test:
             id: "UnivariateNormalityTest"
             code: "r"

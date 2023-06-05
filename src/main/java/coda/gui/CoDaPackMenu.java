@@ -23,26 +23,29 @@
  */
 package coda.gui;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.*;
+import java.io.FileFilter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+
 import org.apache.commons.io.filefilter.RegexFileFilter;
 
 import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
-import coda.ext.json.JSONString;
 import coda.gui.menu.RBasedGenericMenu;
 import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
@@ -53,9 +56,7 @@ import coda.gui.utils.DataSelector1to2;
  * @author marc
  */
 public class CoDaPackMenu extends JMenuBar {
-    /*
-     * Defining actions
-     */
+
     String nomPersonalDirectory = "menus_personalitzables";
 
     public HashMap<String,String> item_key = new HashMap<>();
@@ -105,140 +106,6 @@ public class CoDaPackMenu extends JMenuBar {
     public final String ITEM_QUIT = "Quit CoDaPack";
 
     CoDaPackMain mainApplication;
-
-    /*
-    public JMenu menuData;
-    public final String ITEM_DATA = "Data";
-    public JMenu menuTransforms;
-    public final String ITEM_TRANS = "Transformations";
-    public JMenuItem itemTransformALR;
-    public final String ITEM_RAW_ALR = "ALR";
-    public JMenuItem itemTransformCLR;
-    public final String ITEM_RAW_CLR = "CLR";
-    public JMenuItem itemTransformRawILR;
-    public final String ITEM_T_RAW_ILR = "Raw-ILR";
-    public JMenuItem itemTransformILRRaw;
-    public final String ITEM_T_ILR_RAW = "ILR-Raw";
-    public JMenu menuOperations;
-    public final String ITEM_OPER = "Operations";
-    public JMenuItem itemCenter;
-    public final String ITEM_CENTER = "Centering";
-    public JMenuItem itemClosure;
-    public final String ITEM_CLOSURE = "Subcomposition/Closure";
-    public JMenuItem itemPerturbate;
-    public final String ITEM_PERTURBATE = "Perturbation";
-    public JMenuItem itemPower;
-    public final String ITEM_POWER = "Power transformation";
-    public JMenu menuManipulate;
-    public final String ITEM_MANI = "Manipulate";
-    public JMenuItem itemDiscretize;
-    public final String ITEM_DISCRETIZE = "Discretize/Segment variable";
-    public JMenuItem itemCalculateNewVar;
-    public final String ITEM_CALCULATE_NEW_VAR = "Calculate new Variable";
-    public final JMenuItem itemSortData;
-    public final String ITEM_SORT_DATA = "Sort data";
-    public JMenuItem itemCategorizeVariables;
-    public final String ITEM_CAT_VAR = "Numeric to categorical";
-    public JMenuItem itemNumerizeVariables;
-    public final String ITEM_NUM_VAR = "Categorical to Numeric";
-    public JMenuItem itemChangeCategoricalNameGroup;
-    public final String ITEM_CHANGE_CAT_NAME_GROUP = "Change Categorical label";
-    public JMenu menuFilters;
-    public final String ITEM_FILT = "Filters";
-    public final JMenuItem itemFilter;
-    public final String ITEM_FILTER = "Categorical filter";
-    public final JMenuItem itemAdvFilter;
-    public final String ITEM_ADV_FILTER = "Advanced filter";
-    public JMenuItem itemAmalgamation;
-    public final String ITEM_AMALGAM = "Amalgamation";
-    //public JMenuItem itemZeros;
-    //public final String ITEM_ZEROS = "Non-parametric zero replacement (java)";
-    public JMenuItem itemCreateFrame;
-    public final String ITEM_CREATE_FRAME = "Create new Table";
-    public JMenuItem itemAddVariables;
-    public final String ITEM_ADD_VAR = "Add Numeric Variables";
-    public JMenuItem itemDeleteVariables;
-    public final String ITEM_DEL_VAR = "Delete variables";
-
-    public JMenu menuIrregularData;
-    public final String ITEM_IRREG_DATA = "Irregular data";
-    public JMenuItem zPatternsPlot;
-    public final String ITEM_ZPATTERNS = "ZPatterns plot";
-    public JMenuItem itemSetDetectionLimit;
-    public final String ITEM_SETDETECTION = "Set detection limit";
-    public JMenuItem itemZerosR;
-    public final String ITEM_ZEROS_R = "Non-parametric zero Replacement";
-    public JMenuItem itemLogRatio;
-    public final String ITEM_LOG_RATIO = "Logratio-EM zero Replacement";
-    public JMenuItem itemBayesianMultReplace;
-    public final String ITEM_BAYESIAN_MULT_REPLACE = "Bayesian Multiplicative zero Replacement";
-    public JMenuItem itemEM_Missing;
-    public final String ITEM_EM_MISSING = "Logratio-EM missing replacement";
-    public JMenuItem itemEM_Zero_Missing;
-    public final String ITEM_EM_ZERO_MISSING = "Logratio-EM Zero & missing replacement";
-    public JMenuItem itemAtipicalityIndex;
-    public final String ITEM_ATIP_INDEX = "Atipicality index";
-
-    public JMenu menuStatistics;
-    public final String ITEM_STATS = "Statistics";
-    public JMenuItem itemCompStatsSummary;
-    public final String ITEM_COMP_STATS_SUMMARY = "Compositional statistics summary";
-    public JMenuItem itemClasStatsSummary;
-    public final String ITEM_CLAS_STATS_SUMMARY = "Classical statistics summary";
-    public JMenu menuMultiAnalysis;
-    public final String ITEM_MULTI_ANALYSIS = "Multivariate Analysis";
-    public JMenu menuRegression;
-    public final String ITEM_REGRESSION = "Regression";
-    public JMenuItem item_Reg_XReal_YComp;
-    public final String ITEM_REG_XREAL_YCOMP = "X real Y composition";
-    public JMenuItem item_Reg_XComp_YReal;
-    public final String ITEM_REG_XCOMP_YREAL = "X composition Y real";
-    public JMenuItem item_Reg_XComp_YComp;
-    public final String ITEM_REG_XCOMP_YCOMP = "X composition Y composition";
-    public JMenu menuCluster;
-    public final String ITEM_CLUSTER = "Cluster";
-    public JMenuItem item_Clust_Kmeans;
-    public final String ITEM_CLUST_KMEANS = "K-Means";
-    public JMenuItem item_Manova;
-    public final String ITEM_MANOVA = "Manova";
-    public JMenuItem item_Disc_Analysis;
-    public final String ITEM_DISC_ANALYSIS = "Discriminant Analysis";
-    public JMenuItem itemNormalityTest;
-    public final String ITEM_NORM_TEST = "Log-Ratio Normality Test";
-    public JMenuItem itemClasUniNormTest;
-    public final String ITEM_CLAS_UNI_NORM_TEST = "Classical Univariate Normality test";
-
-    public JMenu menuGraphs;
-    public final String ITEM_GRAPHS = "Graphs";
-    public JMenuItem itemTernaryPlot;
-    public final String ITEM_TERNARY_PLOT = "Ternary/Quaternary plot";
-    public JMenuItem itemEmptyTernaryPlot;
-    public final String ITEM_EMPTY_TERNARY_PLOT = "Ternary/Quaternary plot [Empty]";
-    public JMenuItem itemIlrBiPlot;
-    public final String ITEM_ILR_BIPLOT = "ILR/CLR plot";
-    public JMenuItem itemBiPlot;
-    public final String ITEM_BIPLOT = "CLR biplot";
-    public JMenuItem itemDendrogramPlot;
-    public final String ITEM_DENDROGRAM_PLOT = "Balance dendrogram";
-    public JMenuItem itemALRPlot;
-    public final String ITEM_ALR_PLOT = "ALR plot";
-    public JMenuItem itemCLRPlot;
-    public final String ITEM_CLR_PLOT = "CLR plot";
-    public JMenuItem itemILRPlot;
-    public final String ITEM_ILR_PLOT = "ILR plot";
-    public JMenuItem principalComponentPlot;
-    public final String ITEM_PC_PLOT = "Ternary/Quaternary Principal Components";
-    public JMenuItem predictiveRegionPlot;
-    public final String ITEM_PRED_REG_PLOT = "Predictive Region";
-    public JMenuItem confidenceRegionPlot;
-    public final String ITEM_CONF_REG_PLOT = "Center Confidence Region";
-    public JMenuItem itemBoxplot;
-    public final String ITEM_BOXPLOT = "Boxplot";
-    public JMenuItem itemScatterplot;
-    public final String ITEM_SCATTERPLOT = "Scatterplot 2D/3D";
-    public JMenuItem itemGeoMeanPlot;
-    public final String ITEM_GEO_MEAN_PLOT = "Geometric mean barplot";
-    */
 
     public JMenu personalMenu;
     public final String ITEM_PERSONALMENU = "My Personal Menu";
