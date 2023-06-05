@@ -24,11 +24,8 @@
 
 package coda.gui.utils;
 
-import coda.gui.menu.AbstractMenuDialog2NumCat;
 import coda.gui.menu.AbstractMenuDialogWithILR;
-import coda.gui.menu.AbstractMenuDialog2NumCatONumWithILR;
-import coda.gui.menu.AbstractMenuDialog2NumCatWithILR;
-import coda.gui.menu.AbstractMenuDialog2NumOCatNumOCatWithILR;
+
 import coda.gui.menu.AbstractMenuGeneral;
 import coda.gui.menu.ILRMenu;
 import java.awt.BorderLayout;

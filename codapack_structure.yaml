@@ -21,6 +21,7 @@ CoDaPack Menu:
         - Manipulate:
             - Discretize/Segment Variable:
                 id: "Discretize"
+                code: "r"
             - Calculate New Variable:
                 id: "CalculateNewVar"
                 code: "r"
