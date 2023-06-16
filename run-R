@@ -1,5 +1,7 @@
 #!/bin/bash
 
-export R_HOME=/usr/lib/R
+#export R_HOME=/usr/lib/R
+export R_HOME=/Library/Frameworks/R.framework/Versions/Current/Resources
+
 export R_LIBS_USER=Rlibraries/
 R

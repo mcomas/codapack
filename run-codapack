@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # source env_variables
-export R_HOME=/usr/lib/R
+#export R_HOME=/usr/lib/R
+export R_HOME=/Library/Frameworks/R.framework/Versions/Current/Resources
 export R_LIBS_USER=Rlibraries/
 
 mvn exec:exec

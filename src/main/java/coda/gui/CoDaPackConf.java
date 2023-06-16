@@ -213,10 +213,11 @@ public class CoDaPackConf {
 
     public static String getRScriptDefaultPath() {
         String defaultRscriptPath = Paths.get(codapackDir, "Rscripts/").toString();
-        if (!System.getProperty("os.name").startsWith("Windows") &
-                !System.getProperty("os.name").startsWith("Linux")) {
-            defaultRscriptPath = System.getenv("SCRIPTS_DIRECTORY") + defaultRscriptPath;
-        }
+        System.out.println(defaultRscriptPath);
+        // if (!System.getProperty("os.name").startsWith("Windows") &
+        //         !System.getProperty("os.name").startsWith("Linux")) {
+        //     defaultRscriptPath = System.getenv("SCRIPTS_DIRECTORY") + defaultRscriptPath;
+        // }
         return defaultRscriptPath;
     }
 
