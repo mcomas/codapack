@@ -24,6 +24,7 @@ import coda.gui.utils.DataSelector1to1;
 import coda.util.RScriptEngine;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -99,7 +100,8 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
 
     }
     void captureROutput(){
-        String url = CoDaPackConf.rScriptPath + this.script_file;
+        String url = Paths.get(CoDaPackConf.getRScriptDefaultPath(), 
+                               this.script_file).toString();
         System.out.println(url);
 
         re.eval("error = tryCatch(source('%s'), error = function(e) e$message)".formatted(url));
