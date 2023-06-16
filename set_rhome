@@ -1,6 +1,3 @@
-#!/bin/bash
-
-# source env_variables
 system="$(uname -s)"
 if [ "$system" == "Darwin" ]; then
     echo "MacOS system detected"
@@ -15,6 +12,3 @@ if [ "$system" == "Linux" ]; then
         export R_HOME=/usr/lib/R
     fi
 fi
-
-export R_LIBS_USER=Rlibraries/
-R
