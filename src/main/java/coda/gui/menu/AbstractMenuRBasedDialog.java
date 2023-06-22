@@ -103,7 +103,7 @@ public abstract class AbstractMenuRBasedDialog extends AbstractMenuDialog{
         String url = Paths.get(CoDaPackConf.getRScriptDefaultPath(), 
                                this.script_file).toString();
 
-        String SOURCE = "error = tryCatch(source('%s'), error = function(e) e$message)".formatted(url.replace("\\","\\/"));
+        String SOURCE = "error = tryCatch(source('%s'), error = function(e) e$message)".formatted(url.replace("\\","/"));
         System.out.println(SOURCE);
 
         re.eval(SOURCE);
