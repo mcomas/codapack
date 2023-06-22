@@ -1,0 +1,10 @@
+export R_HOME=/usr/lib/R
+# export JAVA_HOME=
+# export R_LIBS_USER=
+# export R_SHARE_DIR=${R_HOME}/share
+# export R_INCLUDE_DIR=${R_HOME}/include
+# export R_DOC_DIR=${R_HOME}/doc
+
+JRI_LD_PATH=${R_HOME}/lib:${R_HOME}/bin:
+
+export LD_LIBRARY_PATH=${JRI_LD_PATH}
