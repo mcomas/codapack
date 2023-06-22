@@ -813,10 +813,11 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
                 re.assign("GROUP", group);
             }
         }
-        
+        System.out.println("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
+        System.out.println("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
         re.eval("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
         re.eval("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
-
+        
         captureROutput();
 
         setVisible(false);
