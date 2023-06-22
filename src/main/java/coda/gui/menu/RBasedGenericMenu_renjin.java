@@ -47,7 +47,7 @@ import org.rosuda.JRI.Rengine;
 import org.rosuda.REngine.REXPNull;
 
 
-public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog{
+public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
     private static final String yamlUrl = null;
     private static final String helpTitle = null;
     private Rengine re;

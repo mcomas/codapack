@@ -236,7 +236,7 @@ CoDaPack Menu:
             id: "MosaicPlot"
             code: "r"
             script: "cdp_mosaic_plot.R"
-            options: ["groups", "only_categoric"]
+            options: ["only_categoric"]
             controls: []
         - Geometric Mean Barplot:
             id: "GeometricMeanBarplot"

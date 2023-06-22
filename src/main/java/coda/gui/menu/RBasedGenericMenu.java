@@ -2,10 +2,16 @@ package coda.gui.menu;
 
 import coda.BasicStats;
 import coda.CoDaStats;
+import coda.DataFrame;
+import coda.Variable;
 import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import coda.gui.output.OutputElement;
+import coda.gui.output.OutputForR;
+import coda.gui.output.OutputText;
 import coda.gui.utils.BinaryPartitionRowHeaders;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.BinaryPartitionTable;
@@ -22,6 +28,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,6 +40,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -42,14 +51,16 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableModel;
 
+import org.apache.batik.swing.JSVGCanvas;
+import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 import org.rosuda.REngine.REXPNull;
 
 
-public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
+public class RBasedGenericMenu extends AbstractMenuDialog{
     private static final String yamlUrl = null;
     private static final String helpTitle = null;
-    private Rengine re;
+  
     private int iVar = 0;
     private ArrayList<RConversion> cdp_lines = new ArrayList<RConversion>();
     public void addCDP_Line(RConversion cdpLine){
@@ -59,19 +70,139 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
     }
     RBasedGenericMenu mainClass = null;
     ArrayList<JCheckBox> Barray = new ArrayList<JCheckBox>();
+    RScriptEngine re;
+
+    int PLOT_WIDTH = 650;
+    int PLOT_HEIGHT = 400;
+
+    String script_file;
+
     public RBasedGenericMenu(final CoDaPackMain mainApp, 
                              RScriptEngine r, 
                              String title,
                              String Rscript, 
                              JSONArray controls, 
                              DataSelector dataSelector) throws JSONException{
-        super(mainApp, title + " Menu", dataSelector, r); 
+        super(mainApp, title + " Menu", dataSelector); 
         System.out.println("Controls: " + controls.toString());
         mainClass = this;
         build_optionPanel(r, Rscript, controls);
      }
+    public void addMatrixToR(double data[][], String col_names[], String name){
+        String vnames[] = new String[data.length];
+        for(int i=0; i < data.length; i++){
+            vnames[i] = ".cdp_x"+i;
+            re.assign(vnames[i], data[i]);
+        }
+        re.eval("%s = cbind(%s)".formatted(name, String.join(",", vnames)));
 
-     void build_optionPanel(Rengine r, String Rscript, JSONArray controls) throws JSONException{
+        String col_names_ext[] = new String[col_names.length];
+        for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
+        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names_ext)));
+        re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
+    }
+    public void addMatrixToR(String data[][], String col_names[], String name){
+        String vnames[] = new String[data.length];
+        for(int i=0; i < data.length; i++){
+            vnames[i] = ".cdp_x"+i;
+            re.assign(vnames[i], data[i]);
+        }
+        re.eval("%s = cbind(%s)".formatted(name, String.join(",", vnames)));
+
+        String col_names_ext[] = new String[col_names.length];
+        for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
+        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names_ext)));
+        re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
+    }
+    void showText(){
+        
+        REXP result;
+        String[] sortida;
+        
+        /* header output */
+        
+        //CoDaPackMain.outputPanel.addOutput(new OutputText("Zpatterns Plot:"));
+        
+        /* R output */        
+        String outputString[] = re.eval("unlist(cdp_res[['text']])").asStringArray();
+        System.out.println(Arrays.toString(outputString));
+        CoDaPackMain.outputPanel.addOutput(new OutputForR(outputString));
+
+    }
+    void createDataFrame(){
+        int nDataFrames = re.eval("length(cdp_res$dataframe)").asInt();
+        for(int i=0; i < nDataFrames; i++){
+            int nVariables = re.eval("length(cdp_res$dataframe[[" + String.valueOf(i+1) + "]])").asInt();
+            DataFrame newDataFrame = new DataFrame();
+            for(int j=0; j < nVariables; j++){
+                String varName = re.eval("names(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "])").asString();
+                String isNumeric = re.eval("class(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asString();
+                if(isNumeric.equals("numeric")){ /* crear una variable numerica */
+                    double[] data = re.eval("as.numeric(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asDoubleArray();
+                    newDataFrame.addData(varName, data);
+                }
+                else{ /* crear una variable categorica */
+                    String[] data = re.eval("as.character(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asStringArray();
+                    newDataFrame.addData(varName, new Variable(varName,data));
+                }
+            }
+            
+            String dataFrameName = re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString();
+            
+            while(!mainApplication.isDataFrameNameAvailable(dataFrameName)){
+                dataFrameName += "c";
+            }
+            
+            newDataFrame.setName(dataFrameName);
+            DataFrame current = mainApplication.getActiveDataFrame();
+            mainApplication.addDataFrame(newDataFrame);
+            mainApplication.updateDataFrame(current);
+        }
+    }
+
+    void createVariables(){
+        
+        int numberOfNewVar = re.eval("length(cdp_res$new_data)").asInt(); /* numero de columnes nomes*/
+        
+        for(int i=0; i < numberOfNewVar; i++){
+            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
+            String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[["+ String.valueOf(i+1) +"]]))").asString();
+            if(isNumeric.equals("TRUE")){
+                double[] data = re.eval("as.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asDoubleArray();
+                df.addData(varName,data);
+            }
+            else{ // categoric
+                String[] data = re.eval("as.character(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asStringArray();
+                df.addData(varName, new Variable(varName,data));
+            }
+            mainApplication.updateDataFrame(df);
+        }
+    }
+
+    void showGraphics(){
+        
+        String fnames[] = re.eval("cdp_res$graph").asStringArray();
+        if(fnames != null){
+            System.out.println(Arrays.toString(fnames));
+            for(String fname: fnames){
+                JSVGCanvas c = new JSVGCanvas();
+                String uri = new File(fname).toURI().toString();
+                c.setURI(uri);
+                JFrame jf = new JFrame();
+                jf.setSize(PLOT_WIDTH,PLOT_HEIGHT);
+                jf.getContentPane().add(c);
+                jf.setVisible(true);
+            }
+        }
+        /*
+        for(int i=0; i < numberOfGraphics; i++){
+            tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
+            tempsDirR.add(tempDirR);
+            plotZpatternsMenu(this.framesZpatternsMenu.size());
+        }  
+        */
+    }
+     void build_optionPanel(RScriptEngine r, String Rscript, JSONArray controls) throws JSONException{
         script_file = Rscript;
 
         // super.setHelpMenuConfiguration(yamlUrl, helpTitle);
@@ -777,48 +908,71 @@ public class RBasedGenericMenu extends AbstractMenuRBasedDialog{
         }
         df = mainApplication.getActiveDataFrame();
         String sel_names[] = super.ds.getSelectedData();
-
-        if(ds.selection_type == DataSelector.ONLY_NUMERIC){
-            double[][] dataX = df.getNumericalData(sel_names);
-            addMatrixToR(dataX, sel_names, "X");
-        }
-        if(ds.selection_type == DataSelector.ONLY_CATEGORIC){
-            String[][] dataX = df.getCategoricalData(sel_names);
-            addMatrixToR(dataX, sel_names, "X");
-        }
         
+        if(sel_names.length > 0){
+            if(ds.selection_type == DataSelector.ONLY_NUMERIC){
+                double[][] dataX = df.getNumericalData(sel_names);
+                addMatrixToR(dataX, sel_names, "X");
+            }
+            if(ds.selection_type == DataSelector.ONLY_CATEGORIC){
+                String[][] dataX = df.getCategoricalData(sel_names);
+                addMatrixToR(dataX, sel_names, "X");
+            }
+            double dlevel[][] = df.getDetectionLevel(sel_names);
 
+
+            addMatrixToR(dlevel, sel_names, "DL");
+
+            if(ds.group_by){
+                String sel_group = ds.getSelectedGroup();
+                if(sel_group != null){
+                    String group[] = df.getCategoricalData(sel_group);
+                    re.assign("GROUP", group);
+                }
+            }
+
+        }
         if(ds instanceof DataSelector1to2){
             
             String sel_namesY[] = ((DataSelector1to2)ds).getSelectedDataB();
-            double[][] dataY = df.getNumericalData(sel_namesY);
-            addMatrixToR(dataY, sel_namesY, "Y");
-        }
-        // for(int i=0; i < data.length; i++){
-        //     re.assign(sel_names[i], data[i]);
-        // }
-        // re.eval("X = cbind(" + String.join(",", sel_names) + ")");
-        // re.eval("X[is.nan(X)] = NA_real_");
-
-        double dlevel[][] = df.getDetectionLevel(sel_names);
-        addMatrixToR(dlevel, sel_names, "DL");
-        // for(int i=0; i < data.length; i++){
-        //     re.assign(sel_names[i], dlevel[i]);
-        // }
-        // re.eval("DL = cbind(" + String.join(",", sel_names) + ")");
-        if(ds.group_by){
-            String sel_group = ds.getSelectedGroup();
-            if(sel_group != null){
-                String group[] = df.getCategoricalData(sel_group);
-                re.assign("GROUP", group);
+            if(sel_namesY.length > 0){
+                double[][] dataY = df.getNumericalData(sel_namesY);
+                addMatrixToR(dataY, sel_namesY, "Y");
             }
         }
+
+        String SOURCE = "error = tryCatch(source('%s'), error = function(e) e$message)";
+        SOURCE = SOURCE.formatted(Paths.get(CoDaPackConf.getRScriptDefaultPath(), this.script_file).toString().replace("\\","/"));
+        System.out.println(SOURCE);
+        re.eval(SOURCE);
+
+        re.eval("source('Rscripts/cdp_helper_functions.R')");
+        String error_in = re.eval("cdp_check()").asString();
+        if(error_in != null){
+            JOptionPane.showMessageDialog(this, error_in);
+            return;
+        }
+
+
         System.out.println("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
         System.out.println("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
         re.eval("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
         re.eval("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
         
-        captureROutput();
+        
+        re.eval("cdp_res = cdp_analysis()");
+        String errorMessage[] = re.eval("error").asStringArray();
+        if(errorMessage == null){
+            showText();
+            createVariables();
+            showGraphics();
+            createDataFrame();
+        }else{
+            OutputElement type = new OutputText("Error in R:");
+            CoDaPackMain.outputPanel.addOutput(type);
+            OutputElement outElement = new OutputForR(errorMessage);
+            CoDaPackMain.outputPanel.addOutput(outElement);
+        }
 
         setVisible(false);
         
