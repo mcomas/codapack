@@ -109,6 +109,7 @@ import coda.io.ExportData;
 import coda.io.ExportRDA;
 import coda.io.ImportRDA;
 import coda.io.ImportRDA_renjin;
+import coda.io.Importer;
 import coda.io.WorkspaceIO;
 import coda.plot2.TernaryPlot2dDisplay;
 import coda.plot2.objects.Ternary2dGridObject;
@@ -640,15 +641,20 @@ public final class CoDaPackMain extends JFrame {
             if (chooseFile.showOpenDialog(jSplitPane) == JFileChooser.APPROVE_OPTION) {
                 // Creem una nova instància ImportRDA, serà l'encarregada de mostrar i obrir els
                 // dataframes
-                
+                Importer importRDA = null;
+                if(is_R_available()){
+                    importRDA = new ImportRDA(chooseFile.getSelectedFile().getAbsolutePath(), re);
+                }else{
+                    importRDA = new ImportRDA_renjin(chooseFile.getSelectedFile().getAbsolutePath());
+                }
                 //ImportRDA impdf = new ImportRDA(chooseFile.getSelectedFile().getAbsolutePath(), re);
-                ImportRDA_renjin impRDA_Renjin = new ImportRDA_renjin(chooseFile.getSelectedFile().getAbsolutePath());
-                ImportRDA impRDA = new ImportRDA(chooseFile.getSelectedFile().getAbsolutePath(), re);
+                //ImportRDA_renjin impRDA_Renjin = new ImportRDA_renjin(chooseFile.getSelectedFile().getAbsolutePath());
+                //ImportRDA impRDA = new ImportRDA(chooseFile.getSelectedFile().getAbsolutePath(), re);
                 // Creem una nova instància ImportRDAMenu, serà l'encarregada de gestionar el
                 // menú
                 ImportRDAMenu imprdam;
                 try {
-                    imprdam = new ImportRDAMenu(this, impRDA_Renjin);
+                    imprdam = new ImportRDAMenu(this, importRDA);
                     imprdam.setVisible(true);
                 } catch (DataFrameException e) {
                     // TODO Auto-generated catch block
