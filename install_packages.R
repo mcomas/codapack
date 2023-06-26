@@ -1,7 +1,5 @@
-install.packages('coda.base')
-install.packages('zCompositions')
-install.packages('ggplot2')
-if(.Platform$OS.type == "unix") {
-  install.packages('cairoDevice')
-}
-install.packages('fpc')
+available_packages = rownames(installed.packages())
+if(!"rJava" %in% available_packages) install.packages('rJava')
+if(!"coda.base" %in% available_packages) install.packages('coda.base')
+if(!"zCompositions" %in% available_packages) install.packages('zCompositions')
+if(!"fpc" %in% available_packages) install.packages('fpc')
