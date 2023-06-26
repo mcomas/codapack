@@ -1,20 +1,19 @@
 #!/usr/bin/bash
 
-OUTDIR=cdp-windows
+OUTDIR=cdp-macos
 
 mkdir $OUTDIR -p
 mkdir $OUTDIR/Rlibraries -p
 mkdir $OUTDIR/Rscripts -p
 
-unzip -n external-programs/jdk-17.0.7_windows-x64_bin.zip -d $OUTDIR
-unzip -n external-programs/R-4.3.1.zip -d $OUTDIR
+tar xzvf external-programs/jdk-17.0.7_macos-x64_bin.tar.gz -C $OUTDIR
 unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
 
 cp -rf src $OUTDIR
 
-cp -f Rscripts/*.R $OUTDIR/RScripts/
-cp -f build-codapack.bat $OUTDIR
-cp -f run-codapack.bat $OUTDIR
+cp -f Rscripts/*.R $OUTDIR/Rscripts/
+cp -f build-codapack-macos $OUTDIR/build-codapack
+cp -f run-codapack-macos $OUTDIR/run-codapack
 cp -f install_packages.R $OUTDIR
 cp -f codapack_structure.json $OUTDIR
 cp -f pom.xml $OUTDIR
