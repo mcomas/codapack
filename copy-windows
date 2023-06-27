@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-OUTDIR=cdp-windows
+VERSION=windows-x64
+OUTDIR=cdp-$VERSION
 
 mkdir $OUTDIR -p
 mkdir $OUTDIR/Rlibraries -p
@@ -19,4 +20,4 @@ cp -f install_packages.R $OUTDIR
 cp -f codapack_structure.json $OUTDIR
 cp -f pom.xml $OUTDIR
 
-# (cd cdp-windows && zip -r ../codapack-windows-x64.zip -r .)
+# (cd $OUTDIR && zip -r ../codapack-$VERSION.zip -r .)
