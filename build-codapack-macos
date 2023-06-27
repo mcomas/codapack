@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/bin/zsh
 
 export JAVA_HOME=jdk-17.0.7.jdk/Contents/Home
 export PATH=$JAVA_HOME/bin:$PATH
 export R_HOME=/Library/Frameworks/R.framework/Versions/Current/Resources
 export R_LIBS_USER=Rlibraries
 
+cd "$(dirname "$0")"
 apache-maven-3.9.2/bin/mvn package && apache-maven-3.9.2/bin/mvn dependency:copy-dependencies
