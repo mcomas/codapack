@@ -47,12 +47,18 @@ CoDaPack Menu:
             id: "ZeroPatterns"
             code: "r"
             script: "cdp_zpatterns.R"
-            controls:
-                - boolean: "Include means"
-                - boolean: "Include %"
+            controls:                
+                - boolean: "Show means"
+                - boolean: "Show percentages"
                 - boolean: 
                     label: "Add Pattern"
                     value: true
+                - boolean: 
+                    label: "Plot Pattern"
+                    value: true
+                - select:
+                    name: "Label"
+                    values: ["0", "NA"]
         - Set Detection Limit:
             id: "SetDetectionLimit"
         - Separator
@@ -173,7 +179,7 @@ CoDaPack Menu:
                             values: ["Calinski index", "Average Silhouette"]
                         - string: 
                             name: "Cluster name"
-                            value: "clust"
+                            value: "Cluster"
             - Manova:
                 id: "Manova"
                 code: "r"

@@ -78,6 +78,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
 
     String script_file;
 
+    String analysisTitle = "";
     public RBasedGenericMenu(final CoDaPackMain mainApp, 
                              RScriptEngine r, 
                              String title,
@@ -85,6 +86,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
                              JSONArray controls, 
                              DataSelector dataSelector) throws JSONException{
         super(mainApp, title + " Menu", dataSelector); 
+        analysisTitle = title;
         System.out.println("Controls: " + controls.toString());
         mainClass = this;
         build_optionPanel(r, Rscript, controls);
@@ -204,8 +206,11 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
     }
     void showText(){    
         String outputString[] = re.eval("unlist(cdp_res[['text']])").asStringArray();
-        System.out.println(Arrays.toString(outputString));
-        CoDaPackMain.outputPanel.addOutput(new OutputForR(outputString));
+        if(outputString.length > 0){
+            CoDaPackMain.outputPanel.addOutput(new OutputText(analysisTitle));
+            //System.out.println(Arrays.toString(outputString));
+            CoDaPackMain.outputPanel.addOutput(new OutputForR(outputString));
+        }
     }
     void createDataFrame(){
         int nDataFrames = re.eval("length(cdp_res$dataframe)").asInt();

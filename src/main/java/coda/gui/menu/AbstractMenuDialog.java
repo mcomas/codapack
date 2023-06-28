@@ -64,6 +64,7 @@ public abstract class AbstractMenuDialog extends JDialog{
     int WIDTH = 850; //560;
     int HEIGHT = 500; //430;
     
+
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, DataSelector dataSelector){
         super(mainApp, title);
         mainApplication = mainApp;

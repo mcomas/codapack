@@ -1,7 +1,7 @@
 cdp_check = function(){
   if(!exists('X')) return("No data has been selected")
 }
-cdp_analysis = function(){
+cdp_analysis = function(){  
   ################ MAIN #################
   graphname = sprintf("%s.pdf", tempfile())
   svg(filename = graphname, width = PLOT_WIDTH, height = PLOT_HEIGTH)
@@ -42,8 +42,8 @@ cdp_analysis = function(){
     for(i in 1:ncol(X)){
       boxplot(X[,i]~GROUP, xlab = vnames[i], ylab = "", ylim = rng)
       hgap = (V1+V2-1) * 0.06
-      if(V1) points(-hgap+1:2, GMEAN[,i], pch = 22, bg= cmeans[1], cex = 2)
-      if(V2) points(+hgap+1:2, AMEAN[,i], pch = 22, bg = cmeans[2], cex = 2)
+      if(V1) points(-hgap+1:nrow(GMEAN), GMEAN[,i], pch = 22, bg= cmeans[1], cex = 2)
+      if(V2) points(+hgap+1:nrow(GMEAN), AMEAN[,i], pch = 22, bg = cmeans[2], cex = 2)
     }
     par(cpar)
   }else{
