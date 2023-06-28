@@ -10,7 +10,7 @@ cdp_check = function(){
   }
 }
 cdp_analysis = function(){
-  save.image('Rscripts/cdp_lrnormal_zero_repl_missing.RData')
+  # save.image('Rscripts/cdp_lrnormal_zero_repl_missing.RData')
   Ximp <- zCompositions::lrEMplus(X,dl=DL,rob=V3,ini.cov=V1,frac=V2)
   names(Ximp) = paste0("z.", colnames(X))
   

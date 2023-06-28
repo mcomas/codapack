@@ -13,7 +13,7 @@ cdp_check = function(){
   
 }
 cdp_analysis = function(){
-  save.image("Rscripts/cdp_regression_coda_explanatory.RData")
+  # save.image("Rscripts/cdp_regression_coda_explanatory.RData")
   
   H = coda.base::coordinates(X, basis = coda.base::sbp_basis(BasisX))
   colnames(H) = paste0('ilr.', 1:ncol(H))
