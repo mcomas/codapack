@@ -41,13 +41,20 @@ cdp_analysis = function(){
   if(V1) new_data[['residuals']] = LM$residuals
   if(V2) new_data[['fitted.values']] = LM$fitted.values
   
-  text_output = capture.output(summary(LM))
+  nccol = pmax(3, nchar(colnames(X)))
+  text_output = c("Basis:", capture.output({
+  cat(sprintf(sprintf("%%%ds", nccol), colnames(X)), "\n")
+  cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisX), byrow = TRUE, ncol = ncol(X)),
+        1,
+        paste, collapse=' '), sep='\n')
+  }))
+  text_output = c(text_output, capture.output(summary(LM)))
   text_output = gsub("[‘’]", "'", text_output)
   
   # Ooutput
   list(
     'text' = list(text_output),
-    'dataframe' = list(), #list('coefficients' = LM$coefficients),
+    'dataframe' = list('coefficients' = LM$coefficients),
     'graph' = graphname,
     'new_data' = new_data
   )

@@ -237,7 +237,8 @@ CoDaPack Menu:
             code: "r"
             script: "cdp_scatterplot.R"
             options: ["groups"]
-            controls: []
+            controls:
+                - boolean: "Set same scale"
         - Mosaic plot:
             id: "MosaicPlot"
             code: "r"

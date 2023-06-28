@@ -15,6 +15,15 @@ cdp_analysis = function(){
   H = coda.base::coordinates(Y, basis = coda.base::sbp_basis(BasisY))
   colnames(H) = paste0('ilr.', 1:ncol(H))
   
+  nccol = pmax(3, nchar(colnames(Y)))
+  text_output = c("Basis:", capture.output({
+    cat(sprintf(sprintf("%%%ds", nccol), colnames(Y)), "\n")
+    cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisY), byrow = TRUE, ncol = ncol(Y)),
+              1,
+              paste, collapse=' '), sep='\n')
+  }))
+  
+  
   str_y = colnames(H)
   if(ncol(H) > 1) str_y = sprintf("cbind(%s)", paste(colnames(H), collapse=','))
   str_x = paste(colnames(X), collapse='+')
@@ -23,7 +32,8 @@ cdp_analysis = function(){
   . = as.data.frame(cbind(H,X))
   LM = eval(parse(text = sprintf("lm(%s, .)", str_frm)))
   
-  R2 = sum(scale(LM$fitted.values, scale = FALSE)^2) / sum(scale(H, scale = FALSE)^2) 
+  text_output = c(text_output, "\nCall:")
+  text_output = c(text_output, deparse(LM$call))
   
   SLM = summary(LM)
   nr = length(SLM) * nrow(SLM[[1]]$coefficients)
@@ -39,20 +49,14 @@ cdp_analysis = function(){
   colnames(COEFS) = colnames(SLM[[1]]$coefficients)
   rownames(COEFS) = rnames
 
-  B = coef(LM)
-  S = sqrt(diag(vcov(LM)))
-  P = 2*pt(-abs(B/S), LM$df.residual)
-  # O = sprintf("% 0.6f (%0.6f) p=%s", B, S, ifelse(P<0.0001, "<0.0001", sprintf("%0.5f", P)))
-  # dim(O) = dim(B)
-  # colnames(O) = colnames(B)
-  # rownames(O) = rownames(B)
+  text_output = c(text_output, "\nCoefficients:")
+  text_output = c(text_output, gsub("\"", "", capture.output(printCoefmat(COEFS))))
   
+  
+  R2 = sum(scale(LM$fitted.values, scale = FALSE)^2) / sum(scale(H, scale = FALSE)^2) 
   RES = unlist(anova(LM, update(LM, .~1), test = 'Wilks')[2,c('approx F', 'num Df' , 'den Df' ,'Pr(>F)')])
-  output = gsub("\"", "", capture.output(printCoefmat(COEFS)))
-  output = c("", "Coefficients:", output)
-  output = c(deparse(LM$call), output)
-  output = c("Call:", output)
-  output = c(output, "")
+
+  # https://stackoverflow.com/questions/32342018/summary-lm-output-customization
   col_fw = function(col, align = 'left'){
     if(align == 'left'){
       pat = sprintf("%%-%ds", max(nchar(col)))
@@ -64,7 +68,7 @@ cdp_analysis = function(){
     col
   }
   col1 = col_fw(c("", paste("Response", colnames(H)), 'Overall'))
-  col2 = col_fw(c("Multiple R-squared:", sapply(SLM, function(x) formatC(x$r.squared)), formatC(R2)), align = 'right')
+  col2 = col_fw(c("R-squared:", sapply(SLM, function(x) formatC(x$r.squared)), formatC(R2)))
   
   fstat = c("F-statistic:", 
             sapply(SLM, function(x) paste(formatC(x$fstatistic[1L]), "on", x$fstatistic[2L], "and",
@@ -74,7 +78,7 @@ cdp_analysis = function(){
             RES[3L], "DF,  p-value:", format.pval(pf(RES[1],
                                                               RES[2], RES[3], lower.tail = FALSE)), "(Wilks' approx.)"))
   col3 = col_fw(fstat)
-  output = c(output, capture.output({
+  text_output = c(text_output, "", capture.output({
     cat(col1[1], "\t",  col2[1], "\t", col3[1], "\n")
     for(i in 1:length(SLM)){
       x = SLM[[i]]
@@ -82,38 +86,22 @@ cdp_analysis = function(){
     }
     cat(col1[length(SLM)+2], "\t",  col2[length(SLM)+2], "\t", col3[length(SLM)+2], "\n")
   }))
-  # PERF = matrix("", nrow = 3, ncol = 1+length(SLM))
-  # oR2 = c(sapply(SLM, function(x) formatC(x$r.squared)), 
-  #         formatC(R2))
-  # oR2
-  # cat("Multiple R-squared: ", sapply(SLM, function(x) formatC(x$r.squared)))
-  # oF = c(sapply(SLM, function(x) formatC(formatC(x$fstatistic[1L]))), 
-  #        formatC(formatC(RES[1])))
-  # 
-  # 
-  # PERF[1, 1:length(SLM)] = sapply(SLM, function(x) formatC(x$r.squared))
-  # PERF[1,1+length(SLM)] = formatC(R2)
-  # PERF[2, 1:length(SLM)] = 
-  # PERF[2,1+length(SLM)] = sprintf("%s (Wilks' approx.)", formatC(formatC(RES[1])))
-  # PERF[3, 1:length(SLM)] = sapply(SLM, function(x) format.pval(pf(x$fstatistic[1L],
-  #                                                                 x$fstatistic[2L], 
-  #                                                                 x$fstatistic[3L], lower.tail = FALSE)))
-  # PERF[3,1+length(SLM)] = format.pval(RES[4L])
-  # rownames(PERF) = c("Multiple R-squared", "F-statistics", "p-value")
-  # colnames(PERF) = c(colnames(H), 'Overall')
-  # output = c(output, capture.output(PERF))
-  #output = c(output, sprintf("Multiple R-squared:  %0.3f", R2))
-  #output = c(output, sprintf("F-statistic (Wilks' approx.): %0.3f on %.1f and %.1f DF,  p-value: %0.5f", RES[1], RES[2], RES[3], RES[4]))
-  # cat(output, sep ='\n')
   
   new_data = list()
   if (V1) new_data = c(new_data, setNames(apply(LM$residuals, 2, identity, simplify = FALSE), paste0('r.', colnames(H))))
   if (V2) new_data = c(new_data, setNames(apply(LM$fitted.values, 2, identity, simplify = FALSE), paste0('f.', colnames(H))))
-  
-  
-  
-  
-  
+
+  graphnames <- replicate(ncol(H), sprintf("%s.svg", tempfile()))
+  for(i in seq_along(graphnames)){
+    str_frm_sub = sprintf("%s ~ %s", colnames(H)[i], str_x)
+    LM_sub = eval(parse(text = sprintf("lm(%s, .)", str_frm_sub)))
+    svg(graphnames[i], width = PLOT_WIDTH, height = PLOT_HEIGTH)
+    oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
+    plot(LM_sub,sub.caption=deparse(as.formula(LM_sub)))  # Plot the model information
+    par(oldpar)
+    dev.off()
+  }
+  names(graphnames) = paste("Response", colnames(H))
   # # Create graphs
   # graphnames <- list()
   # for (n in 1:nparts)
@@ -140,9 +128,9 @@ cdp_analysis = function(){
   
   # Ooutput
   list(
-    'text' = gsub("[‘’]", "'", output),
+    'text' = gsub("[‘’]", "'", text_output),
     'dataframe' = list(), #list('coefficients' = NDF),
-    'graph' = list(), #graphnames,
+    'graph' = graphnames,
     'new_data' = new_data
   )
 }

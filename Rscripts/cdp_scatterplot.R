@@ -18,20 +18,36 @@ cdp_analysis = function(){
     cgroups = palette()[1+1:ngroups]
     if(ncol(X) > 2){
       cpar = par(no.readonly = TRUE)
-      pairs(X, bg = cgroups[iGROUP], pch = 22, oma=c(4,4,6,12))
+      if(V1){
+        pairs(X, bg = cgroups[iGROUP], pch = 22, xlim = range(X), ylim = range(X), oma=c(4,4,6,12))
+      }else{
+        pairs(X, bg = cgroups[iGROUP], pch = 22, oma=c(4,4,6,12))
+      }
       par(xpd=TRUE)
       legend(x="topright", bty = 'n', legend=vgroups,fill=cgroups, title="")
       par(cpar)
     }else{
-      plot(X, bg = cgroups[iGROUP], pch = 22)
+      if(V1){
+        plot(X, bg = cgroups[iGROUP], pch = 22, xlim = range(X), ylim = range(X))
+      }else{
+        plot(X, bg = cgroups[iGROUP], pch = 22)
+      }
       legend("topright", bty = 'n', legend=vgroups,fill=cgroups, title="")
     }
     
   }else{
     if(ncol(X) > 2){
-      pairs(X, bg = 1, pch = 22)
+      if(V1){
+        pairs(X, bg = 1, pch = 22, xlim = range(X), ylim = range(X))
+      }else{
+        pairs(X, bg = 1, pch = 22)
+      }
     }else{
-      plot(X, bg = 1, pch = 22)
+      if(V1){
+        plot(X, bg = 1, pch = 22, xlim = range(X), ylim = range(X))
+      }else{
+        plot(X, bg = 1, pch = 22)
+      }
     }
   }
   

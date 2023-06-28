@@ -32,7 +32,10 @@ import java.awt.MenuBar;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -52,6 +55,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -206,7 +210,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
     }
     void showText(){    
         String outputString[] = re.eval("unlist(cdp_res[['text']])").asStringArray();
-        if(outputString.length > 0){
+        if(outputString.length > 1 | (outputString.length == 1 & outputString[0].compareTo("") != 0) ){
             CoDaPackMain.outputPanel.addOutput(new OutputText(analysisTitle));
             //System.out.println(Arrays.toString(outputString));
             CoDaPackMain.outputPanel.addOutput(new OutputForR(outputString));
@@ -265,13 +269,13 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
     void showGraphics(){
         
         String fnames[] = re.eval("cdp_res$graph").asStringArray();
+        String pnames[] = re.eval("names(cdp_res$graph)").asStringArray();
+        System.out.println(Arrays.toString(fnames));
+        System.out.println(Arrays.toString(pnames));
         if(fnames != null){
-            System.out.println(Arrays.toString(fnames));
-            for(String fname: fnames){
-                RPlotWindow jf = new RPlotWindow(fname);
+            RPlotWindow jf = new RPlotWindow(fnames, pnames);
                 jf.setSize(PLOT_WIDTH, PLOT_HEIGHT);
                 jf.setVisible(true);
-            }
         }
         /*
         for(int i=0; i < numberOfGraphics; i++){
@@ -474,33 +478,105 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
             // //submenuExport.add(menuItem);
             // menuItem = new JMenuItem("Quit");
 
-        public RPlotWindow(String fname){
-            JSVGCanvas c = new JSVGCanvas();
-            String uri = new File(fname).toURI().toString();
-            c.setURI(uri);
-            getContentPane().add(c);
-
-            //
-            menuSaveSVG.addActionListener((ActionEvent e) -> {
-                System.out.println("Button was clicked");
-                JFileChooser jf = new JFileChooser();
-                jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
-                FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    "SVG graphic", "svg");
-                jf.setFileFilter(filter);
-                int returnVal = jf.showSaveDialog(this);
-                if(returnVal == JFileChooser.APPROVE_OPTION){
-                    File f = new File(fname);
-                    String path = jf.getSelectedFile().getAbsolutePath();
-                    File f2 = new File(path);
-                    f.renameTo(f2);
-                    CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
+        public RPlotWindow(String[] fnames, String[] pnames){
+            if(fnames.length == 1){
+                String fname = fnames[0];
+                JSVGCanvas c = new JSVGCanvas();
+                String uri = new File(fname).toURI().toString();
+                c.setURI(uri);
+                getContentPane().add(c);
+                if(pnames != null){
+                    this.setTitle(pnames[0]);
+                }else{
+                    this.setTitle(analysisTitle);
                 }
-            });
+                
+                menuSaveSVG.addActionListener((ActionEvent e) -> {
+                    System.out.println("Button was clicked");
+                    JFileChooser jf = new JFileChooser();
+                    jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "SVG graphic", "svg");
+                    jf.setFileFilter(filter);
+                    int returnVal = jf.showSaveDialog(this);
+                    if(returnVal == JFileChooser.APPROVE_OPTION){
+                        File f = new File(fname);
+                        String path = jf.getSelectedFile().getAbsolutePath();
+                        File f2 = new File(path);
+                        f.renameTo(f2);
+                        CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
+                    }
+                });
+            }else{
+                JTabbedPane tabbedPane = new JTabbedPane();                
+                for(int i=0;i<fnames.length;i++){
+                    String pname = "plot " + i+1;
+                    if(pnames.length == fnames.length){
+                        pname = pnames[i];
+                    }
+                    String fname = fnames[i];
+                    JSVGCanvas c = new JSVGCanvas();
+                    String uri = new File(fname).toURI().toString();
+                    c.setURI(uri);
+                    getContentPane().add(c);
+                    tabbedPane.addTab(pname, null, c);
+                    getContentPane().add(tabbedPane);
+                }
+                menuSaveSVG.addActionListener((ActionEvent e) -> {
+                    JFileChooser jf = new JFileChooser();
+                    jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "SVG graphic", "svg");
+                    jf.setFileFilter(filter);
+                    int returnVal = jf.showSaveDialog(this);
+                    if(returnVal == JFileChooser.APPROVE_OPTION){
+                        int sel_ind = tabbedPane.getSelectedIndex();
+                        File f = new File(fnames[sel_ind]);
+                        String path = jf.getSelectedFile().getAbsolutePath();
+                        File f2 = new File(path);
+                        // f.renameTo(f2);
+                        try {
+                            Files.copy(f.toPath(), f2.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
+                    }
+                });
+            }            
             menuFile.add(menuSaveSVG);
             menuBar.add(menuFile);
             setJMenuBar(menuBar);
         }
+        // public RPlotWindow(String[] fnames){
+        //     JSVGCanvas c = new JSVGCanvas();
+        //     for(fname in fnames)
+        //     String uri = new File(fname).toURI().toString();
+        //     c.setURI(uri);
+        //     getContentPane().add(c);
+
+        //     //
+        //     menuSaveSVG.addActionListener((ActionEvent e) -> {
+        //         System.out.println("Button was clicked");
+        //         JFileChooser jf = new JFileChooser();
+        //         jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
+        //         FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        //             "SVG graphic", "svg");
+        //         jf.setFileFilter(filter);
+        //         int returnVal = jf.showSaveDialog(this);
+        //         if(returnVal == JFileChooser.APPROVE_OPTION){
+        //             File f = new File(fname);
+        //             String path = jf.getSelectedFile().getAbsolutePath();
+        //             File f2 = new File(path);
+        //             f.renameTo(f2);
+        //             CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
+        //         }
+        //     });
+        //     menuFile.add(menuSaveSVG);
+        //     menuBar.add(menuFile);
+        //     setJMenuBar(menuBar);
+        // }
 
     }
 

@@ -409,6 +409,7 @@ public final class CoDaPackMain extends JFrame {
 
     public void updateDataFrame(DataFrame df) {
         dataList.setData(df);
+        dataFrameSelector.setSelectedItem(df.name);
         tablePanel.setDataFrame(df);
     }
 
