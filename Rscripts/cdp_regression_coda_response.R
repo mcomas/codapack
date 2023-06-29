@@ -16,7 +16,7 @@ cdp_analysis = function(){
   colnames(H) = paste0('ilr.', 1:ncol(H))
   
   nccol = pmax(3, nchar(colnames(Y)))
-  text_output = c("Basis:", capture.output({
+  text_output = c("Partition:", capture.output({
     cat(sprintf(sprintf("%%%ds", nccol), colnames(Y)), "\n")
     cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisY), byrow = TRUE, ncol = ncol(Y)),
               1,

@@ -42,7 +42,7 @@ cdp_analysis = function(){
   if(V2) new_data[['fitted.values']] = LM$fitted.values
   
   nccol = pmax(3, nchar(colnames(X)))
-  text_output = c("Basis:", capture.output({
+  text_output = c("Partition:", capture.output({
   cat(sprintf(sprintf("%%%ds", nccol), colnames(X)), "\n")
   cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisX), byrow = TRUE, ncol = ncol(X)),
         1,

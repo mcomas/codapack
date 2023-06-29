@@ -6,10 +6,11 @@ cdp_check = function(){
   if(!is.null(cond1)) return(cond1)
 }
 cdp_analysis = function(){
-  H = coda.base::coordinates(X, basis = 'ilr')
+  save.image("Rscripts/cdp_manova.RData")
+  H = coda.base::coordinates(X, basis = 'cdp')
   
   mva<-manova(H~GROUP)
-  output = "<p><b>Manova table</b></p>"
+  output = "Manova table:"
   output = c(output, gsub("[‘’]", "'", capture.output(summary(mva, test = V3))))
   
   
@@ -36,13 +37,22 @@ cdp_analysis = function(){
   MSSW = format_matrix(SSResiduals)
   EQUAL = c(rep("   ", length(MSSB)-nl-1), " = ", rep("   ", nl))
   MSST = format_matrix(SSTotals)
-  output = c(output, "<br/><b>Orthonormal Basis:</b><br />")
-  output = c(output, format_matrix(sign(attr(H, 'basis')), "%d", header = colnames(X)))
-  output = c(output, "<br /><b>Sum of Square Decompositions</b>")
-  output = c(output, "<br />SSTreatment + SSResiduals = SSTotal<br />")
-  output = c(output, paste0(MSSB, SUM, MSSW, EQUAL, MSST))
+  
   output = c(output, sprintf("<br/>R² = 1 - trace(SSResiduals) / trace(SSTotal) = %0.2f", 
                              sum(diag(SSTreatment)) / sum(diag(SSTotals))))
+  if(V4){
+    output = c(output, "\nSum of Squares Decomposition:")
+    nccol = pmax(3, nchar(colnames(X)))
+    BasisX = sign(attr(H, 'basis'))
+    output = c(output, "", capture.output({
+      cat(sprintf(sprintf("%%%ds", nccol), colnames(X)), "\n")
+      cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisX), byrow = TRUE, ncol = ncol(X)),
+                1,
+                paste, collapse=' '), sep='\n')
+    }))
+    output = c(output, "<br />SSTreatment + SSResiduals = SSTotal<br />")
+    output = c(output, paste0(MSSB, SUM, MSSW, EQUAL, MSST))
+  }
   
   df.residuals = list()
   if(V1){
@@ -52,17 +62,17 @@ cdp_analysis = function(){
   }
   
   if(V2){
-    output = c(output, "<br /><b>Pair comparison</b>")
-    output = c(output, capture.output(
-      knitr::kable(data.table::rbindlist(apply(combn(unique(GROUP), 2), 2, function(group){
-        H.sub = subset(H, GROUP %in% group)
-        GROUP.sub = GROUP[GROUP %in% group]
-        mva.sub = manova(H.sub~GROUP.sub)
-        data.frame('comparison' = paste(group, collapse = '~'),
-                   'approx F' =summary(mva.sub, test = V3)$stats[1,3],
-                   'p-value' = summary(mva.sub, test = V3)$stats[1,6])
-      })), format = 'markdown')
-    ))
+    output = c(output, "\nPair comparison:")
+    res = apply(combn(unique(GROUP), 2), 2, function(group){
+      H.sub = subset(H, GROUP %in% group)
+      GROUP.sub = GROUP[GROUP %in% group]
+      mva.sub = manova(H.sub~GROUP.sub)
+      data.frame('comparison' = paste(group, collapse = '~'),
+                 'approx F' = summary(mva.sub, test = V3)$stats[1,3],
+                 'p-value' = summary(mva.sub, test = V3)$stats[1,6])
+    })
+    res = do.call('rbind', res)
+    output = c(output, capture.output(print(res, row.names = FALSE)))
   }
   
   list(

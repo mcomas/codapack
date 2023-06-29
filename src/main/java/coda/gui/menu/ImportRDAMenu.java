@@ -59,9 +59,9 @@ public class ImportRDAMenu extends AbstractMenuDialog{
     
     
     public ImportRDAMenu(CoDaPackMain mainApp, Importer importRDA) throws ScriptException, DataFrameException {
-        super(mainApp, "Import R Data File", new DataSelector1to1(importRDA.getAvailableDataFramesNames()));
+        super(mainApp, "Import R Data File", new DataSelector1to1(importRDA.getAvailableDataFramesNames()).setBorderTitle("Select Tables"));
         
- 
+        
         //assignem mida als quadres de text
         usedPrefix = new JTextField(8);
         usedSuffix = new JTextField(8);

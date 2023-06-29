@@ -130,11 +130,11 @@ CoDaPack Menu:
                     code: "r"
                     script: "cdp_regression_coda_response.R"
                     options: ["2selectors"]
-                    textA: "Explanatory"
-                    textB: "Compositional response"
+                    textA: "Explanatory cariables"
+                    textB: "Response composition"
                     controls:
                         - basis: 
-                            name: "Response basis"
+                            name: "Response partition"
                             selector: "Y"
                         - boolean: "Residuals"
                         - boolean: "Fitted values"
@@ -143,11 +143,11 @@ CoDaPack Menu:
                     code: "r"
                     script: "cdp_regression_coda_explanatory.R"
                     options: ["2selectors"]
-                    textA: "Compositional explanatory"
-                    textB: "Response"
+                    textA: "Explanatory composition"
+                    textB: "Response variable"
                     controls:
                         - basis: 
-                            name: "Explanatory basis"
+                            name: "Explanatory partition"
                             selector: "X"
                         - boolean: "Residuals"
                         - boolean: "Fitted values"
@@ -157,7 +157,7 @@ CoDaPack Menu:
                     script: "cdp_regression_real.R"
                     options: ["2selectors"]
                     textA: "Explanatory variables"
-                    textB: "Response variables"
+                    textB: "Response variable"
                     controls:
                         - boolean: "Residuals"
                         - boolean: "Fitted values"
@@ -191,6 +191,7 @@ CoDaPack Menu:
                     - select:
                         name: "Test"
                         values: ["Pillai", "Wilks", "Hotelling-Lawley", "Roy", "Spherical"]
+                    - boolean: "Sum-Squares"
             - Discriminant Analysis:
                 id: "DiscriminantAnalysis"
                 code: "r"

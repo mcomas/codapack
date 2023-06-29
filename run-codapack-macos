@@ -1,12 +1,17 @@
 #!/bin/zsh
-
+ROOT="$(dirname "$0")"
 # source env_variables
-export JAVA_HOME=jdk-17.0.7.jdk/Contents/Home
+export JAVA_HOME=$ROOT/jdk-17.0.7.jdk/Contents/Home
 export PATH=$JAVA_HOME/bin:$PATH
 export R_HOME=/Library/Frameworks/R.framework/Versions/Current/Resources
-export R_LIBS_USER=Rlibraries
+export R_LIBS_USER=$ROOT/Rlibraries
 
-cd "$(dirname "$0")"
+echo $JAVA_HOME
+echo $PATH
+echo $R_HOME
+echo $R_LIBS_USER
+
+cd $ROOT
 Rscript install_packages.R && java -Djava.library.path="$R_LIBS_USER/rJava/jri" -classpath "target/classes:target/dependency/*" coda.gui.CoDaPackMain
 
 # marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAVA_HOME

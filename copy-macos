@@ -13,7 +13,7 @@ cp -f build-codapack-macos $OUTDIR/build-codapack
 cp -f run-codapack-macos $OUTDIR/run-codapack
 
 chmod -R a+x $OUTDIR/apache-maven-3.9.2/bin
-chmod -R a+x $OUTDIR/jdk-17.0.7/bin
+# chmod -R a+x $OUTDIR/jdk-17.0.7/bin
 chmod a+x $OUTDIR/build-codapack
 chmod a+x $OUTDIR/run-codapack
 

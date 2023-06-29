@@ -43,6 +43,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 /**
  *
  * @author mcomas
@@ -52,7 +54,7 @@ public final class DataSelector1to1 extends DataSelector {
     private JList<String> vars_available = new JList<String>();
     private JList<String> vars_selected = new JList<String>();
     private JComboBox<String> var_group = new JComboBox<String>();
-
+    private TitledBorder dsBorder = null;
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
     int releaseIndex = -1;
@@ -173,14 +175,17 @@ public final class DataSelector1to1 extends DataSelector {
 
         return res;
     }
-
+    public DataSelector setBorderTitle(String title){
+        dsBorder.setTitle(title);
+        return this;
+    }
     private void initComponents() {
         
         //setLayout(new GridBagLayout());
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         //GridBagConstraints c = new GridBagConstraints(0,0,1,1,0.5,1,GridBagConstraints.CENTER,GridBagConstraints.BOTH, new Insets(0,0,0,0), 40, 0);
-      
-        setBorder(BorderFactory.createTitledBorder("Select variables"));
+        dsBorder = BorderFactory.createTitledBorder("Select variables");        
+        setBorder(dsBorder);
     
         JPanel p_vars_available = new JPanel(new BorderLayout());
         p_vars_available.setBorder(BorderFactory.createTitledBorder("Available"));

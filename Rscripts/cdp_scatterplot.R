@@ -19,7 +19,7 @@ cdp_analysis = function(){
     if(ncol(X) > 2){
       cpar = par(no.readonly = TRUE)
       if(V1){
-        pairs(X, bg = cgroups[iGROUP], pch = 22, xlim = range(X), ylim = range(X), oma=c(4,4,6,12))
+        pairs(X, bg = cgroups[iGROUP], pch = 22, asp=1) #xlim = range(X), ylim = range(X), oma=c(4,4,6,12))
       }else{
         pairs(X, bg = cgroups[iGROUP], pch = 22, oma=c(4,4,6,12))
       }
@@ -28,7 +28,7 @@ cdp_analysis = function(){
       par(cpar)
     }else{
       if(V1){
-        plot(X, bg = cgroups[iGROUP], pch = 22, xlim = range(X), ylim = range(X))
+        plot(X, bg = cgroups[iGROUP], pch = 22, asp=1) #xlim = range(X), ylim = range(X))
       }else{
         plot(X, bg = cgroups[iGROUP], pch = 22)
       }
@@ -38,13 +38,13 @@ cdp_analysis = function(){
   }else{
     if(ncol(X) > 2){
       if(V1){
-        pairs(X, bg = 1, pch = 22, xlim = range(X), ylim = range(X))
+        pairs(X, bg = 1, pch = 22, asp=1) #xlim = range(X), ylim = range(X))
       }else{
         pairs(X, bg = 1, pch = 22)
       }
     }else{
       if(V1){
-        plot(X, bg = 1, pch = 22, xlim = range(X), ylim = range(X))
+        plot(X, bg = 1, pch = 22, asp = 1) #xlim = range(X), ylim = range(X))
       }else{
         plot(X, bg = 1, pch = 22)
       }
