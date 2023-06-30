@@ -1083,12 +1083,25 @@ public final class CoDaPackMain extends JFrame {
         }
     }
 
+    static boolean jriAvailable = true;
+    static {
+        var path = System.getProperty("java.library.path");
+        
+        try {
+            System.loadLibrary("jri");
+        } catch (UnsatisfiedLinkError e) {
+            System.out.println("JRI not detected");
+            System.out.println("Looking for library at: " + path.toString());
+            
+            jriAvailable = false;
+        }        
+    }
     /**
      * @param args the command line arguments
      */
     static boolean is_R_available(){
         // System.out.println("R_HOME =" + System.getenv("R_HOME"));
-        if(System.getenv("R_HOME") == null) return(false);
+        if(System.getenv("R_HOME") == null | !jriAvailable) return(false);
         return(Rengine.versionCheck());
         // for(String v: System.getenv().keySet()){
         //     System.out.println(v + " = " + System.getenv(v));
@@ -1109,6 +1122,7 @@ public final class CoDaPackMain extends JFrame {
         if(R_available){
             re = new RScriptEngine(Rargs, false, null);
             re.eval("options(width=10000)");
+            re.eval("Sys.setlocale('LC_NUMERIC','C')");
         }
         
         try {
