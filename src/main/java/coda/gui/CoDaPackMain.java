@@ -36,6 +36,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -1085,6 +1086,8 @@ public final class CoDaPackMain extends JFrame {
 
     static boolean jriAvailable = true;
     static {
+        
+
         var path = System.getProperty("java.library.path");
         
         try {
@@ -1094,7 +1097,10 @@ public final class CoDaPackMain extends JFrame {
             System.out.println("Looking for library at: " + path.toString());
             
             jriAvailable = false;
-        }        
+        }
+        
+        Properties props = System.getProperties();
+        props.list(System.out);
     }
     /**
      * @param args the command line arguments

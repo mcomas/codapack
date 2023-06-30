@@ -91,7 +91,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
                              DataSelector dataSelector) throws JSONException{
         super(mainApp, title + " Menu", dataSelector); 
         analysisTitle = title;
-        System.out.println("Controls: " + controls.toString());
+        // System.out.println("Controls: " + controls.toString());
         mainClass = this;
         build_optionPanel(r, Rscript, controls);
     }
@@ -298,7 +298,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
             String type = (String) json_obj.sortedKeys().next();
             switch(type){
                 case "options":
-                    System.out.println("options");
+                    // System.out.println("options");
                     JSONObject obj = json_obj.getJSONObject(type);
                     String lbl = obj.getString("label");
 
@@ -318,7 +318,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
                             String type2 = (String) json_obj2.sortedKeys().next();
                             switch(type2){
                                 case "string":
-                                    System.out.println("string submenu");
+                                    // System.out.println("string submenu");
                                     break;
                                 case "numeric":
                                     JTextField T2 = new JTextField("", 5);
@@ -329,10 +329,10 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
                                     PB3.add(Box.createHorizontalStrut(10));
                                     PB3.add(T2);
                                     jps[j].add(PB3);
-                                    System.out.println("numeric submenu");
+                                    // System.out.println("numeric submenu");
                                     break;
                                 case "boolean":
-                                    System.out.println("boolean submenu");
+                                    // System.out.println("boolean submenu");
                                     String label2 = null;
                                     boolean checked2 = false;
                                     if(json_obj2.get(type2) instanceof JSONObject){
@@ -352,7 +352,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
                                     break;
                             }
                         }
-                        System.out.println(json_arr.getJSONObject(j).toString());
+                        // System.out.println(json_arr.getJSONObject(j).toString());
                     }
                     JComboBox<String> jcb_options = new JComboBox<String>(str1);
                     JPanel PB = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
@@ -367,7 +367,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
 
                     break;
                 case "select":
-                    System.out.println("Menu select line");
+                    // System.out.println("Menu select line");
                     String name = json_obj.getJSONObject(type).getString("name");
                     JSONArray values = json_obj.getJSONObject(type).getJSONArray("values");
                     String str_v[] = new String[values.length()];
@@ -402,7 +402,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
                     addCDP_Line(new CDP_Numeric(num_label, num_value));
                     break;
                 case "basis":
-                    System.out.println("Basis menu");
+                    // System.out.println("Basis menu");
                     addCDP_Line(new CDP_Basis(json_obj.getJSONObject(type).getString("name"), 
                                               json_obj.getJSONObject(type).getString("selector")));
                     // addCDP_Line(new CDP_Basis(json_obj.getJSONObject(type).getString("name")));

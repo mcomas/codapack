@@ -329,7 +329,7 @@ public class CoDaPackMenu extends JMenuBar {
                     if(json_obj.has("script") & json_obj.has("controls")){
                         JSONArray json_controls = json_obj.getJSONArray("controls");
                         String Rscript = json_obj.getString("script");
-                        System.out.println(json_controls.toString());
+                        // System.out.println(json_controls.toString());
                         if(json_obj.has("options")){
                             ArrayList<String> loptions = new ArrayList<String>();
                             if(json_obj.get("options") instanceof String){

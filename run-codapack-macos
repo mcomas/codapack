@@ -2,9 +2,9 @@
 ROOT="$(dirname "$0")"
 # source env_variables
 export JAVA_HOME=$ROOT/jdk-17.0.7.jdk/Contents/Home
+export R_LIBS_USER=$ROOT/Rlibraries
 export PATH=$JAVA_HOME/bin:$R_LIBS_USER/rJava/jri:$PATH
 export R_HOME=/Library/Frameworks/R.framework/Versions/Current/Resources
-export R_LIBS_USER=$ROOT/Rlibraries
 
 echo $JAVA_HOME
 echo $PATH
