@@ -15,3 +15,12 @@ cdp_check_compositional = function(X, zero_allowed = FALSE, na_allowed = FALSE){
   if(!cond2 & zero_allowed) return("No negative parts are allowed")
   
 }
+cdp_print_sbp = function(sbp, pnames){
+  nccol = pmax(3, nchar(pnames))
+  text_output = c("Partition:", capture.output({
+    cat(sprintf(sprintf("%%%ds", nccol), pnames), "\n")
+    cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), sbp), byrow = TRUE, ncol = length(pnames)),
+              1,
+              paste, collapse=' '), sep='\n')
+  }))
+}

@@ -15,13 +15,14 @@ cdp_analysis = function(){
   H = coda.base::coordinates(Y, basis = coda.base::sbp_basis(BasisY))
   colnames(H) = paste0('ilr.', 1:ncol(H))
   
-  nccol = pmax(3, nchar(colnames(Y)))
-  text_output = c("Partition:", capture.output({
-    cat(sprintf(sprintf("%%%ds", nccol), colnames(Y)), "\n")
-    cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisY), byrow = TRUE, ncol = ncol(Y)),
-              1,
-              paste, collapse=' '), sep='\n')
-  }))
+  text_output = cdp_print_sbp(BasisY, colnames(Y))
+  # nccol = pmax(3, nchar(colnames(Y)))
+  # text_output = c("Partition:", capture.output({
+  #   cat(sprintf(sprintf("%%%ds", nccol), colnames(Y)), "\n")
+  #   cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisY), byrow = TRUE, ncol = ncol(Y)),
+  #             1,
+  #             paste, collapse=' '), sep='\n')
+  # }))
   
   
   str_y = colnames(H)

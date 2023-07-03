@@ -42,14 +42,16 @@ cdp_analysis = function(){
                              sum(diag(SSTreatment)) / sum(diag(SSTotals))))
   if(V4){
     output = c(output, "\nSum of Squares Decomposition:")
-    nccol = pmax(3, nchar(colnames(X)))
-    BasisX = sign(attr(H, 'basis'))
-    output = c(output, "", capture.output({
-      cat(sprintf(sprintf("%%%ds", nccol), colnames(X)), "\n")
-      cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisX), byrow = TRUE, ncol = ncol(X)),
-                1,
-                paste, collapse=' '), sep='\n')
-    }))
+    
+    output = c(output, "", cdp_print_sbp(sign(attr(H, 'basis')), colnames(X)))
+    # nccol = pmax(3, nchar(colnames(X)))
+    # BasisX = sign(attr(H, 'basis'))
+    # output = c(output, "", capture.output({
+    #   cat(sprintf(sprintf("%%%ds", nccol), colnames(X)), "\n")
+    #   cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisX), byrow = TRUE, ncol = ncol(X)),
+    #             1,
+    #             paste, collapse=' '), sep='\n')
+    # }))
     output = c(output, "<br />SSTreatment + SSResiduals = SSTotal<br />")
     output = c(output, paste0(MSSB, SUM, MSSW, EQUAL, MSST))
   }

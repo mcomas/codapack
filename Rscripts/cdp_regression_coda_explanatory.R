@@ -41,13 +41,14 @@ cdp_analysis = function(){
   if(V1) new_data[['residuals']] = LM$residuals
   if(V2) new_data[['fitted.values']] = LM$fitted.values
   
-  nccol = pmax(3, nchar(colnames(X)))
-  text_output = c("Partition:", capture.output({
-  cat(sprintf(sprintf("%%%ds", nccol), colnames(X)), "\n")
-  cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisX), byrow = TRUE, ncol = ncol(X)),
-        1,
-        paste, collapse=' '), sep='\n')
-  }))
+  text_output = cdp_print_sbp(BasisX, colnames(X))
+  # nccol = pmax(3, nchar(colnames(X)))
+  # text_output = c("Partition:", capture.output({
+  # cat(sprintf(sprintf("%%%ds", nccol), colnames(X)), "\n")
+  # cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisX), byrow = TRUE, ncol = ncol(X)),
+  #       1,
+  #       paste, collapse=' '), sep='\n')
+  # }))
   text_output = c(text_output, capture.output(summary(LM)))
   text_output = gsub("[‘’]", "'", text_output)
   

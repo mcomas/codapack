@@ -1086,8 +1086,7 @@ public final class CoDaPackMain extends JFrame {
 
     static boolean jriAvailable = true;
     static {
-        
-
+    
         var path = System.getProperty("java.library.path");
         
         try {
@@ -1098,7 +1097,16 @@ public final class CoDaPackMain extends JFrame {
             
             jriAvailable = false;
         }
-        
+        if(!jriAvailable){
+            try {
+            System.load("Rlibraries/rJava/jri/libjri.jnilib");
+            jriAvailable = true;
+        } catch (UnsatisfiedLinkError e) {
+            System.out.println("Error when loading Rlibraries/rJava/jri/libjri.jnilib");
+            
+            jriAvailable = false;
+        }
+        }
         Properties props = System.getProperties();
         props.list(System.out);
     }

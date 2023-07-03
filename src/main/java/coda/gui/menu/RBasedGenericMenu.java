@@ -150,7 +150,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
         }
        
 
-        re.eval("source('Rscripts/cdp_helper_functions.R')");
+        re.eval("source('Rscripts/.cdp_helper_functions.R')");
         String error_in = re.eval("cdp_check()").asString();
         if(error_in != null){
             JOptionPane.showMessageDialog(this, error_in);
