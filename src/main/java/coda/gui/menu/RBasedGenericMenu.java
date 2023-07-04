@@ -91,6 +91,9 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
                              DataSelector dataSelector) throws JSONException{
         super(mainApp, title + " Menu", dataSelector); 
         analysisTitle = title;
+        
+        setHelpMenuConfiguration("Help/" + Rscript.replace(".R", ".yaml"), title);
+        
         // System.out.println("Controls: " + controls.toString());
         mainClass = this;
         build_optionPanel(r, Rscript, controls);

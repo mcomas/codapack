@@ -69,12 +69,15 @@ public final class HelpMenu extends JFXPanel {
 
     public HelpMenu(String yamlPath, String title) throws FileNotFoundException {
 
+        System.out.println("Opening help file: " + yamlPath);
+
         this.urlYamlFile = yamlPath;
         this.helpTitle = title;
         Map<String, Object> map = Yaml.loadType(new File(this.urlYamlFile), HashMap.class);
 
         inicialitzateAtributes(map);
 
+        
         try {
             fileWriter = new OutputStreamWriter(new FileOutputStream(CoDaPackConf.tmpFile("Help.html"), false),
                     StandardCharsets.ISO_8859_1);
@@ -99,11 +102,16 @@ public final class HelpMenu extends JFXPanel {
 
         /* configuracio inicial MathJax */
 
-        helpText = "<html><head><script type=\"text/javascript\" async src=\"file://" + CoDaPackConf.mathJaxPath
-                + "?config=TeX-MML-AM_CHTML-full\"></script></head>";
+        
+        // helpText = "<html><head><script type=\"text/javascript\" async src=\"file://" + CoDaPackConf.mathJaxPath
+        //         + "?config=TeX-MML-AM_CHTML-full\"></script></head>";
 
+        
+        String strMathJaxLib = "<script async src=\"https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_CHTML\"></script>";
         /* name */
+        System.out.println(strMathJaxLib);
 
+        helpText = "<html><head>%s</head><body>".formatted(strMathJaxLib);
         helpText += "<center><h2>" + this.helpTitle + "</h2></center>";
 
         /* description */
@@ -149,7 +157,7 @@ public final class HelpMenu extends JFXPanel {
             helpText += "</ul>";
         }
 
-        helpText += "</html>";
+        helpText += "</body></html>";
 
         return (new OutputText(helpText));
     }
