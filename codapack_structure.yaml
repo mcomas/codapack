@@ -130,7 +130,7 @@ CoDaPack Menu:
                     code: "r"
                     script: "cdp_regression_coda_response.R"
                     options: ["2selectors"]
-                    textA: "Explanatory cariables"
+                    textA: "Explanatory variables"
                     textB: "Response composition"
                     controls:
                         - basis: 
@@ -202,7 +202,6 @@ CoDaPack Menu:
                     - boolean: "Discriminant score"
                     - boolean: "Posterior probability"
                     - boolean: "Maximum posterior classification"
-
         - Log-Ratio Normality Test:
             id: "LogRatioNormalityTest"
         - Univariate Normality Test:
@@ -216,15 +215,28 @@ CoDaPack Menu:
     - Graphs:
         - Ternary/Quaternary Plot:
             id: "TernaryQuaternaryPlot"
-        - Ternary/Quaternary Plot (Empty):
-            id: "TernaryQuaternaryPlotEmpty"
         - Ternary/Quaternary PC Plot:
             id: "TernaryQuaternaryPCPlot"
-        - Separator
-        - Predictive Region:
+        - Ternary Predictive Region:
             id: "PredictiveRegionPlot"
-        - Center Confidence Region:
+        - Ternary Center Confidence Region:
             id: "CenterConfidenceRegionPlot"
+        - Ternary Plot Builder:
+            id: "TernaryQuaternaryPlotEmpty"
+        - Separator
+        - Geometric Mean Barplot:
+            id: "GeometricMeanBarplot"
+            code: "r"
+            script: "cdp_geometric_mean_barplot.R"
+            options: ["groups"]
+            controls: []
+        - CLR-biplot:
+            id: "CLRBiplot"
+        - ILR/CLR-biplot:
+            id: "ILRCLRBiplot"
+        - Balance Dendrogram:
+            id: "BalanceDendrogram"
+        - Separator
         - Boxplot:
             id: "Boxplot"
             code: "r"
@@ -246,15 +258,3 @@ CoDaPack Menu:
             script: "cdp_mosaic_plot.R"
             options: ["only_categoric"]
             controls: []
-        - Geometric Mean Barplot:
-            id: "GeometricMeanBarplot"
-            code: "r"
-            script: "cdp_geometric_mean_barplot.R"
-            options: ["groups"]
-            controls: []
-        - CLR-biplot:
-            id: "CLRBiplot"
-        - ILR/CLR-biplot:
-            id: "ILRCLRBiplot"
-        - Balance Dendrogram:
-            id: "BalanceDendrogram"

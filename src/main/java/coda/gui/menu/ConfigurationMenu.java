@@ -94,34 +94,34 @@ public class ConfigurationMenu extends CoDaPackDialog{
         add(label5);
         add(closure);
         
-        JLabel label6 = new JLabel("Show Dev Menu");
-        menuDevelopment = new JCheckBox();
-        menuDevelopment.setSelected(false);
-        add(label6);
-        add(menuDevelopment);
+        // JLabel label6 = new JLabel("Show Dev Menu");
+        // menuDevelopment = new JCheckBox();
+        // menuDevelopment.setSelected(false);
+        //add(label6);
+        //add(menuDevelopment);
         
-        scriptsDirectory = new JButton("Change scripts directory");
-        scriptsDirectory.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                chooser = new JFileChooser();
-                chooser.setCurrentDirectory(new File(CoDaPackConf.rScriptPath));
-                chooser.setDialogTitle("R Scripts Directory Path");
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                chooser.setAcceptAllFileFilterUsed(false);
-                JFrame chooserFrame = new JFrame();
-                chooserFrame.setSize(new Dimension(200,200));
+        // scriptsDirectory = new JButton("Change scripts directory");
+        // scriptsDirectory.addActionListener(new ActionListener(){
+        //     public void actionPerformed(ActionEvent e){
+        //         chooser = new JFileChooser();
+        //         chooser.setCurrentDirectory(new File(CoDaPackConf.rScriptPath));
+        //         chooser.setDialogTitle("R Scripts Directory Path");
+        //         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        //         chooser.setAcceptAllFileFilterUsed(false);
+        //         JFrame chooserFrame = new JFrame();
+        //         chooserFrame.setSize(new Dimension(200,200));
                 
-                if(chooser.showOpenDialog(chooserFrame) == JFileChooser.APPROVE_OPTION){
-                    String url = chooser.getSelectedFile().getAbsolutePath();
-                    url = url.replaceAll("\\\\", "/");
-                    CoDaPackConf.setScriptsPath(url);
-                }
-                else{
-                    chooserFrame.dispose();
-                }
-            }
-        });
-        add(scriptsDirectory);
+        //         if(chooser.showOpenDialog(chooserFrame) == JFileChooser.APPROVE_OPTION){
+        //             String url = chooser.getSelectedFile().getAbsolutePath();
+        //             url = url.replaceAll("\\\\", "/");
+        //             CoDaPackConf.setScriptsPath(url);
+        //         }
+        //         else{
+        //             chooserFrame.dispose();
+        //         }
+        //     }
+        // });
+        // add(scriptsDirectory);
 
 
         panel.add(label1);
@@ -134,9 +134,9 @@ public class ConfigurationMenu extends CoDaPackDialog{
         panel.add(export);
         panel.add(label5);
         panel.add(closure);
-        panel.add(label6);
-        panel.add(menuDevelopment);
-        panel.add(scriptsDirectory);
+        // panel.add(label6);
+        // panel.add(menuDevelopment);
+        // panel.add(scriptsDirectory);
         
         JPanel south = new JPanel();
         JButton apply = new JButton("Apply");
