@@ -161,6 +161,7 @@ CoDaPack Menu:
                     controls:
                         - boolean: "Residuals"
                         - boolean: "Fitted values"
+                        - data: "Predict new data"
             - Cluster:
                 - K-means:
                     id: "KMeans"
@@ -202,6 +203,7 @@ CoDaPack Menu:
                     - boolean: "Discriminant score"
                     - boolean: "Posterior probability"
                     - boolean: "Maximum posterior classification"
+                    - data: "Predict new data"
         - Log-Ratio Normality Test:
             id: "LogRatioNormalityTest"
         - Univariate Normality Test:

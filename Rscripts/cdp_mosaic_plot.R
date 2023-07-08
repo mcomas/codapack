@@ -8,12 +8,13 @@ cdp_check = function(){
 cdp_analysis = function(){
   graphname = sprintf("%s.pdf", tempfile())
   svg(filename = graphname, width = PLOT_WIDTH, height = PLOT_HEIGTH)
-  
   plot(as.factor(as.matrix(X[,1])),as.factor(as.matrix(X[,2])), xlab=colnames(X)[1], ylab="")
   dev.off()
   
+  output_text = capture.output(addmargins(table(unlist(X[,1]), unlist(X[,2]))))
+  
   list(
-    'text' = "",
+    'text' = output_text,
     'dataframe' = list(),
     'graph' = graphname,
     'new_data' = list())

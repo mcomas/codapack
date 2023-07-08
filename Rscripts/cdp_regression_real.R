@@ -7,6 +7,7 @@ cdp_check = function(){
   
 }
 cdp_analysis = function(){
+  # save.image("Rscripts/cdp_regression_real.RData")
   LM <- lm(Y~X)
   
   
@@ -21,7 +22,10 @@ cdp_analysis = function(){
   if(V1) new_data[['residuals']] = LM$residuals
   if(V2) new_data[['fitted.values']] = LM$fitted.values
   
-  
+  if(exists('X_new')){
+    new_data2 = data.frame(predict(LM, newdata = as.data.frame(X_new)))
+    names(new_data2) = paste0(colnames(Y), '.pred')
+  }
   # Output
   list(
     'text' = list(paste("LINEAR REGRESSION"),
@@ -32,7 +36,8 @@ cdp_analysis = function(){
                   paste(gsub("[‘’]", "'", capture.output(summary(LM))))),
     'dataframe' = list(),
     'graph' = graphname,
-    'new_data' = new_data
+    'new_data' = new_data,
+    'new_data2' = new_data2
   )
 }
 

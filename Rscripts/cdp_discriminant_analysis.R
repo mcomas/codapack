@@ -1,14 +1,14 @@
 cdp_check = function(){
   if(!exists('X')) return("No data has been selected")
   if(!exists('GROUP')) return("No group has been selected")
-  
+  if(length(table(GROUP)) <= 1) return("Grouping variable needs to have two or more categories")
   cond1 = cdp_check_compositional(X)
   if(!is.null(cond1)) return(cond1)
 }
 cdp_analysis = function(){
   ################# MAIN #################
   
-  
+  save.image('Rscripts/cdp_discriminant_analysis.RData')
   H = coda.base::coordinates(X)
   prior = as.vector(prop.table(table(GROUP)))
   if(V1){
@@ -78,7 +78,11 @@ cdp_analysis = function(){
   dev.off()
   
   
-  
+  if(exists('X_new')){
+    H_new = coda.base::coordinates(X_new, coda.base::basis(H))
+    new_data2 = data.frame(predict(lda1, newdata = as.data.frame(H_new))$class)
+    names(new_data2) = paste0('group.pred')
+  }
   
   # nam <- levels(plda1$class)
   # sortida <- list(sortida,paste("Analysis of discriminant index:"))
@@ -104,7 +108,8 @@ cdp_analysis = function(){
     'text' = unlist(sortida),
     'dataframe' = list(),
     'graph' = graphname,
-    'new_data' = data.frame(DF)
+    'new_data' = data.frame(DF),
+    'new_data2' = new_data2
   )
 }
 

@@ -16,6 +16,7 @@ import coda.gui.output.OutputText;
 import coda.gui.utils.BinaryPartitionRowHeaders;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.BinaryPartitionTable;
+import coda.gui.utils.BoxDataSelector;
 import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
 import coda.gui.utils.DataSelector1to2;
@@ -38,6 +39,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -253,19 +255,36 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
     void createVariables(){
         
         int numberOfNewVar = re.eval("length(cdp_res$new_data)").asInt(); /* numero de columnes nomes*/
-        
-        for(int i=0; i < numberOfNewVar; i++){
-            String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
-            String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[["+ String.valueOf(i+1) +"]]))").asString();
-            if(isNumeric.equals("TRUE")){
-                double[] data = re.eval("as.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asDoubleArray();
-                df.addData(varName,data);
-            }
-            else{ // categoric
-                String[] data = re.eval("as.character(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asStringArray();
-                df.addData(varName, new Variable(varName,data));
+        if(numberOfNewVar > 0 ){
+            for(int i=0; i < numberOfNewVar; i++){
+                String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
+                String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[["+ String.valueOf(i+1) +"]]))").asString();
+                if(isNumeric.equals("TRUE")){
+                    double[] data = re.eval("as.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asDoubleArray();
+                    df.addData(varName,data);
+                }
+                else{ // categoric
+                    String[] data = re.eval("as.character(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asStringArray();
+                    df.addData(varName, new Variable(varName,data));
+                }
             }
             mainApplication.updateDataFrame(df);
+        }
+        numberOfNewVar = re.eval("length(cdp_res$new_data2)").asInt(); /* numero de columnes nomes*/
+        if(numberOfNewVar > 0 ){
+            for(int i=0; i < numberOfNewVar; i++){
+                String varName = re.eval("names(cdp_res$new_data2)[" + String.valueOf(i+1) + "]").asString();
+                String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data2[["+ String.valueOf(i+1) +"]]))").asString();
+                if(isNumeric.equals("TRUE")){
+                    double[] data = re.eval("as.numeric(cdp_res$new_data2[[" + String.valueOf(i+1) + "]])").asDoubleArray();
+                    new_df.addData(varName,data);
+                }
+                else{ // categoric
+                    String[] data = re.eval("as.character(cdp_res$new_data2[[" + String.valueOf(i+1) + "]])").asStringArray();
+                    new_df.addData(varName, new Variable(varName,data));
+                }
+            }
+            mainApplication.updateDataFrame(new_df);
         }
     }
 
@@ -415,6 +434,17 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
                     
                     // jScrollPane1.setViewportView(areaPart);
                     // panel.add(jScrollPane1);
+                    break;
+                case "data":
+                    String data_label = null;
+                    String data_value = "";
+                    if(json_obj.get(type) instanceof JSONObject){
+                        data_label = json_obj.getJSONObject(type).getString("name");
+                        data_value = json_obj.getJSONObject(type).getString("value");
+                    }else{
+                        data_label = json_obj.getString(type);
+                    }
+                    addCDP_Line(new CDP_Data(data_label));
                     break;
                 case "boolean":
                     String label = null;
@@ -704,7 +734,6 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
             Bbool.setSelected(checked);
             Pbool.add(Bbool);
             add(Pbool);
-
         }
         @Override
         public boolean addVariableToR() {
@@ -715,6 +744,114 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
             System.out.println(EXP);
             re.eval(EXP);
             return(true);
+        }
+    }
+    DataFrame new_df = null;
+    void configureSampleZ(JButton button){
+        boolean allRight = true;
+        Vector<String> dataFrameNames = new Vector<String>();
+        // obtenim els noms de les taules que hi han carregades
+        
+        for(int i=0; i < mainApplication.getAllDataFrames().size(); i++){
+            dataFrameNames.add(mainApplication.getAllDataFrames().get(i).name);
+        }
+        
+        BoxDataSelector bds = new BoxDataSelector(dataFrameNames.toArray(new String[dataFrameNames.size()]));
+        JDialog jd = new JDialog(this);
+        jd.add(bds);
+        jd.setSize(190,370);
+        jd.setLocationRelativeTo(this);
+        JButton accept = new JButton("Accept");
+        jd.add(accept, BorderLayout.SOUTH);
+        
+        accept.addActionListener(new java.awt.event.ActionListener() {
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                String selected[] = bds.getSelectedData();
+                int n = selected.length;
+                if(n == 1){
+                    int pos =0;
+                    for(int i=0; i < dataFrameNames.size(); i++){
+                        if(dataFrameNames.get(i).equals(selected[0])) pos = i;
+                    }
+                    new_df = mainApplication.getAllDataFrames().get(pos);
+                    button.setText(new_df.name);
+                    jd.setVisible(false);
+                }
+                //     boolean found = false; boolean foundall = true;
+                //     for(int i=0; i < nomVars.length  && foundall; i++){
+                //         found = false;
+                //         for(int j=0; j < sampleZDf.size() && !found;j++){
+                //             if(sampleZDf.get(j).getName().equals(nomVars[i])) found = true;
+                //         }
+                //         if(found == false) foundall = false;
+                //     }
+                    
+                //     if(foundall){ // creem Z SAMPLE
+                //         Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(nomVars));
+                //         int auxPos = 0;
+                //         for(int i=0; i < sampleZDf.size();i++){ // totes les columnes
+                //             if(vSelectedNames1.contains(sampleZDf.get(i).getName())){
+                //                 re.eval(vSelectedNames1.elementAt(auxPos) + " <- NULL");
+                //                 if(sampleZDf.get(i).isNumeric()){
+                //                     for(double j : sampleZDf.get(i).getNumericalData()){
+                //                         re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                //                     }
+                //                 }
+                //                 else{
+                //                     for(String j : df.get(i).getTextData()){
+                //                         re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +",'" + j + "')");
+                //                     }
+                //                 }
+                //                 auxPos++;
+                //             }
+                //         }
+                        
+                //         String dataFrameString = "Z <- data.frame(";
+                //         for(int i=0; i < nomVars.length;i++){
+                //             dataFrameString += vSelectedNames1.elementAt(i);
+                //             if(i != nomVars.length-1) dataFrameString += ",";
+                //         }
+                        
+                //         dataFrameString +=")";
+                        
+                //         re.eval(dataFrameString); // we create the dataframe in R
+                //         //dfZ = sampleZDf; // ens guardem la taula 
+                //     }
+                //     else{
+                //         re.eval("Z <- NULL");
+                //     }
+                // }
+                    
+            }
+            
+        });
+        jd.setVisible(true);
+    }
+    private class CDP_Data extends CDP_Line implements RConversion{
+        JButton button = null;
+        public CDP_Data(String label){
+            
+            JPanel Pbutton = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            button = new JButton(label);
+            button.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    configureSampleZ(button);
+                }
+            });
+            Pbutton.add(button);
+            add(Pbutton);
+        }
+        @Override
+        public boolean addVariableToR() {
+            if(new_df != null){
+                String vnum_names[] = new_df.getNumericalVariablesName();
+                double[][] dataX = new_df.getNumericalData(vnum_names);
+                addMatrixToR(dataX, vnum_names, "X_new");
+            }
+            return(true);
+            // TODO Auto-generated method stub
+            //throw new UnsupportedOperationException("Unimplemented method 'addVariableToR'");
         }
     }
     private class CDP_Basis extends CDP_Line implements RConversion{
