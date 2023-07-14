@@ -166,48 +166,52 @@ public class ImportRDA implements Importer{
 
     @Override
     public DataFrame importDataFrame(String df_name) throws DataFrameException {
-                    DataFrame dataf = new DataFrame();
-                    String E1 = "(d <- get('#DFNAME#', envir = etreball))";
-                    RList df = re.eval(E1.replace("#DFNAME#", df_name)).asList();                
-                    for(String j: df.keys()){
-                        REXP var = df.at(j);
-                        System.out.println(var.getType());
-                        int itype = var.getType();
-                        // https://www.rforge.net/org/doc/constant-values.html#org.rosuda.JRI.REXP.XT_NULL
-                        if(itype == REXP.XT_ARRAY_INT ||      // 32
-                           itype == REXP.XT_ARRAY_DOUBLE    // 33
-                            ){ // numeric
-                            String varname = j;
-                            double[] vardouble = var.asDoubleArray();
-                            System.out.println(vardouble.length);
-                            Variable vardf = new Variable(varname,vardouble);
-                            Variable vardfin = dataf.add(vardf);
-                        }
-                        if(itype == REXP.XT_ARRAY_BOOL_INT ||  // 37
-                           itype == REXP.XT_ARRAY_BOOL){       // 36
-                            String varname = j;
-                            double[] varinteger = Arrays.stream(var.asIntArray()).asDoubleStream().toArray();
-                            Variable vardf = new Variable(varname,varinteger);
-                            Variable vardfin = dataf.add(vardf);
-                        }
-                        if(itype == REXP.XT_ARRAY_STR){
-                            String varname = j;
-                            String[] varstring = var.asStringArray();
-                            
-                            System.out.println(varstring.length);
-                            Variable vardf = new Variable(varname,varstring);
-                            Variable vardfin = dataf.add(vardf);
-                           
-                        }
-                        if(itype == REXP.XT_FACTOR){
-                            String varname = j;
-                            String[] varstring = re.eval("as.character(d[['" + varname + "']])").asStringArray();
-                            System.out.println(varstring.length);
-                            Variable vardf = new Variable(varname,varstring);
-                            Variable vardfin = dataf.add(vardf);
-                        }
-                        
-                    }
+        DataFrame dataf = new DataFrame();
+        String E1 = "(d <- get('#DFNAME#', envir = etreball))";
+        RList df = re.eval(E1.replace("#DFNAME#", df_name)).asList();                
+        for(String j: df.keys()){
+            REXP var = df.at(j);
+            System.out.println(var.getType());
+            int itype = var.getType();
+            // https://www.rforge.net/org/doc/constant-values.html#org.rosuda.JRI.REXP.XT_NULL
+            if(itype == REXP.XT_ARRAY_INT ||      // 32
+                itype == REXP.XT_ARRAY_DOUBLE    // 33
+                ){ // numeric
+                String varname = j;
+                double[] vardouble = var.asDoubleArray();
+                System.out.println(vardouble.length);
+                Variable vardf = new Variable(varname,vardouble);
+                Variable vardfin = dataf.add(vardf);
+            }
+            if(itype == REXP.XT_ARRAY_BOOL_INT ||  // 37
+                itype == REXP.XT_ARRAY_BOOL){       // 36
+                String varname = j;
+                double[] varinteger = Arrays.stream(var.asIntArray()).asDoubleStream().toArray();
+                Variable vardf = new Variable(varname,varinteger);
+                Variable vardfin = dataf.add(vardf);
+            }
+            if(itype == REXP.XT_ARRAY_STR){
+                String varname = j;
+                re.eval(".v = d[['" + varname + "']]");
+                re.eval(".v[is.na(.v)] = 'na'");
+                String[] varstring = re.eval(".v").asStringArray();
+                
+                System.out.println(varstring.length);
+                Variable vardf = new Variable(varname,varstring);
+                Variable vardfin = dataf.add(vardf);
+                
+            }
+            if(itype == REXP.XT_FACTOR){
+                String varname = j;
+                re.eval(".v = as.character(d[['" + varname + "']])");
+                re.eval(".v[is.na(.v)] = 'na'");
+                String[] varstring = re.eval(".v").asStringArray();
+                System.out.println(varstring.length);
+                Variable vardf = new Variable(varname,varstring);
+                Variable vardfin = dataf.add(vardf);
+            }
+            
+        }
         return dataf;
     }
     
