@@ -111,6 +111,7 @@ public final class OutputPanel extends JFXPanel {
 
     public void addWelcome(String CoDaVersion) /**/ throws ScriptException, Exception {
         clearOutput();
+        /*
         String windowText = "<script type=\"text/javascript\" async src=\"file://" + CoDaPackConf.mathJaxPath
                 + "?config=TeX-MML-AM_CHTML\"></script>\n"
                 // + "<head><meta http-equiv=\"Content-Type\" content=\"text/html;
@@ -125,6 +126,7 @@ public final class OutputPanel extends JFXPanel {
                 + "<script src=\"JavaScriptFile.js\"></script>\n"
 
                 + "";
+                */
         // + "<canvas id=\"myChart\"></canvas>\n" ;
 
         /*

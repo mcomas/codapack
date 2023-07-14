@@ -144,7 +144,8 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
         }
 
         String SOURCE = "error = tryCatch(source('%s'), error = function(e) e$message)";
-        SOURCE = SOURCE.formatted(Paths.get(CoDaPackConf.getRScriptDefaultPath(), this.script_file).toString().replace("\\","/"));
+        
+        SOURCE = SOURCE.formatted(Paths.get(CoDaPackConf.rScriptPath, this.script_file).toString().replace("\\","/"));
         System.out.println(SOURCE);
         re.eval(SOURCE);
 

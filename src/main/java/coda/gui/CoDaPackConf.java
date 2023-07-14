@@ -35,81 +35,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Versioning history
- * 
- * 2 01 16
- * - Text in figures and other objects can be resized from menu File->
- * Configuration at tab Sizes.
- * - Exportation to R has been modified. Now, CoDaPack generates a RData file
- * instead of a source code.
- * 
- * 2 01 15
- * 
- * 
- * 2 01 14
- * - Decimal point configuration available through File->Configuration menu
- * - MAC version: Save to R menu (problem solved)
- * 
- * 2 01 13
- * - Sorry, the update 2 01 12 was not correctly integrated in CoDaPack. This
- * update correctly integrates the previous one
- * 
- * 2 01 12
- * - The user can select the fraction to be used in the zero replacement menu
- * 
- * 2 01 11
- * - Problem when exporting variables with non-regular characters to R solved
- * 
- * 2 01 10
- * - Amalgamation problems solved
- * - Export tables to R data-frames as source code
- * - Text file importation
- * - CRITICAL: CLR variances in Variation Array corrected
- * 
- * 2 01 9
- * - Datasets without headers importation problems solved
- * - In graphics: Now it is possible to associate a variable as observation name
- * - In graphics: Show/Hide all observation labels automatically
- *
- * 2 01 8
- * - Added Excel formula evaluation capabilities
- * - Order inside groups in the manually partition table
- * - Dendrogram: Counting from 1 in the ilr generated variables
- *
- * 2 01 7
- * - Predictive region estimation
- * - Confidence region for the mean
- * - Empty Ternary Plot Simplistic Editor
- * - Biplot: covariance biplot as default biplot representation
- *
- * 2 01 6
- * - Correlation matrix calculation in Classical Statistics
- * - Biplot: representation of UV decomposition
- * - Biplot: coordinates output
- *
- * 2 01 5
- *
- * - Update protocol improved
- * - IMPORTANT: xlsx files compatibilities removed
- * - Atipicality index calculation implemented
- * - Simple color menu editor for plots
- * - Add numeric variables menu allows tabs and spaces in variable names
- * - Number of groups on plots unlimited
- *
- *
  * @author mcomas
  */
 public class CoDaPackConf {
-    /*
-     * Decimal configuration output
-     * 
-     * This object keeps the last version
-     */
     public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
-    // public static String HTTP_ROOT = "http://mcomas.net/codapack/versioning/";
 
     public static String CoDaVersion = "2 03 02";
-    public static int CoDaUpdaterVersion = 4;
 
     public static int[] getVersionNum(String version_str) {
         int num[] = new int[3];
@@ -125,7 +56,7 @@ public class CoDaPackConf {
         return version[0] + "." + version[1] + "." + version[2];
     }
 
-    public static String newest(String v1, String v2) {
+    public static String newestVersion(String v1, String v2) {
         String[] version1 = v1.split(" ");
         String[] version2 = v2.split(" ");
 
@@ -181,24 +112,39 @@ public class CoDaPackConf {
     public static String decimalExportFormat = "0.00########";
     public static String closureTo = "1.0";
     public static boolean showDev = false;
-    public static String temporalDir = System.getProperty("java.io.tmpdir");
 
+    public static String temporalDir = System.getProperty("java.io.tmpdir");
     public static String tmpFile(String fname) {
         return (Paths.get(temporalDir, fname).toString());
     }
 
-    public static String workingDir = System.getProperty("user.dir");
-    public static String recentFiles = Paths.get(workingDir, ".recent_files").toString();
-    public static String usrFile(String fname) {
-        System.out.println(Paths.get(workingDir, fname).toString());
-        return (Paths.get(workingDir, fname).toString());
+    public static String workingDir = System.getenv("CDP_WORKING_DIR"); //System.getProperty("user.dir");
+    static{
+        if(workingDir == null) workingDir = System.getProperty("user.dir");
+        System.out.println("Working directory at: %s".formatted(workingDir));
     }
 
-    public static String codapackDir = ".";
+    public static String configurationFile = Paths.get(workingDir, ".codapack").toString();
+    public static String recentFiles = Paths.get(workingDir, ".recent_files").toString();
+
+
+    public static String resourcesDir = System.getenv("RESOURCES_DIR");
+    static{
+        if(resourcesDir == null) resourcesDir = ".";
+        System.out.println("Resources directory at: %s".formatted(resourcesDir));
+    }
+
+
     public static String refusedVersion = CoDaVersion;
-    public static String rScriptPath = getRScriptDefaultPath() + "/";
-    public static String helpPath = getHelpPath() + "/";
-    public static String mathJaxPath = getMathJaxPath();
+    public static String rScriptPath = System.getenv("CDP_R_SCRIPTS");
+    static{
+        if(rScriptPath == null) Paths.get(resourcesDir, "Rscripts").toString();
+        System.out.println("R scripts at: %s".formatted(rScriptPath));
+    }
+
+    public static String helpPath = Paths.get(resourcesDir, "Help").toString();
+    
+    //public static String mathJaxPath = getMathJaxPath();
 
     // private static DecimalFormat decimalOutputFormat = new
     // DecimalFormat("0.0000", decimalFormat);
@@ -211,7 +157,7 @@ public class CoDaPackConf {
     // private static DecimalFormat decimalExportFormat = new
     // DecimalFormat("0.00########");
 
-    public static String getRScriptDefaultPath() {
+    /*public static String getRScriptDefaultPath() {
         String defaultRscriptPath = Paths.get(codapackDir, "Rscripts/").toString();
         System.out.println(defaultRscriptPath);
         // if (!System.getProperty("os.name").startsWith("Windows") &
@@ -219,17 +165,19 @@ public class CoDaPackConf {
         //     defaultRscriptPath = System.getenv("SCRIPTS_DIRECTORY") + defaultRscriptPath;
         // }
         return defaultRscriptPath;
-    }
+    }*/
 
+    /*
     public static String getHelpPath() {
-        String helpPath = Paths.get(codapackDir, "Help/").toString();
+        String helpPath = Paths.get(codapackDir, "Help").toString();
         if (!System.getProperty("os.name").startsWith("Windows") &
                 !System.getProperty("os.name").startsWith("Linux")) {
             helpPath = System.getenv("HELP_DIRECTORY") + helpPath;
         }
         return helpPath;
-    }
+    }*/
 
+    /*
     public static String getMathJaxPath() {
 
         if (System.getProperty("os.name").startsWith("Windows") || System.getProperty("os.name").startsWith("Linux")) {
@@ -239,6 +187,7 @@ public class CoDaPackConf {
             return System.getenv("MATHJAX_DIRECTORY") + "MathJax.js";
         }
     }
+    */
 
     public static void setScriptsPath(String path) {
         rScriptPath = path + "/";
@@ -303,7 +252,7 @@ public class CoDaPackConf {
         return ouputColor;
     }
 
-    public static String configurationFile = usrFile(".codapack");
+    
 
     public static void saveConfiguration() {
         try {
