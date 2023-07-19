@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>console</headerType>
+  <jar>target\CoDaPack-2.03.02-jar-with-dependencies.jar</jar>
+  <outfile>CoDaPack.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>src\main\resources\icon.ico</icon>
+  <var>PATH=%PATH%;%EXEDIR%\R-4.3.1\bin\x64;%EXEDIR%\Rlibraries\rJava\jri\x64</var>
+  <var>JAVA_HOME=%EXEDIR%\jdk-17.0.7</var>
+  <var>R_HOME=%EXEDIR%\R-4.3.1</var>
+  <var>R_LIBS=%EXEDIR%\R-4.3.1\library</var>
+  <var>CDP_WORKING_DIR=%EXEDIR%</var>
+  <var>CDP_RESOURCES=%EXEDIR%</var>
+  <var>CDP_R_SCRIPTS=%EXEDIR%\Rscripts</var>
+  <jre>
+    <path>%EXEDIR%\jdk-17.0.7</path>
+    <requiresJdk>true</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion>17.0.7</minVersion>
+    <maxVersion></maxVersion>
+    <opt>-Dlaunch4j.exedir="%EXEDIR%"</opt>
+  </jre>
+</launch4jConfig>

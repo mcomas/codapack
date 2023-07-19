@@ -128,7 +128,7 @@ public class CoDaPackConf {
     public static String recentFiles = Paths.get(workingDir, ".recent_files").toString();
 
 
-    public static String resourcesDir = System.getenv("RESOURCES_DIR");
+    public static String resourcesDir = System.getenv("CDP_RESOURCES");
     static{
         if(resourcesDir == null) resourcesDir = ".";
         System.out.println("Resources directory at: %s".formatted(resourcesDir));
