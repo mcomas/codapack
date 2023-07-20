@@ -143,20 +143,24 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
             }
         }
 
+        
         String SOURCE = "error = tryCatch(source('%s'), error = function(e) e$message)";
         
-        SOURCE = SOURCE.formatted(Paths.get(CoDaPackConf.rScriptPath, this.script_file).toString().replace("\\","/"));
-        System.out.println(SOURCE);
-        re.eval(SOURCE);
+        String SOURCE_HELPER = SOURCE.formatted(Paths.get(CoDaPackConf.rScriptPath, ".cdp_helper_functions.R").toString().replace("\\","/"));
+        System.out.println(SOURCE_HELPER);
+        re.eval(SOURCE_HELPER);
+        
+        String SOURCE_CODE = SOURCE.formatted(Paths.get(CoDaPackConf.rScriptPath, this.script_file).toString().replace("\\","/"));
+        System.out.println(SOURCE_CODE);
+        re.eval(SOURCE_CODE);
 
         String errorMessage[] = re.eval("error").asStringArray();
         if(errorMessage != null){
             JOptionPane.showMessageDialog(this, "Error when reading R script file: %s".formatted(this.script_file));
             return;
         }
-       
 
-        re.eval("source('Rscripts/.cdp_helper_functions.R')");
+        // re.eval("source('Rscripts/.cdp_helper_functions.R')");
         String error_in = re.eval("cdp_check()").asString();
         if(error_in != null){
             JOptionPane.showMessageDialog(this, error_in);
