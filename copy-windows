@@ -13,7 +13,7 @@ unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
 
 cp -rf src $OUTDIR
 
-cp -f Rscripts/*.R $OUTDIR/Rscripts/
+cp -f Rscripts/{.,}**.R $OUTDIR/Rscripts/
 cp -f build-codapack.bat $OUTDIR
 cp -f run-codapack.bat $OUTDIR
 cp -f install_packages.R $OUTDIR

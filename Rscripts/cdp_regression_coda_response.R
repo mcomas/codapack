@@ -37,6 +37,7 @@ cdp_analysis = function(){
   text_output = c(text_output, deparse(LM$call))
   
   SLM = summary(LM)
+  if(ncol(H) == 1) SLM = list(SLM)
   nr = length(SLM) * nrow(SLM[[1]]$coefficients)
   COEFS = matrix(0, nrow = nr, ncol = 4)
   for(i in 1:length(SLM)){
@@ -55,7 +56,13 @@ cdp_analysis = function(){
   
   
   R2 = sum(scale(LM$fitted.values, scale = FALSE)^2) / sum(scale(H, scale = FALSE)^2) 
-  RES = unlist(anova(LM, update(LM, .~1), test = 'Wilks')[2,c('approx F', 'num Df' , 'den Df' ,'Pr(>F)')])
+  if(ncol(H) == 1){
+    RES = as.matrix(anova(update(LM, .~1), LM))[2,c('F', 'Df', 'Res.Df', 'Pr(>F)')]
+  }else{
+    F.APPROX = "(Wilks' approx.)"
+    RES = unlist(anova(LM, update(LM, .~1), test = 'Wilks')[2,c('approx F', 'num Df' , 'den Df' ,'Pr(>F)')])
+  }
+  
 
   # https://stackoverflow.com/questions/32342018/summary-lm-output-customization
   col_fw = function(col, align = 'left'){
@@ -68,24 +75,37 @@ cdp_analysis = function(){
     col = sprintf(pat, col)
     col
   }
-  col1 = col_fw(c("", paste("Response", colnames(H)), 'Overall'))
-  col2 = col_fw(c("R-squared:", sapply(SLM, function(x) formatC(x$r.squared)), formatC(R2)))
-  
-  fstat = c("F-statistic:", 
-            sapply(SLM, function(x) paste(formatC(x$fstatistic[1L]), "on", x$fstatistic[2L], "and",
-      x$fstatistic[3L], "DF,  p-value:", format.pval(pf(x$fstatistic[1L],
-                                                        x$fstatistic[2L], x$fstatistic[3L], lower.tail = FALSE)))),
-      paste(formatC(RES[1L]), "on", RES[2L], "and",
-            RES[3L], "DF,  p-value:", format.pval(pf(RES[1],
-                                                              RES[2], RES[3], lower.tail = FALSE)), "(Wilks' approx.)"))
-  col3 = col_fw(fstat)
+  summ.title = c("", paste("Response", colnames(H)))
+  summ.r2 = c("R-squared:", sapply(SLM, function(x) formatC(x$r.squared)))
+  summ.fstat = c("F-statistic:", 
+                sapply(SLM, function(x) paste(formatC(x$fstatistic[1L]), "on", x$fstatistic[2L], "and",
+                                              x$fstatistic[3L], "DF,  p-value:", 
+                                              format.pval(pf(x$fstatistic[1L],
+                                                             x$fstatistic[2L], 
+                                                             x$fstatistic[3L], 
+                                                             lower.tail = FALSE)))))
+  if(ncol(H) > 1){
+    summ.title = c(summ.title, 'Overall')
+    summ.r2 = c(summ.r2, formatC(R2))
+    summ.fstat = c(summ.fstat,
+                   paste(formatC(RES[1L]), "on", RES[2L], "and",
+                         RES[3L], "DF,  p-value:", 
+                         format.pval(pf(RES[1],
+                                        RES[2], RES[3], lower.tail = FALSE)), 
+                         F.APPROX))
+  }
+  col1 = col_fw(summ.title)
+  col2 = col_fw(summ.r2)
+  col3 = col_fw(summ.fstat)
   text_output = c(text_output, "", capture.output({
     cat(col1[1], "\t",  col2[1], "\t", col3[1], "\n")
     for(i in 1:length(SLM)){
       x = SLM[[i]]
       cat(col1[1+i], "\t", col2[1+i], "\t", col3[1+i], "\n")
     }
-    cat(col1[length(SLM)+2], "\t",  col2[length(SLM)+2], "\t", col3[length(SLM)+2], "\n")
+    if(ncol(H)>1){
+      cat(col1[length(SLM)+2], "\t",  col2[length(SLM)+2], "\t", col3[length(SLM)+2], "\n")
+    }
   }))
   
   new_data = list()

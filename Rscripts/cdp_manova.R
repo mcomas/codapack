@@ -1,12 +1,12 @@
 cdp_check = function(){
   if(!exists('X')) return("No data has been selected")
   if(!exists('GROUP')) return("No group has been selected")
-  
+  if(length(unique(GROUP)) <= 1) return("Two or more categories are needed")
   cond1 = cdp_check_compositional(X)
   if(!is.null(cond1)) return(cond1)
 }
 cdp_analysis = function(){
-  save.image("Rscripts/cdp_manova.RData")
+  # save.image("Rscripts/cdp_manova.RData")
   H = coda.base::coordinates(X, basis = 'cdp')
   
   mva<-manova(H~GROUP)
