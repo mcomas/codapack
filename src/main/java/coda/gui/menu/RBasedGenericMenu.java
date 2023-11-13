@@ -752,8 +752,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
         }
     }
     DataFrame new_df = null;
-    void configureSampleZ(JButton button){
-        boolean allRight = true;
+    void configureSampleZ(JButton button, String defaultLabel){
         Vector<String> dataFrameNames = new Vector<String>();
         // obtenim els noms de les taules que hi han carregades
         
@@ -781,6 +780,11 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
                     }
                     new_df = mainApplication.getAllDataFrames().get(pos);
                     button.setText(new_df.name);
+                    jd.setVisible(false);
+                }
+                if(n == 0){
+                    new_df = null;
+                    button.setText(defaultLabel);
                     jd.setVisible(false);
                 }
                 //     boolean found = false; boolean foundall = true;
@@ -835,13 +839,14 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
     }
     private class CDP_Data extends CDP_Line implements RConversion{
         JButton button = null;
+        String initial_label = "";
         public CDP_Data(String label){
-            
+            initial_label = label;
             JPanel Pbutton = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
             button = new JButton(label);
             button.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    configureSampleZ(button);
+                    configureSampleZ(button, initial_label);
                 }
             });
             Pbutton.add(button);

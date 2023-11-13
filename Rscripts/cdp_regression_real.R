@@ -27,7 +27,7 @@ cdp_analysis = function(){
     names(new_data2) = paste0(colnames(Y), '.pred')
   }
   # Output
-  list(
+  cdp_out = list(
     'text' = list(paste("LINEAR REGRESSION"),
                   paste("Dependent variable"),
                   paste(capture.output(cat(paste(colnames(Y), collapse=', ')))),
@@ -36,8 +36,11 @@ cdp_analysis = function(){
                   paste(gsub("[‘’]", "'", capture.output(summary(LM))))),
     'dataframe' = list(),
     'graph' = graphname,
-    'new_data' = new_data,
-    'new_data2' = new_data2
+    'new_data' = new_data
   )
+  if(exists('X_new')){
+    cdp_out[['new_data2']] = new_data2
+  }
+  cdp_out
 }
 
