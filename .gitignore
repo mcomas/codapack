@@ -13,3 +13,4 @@ renjin-3.5*
 *.log
 *.RData
 *.cdp
+*.exe
