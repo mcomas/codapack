@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch4jConfig>
-  <dontWrapJar>false</dontWrapJar>
+  <dontWrapJar>true</dontWrapJar>
   <headerType>console</headerType>
-  <jar>target\CoDaPack-2.03.02-jar-with-dependencies.jar</jar>
+  <jar>target\CoDaPack-2.03.06-jar-with-dependencies.jar</jar>
   <outfile>CoDaPack.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
-  <chdir>.</chdir>
+  <chdir></chdir>
   <priority>normal</priority>
   <downloadUrl></downloadUrl>
   <supportUrl></supportUrl>
@@ -20,6 +20,7 @@
   <var>R_LIBS=%EXEDIR%\R-4.3.1\library</var>
   <var>CDP_WORKING_DIR=%EXEDIR%</var>
   <var>CDP_RESOURCES=%EXEDIR%</var>
+  <var>R_LIBS_USER=%EXEDIR%\Rlibraries</var>
   <var>CDP_R_SCRIPTS=%EXEDIR%\Rscripts</var>
   <jre>
     <path>%EXEDIR%\jdk-17.0.7</path>
@@ -27,6 +28,6 @@
     <requires64Bit>false</requires64Bit>
     <minVersion>17.0.7</minVersion>
     <maxVersion></maxVersion>
-    <opt>-Dlaunch4j.exedir="%EXEDIR%"</opt>
+    <opt>-Dlaunch4j.exedir=&quot;%EXEDIR%&quot;</opt>
   </jre>
 </launch4jConfig>
