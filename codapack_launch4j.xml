@@ -25,7 +25,7 @@
   <jre>
     <path>%EXEDIR%\jdk-17.0.7</path>
     <requiresJdk>true</requiresJdk>
-    <requires64Bit>false</requires64Bit>
+    <requires64Bit>true</requires64Bit>
     <minVersion>17.0.7</minVersion>
     <maxVersion></maxVersion>
     <opt>-Dlaunch4j.exedir=&quot;%EXEDIR%&quot;</opt>

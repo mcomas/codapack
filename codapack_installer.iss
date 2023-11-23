@@ -21,7 +21,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf64}\{#MyAppName}
+DefaultDirName={commonpf64}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 LicenseFile=license.txt
 OutputDir=target\
@@ -38,7 +38,12 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "jdk-*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "R-*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "Rlibraries"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "Rscripts"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "src"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "target\CoDaPack-2.03.06-jar-with-dependencies.jar"; DestDir: "{app}\target"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "CoDaPack.exe"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "target\codapack-{#MyAppVersion}.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "license.txt"; DestDir: "{app}"; Flags: ignoreversion
