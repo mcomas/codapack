@@ -8,7 +8,7 @@ cdp_check = function(){
 cdp_analysis = function(){
   ################# MAIN #################
   
-  save.image('Rscripts/cdp_discriminant_analysis.RData')
+  # save.image('Rscripts/cdp_discriminant_analysis.RData')
   H = coda.base::coordinates(X)
   prior = as.vector(prop.table(table(GROUP)))
   if(V1){
@@ -44,18 +44,10 @@ cdp_analysis = function(){
   
   sortida <- c(sortida,"\nLOOCV table:")
   sortida <- c(sortida,capture.output(ct))
-  # sortida <- c(sortida,capture.output(prop.table(ct, 1)))
-  # sortida <- c(sortida,capture.output(prop.table(ct)))
   sortida <- c(sortida,sprintf("\nAccuracy: (%s)/%d = %.4f", 
                                paste(diag(ct), collapse = '+'),
                                sum(ct),
                                sum(diag(prop.table(ct)))))
-  
-  # DF1 = NULL
-  # if(V2){
-  #   P1t <- coda.base::coordinates(Z, basis = coda.base::sbp_basis(BaseX), label = 'ilr.')
-  #   DF1 <- as.data.frame(predict(lda1,newdata=P1t))
-  # }
   
   plda1 = predict(lda1, H)
   DF = NULL
@@ -76,40 +68,23 @@ cdp_analysis = function(){
   
   plot(lda1, dimen=1, type="both")
   dev.off()
-  
+
+  ################################
+  # Output
+  res = list(
+    'text' = unlist(sortida),
+    'dataframe' = list(),
+    'graph' = graphname,
+    'new_data' = data.frame(DF)
+  )
   
   if(exists('X_new')){
     H_new = coda.base::coordinates(X_new, coda.base::basis(H))
     new_data2 = data.frame(predict(lda1, newdata = as.data.frame(H_new))$class)
     names(new_data2) = paste0('group.pred')
+    res[['new_data2']] = new_data2
   }
   
-  # nam <- levels(plda1$class)
-  # sortida <- list(sortida,paste("Analysis of discriminant index:"))
-  # sortida <- list(sortida,paste(nam[1]))
-  # sortida <- list(sortida,paste(capture.output(summary(plda1$x[plda1$class==nam[1]]))))
-  # sortida <- list(sortida,paste(nam[2]))
-  # sortida <- list(sortida,paste(capture.output(summary(plda1$x[plda1$class==nam[2]]))))
-  # 
-  # name <- generateFileName(paste(tempdir(),'discriminant_index',sep="\\"))
-  # svg(name)
-  # plot(density(plda1$x[plda1$class==nam[1]]),
-  #      xlim=c(-7,7),ylim=c(0,0.5),main="lda",xlab="discriminant index")
-  # lines(density(plda1$x[plda1$class==nam[2]]),lty=2)
-  # dev.off()
-  # graphnames[2] <- name
-  
-  
-  
-  ################################
-  
-  # Output
-  list(
-    'text' = unlist(sortida),
-    'dataframe' = list(),
-    'graph' = graphname,
-    'new_data' = data.frame(DF),
-    'new_data2' = new_data2
-  )
+  res
 }
 
