@@ -1,11 +1,10 @@
 cdp_check = function(){  
   if(!exists('X')) return("No data has been selected")
-  
-  if(V5 == "0") cond1 = cdp_check_compositional(X, zero_allowed = TRUE)
+  if(V5 == "0") cond1 = cdp_check_compositional(X, zero_allowed = TRUE, na_allowed = TRUE)
   if(V5 == "NA") cond1 = cdp_check_compositional(X, zero_allowed = TRUE, na_allowed = TRUE)
   if(!is.null(cond1)) return(cond1)
   if(V5 == "0"){
-    cond2 = min(X) == 0
+    cond2 = min(X, na.rm=TRUE) == 0
     if(!cond2) return("No zero detected")
   }
   if(V5 == "NA"){
@@ -16,7 +15,7 @@ cdp_check = function(){
   
 }
 cdp_analysis = function(){
-  
+  # save.image('Rscripts/cdp_zpatterns.RData')
   graphname = NULL
   if(V4){
     graphname <- sprintf("%s.svg", tempfile())
