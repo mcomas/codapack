@@ -38,12 +38,12 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "jdk-*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "R-*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "Rlibraries"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "Rscripts"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "src"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "target\CoDaPack-2.03.06-jar-with-dependencies.jar"; DestDir: "{app}\target"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "jdk-17.0.7\*"; DestDir: "{app}\jdk-17.0.7"; Flags: ignoreversion recursesubdirs
+Source: "R-4.3.1\*"; DestDir: "{app}\R-4.3.1"; Flags: ignoreversion recursesubdirs
+Source: "Rlibraries\*"; DestDir: "{app}\Rlibraries"; Flags: ignoreversion recursesubdirs
+Source: "Rscripts\*"; DestDir: "{app}\Rscripts"; Flags: ignoreversion recursesubdirs
+Source: "src\*"; DestDir: "{app}\src"; Flags: ignoreversion recursesubdirs
+Source: "target\CoDaPack-2.03.06-jar-with-dependencies.jar"; DestDir: "{app}\target"; Flags: ignoreversion recursesubdirs
 Source: "CoDaPack.exe"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "target\codapack-{#MyAppVersion}.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "license.txt"; DestDir: "{app}"; Flags: ignoreversion
