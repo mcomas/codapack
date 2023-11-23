@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
-  <headerType>console</headerType>
+  <headerType>gui</headerType>
   <jar>target\CoDaPack-2.03.06-jar-with-dependencies.jar</jar>
   <outfile>CoDaPack.exe</outfile>
   <errTitle></errTitle>
@@ -28,6 +28,6 @@
     <requires64Bit>true</requires64Bit>
     <minVersion>17.0.7</minVersion>
     <maxVersion></maxVersion>
-    <opt>-Dlaunch4j.exedir=&quot;%EXEDIR%&quot;</opt>
+    <opt>-Dlaunch4j.exedir=&quot;%EXEDIR%&quot; -Xms1024m -Xmx1024m</opt>
   </jre>
 </launch4jConfig>
