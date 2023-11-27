@@ -6,6 +6,7 @@ cdp_check = function(){
   if(!is.null(cond1)) return(cond1)
 }
 cdp_analysis = function(){
+  # save.image(file = 'cdp_geometric_mean_barplot.RData')
   Y <- as.factor(GROUP)
   X = as.data.frame(X)  
   nOrig <- length(X)
@@ -16,12 +17,12 @@ cdp_analysis = function(){
   
   int = as.integer(Y)
   Mat = cbind.data.frame(X,int)
-  nCat = nlevels(as.factor(Y)) 
+  nCat = nlevels(Y) 
   
   #nRow <- choose(nCat,2)
   nRow <- nOrig
   nCol <- nCat
-  rm(cmat)
+  # rm(cmat)
   #cmat <- matrix(, nrow = choose(nCat,2), ncol = nCat)
   cmat <- matrix(0, nrow = nCat, ncol = nOrig)
   
@@ -37,7 +38,10 @@ cdp_analysis = function(){
   
   graphname = sprintf("%s.pdf", tempfile())
   svg(graphname, width = PLOT_WIDTH, height = PLOT_HEIGTH)
-  barplot(log(Num/Den), beside=TRUE,col=c(1:nCat))
+  M = log(Num/Den)
+  barplot(M, beside=TRUE,col=c(1:nCat), ylim = range(M) * c(1.2,1.35))
+  legend('top', levels(Y), horiz = TRUE, bty = 'n', fill = 1:nCat)
+  abline(h = 0, lty = 1)
   dev.off()
   
   list(
