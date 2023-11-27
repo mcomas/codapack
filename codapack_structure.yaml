@@ -231,7 +231,10 @@ CoDaPack Menu:
             code: "r"
             script: "cdp_geometric_mean_barplot.R"
             options: ["groups"]
-            controls: []
+            controls:
+                - select:
+                    name: "Colorize"
+                    values: ["groups", "parts"]
         - CLR-biplot:
             id: "CLRBiplot"
         - ILR/CLR-biplot:
