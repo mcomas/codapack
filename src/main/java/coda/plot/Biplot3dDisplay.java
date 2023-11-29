@@ -76,9 +76,9 @@ public class Biplot3dDisplay extends RealPlot3dDisplay{
         int s = config.getSize("label").intValue();
         //iconLabel = new TeXIcon[3];
         textLabel = new String[3];
-        textLabel[0] = "PC1_ilr";
-        textLabel[1] = "PC2_ilr";
-        textLabel[2] = "PC3_ilr";
+        textLabel[0] = "PC1";
+        textLabel[1] = "PC2";
+        textLabel[2] = "PC3";
         /*iconLabel[0] = new TeXFormula("1st").
                     createTeXIcon(TeXConstants.STYLE_DISPLAY, s);
         iconLabel[1] = new TeXFormula("2nd").

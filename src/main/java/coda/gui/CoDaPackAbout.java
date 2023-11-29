@@ -55,12 +55,11 @@ public class CoDaPackAbout extends JDialog{
         //text.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         //text.setAlignmentY(TOP_ALIGNMENT);
         String aboutText = "<h2>CoDaPack Team</h2>";
-        aboutText += "<p>CoDaPack is being developed at <a href='http://imae.udg.edu'>Deptartment of Computer Science " +
-                ", Applied Mathematics and Statistics</a> in the University of Girona</p><br>";
+        aboutText += "<p>CoDaPack is being developed at <a href='http://imae.udg.edu'>Department of Computer Science " +
+                ", Applied Mathematics and Statistics</a> at the University of Girona</p><br>";
 
-        aboutText += "<p>Please, if you detect some bug or if you think in new features send us an e-mail at:</p><br>" +
-                "<b>Marc Comas-Cuf&iacute;</b>: mcomas@imae.udg.edu,<br>" +
-                "<b>Santiago Thi&oacute;-Henestrosa</b>: thio@imae.udg.edu";
+        aboutText += "<p>Please, if you detect any bug or would like to make a suggestion, please reach us on </p><br>" +
+                "<b>Marc Comas-Cuf&iacute;</b>: mcomas@imae.udg.edu<br>";
 
         text.setText("<html><center>" + aboutText + "</center></html>");
         about.add(text, BorderLayout.CENTER);

@@ -98,7 +98,7 @@ public class CoDaPackMenu extends JMenuBar {
     public JMenuItem itemDeleteAllTables;
     public final String ITEM_DELETE_ALL_TABLES = "Delete All Tables";
     public JMenuItem itemClearOutputs;
-    public final String ITEM_CLEAR_OUTPUTS = "Clear the output";
+    public final String ITEM_CLEAR_OUTPUTS = "Clear the Output";
 
     public JMenuItem itemConfiguration;
     public final String ITEM_CONF = "Configuration";

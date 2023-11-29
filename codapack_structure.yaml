@@ -43,7 +43,7 @@ CoDaPack Menu:
         - Delete Variables:
             id: "DeleteVariables"
     - Irregular Data:
-        - Zero-Patterns:
+        - Zero Patterns:
             id: "ZeroPatterns"
             code: "r"
             script: "cdp_zpatterns.R"
@@ -62,7 +62,7 @@ CoDaPack Menu:
         - Set Detection Limit:
             id: "SetDetectionLimit"
         - Separator
-        - Non-Parametric Zero Replacement:
+        - Multiplicative Zero Replacement:
             id: "NonParametricZeroReplacement"
             code: "r"
             script: "cdp_nonparametric_zero_repl.R"
