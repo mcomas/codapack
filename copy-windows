@@ -19,8 +19,9 @@ cp -f run-codapack.bat $OUTDIR
 cp -f install_packages.R $OUTDIR
 cp -f codapack_structure.json $OUTDIR
 cp -f license.txt $OUTDIR
+cp -f pom.xml $OUTDIR
+
 cp -f codapack_installer.iss $OUTDIR
 cp -f codapack_launch4j.xml $OUTDIR
-cp -f pom.xml $OUTDIR
 
 (cd $OUTDIR && zip -r ../codapack-$VERSION.zip -r .)

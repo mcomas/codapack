@@ -15,7 +15,7 @@ cdp_analysis = function(){
   
   graphname = sprintf("%s.pdf", tempfile())
   svg(graphname, width = PLOT_WIDTH, height = PLOT_HEIGTH)
-  if(V1 == 'groups'){
+  if(V1 == 'parts'){
     barplot(M, beside=TRUE, col=1:nlevels(Y), ylim = range(M) * c(1.2,1.35))
     legend('top', levels(Y), horiz = TRUE, bty = 'n', fill = 1:nlevels(Y))
     abline(h = 0, lty = 1)
