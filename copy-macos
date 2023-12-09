@@ -3,6 +3,7 @@ OUTDIR=cdp-$VERSION
 mkdir $OUTDIR -p
 mkdir $OUTDIR/Rlibraries -p
 mkdir $OUTDIR/Rscripts -p
+mkdir $OUTDIR/Help -p
 
 tar xzvf external-programs/jdk-17.0.7_${VERSION}_bin.tar.gz -C $OUTDIR
 unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
@@ -11,6 +12,7 @@ unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
 cp -rf src $OUTDIR
 
 cp -f Rscripts/{.,}**.R $OUTDIR/Rscripts/
+cp -f Help/{.,}**.yaml $OUTDIR/Help/
 cp -f build-codapack-macos $OUTDIR/build-codapack
 cp -f run-codapack-macos $OUTDIR/run-codapack
 cp -f install_packages.R $OUTDIR
