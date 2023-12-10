@@ -1,9 +1,13 @@
 available_packages = rownames(installed.packages())
 R_repo = 'http://cran.us.r-project.org'
 
-if (!require('rJava')) install.packages('rJava', repos = R_repo, dependencies = TRUE)
-if (!require('coda.base')) install.packages('coda.base', repos = R_repo, dependencies = TRUE)
-if (!require('zCompositions')) install.packages('zCompositions', repos = R_repo, dependencies = TRUE)
-if (!require('fpc')) install.packages('fpc', repos = R_repo, dependencies = TRUE)
-if (!require('MASS')) install.packages('MASS', repos = R_repo, dependencies = TRUE)
-if (!require('knitr')) install.packages('knitr', repos = R_repo, dependencies = TRUE)
+if(!exists('TYPE')) TYPE = 'binary'
+install_packages = function(pname){
+    install.packages(pname, repos = R_repo, type = TYPE, dependencies = TRUE, lib = 'Rlibraries')
+}
+install_packages('rJava')
+install_packages('coda.base')
+install_packages('zCompositions')
+install_packages('fpc')
+install_packages('MASS')
+install_packages('knitr')
