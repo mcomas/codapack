@@ -1128,7 +1128,7 @@ public final class CoDaPackMain extends JFrame {
          * Look and Feel: change appearence according to OS
          */
         System.out.println("Current JVM version - " + System.getProperty("java.version"));
-        Runtime.getRuntime().exec("Rscript install_packages.R");
+        //Runtime.getRuntime().exec("Rscript install_packages.R");
         CoDaPackConf.workingDir = System.getProperty("user.dir");
         //re.eval("library(coda.base, lib.loc='Rlibraries')");
         //re.eval("library(zCompositions, lib.loc='Rlibraries')");

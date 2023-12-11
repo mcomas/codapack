@@ -2,8 +2,9 @@ available_packages = rownames(installed.packages())
 R_repo = 'http://cran.us.r-project.org'
 
 if(!exists('TYPE')) TYPE = 'binary'
+if(!exists('LIB')) TYPE = 'Rlibraries'
 install_packages = function(pname){
-    install.packages(pname, repos = R_repo, type = TYPE, dependencies = TRUE, lib = 'Rlibraries')
+    install.packages(pname, repos = R_repo, type = TYPE, dependencies = NA, lib = LIB)
 }
 install_packages('rJava')
 install_packages('coda.base')

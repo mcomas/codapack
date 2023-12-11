@@ -3,11 +3,12 @@
 ROOT="$(dirname "$0")"
 unset R_HOME
 export JAVA_HOME=$ROOT/jdk-17.0.7.jdk/Contents/Home
+export MAVEN_HOME=$ROOT/apache-maven-3.9.2
 export R_LIBS_USER=$ROOT/Rlibraries
-export PATH=$JAVA_HOME/bin:$PATH
+export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
 export R_HOME=$(R RHOME)
 
 #R
 
 cd $ROOT
-apache-maven-3.9.2/bin/mvn -f pom_mac.xml package && apache-maven-3.9.2/bin/mvn -f pom_mac.xml dependency:copy-dependencies && Rscript -e "TYPE='mac.binary'; source('install_packages.R')"
+mvn package && Rscript -e "TYPE='mac.binary'; LIB='$R_LIBS_USER'; source('install_packages.R')"
