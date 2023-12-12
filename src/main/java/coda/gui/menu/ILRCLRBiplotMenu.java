@@ -48,7 +48,7 @@ import javax.swing.JOptionPane;
 public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.ILR-CLR Plot.yaml";
+    private static final String yamlUrl = "Graphs.ILR-CLR Plot.yaml";
     private static final String helpTitle = "ILR/CLR Biplot Help Menu";
     
     JCheckBox coordinates;
@@ -57,7 +57,7 @@ public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
     
     public ILRCLRBiplotMenu(final CoDaPackMain mainApp){
         super(mainApp, "ILR/CLR Biplot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
-        super.setHelpConfig(yamlUrl, helpTitle);
+        setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");

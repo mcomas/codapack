@@ -41,7 +41,7 @@ public class SortDataMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Sort Data.yaml";
+    private static final String yamlUrl = "Data.Manipulte.Sort Data.yaml";
     private static final String helpTitle = "Sort Data Help Menu";
     
     public SortDataMenu(final CoDaPackMain mainApp){

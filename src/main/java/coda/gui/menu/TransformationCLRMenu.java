@@ -37,7 +37,7 @@ import javax.swing.JTextField;
  */
 public class TransformationCLRMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Transformations.CLR.yaml";
+    private static final String yamlUrl = "Data.Transformations.CLR.yaml";
     private static final String helpTitle = "CLR Transform Help Menu";
     
     JRadioButton rc;

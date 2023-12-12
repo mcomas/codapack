@@ -49,7 +49,7 @@ import javax.swing.JOptionPane;
 public class CLRBiplotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Biplot.yaml";
+    private static final String yamlUrl = "Graphs.Biplot.yaml";
     private static final String helpTitle = "CLR Biplot Help Menu";
     JCheckBox coordinates;
     DataFrame df;

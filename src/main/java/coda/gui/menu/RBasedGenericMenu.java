@@ -94,7 +94,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
         super(mainApp, title + " Menu", dataSelector); 
         analysisTitle = title;
         
-        setHelpMenuConfiguration("Help/" + Rscript.replace(".R", ".yaml"), title);
+        setHelpMenuConfiguration(Rscript.replace(".R", ".yaml"), title);
         
         // System.out.println("Controls: " + controls.toString());
         mainClass = this;

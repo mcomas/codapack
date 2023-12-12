@@ -36,7 +36,7 @@ import javax.swing.*;
  * @author david
  */
 public class SetDetectionLimitMenu extends AbstractMenuDialog{
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Irregular data.Set Detection Limit.yaml";
+    private static final String yamlUrl = "Irregular data.Set Detection Limit.yaml";
     private static final String helpTitle = "Set Detection Limit Help";
     
     JRadioButton B1 = new JRadioButton("Detection Limit", true);

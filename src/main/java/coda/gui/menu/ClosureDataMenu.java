@@ -36,7 +36,7 @@ import javax.swing.JTextField;
  */
 public class ClosureDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Subcomposition-Closure.yaml";
+    private static final String yamlUrl = "Data.Operations.Subcomposition-Closure.yaml";
     private static final String helpTitle = "Subcomposition/closure Help Menu";
     
     String selected[];

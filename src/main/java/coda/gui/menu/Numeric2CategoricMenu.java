@@ -49,7 +49,7 @@ import javax.swing.JPanel;
  */
 public class Numeric2CategoricMenu extends JDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Numeric to Categorical.yaml";
+    private static final String yamlUrl = "Data.Manipulte.Numeric to Categorical.yaml";
     private static final String helpTitle = "Numeric to Categorical Help";
     
     BoxDataSelector ds;

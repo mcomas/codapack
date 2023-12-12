@@ -73,7 +73,7 @@ public class DiscriminantAnalysisMenu extends AbstractMenuDialog{
     JRadioButton B5 = new JRadioButton("Posterior prob. for the classes");
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Multivariate Analysis.Discriminant Analysis.yaml";
+    private static final String yamlUrl = "Statistics.Multivariate Analysis.Discriminant Analysis.yaml";
     private static final String helpTitle = "Discriminant Help Menu";
     
     public DiscriminantAnalysisMenu(final CoDaPackMain mainApp, Rengine r){

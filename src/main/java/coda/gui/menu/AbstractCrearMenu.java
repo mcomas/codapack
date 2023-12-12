@@ -4,6 +4,7 @@
  */
 package coda.gui.menu;
 
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
 import java.awt.BorderLayout;
@@ -15,6 +16,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -51,7 +53,7 @@ public abstract class AbstractCrearMenu extends JDialog{
     
     public void setHelpMenuConfiguration(String yamlUrl, String helpTitle){
         
-        this.yamlFile = yamlUrl;
+        this.yamlFile = Paths.get(CoDaPackConf.helpPath, yamlUrl).toString();
         this.helpTitle = helpTitle;
     }
     

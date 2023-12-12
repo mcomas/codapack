@@ -55,7 +55,7 @@ public class CreateNewTableMenu extends JFrame{
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Create New Table.yaml";
+    private static final String yamlUrl = "Data.Create New Table.yaml";
     private static final String helpTitle = "Create New Table Help";
     
     public CreateNewTableMenu(final CoDaPackMain mainApp){

@@ -5,7 +5,7 @@ source set_rhome
 
 
 export R_LIBS_USER=Rlibraries
-export CDP_WORKING_DIR=config
+# export CDP_WORKING_DIR=config
 export CDP_R_SCRIPTS=Rscripts
 # export CDP_RESOURCES=.
 

@@ -55,7 +55,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
     JPanel panel;
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Discretize-Segment variable.yaml";
+    private static final String yamlUrl = "Data.Manipulte.Discretize-Segment variable.yaml";
     private static final String helpTitle = "Discretize/Segment Help Menu";
     
     /** options var **/

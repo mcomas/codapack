@@ -48,7 +48,7 @@ import javax.swing.JOptionPane;
 public class TernaryQuaternaryPCPlotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs. Ternary-Quaternary Principal Components.yaml";
+    private static final String yamlUrl = "Graphs. Ternary-Quaternary Principal Components.yaml";
     private static final String helpTitle = "Principal Component Help Menu";
     
     DataFrame df;

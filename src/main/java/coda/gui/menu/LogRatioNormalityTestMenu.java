@@ -46,12 +46,12 @@ public class LogRatioNormalityTestMenu extends AbstractMenuDialogWithILR{
     
     DataFrame df;
     ArrayList<String> names;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Additive Logistic Normality Tests.yaml";
+    private static final String yamlUrl = "Statistics.Additive Logistic Normality Tests.yaml";
     private static final String helpTitle = "Log-Ratio Normality Test Help";
 
     public LogRatioNormalityTestMenu(final CoDaPackMain mainApp){
         super(mainApp, "Log-Ratio Normality Test", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
-        super.setHelpConfig(yamlUrl, helpTitle);
+        setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");

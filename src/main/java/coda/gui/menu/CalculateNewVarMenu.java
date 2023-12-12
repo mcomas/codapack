@@ -35,7 +35,7 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Calculate new Variable.yaml";
+    private static final String yamlUrl = "Data.Manipulte.Calculate new Variable.yaml";
     private static final String helpTitle = "Calculate new Variable Help Menu";
     
     public CalculateNewVarMenu(final CoDaPackMain mainApp){

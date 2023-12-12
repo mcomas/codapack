@@ -63,10 +63,6 @@ public abstract class AbstractMenuDialogWithILR extends AbstractMenuDialog{
 
     }
     
-    public void setHelpConfig(String yamlUrl, String helpTitle){
-        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
-    }
-    
     public void setPartition(int partition[][]){
         String spart = "";
         for(short i=0;i<partition.length;i++){

@@ -34,7 +34,7 @@ import javax.swing.*;
  */
 public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Transformations.ILR-Raw.yaml";
+    private static final String yamlUrl = "Data.Transformations.ILR-Raw.yaml";
     private static final String helpTitle = "ILR-Raw Transform Help Menu";
     
     DataFrame df;
@@ -42,7 +42,7 @@ public class TransformationILRRawMenu extends AbstractMenuDialogWithILR{
 
     public TransformationILRRawMenu(final CoDaPackMain mainApp){
         super(mainApp, "ILR-Raw Transform Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
-        super.setHelpConfig(yamlUrl, helpTitle);
+        setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
         //JButton manuallyPart = new JButton("Define Manually");

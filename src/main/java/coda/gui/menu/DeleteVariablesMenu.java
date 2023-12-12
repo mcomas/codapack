@@ -49,7 +49,7 @@ import javax.swing.JPanel;
  */
 public class DeleteVariablesMenu extends JDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Delete Variables.yaml";
+    private static final String yamlUrl = "Data.Delete Variables.yaml";
     private static final String helpTitle = "Delete variables Help";
     
     BoxDataSelector ds;

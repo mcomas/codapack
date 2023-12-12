@@ -39,12 +39,12 @@ public class AddToPersonalMenu extends AbstractCrearMenu {
     
     JTextField jl1 = new JTextField(newTxtDir), jl2 = new JTextField(newRDir);
     
-    private static final String yamlURL = CoDaPackConf.helpPath + "Personal.ImportarMenuPersonal.yaml";
+    private static final String yamlUrl = "Personal.ImportarMenuPersonal.yaml";
     private static final String helpTitle = "Crear Menu Personal Help Menu";
     
     public AddToPersonalMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Import Menu");
-        super.setHelpMenuConfiguration(yamlURL, helpTitle);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         JLabel jlZIP = new JLabel("    Select .zip:  ");
         jlZIP.setPreferredSize(new Dimension(150, 25));

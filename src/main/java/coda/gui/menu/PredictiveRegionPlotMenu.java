@@ -55,7 +55,7 @@ import javax.swing.JTextField;
 public class PredictiveRegionPlotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Predictive Region.yaml";
+    private static final String yamlUrl = "Graphs.Predictive Region.yaml";
     private static final String helpTitle = "Predictive Region Help Menu";
     JTextField predLevel;
     JLabel text1 = new JLabel("Predictive level");

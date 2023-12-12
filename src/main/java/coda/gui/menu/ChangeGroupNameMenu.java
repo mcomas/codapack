@@ -32,7 +32,7 @@ import javax.swing.JTextField;
 public class ChangeGroupNameMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID =1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Manipulte.Change Categorical Label.yaml";
+    private static final String yamlUrl = "Data.Manipulte.Change Categorical Label.yaml";
     private static final String helpTitle = "Change Categorical Label Help Menu";
     
     DataFrame df;

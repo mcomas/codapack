@@ -40,7 +40,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
 
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Filters.Advanced Filter.yaml";
+    private static final String yamlUrl = "Data.Filters.Advanced Filter.yaml";
     private static final String helpTitle = "Advanced Filter Help Menu";
     
     public AdvancedFilterMenu(final CoDaPackMain mainApp){

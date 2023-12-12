@@ -41,12 +41,12 @@ public class ExportPersonalMenu extends AbstractCrearMenu{
     
     JTextField jl1 = new JTextField(newTxtDir), jl2 = new JTextField(newRDir), jl3 = new JTextField("");
     
-    private static final String yamlURL = CoDaPackConf.helpPath + "Personal.ExportarMenuPersonal.yaml";
+    private static final String yamlUrl = "Personal.ExportarMenuPersonal.yaml";
     private static final String helpTitle = "Exportar Menu Personal Help Menu";
     
     public ExportPersonalMenu(final CoDaPackMain mainApp, Rengine r){
         super(mainApp, "Export Menu");
-        super.setHelpMenuConfiguration(yamlURL, helpTitle);
+        super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         //Create Combo Boz
         JLabel jlTXT = new JLabel("Select File to export:  ");

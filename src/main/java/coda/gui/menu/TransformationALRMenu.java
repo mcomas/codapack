@@ -36,7 +36,7 @@ import javax.swing.JTextField;
  */
 public class TransformationALRMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Transformations.ALR.yaml";
+    private static final String yamlUrl = "Data.Transformations.ALR.yaml";
     private static final String helpTitle = "ALR Transform Help Menu";
     
     JRadioButton ra;

@@ -41,7 +41,7 @@ import javax.swing.JTextField;
  */
 public class PerturbateDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Perturbation.yaml";
+    private static final String yamlUrl = "Data.Operations.Perturbation.yaml";
     private static final String helpTitle = "Perturbate Data Help Menu";
     
     String selected[];

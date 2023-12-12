@@ -26,7 +26,7 @@ import org.rosuda.JRI.Rengine;
 public class UnivariateNormalityTestMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Univariate Classical Normality Tests.yaml";
+    private static final String yamlUrl = "Statistics.Univariate Classical Normality Tests.yaml";
     private static final String helpTitle = "Classical Univariate Normality Test Help Menu";
     DataFrame df;
     ArrayList<String> names;

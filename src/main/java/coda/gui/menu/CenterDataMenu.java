@@ -37,7 +37,7 @@ import javax.swing.JOptionPane;
  */
 public class CenterDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Centering.yaml";
+    private static final String yamlUrl = "Data.Operations.Centering.yaml";
     private static final String helpTitle = "Center Data Help Menu";
     
     String selected[];

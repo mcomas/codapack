@@ -52,7 +52,7 @@ import javax.swing.JTextField;
  */
 public class AddNumericVariablesMenu extends CoDaPackDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Add Numerical Variables.yaml";
+    private static final String yamlUrl = "Data.Add Numerical Variables.yaml";
     private static final String helpTitle = "Add numeric variables Help Menu";
     
     DataFrame df;

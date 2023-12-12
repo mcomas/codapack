@@ -42,7 +42,7 @@ import javax.swing.JOptionPane;
 public class FilterMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Filters.Categorical Filter.yaml";
+    private static final String yamlUrl = "Data.Filters.Categorical Filter.yaml";
     private static final String helpTitle = "Categorical Filter Help Menu";
     BoxDataSelector boxdataSel;
     DataFrame df;

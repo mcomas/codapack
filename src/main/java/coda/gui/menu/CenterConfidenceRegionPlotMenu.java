@@ -55,7 +55,7 @@ import javax.swing.JTextField;
 public class CenterConfidenceRegionPlotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Graphs.Center Confidence Region.yaml";
+    private static final String yamlUrl = "Graphs.Center Confidence Region.yaml";
     private static final String helpTitle = "Center Confidence Region Help Menu";
     
     JTextField predLevel;
