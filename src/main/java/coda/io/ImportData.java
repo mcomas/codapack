@@ -42,6 +42,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.formula.eval.NotImplementedException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
@@ -122,10 +123,10 @@ public class ImportData{
             while(cells.hasNext()){
                 Cell cell = cells.next();
                 String name = null;
-                if(cell.getCellType() == Cell.CELL_TYPE_STRING){
+                if(cell.getCellType() == CellType.STRING){
                     name = cell.getRichStringCellValue().getString().trim();
                 }
-                if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+                if(cell.getCellType() == CellType.NUMERIC){
                     name = Double.toString(cell.getNumericCellValue());
                 }
                 if(name != null){
@@ -169,13 +170,13 @@ public class ImportData{
                     try{
                         cellValue = evaluator.evaluate(cell);
                         if( var.isText() ){
-                            if(cellValue.getCellType() == Cell.CELL_TYPE_STRING){
+                            if(cellValue.getCellType() == CellType.STRING){
                                 var.add(cellValue.getStringValue().trim());
-                            }else if(cellValue.getCellType() == Cell.CELL_TYPE_NUMERIC){
+                            }else if(cellValue.getCellType() == CellType.NUMERIC){
                                 var.add(Double.valueOf(cellValue.getNumberValue()).toString());
                             }
                         }else{
-                            if(cellValue.getCellType() == Cell.CELL_TYPE_STRING){
+                            if(cellValue.getCellType() == CellType.STRING){
                                 str = cellValue.getStringValue().trim();
                                 if( str.compareTo(notAvailable) == 0){
                                     var.add( new NonAvailable() );
@@ -188,7 +189,7 @@ public class ImportData{
                                     var.toText();
                                     var.add(str);
                                 }
-                            }else if(cellValue.getCellType() == Cell.CELL_TYPE_NUMERIC){
+                            }else if(cellValue.getCellType() == CellType.NUMERIC){
                                 var.add(Double.valueOf(cellValue.getNumberValue()));
                             }
                         }
