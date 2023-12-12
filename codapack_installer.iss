@@ -42,6 +42,7 @@ Source: "jdk-17.0.7\*"; DestDir: "{app}\jdk-17.0.7"; Flags: ignoreversion recurs
 Source: "R-4.3.1\*"; DestDir: "{app}\R-4.3.1"; Flags: ignoreversion recursesubdirs
 Source: "Rlibraries\*"; DestDir: "{app}\Rlibraries"; Flags: ignoreversion recursesubdirs
 Source: "Rscripts\*"; DestDir: "{app}\Rscripts"; Flags: ignoreversion recursesubdirs
+Source: "Help\*"; DestDir: "{app}\Help"; Flags: ignoreversion recursesubdirs
 Source: "src\*"; DestDir: "{app}\src"; Flags: ignoreversion recursesubdirs
 Source: "target\CoDaPack-2.03.06-jar-with-dependencies.jar"; DestDir: "{app}\target"; Flags: ignoreversion recursesubdirs
 Source: "CoDaPack.exe"; DestDir: "{app}"; Flags: ignoreversion
