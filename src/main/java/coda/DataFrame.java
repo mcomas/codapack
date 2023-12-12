@@ -340,13 +340,26 @@ public class DataFrame extends HashMap<String, Variable>{
     public String[] getCategoricalData(String n){
         return this.get(n).getTextData();
     }
-    
-    public String[] getCategoriaclNames(){
+
+    public String[] getNumericalVariablesName(){
         
         Vector<String> vec = new Vector<String>();
         
         for(int i=0; i < this.size();i++){
-            if(this.get(i).getType() == 1) vec.add(this.get(i).name);
+            if(this.get(i).getType() == Variable.VAR_NUMERIC) vec.add(this.get(i).name);
+        }
+        
+        String[] res = vec.toArray(new String[vec.size()]);
+        
+        return res;
+    }
+
+    public String[] getCategoricalVariablesName(){
+        
+        Vector<String> vec = new Vector<String>();
+        
+        for(int i=0; i < this.size();i++){
+            if(this.get(i).getType() == Variable.VAR_TEXT) vec.add(this.get(i).name);
         }
         
         String[] res = vec.toArray(new String[vec.size()]);
@@ -430,8 +443,8 @@ public class DataFrame extends HashMap<String, Variable>{
         for(int i=0;i<m;i++){
             addData(name[i], data[i]);
         }
-    }
-       public JSONObject toJSON(){
+    }    
+    public JSONObject toJSON(){
         JSONObject dataFrame = new JSONObject();
         JSONArray variables = new JSONArray();
         try {

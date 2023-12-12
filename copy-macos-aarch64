@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+VERSION=macos-aarch64
+
+source copy-macos

@@ -13,6 +13,8 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import coda.gui.utils.DataSelector1to1;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -67,15 +69,15 @@ public class ManovaMenu extends AbstractMenuDialog{
     JRadioButton analyzeDiff = new JRadioButton("Dif. between pairs of groups");
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Multivariate Analysis.Manova.yaml";
+    private static final String yamlUrl = "Statistics.Multivariate Analysis.Manova.yaml";
     private static final String helpTitle = "Manova Help Menu";
     
     public ManovaMenu(final CoDaPackMain mainApp, Rengine r){
-        super(mainApp,"Manova Menu",true);
+        super(mainApp,"Manova Menu",new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         re = r;
-        super.setSelectedDataName("Selected Composition:");
+        //super.setSelectedDataName("Selected Composition:");
         
         this.optionsPanel.add(residuals);
         this.optionsPanel.add(analyzeDiff);
@@ -319,7 +321,7 @@ public class ManovaMenu extends AbstractMenuDialog{
                     try {
                         img = ImageIO.read(new File(tempsDirR[position]));
                     } catch (IOException ex) {
-                        Logger.getLogger(ZpatternsMenu.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     }
                     ImageIcon icon = new ImageIcon(img);
                     Image image = icon.getImage();

@@ -23,6 +23,8 @@ import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
 import coda.gui.utils.BoxDataSelector;
+import coda.gui.utils.DataSelector1to1;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -40,7 +42,7 @@ import javax.swing.JOptionPane;
 public class FilterMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Filters.Categorical Filter.yaml";
+    private static final String yamlUrl = "Data.Filters.Categorical Filter.yaml";
     private static final String helpTitle = "Categorical Filter Help Menu";
     BoxDataSelector boxdataSel;
     DataFrame df;
@@ -51,7 +53,7 @@ public class FilterMenu extends AbstractMenuDialog{
     
     public FilterMenu(final CoDaPackMain mainApp){
        
-        super(mainApp,"Categorical Filter Menu","categoric");
+        super(mainApp,"Categorical Filter Menu",new DataSelector1to1(mainApp.getActiveDataFrame(), false, DataSelector1to1.ONLY_CATEGORIC));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }

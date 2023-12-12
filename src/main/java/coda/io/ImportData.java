@@ -24,6 +24,7 @@
 
 package coda.io;
 
+import au.com.bytecode.opencsv.*;
 import au.com.bytecode.opencsv.CSVReader;
 import coda.DataFrame;
 import coda.NonAvailable;

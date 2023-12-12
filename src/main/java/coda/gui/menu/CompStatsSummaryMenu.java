@@ -34,6 +34,8 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputSingleValue;
 import coda.gui.output.OutputText;
 import coda.gui.output.OutputVariationArray;
+import coda.gui.utils.DataSelector1to1;
+
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -48,7 +50,7 @@ import javax.swing.event.ChangeListener;
  */
 public class CompStatsSummaryMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Statistics.Compositional Statistics Summary.yaml";
+    private static final String yamlUrl = "Statistics.Compositional Statistics Summary.yaml";
     private static final String helpTitle = "Numerical Summary Help";
     JCheckBox centerCheck;
     JCheckBox vararrayCheck;
@@ -60,7 +62,7 @@ public class CompStatsSummaryMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public CompStatsSummaryMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Numerical Summary", true);
+        super(mainApp, "Numerical Summary", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         centerCheck = new JCheckBox("Center", true);

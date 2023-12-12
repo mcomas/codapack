@@ -1,0 +1,14 @@
+exec:
+Regression_X_Real_Y_Composition.R
+
+Variables:
+2
+
+Partitions:
+Set X partition
+
+Name of Variables:
+Bool:
+Residuals
+Fitted
+

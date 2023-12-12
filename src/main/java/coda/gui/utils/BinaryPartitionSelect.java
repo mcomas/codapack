@@ -24,11 +24,9 @@
 
 package coda.gui.utils;
 
-import coda.gui.menu.AbstractMenuDialog2NumCat;
 import coda.gui.menu.AbstractMenuDialogWithILR;
-import coda.gui.menu.AbstractMenuDialog2NumCatONumWithILR;
-import coda.gui.menu.AbstractMenuDialog2NumCatWithILR;
-import coda.gui.menu.AbstractMenuDialog2NumOCatNumOCatWithILR;
+
+import coda.gui.menu.AbstractMenuGeneral;
 import coda.gui.menu.ILRMenu;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -70,6 +68,7 @@ public class BinaryPartitionSelect extends JDialog{
     
     AbstractMenuDialogWithILR rootMenu = null;
     ILRMenu rootILRMenu = null;
+    AbstractMenuGeneral rootGeneralMenu = null;
     
     public BinaryPartitionSelect(AbstractMenuDialogWithILR dialogRoot, String vars[]){
         super(dialogRoot, "Binary Partition Menu");
@@ -220,6 +219,81 @@ public class BinaryPartitionSelect extends JDialog{
         south.add(panel1);
         getContentPane().add(south, BorderLayout.SOUTH);
     }
+    
+    public BinaryPartitionSelect(AbstractMenuGeneral dialogRoot, String vars[]){
+        super(dialogRoot, "Binary Partition Menu");
+
+        Point p = dialogRoot.getLocation();
+        p.x = p.x + (dialogRoot.getWidth()-20)/2;
+        p.y = p.y + (dialogRoot.getHeight()-60)/2;
+        setLocation(p);
+
+        this.rootGeneralMenu = dialogRoot;
+        variables = vars;
+        nvariables = variables.length;
+        partition = new int[nvariables-1][nvariables];
+        order = new int[nvariables];
+        activeVars = new boolean[nvariables];
+        for(int i=0;i<nvariables;i++){
+            activeVars[i] = true;
+            order[i] = i;
+        }
+        //int height = partitionTable.getRowHeight();
+        //int width = partitionTable.getWidth();
+
+        int heightRow = 20;
+        int widthCol = 40;
+
+        setSize( widthCol *(nvariables-1)+158+5,heightRow*nvariables+100);
+        getContentPane().setLayout(new BorderLayout());
+
+        
+
+        partitionTable = new BinaryPartitionTable(rowsTable, order, activeVars, nvariables);
+        rowsTable = new BinaryPartitionRowHeaders(partitionTable, order, variables, heightRow);        
+
+        partitionTable.setRowHeight(heightRow);
+        for(int vColIndex=0;vColIndex<nvariables-1;vColIndex++){
+            partitionTable.getColumnModel().
+                    getColumn(vColIndex).setPreferredWidth(widthCol);
+        }
+        partitionTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        partitionTable.setEnabled(false);
+
+        JScrollPane scrollPane = new JScrollPane(partitionTable);
+        scrollPane.setRowHeaderView(rowsTable);
+        scrollPane.setCorner(
+                JScrollPane.UPPER_LEFT_CORNER, rowsTable.getTableHeader());
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+        // Defining control buttons in South Area
+        JPanel south = new JPanel();
+        south.setLayout(new GridLayout(1,2));
+        JPanel panel1 = new JPanel();
+
+        previous = new JButton("Previous");
+        previous.addActionListener(new java.awt.event.ActionListener() {
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previousButtonActionPerformed(evt);
+            }
+        });
+        next = new JButton("Next");
+        next.addActionListener(new java.awt.event.ActionListener() {
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextButtonActionPerformed(evt);
+            }
+        });
+        
+        panel1.add(previous);
+        panel1.add(next);
+
+
+
+        south.add(panel1);
+        getContentPane().add(south, BorderLayout.SOUTH);
+    }
 
     void previousButtonActionPerformed(ActionEvent evt){
         int actualStep = partitionTable.getActualStep();
@@ -300,6 +374,7 @@ public class BinaryPartitionSelect extends JDialog{
             // the frame.
             if(rootMenu != null)rootMenu.setPartition(partition);
             if(rootILRMenu != null) rootILRMenu.setPartition(partition);
+            //if(rootGeneralMenu != null) rootGeneralMenu.setPartition(partition);
             setVisible(false);
             dispose();
             return;

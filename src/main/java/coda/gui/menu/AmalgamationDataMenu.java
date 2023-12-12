@@ -24,6 +24,8 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector1to1;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -44,7 +46,7 @@ public class AmalgamationDataMenu extends AbstractMenuDialog{
     //JTextField amalgameWith;
     //JLabel text1 = new JLabel("Combination");
     public AmalgamationDataMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Amalgamation Menu", false);
+        super(mainApp, "Amalgamation Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
 
         //amalgameWith =  new JTextField("1.0 1.0 1.0", 14);
         //perturbateWith.setText();

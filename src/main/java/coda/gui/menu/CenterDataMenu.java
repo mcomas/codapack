@@ -24,6 +24,8 @@ import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.CoDaPackConf;
 import coda.gui.output.OutputVector;
+import coda.gui.utils.DataSelector1to1;
+
 import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -35,7 +37,7 @@ import javax.swing.JOptionPane;
  */
 public class CenterDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Centering.yaml";
+    private static final String yamlUrl = "Data.Operations.Centering.yaml";
     private static final String helpTitle = "Center Data Help Menu";
     
     String selected[];
@@ -44,7 +46,7 @@ public class CenterDataMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public CenterDataMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Center Data Menu", false);
+        super(mainApp, "Center Data Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         centerCheck = new JCheckBox("Show Center", true);

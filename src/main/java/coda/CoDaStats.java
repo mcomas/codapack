@@ -787,13 +787,13 @@ public class CoDaStats{
             if(t[i] < p015[i]){
                 pValue[i] = ">0.15";
             }else if(t[i] < p010[i]){
-                pValue[i] = "[0.15,  0.10]";
+                pValue[i] = "[0.10, 0.15]";
             }else if(t[i] < p005[i]){
-                pValue[i] = "[0.10, 0.05]";
+                pValue[i] = "[0.05, 0.10]";
             }else if(t[i] < p0025[i]){
-                pValue[i] = "[0.05, 0.025]";
+                pValue[i] = "[0.025, 0.05]";
             }else if(t[i] < p001[i]){
-                pValue[i] = "[0.025, 0.01]";
+                pValue[i] = "[0.01, 0.025]";
             }else{
                 pValue[i] = "&lt;0.01";
             }

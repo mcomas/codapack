@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# source env_variables
+source set_rhome
+
+
+export R_LIBS_USER=Rlibraries
+# export CDP_WORKING_DIR=config
+export CDP_R_SCRIPTS=Rscripts
+# export CDP_RESOURCES=.
+
+mvn exec:exec
+
+
+# marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAVA_HOME
+# /usr/lib/jvm/java-17-oracle
+# marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAVA
+# /usr/lib/jvm/java-17-oracle/bin/java
+# marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAVAC
+# /usr/lib/jvm/java-17-oracle/bin/javac
+# marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAVAH
+
+# marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAR
+# /usr/lib/jvm/java-17-oracle/bin/jar
+# marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAVA_LIBS
+# -L/usr/lib/jvm/java-17-oracle/lib/server -ljvm
+# marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAVA_CPPFLAGS
+# -I/usr/lib/jvm/java-17-oracle/include -I/usr/lib/jvm/java-17-oracle/include/linux
+# marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAVA_LD_LIBRARY_PATH 
+# /usr/lib/jvm/java-17-oracle/lib/server
+
+# java -Djava.library.path=renv/library/R-4.2/x86_64-pc-linux-gnu/rJava/jri/: -classpath /home/marc/Software/codapack_codacourse-2023/target/classes:/home/marc/.m2/repository/org/jyaml/jyaml/1.3/jyaml-1.3.jar:/home/marc/.m2/repository/batik/batik-swing/1.6-1/batik-swing-1.6-1.jar:/home/marc/.m2/repository/batik/batik-bridge/1.6-1/batik-bridge-1.6-1.jar:/home/marc/.m2/repository/batik/batik-gvt/1.6-1/batik-gvt-1.6-1.jar:/home/marc/.m2/repository/batik/batik-awt-util/1.6-1/batik-awt-util-1.6-1.jar:/home/marc/.m2/repository/batik/batik-util/1.6-1/batik-util-1.6-1.jar:/home/marc/.m2/repository/batik/batik-gui-util/1.6-1/batik-gui-util-1.6-1.jar:/home/marc/.m2/repository/batik/batik-ext/1.6-1/batik-ext-1.6-1.jar:/home/marc/.m2/repository/xml-apis/xmlParserAPIs/2.0.2/xmlParserAPIs-2.0.2.jar:/home/marc/.m2/repository/batik/batik-script/1.6-1/batik-script-1.6-1.jar:/home/marc/.m2/repository/rhino/js/1.5R4.1/js-1.5R4.1.jar:/home/marc/.m2/repository/batik/batik-svg-dom/1.6-1/batik-svg-dom-1.6-1.jar:/home/marc/.m2/repository/batik/batik-dom/1.6-1/batik-dom-1.6-1.jar:/home/marc/.m2/repository/batik/batik-css/1.6-1/batik-css-1.6-1.jar:/home/marc/.m2/repository/batik/batik-xml/1.6-1/batik-xml-1.6-1.jar:/home/marc/.m2/repository/xerces/xercesImpl/2.5.0/xercesImpl-2.5.0.jar:/home/marc/.m2/repository/batik/batik-parser/1.6-1/batik-parser-1.6-1.jar:/home/marc/.m2/repository/org/apache/commons/commons-math/2.2/commons-math-2.2.jar:/home/marc/.m2/repository/org/apache/commons/commons-lang3/3.11/commons-lang3-3.11.jar:/home/marc/.m2/repository/org/apache/poi/poi/3.7/poi-3.7.jar:/home/marc/.m2/repository/org/apache/poi/poi-ooxml/3.7/poi-ooxml-3.7.jar:/home/marc/.m2/repository/org/apache/poi/poi-ooxml-schemas/3.7/poi-ooxml-schemas-3.7.jar:/home/marc/.m2/repository/org/apache/xmlbeans/xmlbeans/2.3.0/xmlbeans-2.3.0.jar:/home/marc/.m2/repository/stax/stax-api/1.0.1/stax-api-1.0.1.jar:/home/marc/.m2/repository/org/apache/geronimo/specs/geronimo-stax-api_1.0_spec/1.0/geronimo-stax-api_1.0_spec-1.0.jar:/home/marc/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar:/home/marc/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/home/marc/.m2/repository/net/java/dev/swing-layout/swing-layout/1.0.2/swing-layout-1.0.2.jar:/home/marc/.m2/repository/org/scilab/forge/jlatexmath/1.0.2/jlatexmath-1.0.2.jar:/home/marc/.m2/repository/com/github/lucarosellini/rJava/JRI/0.9-7/JRI-0.9-7.jar:/home/marc/.m2/repository/com/github/lucarosellini/rJava/REngine/0.9-7/REngine-0.9-7.jar:/home/marc/.m2/repository/com/github/lucarosellini/rJava/JRIEngine/0.9-7/JRIEngine-0.9-7.jar:/home/marc/.m2/repository/org/controlsfx/controlsfx/8.40.12/controlsfx-8.40.12.jar:/home/marc/.m2/repository/com/itextpdf/itextpdf/5.5.8/itextpdf-5.5.8.jar:/home/marc/.m2/repository/org/openjfx/javafx-swing/20/javafx-swing-20.jar:/home/marc/.m2/repository/org/openjfx/javafx-swing/20/javafx-swing-20-linux.jar:/home/marc/.m2/repository/org/openjfx/javafx-graphics/20/javafx-graphics-20.jar:/home/marc/.m2/repository/org/openjfx/javafx-graphics/20/javafx-graphics-20-linux.jar:/home/marc/.m2/repository/org/openjfx/javafx-base/20/javafx-base-20.jar:/home/marc/.m2/repository/org/openjfx/javafx-base/20/javafx-base-20-linux.jar:/home/marc/.m2/repository/org/openjfx/javafx-web/20/javafx-web-20.jar:/home/marc/.m2/repository/org/openjfx/javafx-web/20/javafx-web-20-linux.jar:/home/marc/.m2/repository/org/openjfx/javafx-media/20/javafx-media-20.jar:/home/marc/.m2/repository/org/openjfx/javafx-media/20/javafx-media-20-linux.jar:/home/marc/.m2/repository/org/openjfx/javafx-controls/20/javafx-controls-20.jar:/home/marc/.m2/repository/org/openjfx/javafx-controls/20/javafx-controls-20-linux.jar:/home/marc/.m2/repository/au/com/bytecode/opencsv/2.4/opencsv-2.4.jar:/home/marc/.m2/repository/commons-io/commons-io/2.5/commons-io-2.5.jar coda.gui.CoDaPackMain

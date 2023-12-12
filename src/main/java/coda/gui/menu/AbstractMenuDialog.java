@@ -20,23 +20,22 @@
 package coda.gui.menu;
 
 import coda.DataFrame;
-import coda.gui.utils.DataSelector;
+import coda.gui.utils.DataSelector1to1;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataFrameSelector;
+import coda.gui.utils.DataSelector;
 import coda.io.ImportRDA;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.script.ScriptException;
@@ -46,26 +45,45 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.SwingConstants;
-import org.renjin.sexp.StringVector;
 /**
  *
  * @author mcomas
  */
 public abstract class AbstractMenuDialog extends JDialog{
-    final DataSelector ds;
-    DataFrameSelector dfs;
+    DataSelector ds;
+    DataFrame df;
+    
     public JPanel optionsPanel = new JPanel();;
     JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     CoDaPackMain mainApplication;
-    ImportRDA imp_df;
+    //ImportRDA imp_df;
     boolean allowEmpty = false;
     String variables[];
+
     String yamlFile; // variable que serveix per el path del fitxer yaml
     String helpTitle; // variable per el titol del menu
-    int WIDTH = 650;//560;
-    int HEIGHT = 500;//430;
+
+    int WIDTH = 850; //560;
+    int HEIGHT = 500; //430;
+    
+
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, DataSelector dataSelector){
+        super(mainApp, title);
+        mainApplication = mainApp;
+        this.df = mainApplication.getActiveDataFrame();
+        this.ds = dataSelector;
+        initialize();
+    }
+    /*
+    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, int variable_type){
+        super(mainApp, title);
+        mainApplication = mainApp;
+        this.df = mainApplication.getActiveDataFrame();              
+        this.ds = new DataSelector(df, groups, variable_type);
+        initialize();
+    }
+    */
+    /*
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups, boolean allowEmpty, boolean categoric){
         super(mainApp, title);
         mainApplication = mainApp;
@@ -80,9 +98,9 @@ public abstract class AbstractMenuDialog extends JDialog{
         ds = null;
         imp_df = impdf;
         String fname = chooseFile.getSelectedFile().getAbsolutePath().replace("\\","/");
-        StringVector df_names = (StringVector)imp_df.getDataFramesNames(fname);
-        if (df_names.length()!=0) {
-            variables = df_names.toArray();
+        String[]df_names = imp_df.getDataFramesNames(fname);
+        if (df_names.length!=0) {
+            variables = df_names;
             dfs = new DataFrameSelector(variables);
             initialize();
         }
@@ -99,42 +117,48 @@ public abstract class AbstractMenuDialog extends JDialog{
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
         initialize();
     }
-    public AbstractMenuDialog(final CoDaPackMain mainApp, String title, boolean groups){
-        super(mainApp, title);
-        mainApplication = mainApp;
-        dfs = null;
-        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
-        initialize();
-    }
+    
     public AbstractMenuDialog(final CoDaPackMain mainApp, String title, String categoric){
         super(mainApp, title);
         mainApplication = mainApp;
         dfs = null;
         ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), categoric);
         initialize();
-    }
-    
+    }    
+    */
     public void setHelpMenuConfiguration(String yamlUrl, String helpTitle){
         
-        this.yamlFile = yamlUrl;
+        this.yamlFile = Paths.get(CoDaPackConf.helpPath, yamlUrl).toString();
         this.helpTitle = helpTitle;
     }
     
-    private void initialize(){
+    /*public void activeGroups(final CoDaPackMain mainApp, boolean groups){
+        System.out.println("Active Groups"+ groups);
+        mainApplication = mainApp;
+        dfs = null;
+        ds = new DataSelector(mainApplication.getActiveDataFrame(), CoDaPackMain.dataList.getSelectedData(), groups);
+        initialize();
+    }*/
+    public void reLocate(){
+        Point p = mainApplication.getLocation();
+        p.x = p.x + (mainApplication.getWidth()-520)/2;
+        p.y = p.y + (mainApplication.getHeight()-430)/2;
+        setLocation(p);
+    }
+    protected void initialize(){
         Point p = mainApplication.getLocation();
         p.x = p.x + (mainApplication.getWidth()-520)/2;
         p.y = p.y + (mainApplication.getHeight()-430)/2;
         setLocation(p);
 
-        setResizable(false);
+        setResizable(true);
         getContentPane().setLayout(new BorderLayout());
         setSize(WIDTH,HEIGHT);
-        if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);
-        else if (dfs!=null) getContentPane().add(dfs, BorderLayout.CENTER);
 
-        JPanel eastPanel = new JPanel();
+        if (ds!=null) getContentPane().add(ds, BorderLayout.CENTER);
+
         optionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
-        optionsPanel.setPreferredSize(new Dimension(250,200));
+        optionsPanel.setPreferredSize(new Dimension(300,200));
         //optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
         //eastPanel.add(optionsPanel);
         getContentPane().add(optionsPanel, BorderLayout.EAST);
@@ -150,9 +174,9 @@ public abstract class AbstractMenuDialog extends JDialog{
         JButton cancelButton = new JButton("Cancel");
         southPanel.add(cancelButton);
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dispose();
+                //dispose();
+                setVisible(false);
             }
         });
         JButton helpButton = new JButton("Help");
@@ -193,26 +217,24 @@ public abstract class AbstractMenuDialog extends JDialog{
     }
     @Override
     public void setVisible(boolean v){
-        if(mainApplication.getActiveDataFrame() == null && !allowEmpty){
+        if(ds.ds_dataFrame == null){
             JOptionPane.showMessageDialog(this, "No data available");
             this.dispose();
         }else{
             super.setVisible(v);
         }
     }
-    public void setVisible(boolean v, boolean b){
+    /*public void setVisible(boolean v, boolean b){
         if (b==true && v==true) super.setVisible(v);
         else if (b==false && v==false) super.setVisible(v);
-    }
+    }*/
     public abstract void acceptButtonActionPerformed();
-    public DataFrameSelector getDFS() {
-        return dfs;
-    }
-    
+
+    /* 
     public void setSelectedDataName(String data1){
         ds.setSelectedName(data1);
     }
-
+*/
     public boolean[] getValidComposition(DataFrame df, String[] selectedNames){
         boolean selection[] = df.getValidCompositions(selectedNames);
         String invalid = "";
@@ -259,7 +281,13 @@ public abstract class AbstractMenuDialog extends JDialog{
 
         return selection;
     }
-
+    public void updateMenuDialog(){
+        df = mainApplication.getActiveDataFrame();
+        ds.updateDataLists(df);
+    }
+    public DataFrame getDataFrame(){
+        return(df);
+    }
     public void closeMenuDialog(){        
         setVisible(false);
     }
@@ -268,9 +296,6 @@ public abstract class AbstractMenuDialog extends JDialog{
     }
     public String[] getSelectedData(){
         return ds.getSelectedData();
-    }
-    public ImportRDA getRDA() {
-        return imp_df;
     }
 }
 

@@ -1,0 +1,29 @@
+#!/usr/bin/bash
+
+VERSION=windows-x64
+OUTDIR=cdp-$VERSION
+
+mkdir $OUTDIR -p
+mkdir $OUTDIR/Rlibraries -p
+mkdir $OUTDIR/Rscripts -p
+mkdir $OUTDIR/Help -p
+
+unzip -n external-programs/jdk-17.0.7_windows-x64_bin.zip -d $OUTDIR
+unzip -n external-programs/R-4.3.1.zip -d $OUTDIR
+unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
+
+cp -rf src $OUTDIR
+
+cp -f Rscripts/{.,}**.R $OUTDIR/Rscripts/
+cp -f Help/{.,}**.yaml $OUTDIR/Help/
+cp -f build-codapack.bat $OUTDIR
+cp -f run-codapack.bat $OUTDIR
+cp -f install_packages.R $OUTDIR
+cp -f codapack_structure.json $OUTDIR
+cp -f license.txt $OUTDIR
+cp -f pom.xml $OUTDIR
+
+cp -f codapack_installer.iss $OUTDIR
+cp -f codapack_launch4j.xml $OUTDIR
+
+(cd $OUTDIR && zip -r ../codapack-$VERSION.zip -r .)

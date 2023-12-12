@@ -22,6 +22,7 @@ package coda.gui.menu;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackConf;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
@@ -35,7 +36,7 @@ import javax.swing.JTextField;
  */
 public class TransformationALRMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Transformations.ALR.yaml";
+    private static final String yamlUrl = "Data.Transformations.ALR.yaml";
     private static final String helpTitle = "ALR Transform Help Menu";
     
     JRadioButton ra;
@@ -45,7 +46,7 @@ public class TransformationALRMenu extends AbstractMenuDialog{
     ArrayList<String> names;
 
     public TransformationALRMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ALR Transform Menu", false);
+        super(mainApp, "ALR Transform Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JPanel opt = new JPanel();

@@ -24,6 +24,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.Zero;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector1to1;
 import coda.gui.CoDaPackConf;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,20 +39,20 @@ import javax.swing.JTextField;
  */
 public class PowerDataMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = CoDaPackConf.helpPath + "Data.Operations.Power Transformation.yaml";
+    private static final String yamlUrl = "Data.Operations.Power Transformation.yaml";
     private static final String helpTitle = "Power transformation Help Menu";
     
     String selected[];
     JTextField powerWith;
     JLabel text1 = new JLabel("Power");
     JCheckBox performClosure;
-    JLabel lclosure = new JLabel("Closure to");
+    //JLabel lclosure = new JLabel("Closure to");
     JTextField closureTo;
     DataFrame dataFrame;
     ArrayList<String> names;
     
     public PowerDataMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Power transformation Menu", false);
+        super(mainApp, "Power transformation Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         powerWith =  new JTextField(5);
@@ -74,7 +75,7 @@ public class PowerDataMenu extends AbstractMenuDialog{
         closureTo.setText(mainApp.config.getClosureTo());
         
         optionsPanel.add(performClosure);
-        optionsPanel.add(lclosure);
+        //optionsPanel.add(lclosure);
         optionsPanel.add(closureTo);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }

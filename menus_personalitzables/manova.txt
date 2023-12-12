@@ -1,0 +1,19 @@
+exec:
+Manova.R
+
+Groups:
+true
+
+Variables:
+1
+
+Name of Variables:
+
+Bool:
+Residuals
+Dif. between pairs of groups
+
+
+
+
+

@@ -28,6 +28,7 @@ import coda.CoDaStats;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputPlotHeader;
+import coda.gui.utils.DataSelector1to1;
 import coda.plot.RealPlot2dDisplay.RealPlot2dBuilder;
 import coda.plot.RealPlot3dDisplay.RealPlot3dBuilder;
 import coda.plot.window.CoDaPlotWindow;
@@ -43,7 +44,7 @@ public class CLRPlotMenu extends AbstractMenuDialog{
     public static final long serialVersionUID = 1L;
 
     public CLRPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "CLR Plot Menu", true);
+        super(mainApp, "CLR Plot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
     }
     @Override
     public void acceptButtonActionPerformed() {

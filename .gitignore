@@ -2,4 +2,15 @@
 .codapack
 .recent_files
 .idea/
+.vscode
 /MathJax/
+Rscripts/*.RData
+.Rproj.user
+apache-maven-*
+jdk-17*
+R-4*
+renjin-3.5*
+*.log
+*.RData
+*.cdp
+*.exe
