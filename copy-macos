@@ -7,7 +7,7 @@ mkdir $OUTDIR/Help -p
 
 tar xzvf external-programs/jdk-17.0.7_${VERSION}_bin.tar.gz -C $OUTDIR
 unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
-
+cp -rf external-programs/create-dmg $OUTDIR
 
 cp -rf src $OUTDIR
 
@@ -15,6 +15,23 @@ cp -f Rscripts/{.,}**.R $OUTDIR/Rscripts/
 cp -f Help/{.,}**.yaml $OUTDIR/Help/
 cp -f build-codapack-macos $OUTDIR/build-codapack
 cp -f run-codapack-macos $OUTDIR/run-codapack
+cp -f build_app.sh $OUTDIR/build-app
+# cp -f build_dmg.sh $OUTDIR/build-dmg
+cat << EOF > $OUTDIR/build-dmg
+#!/bin/bash
+./create-dmg/create-dmg \\
+    --volname "CoDaPack" \\
+    --volicon "src/main/resources/icons.icns" \\
+    --background "src/main/resources/background.png" \\
+    --window-pos 200 120 \\
+    --window-size 800 500 \\
+    --icon-size 100 \\
+    --icon "CoDaPack.app" 200 200 \\
+    --app-drop-link 600 200 \\
+    "CoDaPack-${VERSION}.dmg" \\
+    "CoDaPack.app"
+EOF
+
 cp -f install_packages.R $OUTDIR
 cp -f codapack_structure.json $OUTDIR
 cp -f license.txt $OUTDIR
@@ -24,6 +41,7 @@ chmod -R a+x $OUTDIR/apache-maven-3.9.2/bin
 # chmod -R a+x $OUTDIR/jdk-17.0.7/bin
 chmod a+x $OUTDIR/build-codapack
 chmod a+x $OUTDIR/run-codapack
-
+chmod a+x $OUTDIR/build-app
+chmod a+x $OUTDIR/build-dmg
 
 (cd $OUTDIR && zip -r ../codapack-$VERSION.zip -r .)
