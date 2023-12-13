@@ -177,7 +177,8 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
         re.eval("error = tryCatch(cdp_res <- cdp_analysis(), error = function(e) e$message)");
         errorMessage = re.eval("error").asStringArray();
         if(errorMessage != null){
-            JOptionPane.showMessageDialog(this, "Error when running the analysis: %s".formatted(error_in));
+            
+            JOptionPane.showMessageDialog(this, "Error when running the analysis: %s".formatted(String.join("\n", errorMessage)));
             return;
         }
         
