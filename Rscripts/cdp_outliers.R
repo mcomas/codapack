@@ -6,6 +6,7 @@ cdp_check = function(){
   
 }
 cdp_analysis = function(){
+  save.image("backup.RData")
   threshold <- V1
   H <- coda.base::coordinates(X)
   
@@ -13,7 +14,7 @@ cdp_analysis = function(){
   md <- mahalanobis(H, colMeans(H), cov(H))
   chsq <- pchisq(md,df=ncol(H))
   atyp <- as.integer(chsq > threshold)
-  c.atyp <- factor(atyp, labels = c("Non atypical",  "Atypical"))
+  c.atyp <- ifelse(atyp == 1, "Atypical", "Non atypical")
   
   df = data.frame("Chisq" = chsq, "Atyp" = c.atyp)
   
