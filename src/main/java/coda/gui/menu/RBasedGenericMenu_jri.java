@@ -1,6 +1,5 @@
 package coda.gui.menu;
 
-import coda.BasicStats;
 import coda.CoDaStats;
 import coda.DataFrame;
 import coda.Variable;
@@ -9,8 +8,6 @@ import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
-import coda.gui.menu.RBasedGenericMenu_renjin.RConversion;
-import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
 import coda.gui.utils.BinaryPartitionRowHeaders;
@@ -18,18 +15,15 @@ import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.BinaryPartitionTable;
 import coda.gui.utils.BoxDataSelector;
 import coda.gui.utils.DataSelector;
-import coda.gui.utils.DataSelector1to1;
 import coda.gui.utils.DataSelector1to2;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.util.RScriptEngine;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.MenuBar;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -49,7 +43,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -66,7 +59,7 @@ import javax.swing.table.TableModel;
 import org.apache.batik.swing.JSVGCanvas;
 
 
-public class RBasedGenericMenu extends AbstractMenuDialog{
+public class RBasedGenericMenu_jri extends AbstractMenuDialog{
   
     private int iVar = 0;
     private ArrayList<RConversion> cdp_lines = new ArrayList<RConversion>();
@@ -75,7 +68,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
         optionsPanel.add(cdpl);
         cdp_lines.add(cdpLine);
     }
-    RBasedGenericMenu mainClass = null;
+    RBasedGenericMenu_jri mainClass = null;
     ArrayList<JCheckBox> Barray = new ArrayList<JCheckBox>();
     RScriptEngine re;
 
@@ -85,7 +78,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
     String script_file;
 
     String analysisTitle = "";
-    public RBasedGenericMenu(final CoDaPackMain mainApp, 
+    public RBasedGenericMenu_jri(final CoDaPackMain mainApp, 
                              RScriptEngine r, 
                              String title,
                              String Rscript, 
@@ -993,7 +986,7 @@ public class RBasedGenericMenu extends AbstractMenuDialog{
             ILRMenu rootILRMenu = null;
             AbstractMenuGeneral rootGeneralMenu = null;
             
-            public BuildSBP(RBasedGenericMenu dialogRoot, String vars[]){
+            public BuildSBP(RBasedGenericMenu_jri dialogRoot, String vars[]){
                 super(dialogRoot, "Binary Partition Menu");
         
                 Point p = dialogRoot.getLocation();

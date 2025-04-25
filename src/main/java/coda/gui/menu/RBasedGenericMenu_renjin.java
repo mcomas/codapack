@@ -58,7 +58,7 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
         optionsPanel.add(cdpl);
         cdp_lines.add(cdpLine);
     }
-    RBasedGenericMenu mainClass = null;
+    RBasedGenericMenu_jri mainClass = null;
     ArrayList<JCheckBox> Barray = new ArrayList<JCheckBox>();
     public RBasedGenericMenu_renjin(final CoDaPackMain mainApp,
                                      RScriptEngine r,
@@ -502,7 +502,7 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
             ILRMenu rootILRMenu = null;
             AbstractMenuGeneral rootGeneralMenu = null;
             
-            public BuildSBP(RBasedGenericMenu dialogRoot, String vars[]){
+            public BuildSBP(RBasedGenericMenu_jri dialogRoot, String vars[]){
                 super(dialogRoot, "Binary Partition Menu");
         
                 Point p = dialogRoot.getLocation();

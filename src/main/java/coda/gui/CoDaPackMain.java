@@ -91,7 +91,7 @@ import coda.gui.menu.Numeric2CategoricMenu;
 import coda.gui.menu.PerturbateDataMenu;
 import coda.gui.menu.PowerDataMenu;
 import coda.gui.menu.PredictiveRegionPlotMenu;
-import coda.gui.menu.RBasedGenericMenu;
+import coda.gui.menu.RBasedGenericMenu_jri;
 import coda.gui.menu.SetDetectionLimitMenu;
 import coda.gui.menu.SortDataMenu;
 import coda.gui.menu.T1;
@@ -441,7 +441,7 @@ public final class CoDaPackMain extends JFrame {
         }
     }
 
-    HashMap<String,RBasedGenericMenu> dynamicMenus = new HashMap<String,RBasedGenericMenu>();
+    HashMap<String,RBasedGenericMenu_jri> dynamicMenus = new HashMap<String,RBasedGenericMenu_jri>();
     
     public void eventCoDaPackWithKey(String key){
         switch(key){

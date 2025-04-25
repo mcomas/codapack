@@ -46,7 +46,7 @@ import org.apache.commons.io.filefilter.RegexFileFilter;
 import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
-import coda.gui.menu.RBasedGenericMenu;
+import coda.gui.menu.RBasedGenericMenu_jri;
 import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
 import coda.gui.utils.DataSelector1to2;
@@ -357,7 +357,7 @@ public class CoDaPackMenu extends JMenuBar {
                             if(json_obj.has("textA")) ds12.setTextA(json_obj.getString("textA"));
                             if(json_obj.has("textB")) ds12.setTextB(json_obj.getString("textB"));
                             mainApplication.dynamicMenus.put(id, 
-                                new RBasedGenericMenu(mainApplication, 
+                                new RBasedGenericMenu_jri(mainApplication, 
                                                     CoDaPackMain.re, 
                                                     name,
                                                     Rscript,
@@ -365,7 +365,7 @@ public class CoDaPackMenu extends JMenuBar {
                                                     ds12));
                         }else{
                             mainApplication.dynamicMenus.put(id, 
-                                new RBasedGenericMenu(mainApplication, 
+                                new RBasedGenericMenu_jri(mainApplication, 
                                                     CoDaPackMain.re, 
                                                     name,
                                                     Rscript,
