@@ -33,13 +33,7 @@ import coda.gui.utils.DataSelector1to1;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.ExportRDA;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.text.Normalizer;
 import java.util.zip.GZIPOutputStream;
 import javax.swing.JFileChooser;
@@ -53,7 +47,6 @@ import org.renjin.sexp.IntArrayVector;
 import org.renjin.sexp.ListVector;
 import org.renjin.sexp.PairList;
 import org.renjin.sexp.StringArrayVector;
-import org.rosuda.JRI.Rengine;
 
 /**
  *

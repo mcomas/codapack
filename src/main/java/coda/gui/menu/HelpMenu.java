@@ -26,6 +26,7 @@ import coda.gui.output.OutputElement;
 import coda.gui.output.OutputText;
 import javafx.scene.paint.Color;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,6 +38,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.yaml.snakeyaml.Yaml;
+
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -48,7 +52,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import org.ho.yaml.Yaml;
 
 public final class HelpMenu extends JFXPanel {
 
@@ -73,8 +76,10 @@ public final class HelpMenu extends JFXPanel {
 
         this.urlYamlFile = yamlPath;
         this.helpTitle = title;
-        Map<String, Object> map = Yaml.loadType(new File(this.urlYamlFile), HashMap.class);
-
+        //Map<String, Object> map = Yaml.loadType(new File(this.urlYamlFile), HashMap.class);
+        Yaml yaml = new Yaml();
+        FileInputStream inputStream = new FileInputStream(this.urlYamlFile);
+        HashMap<String, Object> map = yaml.loadAs(inputStream, HashMap.class);
         inicialitzateAtributes(map);
 
         
