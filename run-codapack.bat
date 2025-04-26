@@ -4,4 +4,4 @@ set R_HOME=R-4.3.1
 set R_LIBS_USER=Rlibraries
 set CDP_R_SCRIPTS=Rscripts
 
-jdk-17.0.7\bin\java -classpath target\classes;target\dependency\* coda.gui.CoDaPackMain
+jdk-17.0.7\bin\java -Djava.library.path=Rlibraries\rJava\jri -classpath target\classes;target\dependency\* coda.gui.CoDaPackMain
