@@ -28,6 +28,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.ExportRDA;
@@ -44,6 +45,14 @@ import java.util.zip.GZIPOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import org.renjin.eval.Context;
+import org.renjin.serialization.RDataWriter;
+import org.renjin.sexp.DoubleArrayVector;
+import org.renjin.sexp.IntArrayVector;
+import org.renjin.sexp.ListVector;
+import org.renjin.sexp.PairList;
+import org.renjin.sexp.StringArrayVector;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -56,7 +65,7 @@ public class ExportRDataMenu extends AbstractMenuDialog {
     JLabel text1 = new JLabel("Data Frame name:");
     ExportRDA exportRDA;
     public ExportRDataMenu(final CoDaPackMain mainApp, ExportRDA expRDA) {
-        super(mainApp, "Export Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Export Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false, DataSelector.ALL_VARIABLES));
         exportRDA = expRDA;
         dfname = new JTextField("data", 14);
         optionsPanel.add(text1);
@@ -87,7 +96,7 @@ public class ExportRDataMenu extends AbstractMenuDialog {
         JFileChooser chooseFile = new JFileChooser(ruta);
         chooseFile.setFileFilter(
                 new FileNameExtensionFilter("R data file", "RData"));
-                /* 
+                
         if (chooseFile.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 String fname = chooseFile.getSelectedFile().getAbsolutePath();
@@ -125,12 +134,12 @@ public class ExportRDataMenu extends AbstractMenuDialog {
                 fos.close();
                 ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
                 CoDaPackConf.workingDir = ruta;
+                writer.close();
 
                 setVisible(false);
             } catch (Exception e) { // Catch exception if any
                 System.err.println("Error: " + e.getMessage());
             }
         }
-        */
     }
 }
