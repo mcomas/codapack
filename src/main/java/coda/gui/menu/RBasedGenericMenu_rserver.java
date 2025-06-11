@@ -1,31 +1,40 @@
 package coda.gui.menu;
 
-import coda.BasicStats;
 import coda.CoDaStats;
+import coda.DataFrame;
+import coda.Variable;
 import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
+import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
+import coda.gui.output.OutputForR;
+import coda.gui.output.OutputText;
 import coda.gui.utils.BinaryPartitionRowHeaders;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.BinaryPartitionTable;
+import coda.gui.utils.BoxDataSelector;
 import coda.gui.utils.DataSelector;
-import coda.gui.utils.DataSelector1to1;
 import coda.gui.utils.DataSelector1to2;
+import coda.gui.utils.FileNameExtensionFilter;
 import coda.util.RScriptEngine;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Vector;
 
-import javax.script.ScriptEngine;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -33,24 +42,25 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.table.TableModel;
 
-import org.rosuda.JRI.Rengine;
-import org.rosuda.REngine.REXPNull;
+import org.apache.batik.swing.JSVGCanvas;
 
 
-public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
-    private static final String yamlUrl = null;
-    private static final String helpTitle = null;
-    private Rengine re;
+public class RBasedGenericMenu_rserver extends AbstractMenuDialog{
+  
     private int iVar = 0;
     private ArrayList<RConversion> cdp_lines = new ArrayList<RConversion>();
     public void addCDP_Line(RConversion cdpLine){
@@ -58,21 +68,245 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
         optionsPanel.add(cdpl);
         cdp_lines.add(cdpLine);
     }
-    RBasedGenericMenu_jri mainClass = null;
+    RBasedGenericMenu_rserver mainClass = null;
     ArrayList<JCheckBox> Barray = new ArrayList<JCheckBox>();
-    public RBasedGenericMenu_renjin(final CoDaPackMain mainApp,
-                                     RScriptEngine r,
-                                     String title,
-                                     String Rscript,
-                                     JSONArray controls,
-                                     DataSelector dataSelector) throws JSONException{
-        super(mainApp, title + " Menu", dataSelector, r); 
-        System.out.println("Controls: " + controls.toString());
-        // mainClass = this;
-        build_optionPanel(r, Rscript, controls);
-     }
+    RScriptEngine re;
 
-     void build_optionPanel(Rengine r, String Rscript, JSONArray controls) throws JSONException{
+    int PLOT_WIDTH = 650;
+    int PLOT_HEIGHT = 400;
+
+    String script_file;
+
+    String analysisTitle = "";
+    public RBasedGenericMenu_rserver(final CoDaPackMain mainApp, 
+                             RScriptEngine r, 
+                             String title,
+                             String Rscript, 
+                             JSONArray controls, 
+                             DataSelector dataSelector) throws JSONException{
+        super(mainApp, title + " Menu", dataSelector); 
+        analysisTitle = title;
+        
+        setHelpMenuConfiguration(Rscript.replace(".R", ".yaml"), title);
+        
+        // System.out.println("Controls: " + controls.toString());
+        mainClass = this;
+        build_optionPanel(r, Rscript, controls);
+    }
+    @Override
+    public void acceptButtonActionPerformed(){
+        re.eval("rm(list = ls())");
+
+        iVar = 0;
+        for(RConversion cdpLine: cdp_lines){
+            cdpLine.addVariableToR();
+        }
+        df = mainApplication.getActiveDataFrame();
+        String sel_names[] = super.ds.getSelectedData();
+        
+        if(sel_names.length > 0){
+            if(ds.selection_type == DataSelector.ONLY_NUMERIC){
+                double[][] dataX = df.getNumericalData(sel_names);
+                addMatrixToR(dataX, sel_names, "X");
+            }
+            if(ds.selection_type == DataSelector.ONLY_CATEGORIC){
+                String[][] dataX = df.getCategoricalData(sel_names);
+                addMatrixToR(dataX, sel_names, "X");
+            }
+            double dlevel[][] = df.getDetectionLevel(sel_names);
+
+
+            addMatrixToR(dlevel, sel_names, "DL");
+
+            if(ds.group_by){
+                String sel_group = ds.getSelectedGroup();
+                if(sel_group != null){
+                    String group[] = df.getCategoricalData(sel_group);
+                    re.assign("GROUP", group);
+                }
+            }
+
+        }
+        if(ds instanceof DataSelector1to2){
+            
+            String sel_namesY[] = ((DataSelector1to2)ds).getSelectedDataB();
+            if(sel_namesY.length > 0){
+                double[][] dataY = df.getNumericalData(sel_namesY);
+                addMatrixToR(dataY, sel_namesY, "Y");
+            }
+        }
+
+        
+        String SOURCE = "error = tryCatch(source('%s'), error = function(e) e$message)";
+        
+        String SOURCE_HELPER = SOURCE.formatted(Paths.get(CoDaPackConf.rScriptPath, ".cdp_helper_functions.R").toString().replace("\\","/"));
+        System.out.println(SOURCE_HELPER);
+        re.eval(SOURCE_HELPER);
+        
+        String SOURCE_CODE = SOURCE.formatted(Paths.get(CoDaPackConf.rScriptPath, this.script_file).toString().replace("\\","/"));
+        System.out.println(SOURCE_CODE);
+        re.eval(SOURCE_CODE);
+
+        String errorMessage[] = re.eval("error").asStringArray();
+        if(errorMessage != null){
+            JOptionPane.showMessageDialog(this, "Error when reading R script file: %s".formatted(this.script_file));
+            return;
+        }
+
+        // re.eval("source('Rscripts/.cdp_helper_functions.R')");
+        String error_in = re.eval("cdp_check()").asString();
+        if(error_in != null){
+            JOptionPane.showMessageDialog(this, error_in);
+            return;
+        }
+
+
+        System.out.println("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
+        System.out.println("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
+        re.eval("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
+        re.eval("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
+        
+        
+        re.eval("error = tryCatch(cdp_res <- cdp_analysis(), error = function(e) e$message)");
+        errorMessage = re.eval("error").asStringArray();
+        if(errorMessage != null){
+            
+            JOptionPane.showMessageDialog(this, "Error when running the analysis: %s".formatted(String.join("\n", errorMessage)));
+            return;
+        }
+        
+
+        showText();
+        createVariables();
+        showGraphics();
+        createDataFrame();
+
+
+        setVisible(false);
+        
+    }
+
+    public void addMatrixToR(double data[][], String col_names[], String name){
+        String vnames[] = new String[data.length];
+        for(int i=0; i < data.length; i++){
+            vnames[i] = ".cdp_x"+i;
+            re.assign(vnames[i], data[i]);
+        }
+        re.eval("%s = cbind(%s)".formatted(name, String.join(",", vnames)));
+
+        String col_names_ext[] = new String[col_names.length];
+        for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
+        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names_ext)));
+        re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
+    }
+    public void addMatrixToR(String data[][], String col_names[], String name){
+        String vnames[] = new String[data.length];
+        for(int i=0; i < data.length; i++){
+            vnames[i] = ".cdp_x"+i;
+            re.assign(vnames[i], data[i]);
+        }
+        re.eval("%s = cbind(%s)".formatted(name, String.join(",", vnames)));
+
+        String col_names_ext[] = new String[col_names.length];
+        for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
+        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names_ext)));
+        re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
+    }
+    void showText(){    
+        String outputString[] = re.eval("unlist(cdp_res[['text']])").asStringArray();
+        if(outputString.length > 1 | (outputString.length == 1 & outputString[0].compareTo("") != 0) ){
+            CoDaPackMain.outputPanel.addOutput(new OutputText(analysisTitle));
+            //System.out.println(Arrays.toString(outputString));
+            CoDaPackMain.outputPanel.addOutput(new OutputForR(outputString));
+        }
+    }
+    void createDataFrame(){
+        int nDataFrames = re.eval("length(cdp_res$dataframe)").asInt();
+        for(int i=0; i < nDataFrames; i++){
+            int nVariables = re.eval("length(cdp_res$dataframe[[" + String.valueOf(i+1) + "]])").asInt();
+            DataFrame newDataFrame = new DataFrame();
+            for(int j=0; j < nVariables; j++){
+                String varName = re.eval("names(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "])").asString();
+                String isNumeric = re.eval("class(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asString();
+                if(isNumeric.equals("numeric")){ /* crear una variable numerica */
+                    double[] data = re.eval("as.numeric(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asDoubleArray();
+                    newDataFrame.addData(varName, data);
+                }
+                else{ /* crear una variable categorica */
+                    String[] data = re.eval("as.character(unlist(cdp_res$dataframe[[" + String.valueOf(i+1) + "]][" + String.valueOf(j+1) + "]))").asStringArray();
+                    newDataFrame.addData(varName, new Variable(varName,data));
+                }
+            }
+            
+            String dataFrameName = re.eval("names(cdp_res$dataframe)[" + String.valueOf(i+1) + "]").asString();
+            
+            while(!mainApplication.isDataFrameNameAvailable(dataFrameName)){
+                dataFrameName += "c";
+            }
+            
+            newDataFrame.setName(dataFrameName);
+            DataFrame current = mainApplication.getActiveDataFrame();
+            mainApplication.addDataFrame(newDataFrame);
+            mainApplication.updateDataFrame(current);
+        }
+    }
+
+    void createVariables(){
+        
+        int numberOfNewVar = re.eval("length(cdp_res$new_data)").asInt(); /* numero de columnes nomes*/
+        if(numberOfNewVar > 0 ){
+            for(int i=0; i < numberOfNewVar; i++){
+                String varName = re.eval("names(cdp_res$new_data)[" + String.valueOf(i+1) + "]").asString();
+                String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data[["+ String.valueOf(i+1) +"]]))").asString();
+                if(isNumeric.equals("TRUE")){
+                    double[] data = re.eval("as.numeric(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asDoubleArray();
+                    df.addData(varName,data);
+                }
+                else{ // categoric
+                    String[] data = re.eval("as.character(cdp_res$new_data[[" + String.valueOf(i+1) + "]])").asStringArray();
+                    df.addData(varName, new Variable(varName,data));
+                }
+            }
+            mainApplication.updateDataFrame(df);
+        }
+        numberOfNewVar = re.eval("length(cdp_res$new_data2)").asInt(); /* numero de columnes nomes*/
+        if(numberOfNewVar > 0 ){
+            for(int i=0; i < numberOfNewVar; i++){
+                String varName = re.eval("names(cdp_res$new_data2)[" + String.valueOf(i+1) + "]").asString();
+                String isNumeric = re.eval("as.character(is.numeric(cdp_res$new_data2[["+ String.valueOf(i+1) +"]]))").asString();
+                if(isNumeric.equals("TRUE")){
+                    double[] data = re.eval("as.numeric(cdp_res$new_data2[[" + String.valueOf(i+1) + "]])").asDoubleArray();
+                    new_df.addData(varName,data);
+                }
+                else{ // categoric
+                    String[] data = re.eval("as.character(cdp_res$new_data2[[" + String.valueOf(i+1) + "]])").asStringArray();
+                    new_df.addData(varName, new Variable(varName,data));
+                }
+            }
+            mainApplication.updateDataFrame(new_df);
+        }
+    }
+
+    void showGraphics(){
+        
+        String fnames[] = re.eval("cdp_res$graph").asStringArray();
+        String pnames[] = re.eval("names(cdp_res$graph)").asStringArray();
+        System.out.println(Arrays.toString(fnames));
+        System.out.println(Arrays.toString(pnames));
+        if(fnames != null){
+            RPlotWindow jf = new RPlotWindow(fnames, pnames);
+                jf.setSize(PLOT_WIDTH, PLOT_HEIGHT);
+                jf.setVisible(true);
+        }
+        /*
+        for(int i=0; i < numberOfGraphics; i++){
+            tempDirR = re.eval("cdp_res$graph[[" + String.valueOf(i+1) + "]]").asString();
+            tempsDirR.add(tempDirR);
+            plotZpatternsMenu(this.framesZpatternsMenu.size());
+        }  
+        */
+    }
+     void build_optionPanel(RScriptEngine r, String Rscript, JSONArray controls) throws JSONException{
         script_file = Rscript;
 
         // super.setHelpMenuConfiguration(yamlUrl, helpTitle);
@@ -85,7 +319,7 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
             String type = (String) json_obj.sortedKeys().next();
             switch(type){
                 case "options":
-                    System.out.println("options");
+                    // System.out.println("options");
                     JSONObject obj = json_obj.getJSONObject(type);
                     String lbl = obj.getString("label");
 
@@ -105,7 +339,7 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
                             String type2 = (String) json_obj2.sortedKeys().next();
                             switch(type2){
                                 case "string":
-                                    System.out.println("string submenu");
+                                    // System.out.println("string submenu");
                                     break;
                                 case "numeric":
                                     JTextField T2 = new JTextField("", 5);
@@ -116,10 +350,10 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
                                     PB3.add(Box.createHorizontalStrut(10));
                                     PB3.add(T2);
                                     jps[j].add(PB3);
-                                    System.out.println("numeric submenu");
+                                    // System.out.println("numeric submenu");
                                     break;
                                 case "boolean":
-                                    System.out.println("boolean submenu");
+                                    // System.out.println("boolean submenu");
                                     String label2 = null;
                                     boolean checked2 = false;
                                     if(json_obj2.get(type2) instanceof JSONObject){
@@ -139,7 +373,7 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
                                     break;
                             }
                         }
-                        System.out.println(json_arr.getJSONObject(j).toString());
+                        // System.out.println(json_arr.getJSONObject(j).toString());
                     }
                     JComboBox<String> jcb_options = new JComboBox<String>(str1);
                     JPanel PB = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
@@ -154,7 +388,7 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
 
                     break;
                 case "select":
-                    System.out.println("Menu select line");
+                    // System.out.println("Menu select line");
                     String name = json_obj.getJSONObject(type).getString("name");
                     JSONArray values = json_obj.getJSONObject(type).getJSONArray("values");
                     String str_v[] = new String[values.length()];
@@ -189,7 +423,7 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
                     addCDP_Line(new CDP_Numeric(num_label, num_value));
                     break;
                 case "basis":
-                    System.out.println("Basis menu");
+                    // System.out.println("Basis menu");
                     addCDP_Line(new CDP_Basis(json_obj.getJSONObject(type).getString("name"), 
                                               json_obj.getJSONObject(type).getString("selector")));
                     // addCDP_Line(new CDP_Basis(json_obj.getJSONObject(type).getString("name")));
@@ -199,6 +433,17 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
                     
                     // jScrollPane1.setViewportView(areaPart);
                     // panel.add(jScrollPane1);
+                    break;
+                case "data":
+                    String data_label = null;
+                    String data_value = "";
+                    if(json_obj.get(type) instanceof JSONObject){
+                        data_label = json_obj.getJSONObject(type).getString("name");
+                        data_value = json_obj.getJSONObject(type).getString("value");
+                    }else{
+                        data_label = json_obj.getString(type);
+                    }
+                    addCDP_Line(new CDP_Data(data_label));
                     break;
                 case "boolean":
                     String label = null;
@@ -239,6 +484,134 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
         */
 
     }
+
+    private class RPlotWindow extends javax.swing.JFrame{
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menuFile = new JMenu("File");
+        JMenuItem menuSaveSVG = new JMenuItem("Export SVG");
+        
+        
+        //JMenuItem menuItem = new JMenuItem("Open");
+            // framesScatterplotMenu.add(new JFrame());
+            // JPanel panel = new JPanel();
+            // menu.add(menuItem);
+            // menuItem = new JMenuItem("Export");
+            // JMenu submenuExport = new JMenu("Export");
+            // menuItem = new JMenuItem("Export As SVG");
+            // menuItem.addActionListener(new ScatterplotMenu.FileChooserAction(position));
+            // submenuExport.add(menuItem);
+            // menuItem = new JMenuItem("Export As JPEG");
+            // //submenuExport.add(menuItem);
+            // menuItem = new JMenuItem("Export As PDF");
+            // //submenuExport.add(menuItem);
+            // menuItem = new JMenuItem("Export As WMF");
+            // //submenuExport.add(menuItem);
+            // menuItem = new JMenuItem("Export As Postscripts");
+            // //submenuExport.add(menuItem);
+            // menuItem = new JMenuItem("Quit");
+
+        public RPlotWindow(String[] fnames, String[] pnames){
+            if(fnames.length == 1){
+                String fname = fnames[0];
+                JSVGCanvas c = new JSVGCanvas();
+                String uri = new File(fname).toURI().toString();
+                c.setURI(uri);
+                getContentPane().add(c);
+                if(pnames != null){
+                    this.setTitle(pnames[0]);
+                }else{
+                    this.setTitle(analysisTitle);
+                }
+                
+                menuSaveSVG.addActionListener((ActionEvent e) -> {
+                    System.out.println("Button was clicked");
+                    JFileChooser jf = new JFileChooser();
+                    jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "SVG graphic", "svg");
+                    jf.setFileFilter(filter);
+                    int returnVal = jf.showSaveDialog(this);
+                    if(returnVal == JFileChooser.APPROVE_OPTION){
+                        File f = new File(fname);
+                        String path = jf.getSelectedFile().getAbsolutePath();
+                        File f2 = new File(path);
+                        f.renameTo(f2);
+                        CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
+                    }
+                });
+            }else{
+                JTabbedPane tabbedPane = new JTabbedPane();                
+                for(int i=0;i<fnames.length;i++){
+                    String pname = "plot " + i+1;
+                    if(pnames.length == fnames.length){
+                        pname = pnames[i];
+                    }
+                    String fname = fnames[i];
+                    JSVGCanvas c = new JSVGCanvas();
+                    String uri = new File(fname).toURI().toString();
+                    c.setURI(uri);
+                    getContentPane().add(c);
+                    tabbedPane.addTab(pname, null, c);
+                    getContentPane().add(tabbedPane);
+                }
+                menuSaveSVG.addActionListener((ActionEvent e) -> {
+                    JFileChooser jf = new JFileChooser();
+                    jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                        "SVG graphic", "svg");
+                    jf.setFileFilter(filter);
+                    int returnVal = jf.showSaveDialog(this);
+                    if(returnVal == JFileChooser.APPROVE_OPTION){
+                        int sel_ind = tabbedPane.getSelectedIndex();
+                        File f = new File(fnames[sel_ind]);
+                        String path = jf.getSelectedFile().getAbsolutePath();
+                        File f2 = new File(path);
+                        // f.renameTo(f2);
+                        try {
+                            Files.copy(f.toPath(), f2.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
+                    }
+                });
+            }            
+            menuFile.add(menuSaveSVG);
+            menuBar.add(menuFile);
+            setJMenuBar(menuBar);
+        }
+        // public RPlotWindow(String[] fnames){
+        //     JSVGCanvas c = new JSVGCanvas();
+        //     for(fname in fnames)
+        //     String uri = new File(fname).toURI().toString();
+        //     c.setURI(uri);
+        //     getContentPane().add(c);
+
+        //     //
+        //     menuSaveSVG.addActionListener((ActionEvent e) -> {
+        //         System.out.println("Button was clicked");
+        //         JFileChooser jf = new JFileChooser();
+        //         jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
+        //         FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        //             "SVG graphic", "svg");
+        //         jf.setFileFilter(filter);
+        //         int returnVal = jf.showSaveDialog(this);
+        //         if(returnVal == JFileChooser.APPROVE_OPTION){
+        //             File f = new File(fname);
+        //             String path = jf.getSelectedFile().getAbsolutePath();
+        //             File f2 = new File(path);
+        //             f.renameTo(f2);
+        //             CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
+        //         }
+        //     });
+        //     menuFile.add(menuSaveSVG);
+        //     menuBar.add(menuFile);
+        //     setJMenuBar(menuBar);
+        // }
+
+    }
+
     interface RConversion{
         public boolean addVariableToR();
     }
@@ -360,9 +733,7 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
             Bbool.setSelected(checked);
             Pbool.add(Bbool);
             add(Pbool);
-
         }
-
         @Override
         public boolean addVariableToR() {
             String V = "FALSE";
@@ -372,6 +743,119 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
             System.out.println(EXP);
             re.eval(EXP);
             return(true);
+        }
+    }
+    DataFrame new_df = null;
+    void configureSampleZ(JButton button, String defaultLabel){
+        Vector<String> dataFrameNames = new Vector<String>();
+        // obtenim els noms de les taules que hi han carregades
+        
+        for(int i=0; i < mainApplication.getAllDataFrames().size(); i++){
+            dataFrameNames.add(mainApplication.getAllDataFrames().get(i).name);
+        }
+        
+        BoxDataSelector bds = new BoxDataSelector(dataFrameNames.toArray(new String[dataFrameNames.size()]));
+        JDialog jd = new JDialog(this);
+        jd.add(bds);
+        jd.setSize(190,370);
+        jd.setLocationRelativeTo(this);
+        JButton accept = new JButton("Accept");
+        jd.add(accept, BorderLayout.SOUTH);
+        
+        accept.addActionListener(new java.awt.event.ActionListener() {
+            
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                String selected[] = bds.getSelectedData();
+                int n = selected.length;
+                if(n == 1){
+                    int pos =0;
+                    for(int i=0; i < dataFrameNames.size(); i++){
+                        if(dataFrameNames.get(i).equals(selected[0])) pos = i;
+                    }
+                    new_df = mainApplication.getAllDataFrames().get(pos);
+                    button.setText(new_df.name);
+                    jd.setVisible(false);
+                }
+                if(n == 0){
+                    new_df = null;
+                    button.setText(defaultLabel);
+                    jd.setVisible(false);
+                }
+                //     boolean found = false; boolean foundall = true;
+                //     for(int i=0; i < nomVars.length  && foundall; i++){
+                //         found = false;
+                //         for(int j=0; j < sampleZDf.size() && !found;j++){
+                //             if(sampleZDf.get(j).getName().equals(nomVars[i])) found = true;
+                //         }
+                //         if(found == false) foundall = false;
+                //     }
+                    
+                //     if(foundall){ // creem Z SAMPLE
+                //         Vector<String> vSelectedNames1 = new Vector<String>(Arrays.asList(nomVars));
+                //         int auxPos = 0;
+                //         for(int i=0; i < sampleZDf.size();i++){ // totes les columnes
+                //             if(vSelectedNames1.contains(sampleZDf.get(i).getName())){
+                //                 re.eval(vSelectedNames1.elementAt(auxPos) + " <- NULL");
+                //                 if(sampleZDf.get(i).isNumeric()){
+                //                     for(double j : sampleZDf.get(i).getNumericalData()){
+                //                         re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +"," + String.valueOf(j) + ")");
+                //                     }
+                //                 }
+                //                 else{
+                //                     for(String j : df.get(i).getTextData()){
+                //                         re.eval(vSelectedNames1.elementAt(auxPos) + " <- c(" + vSelectedNames1.elementAt(auxPos) +",'" + j + "')");
+                //                     }
+                //                 }
+                //                 auxPos++;
+                //             }
+                //         }
+                        
+                //         String dataFrameString = "Z <- data.frame(";
+                //         for(int i=0; i < nomVars.length;i++){
+                //             dataFrameString += vSelectedNames1.elementAt(i);
+                //             if(i != nomVars.length-1) dataFrameString += ",";
+                //         }
+                        
+                //         dataFrameString +=")";
+                        
+                //         re.eval(dataFrameString); // we create the dataframe in R
+                //         //dfZ = sampleZDf; // ens guardem la taula 
+                //     }
+                //     else{
+                //         re.eval("Z <- NULL");
+                //     }
+                // }
+                    
+            }
+            
+        });
+        jd.setVisible(true);
+    }
+    private class CDP_Data extends CDP_Line implements RConversion{
+        JButton button = null;
+        String initial_label = "";
+        public CDP_Data(String label){
+            initial_label = label;
+            JPanel Pbutton = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+            button = new JButton(label);
+            button.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    configureSampleZ(button, initial_label);
+                }
+            });
+            Pbutton.add(button);
+            add(Pbutton);
+        }
+        @Override
+        public boolean addVariableToR() {
+            if(new_df != null){
+                String vnum_names[] = new_df.getNumericalVariablesName();
+                double[][] dataX = new_df.getNumericalData(vnum_names);
+                addMatrixToR(dataX, vnum_names, "X_new");
+            }
+            return(true);
+            // TODO Auto-generated method stub
+            //throw new UnsupportedOperationException("Unimplemented method 'addVariableToR'");
         }
     }
     private class CDP_Basis extends CDP_Line implements RConversion{
@@ -501,8 +985,8 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
             AbstractMenuDialogWithILR rootMenu = null;
             ILRMenu rootILRMenu = null;
             AbstractMenuGeneral rootGeneralMenu = null;
-            
-            public BuildSBP(RBasedGenericMenu_jri dialogRoot, String vars[]){
+
+            public BuildSBP(JDialog dialogRoot, String vars[]){
                 super(dialogRoot, "Binary Partition Menu");
         
                 Point p = dialogRoot.getLocation();
@@ -767,63 +1251,6 @@ public class RBasedGenericMenu_renjin extends AbstractMenuRBasedDialog_renjin{
             }
         }
     }
-    
-    @Override
-    public void acceptButtonActionPerformed(){
-        re.eval("rm(list = ls())");
-
-        iVar = 0;
-        for(RConversion cdpLine: cdp_lines){
-            cdpLine.addVariableToR();
-        }
-        df = mainApplication.getActiveDataFrame();
-        String sel_names[] = super.ds.getSelectedData();
-
-        if(ds.selection_type == DataSelector.ONLY_NUMERIC){
-            double[][] dataX = df.getNumericalData(sel_names);
-            addMatrixToR(dataX, sel_names, "X");
-        }
-        if(ds.selection_type == DataSelector.ONLY_CATEGORIC){
-            String[][] dataX = df.getCategoricalData(sel_names);
-            addMatrixToR(dataX, sel_names, "X");
-        }
-        
-
-        if(ds instanceof DataSelector1to2){
-            
-            String sel_namesY[] = ((DataSelector1to2)ds).getSelectedDataB();
-            double[][] dataY = df.getNumericalData(sel_namesY);
-            addMatrixToR(dataY, sel_namesY, "Y");
-        }
-        // for(int i=0; i < data.length; i++){
-        //     re.assign(sel_names[i], data[i]);
-        // }
-        // re.eval("X = cbind(" + String.join(",", sel_names) + ")");
-        // re.eval("X[is.nan(X)] = NA_real_");
-
-        double dlevel[][] = df.getDetectionLevel(sel_names);
-        addMatrixToR(dlevel, sel_names, "DL");
-        // for(int i=0; i < data.length; i++){
-        //     re.assign(sel_names[i], dlevel[i]);
-        // }
-        // re.eval("DL = cbind(" + String.join(",", sel_names) + ")");
-        if(ds.group_by){
-            String sel_group = ds.getSelectedGroup();
-            if(sel_group != null){
-                String group[] = df.getCategoricalData(sel_group);
-                re.assign("GROUP", group);
-            }
-        }
-        
-        re.eval("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
-        re.eval("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
-
-        captureROutput();
-
-        setVisible(false);
-        
-    }
-
 
     
 }

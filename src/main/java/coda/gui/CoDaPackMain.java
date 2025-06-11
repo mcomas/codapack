@@ -210,7 +210,23 @@ public final class CoDaPackMain extends JFrame {
                         getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logoL.png")));
         outputPanel.addWelcome(CoDaPackConf.getVersion());
     }
-
+    public CoDaPackMain(boolean rcoda_call){
+        screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        // Es carrega el logo del CoDaPack
+        initComponents();
+        if(!rcoda_call){
+            this.setIconImage(
+                    Toolkit.getDefaultToolkit().getImage(
+                            getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logoL.png")));
+        }
+        try {
+            outputPanel.addWelcome(CoDaPackConf.getVersion());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     public void closeApplication() {
         CoDaPackConf.saveConfiguration();
         System.exit(0);

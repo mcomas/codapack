@@ -986,7 +986,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             ILRMenu rootILRMenu = null;
             AbstractMenuGeneral rootGeneralMenu = null;
             
-            public BuildSBP(RBasedGenericMenu_jri dialogRoot, String vars[]){
+            public BuildSBP(JDialog dialogRoot, String vars[]){
                 super(dialogRoot, "Binary Partition Menu");
         
                 Point p = dialogRoot.getLocation();
