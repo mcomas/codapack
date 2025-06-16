@@ -14,3 +14,8 @@ renjin-3.5*
 *.RData
 *.cdp
 *.exe
+*.zip
+external-programs
+cdp-macos-x64
+cdp-macos-aarch64
+cdp-windows

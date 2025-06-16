@@ -1,24 +1,33 @@
+#!/bin/bash
+
+set -e
+
 OUTDIR=cdp-$VERSION
 
-mkdir $OUTDIR -p
-mkdir $OUTDIR/Rlibraries -p
-mkdir $OUTDIR/Rscripts -p
-mkdir $OUTDIR/Help -p
+# Creem els directoris
+mkdir -p $OUTDIR $OUTDIR/Rlibraries $OUTDIR/Rscripts $OUTDIR/Help
 
+# Descomprimim els programes externs
 tar xzvf external-programs/jdk-17.0.7_${VERSION}_bin.tar.gz -C $OUTDIR
 unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
 cp -rf external-programs/create-dmg $OUTDIR
 
+# Copiem el codi font
 cp -rf src $OUTDIR
 
-cp -f Rscripts/{.,}**.R $OUTDIR/Rscripts/
-cp -f Help/{.,}**.yaml $OUTDIR/Help/
+# Copiem els Rscripts i Help amb rsync (més robust)
+rsync -av Rscripts/ $OUTDIR/Rscripts/
+rsync -av Help/ $OUTDIR/Help/
+
+# Copiem els scripts de construcció
 cp -f build-codapack-macos $OUTDIR/build-codapack
 cp -f run-codapack-macos $OUTDIR/run-codapack
 cp -f build_app.sh $OUTDIR/build-app
-# cp -f build_dmg.sh $OUTDIR/build-dmg
+
+# Generem l’script build-dmg
 cat << EOF > $OUTDIR/build-dmg
 #!/bin/bash
+set -e
 ./create-dmg/create-dmg \\
     --volname "CoDaPack" \\
     --volicon "src/main/resources/icons.icns" \\
@@ -32,16 +41,19 @@ cat << EOF > $OUTDIR/build-dmg
     "CoDaPack.app"
 EOF
 
+chmod +x $OUTDIR/build-dmg
+
+# Altres fitxers de configuració
 cp -f install_packages.R $OUTDIR
 cp -f codapack_structure.json $OUTDIR
 cp -f license.txt $OUTDIR
 cp -f pom.xml $OUTDIR
 
+# Permisos
 chmod -R a+x $OUTDIR/apache-maven-3.9.2/bin
-# chmod -R a+x $OUTDIR/jdk-17.0.7/bin
 chmod a+x $OUTDIR/build-codapack
 chmod a+x $OUTDIR/run-codapack
 chmod a+x $OUTDIR/build-app
-chmod a+x $OUTDIR/build-dmg
 
-(cd $OUTDIR && zip -r ../codapack-$VERSION.zip -r .)
+# Empaquetem el resultat final
+(cd $OUTDIR && zip -X -r ../codapack-$VERSION.zip .)

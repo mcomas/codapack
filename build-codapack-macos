@@ -1,14 +1,24 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
-ROOT="$(dirname "$0")"
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+
 unset R_HOME
 export JAVA_HOME=$ROOT/jdk-17.0.7.jdk/Contents/Home
 export MAVEN_HOME=$ROOT/apache-maven-3.9.2
 export R_LIBS_USER=$ROOT/Rlibraries
 export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
+
+# Verifiquem que R estigui disponible
+command -v R >/dev/null 2>&1 || { echo >&2 "R not found in PATH"; exit 1; }
+
 export R_HOME=$(R RHOME)
 
-#R
+cd "$ROOT"
 
-cd $ROOT
-mvn package && Rscript -e "TYPE='mac.binary'; LIB='$R_LIBS_USER'; source('install_packages.R')"
+echo "Building Java package..."
+mvn package
+
+echo "Installing R packages..."
+Rscript -e "TYPE='mac.binary'; LIB='$R_LIBS_USER'; source('install_packages.R')"
+
+echo "Build completed successfully."

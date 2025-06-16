@@ -213,19 +213,21 @@ public final class CoDaPackMain extends JFrame {
     public CoDaPackMain(boolean rcoda_call){
         screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
         
-        // Es carrega el logo del CoDaPack
-        initComponents();
+        initComponents(rcoda_call);
         if(!rcoda_call){
+            // Es carrega el logo del CoDaPack
+            
             this.setIconImage(
-                    Toolkit.getDefaultToolkit().getImage(
-                            getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logoL.png")));
-        }
-        try {
-            outputPanel.addWelcome(CoDaPackConf.getVersion());
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            Toolkit.getDefaultToolkit().getImage(
+            getClass().getResource(CoDaPackMain.RESOURCE_PATH + "logoL.png")));
+            try {
+                outputPanel.addWelcome(CoDaPackConf.getVersion());
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+}
+        
     }
     public void closeApplication() {
         CoDaPackConf.saveConfiguration();
@@ -233,27 +235,30 @@ public final class CoDaPackMain extends JFrame {
     }
 
     private void initComponents() {
+        initComponents(false);
+    }
+    private void initComponents(boolean rcoda_call) {
         ITEM_APPLICATION_NAME = "CoDaPack v" + CoDaPackConf.getVersion();
         outputPanel = new OutputPanel();
         outputPanels = new OutputPanel[1];        
         outputPanels[0] = outputPanel;
 
         tablePanel = new TablePanel(this);
-
-        // Panel with the active variable
         dataList = new DataList();
-        jMenuBar = new CoDaPackMenu(this);
-        jMenuBar.addCoDaPackMenuListener(new CoDaPackMenuListener() {
-            @Override
-            public void menuItemClicked(String v) {
-                try {
-                    eventCoDaPack(v);
-                } catch (ScriptException ex) {
-                    Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+        if(!rcoda_call){
+            // Panel with the active variable            
+            jMenuBar = new CoDaPackMenu(this);
+            jMenuBar.addCoDaPackMenuListener(new CoDaPackMenuListener() {
+                @Override
+                public void menuItemClicked(String v) {
+                    try {
+                        eventCoDaPack(v);
+                    } catch (ScriptException ex) {
+                        Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
-
+            });
+        }
         setTitle(ITEM_APPLICATION_NAME);
         int w_size = Math.round(3*screenDimension.width/4);
         int h_size = Math.round(3*screenDimension.height/4);

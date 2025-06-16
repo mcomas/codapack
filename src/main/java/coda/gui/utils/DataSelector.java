@@ -22,4 +22,5 @@ public abstract class DataSelector extends JPanel {
 
     public abstract String getSelectedGroup();
     
+    public abstract void setSelectedGroup(String value);
 }

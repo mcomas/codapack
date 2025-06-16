@@ -37,6 +37,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -504,6 +505,20 @@ public final class DataSelector1to2 extends DataSelector {
             String ee = model2B.elementAt(index[i]);
             model2B.removeElementAt(index[i]);
             model1.insertElementAt(ee, from);
+        }
+    }
+    @Override
+    public void setSelectedGroup(String value) {
+        if (value == null) {
+            var_group.setSelectedIndex(0);
+            return;
+        }
+        ComboBoxModel<String> model = var_group.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            if (value.equals(model.getElementAt(i))) {
+                var_group.setSelectedIndex(i);
+                return;
+            }
         }
     }
 }

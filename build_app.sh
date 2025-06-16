@@ -1,18 +1,25 @@
 #!/bin/bash
 
-# Define paths to your JDK and other necessary files
+set -e
+
+# Define version and paths
+VERSION=2.03.07
 JAVA_HOME=jdk-17.0.7.jdk/Contents/Home/
-JAR_PATH=target/CoDaPack-2.03.06-jar-with-dependencies.jar
+JAR_PATH=target/CoDaPack-${VERSION}-jar-with-dependencies.jar
 JSON_PATH=codapack_structure.json
 HELP_PATH=Help
 RSCRIPTS_PATH=RScripts
 ICON_PATH=src/main/resources/icons.icns
 RLIBRARIES_PATH=Rlibraries
 
-# Create "CoDaPack.app" and its structure
+# Clean previous build
+rm -rf CoDaPack.app
+
+# Create app structure
 mkdir -p CoDaPack.app/Contents
 CONTENTS=CoDaPack.app/Contents
 
+# Create info.plist
 cat << EOF > $CONTENTS/info.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
@@ -23,49 +30,55 @@ cat << EOF > $CONTENTS/info.plist
     <string>run.sh</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon.icns</string>
+    <key>CFBundleName</key>
+    <string>CoDaPack</string>
+    <key>CFBundleVersion</key>
+    <string>${VERSION}</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.coda.codaPack</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
 </dict>
 </plist>
 EOF
 
-# Copy JDK contents
-mkdir $CONTENTS/Java
-cp -rf $JAVA_HOME/* $CONTENTS/Java/
+# Copy JDK
+mkdir -p $CONTENTS/Java
+cp -a $JAVA_HOME/. $CONTENTS/Java/
 
-# Create MacOS folder and copy necessary files
-mkdir $CONTENTS/MacOS
+# Copy application files
+mkdir -p $CONTENTS/MacOS
 cp $JAR_PATH $CONTENTS/MacOS/
 cp $JSON_PATH $CONTENTS/MacOS/
-cp -r $RSCRIPTS_PATH $CONTENTS/MacOS/
-cp -r $HELP_PATH $CONTENTS/MacOS/
 
+rsync -av $RSCRIPTS_PATH/ $CONTENTS/MacOS/RScripts/
+rsync -av $HELP_PATH/ $CONTENTS/MacOS/Help/
 
-# Create run.sh in MacOS
+# Create run.sh
 cat << EOF > $CONTENTS/MacOS/run.sh
 #!/bin/zsh
-# source env_variables
 EXEDIR="\$(dirname "\$0")"
-
 cd \$EXEDIR
 
 export JAVA_HOME="../Java/"
 export R_LIBS_USER="../Rlibraries"
 export PATH=\$JAVA_HOME/bin:\$R_LIBS_USER/rJava/jri:\$PATH
-export R_HOME="$(R RHOME)"
+export R_HOME="\$(R RHOME)"
 
 export CDP_WORKING_DIR=\$EXEDIR
 export CDP_RESOURCES="."
-export CDP_R_SCRIPTS=\$CDP_RESOURCES/Rscripts/
+export CDP_R_SCRIPTS=\$CDP_RESOURCES/RScripts/
 
-exec java -Djava.library.path="\$R_LIBS_USER/rJava/jri" -Xdock:name="CoDaPack" -Xdock:icon="../Resources/AppIcon.icns" -jar "CoDaPack-2.03.06-jar-with-dependencies.jar" 
+exec java -Djava.library.path="\$R_LIBS_USER/rJava/jri" -Xdock:name="CoDaPack" -Xdock:icon="../Resources/AppIcon.icns" -jar "CoDaPack-${VERSION}-jar-with-dependencies.jar"
 EOF
+
 chmod +x $CONTENTS/MacOS/run.sh
 
-# Go back to Contents and create Resources folder, then copy the icon
-mkdir $CONTENTS/Resources
+# Copy resources
+mkdir -p $CONTENTS/Resources
 cp $ICON_PATH $CONTENTS/Resources/AppIcon.icns
 
-# Copy Rlibraries
-cp -r $RLIBRARIES_PATH $CONTENTS/
+# Copy R libraries
+rsync -av $RLIBRARIES_PATH/ $CONTENTS/Rlibraries/
 
-# End of script
 echo "CoDaPack.app structure created successfully."
