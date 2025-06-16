@@ -139,17 +139,17 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         
         String SOURCE = "error = tryCatch(source('%s'), error = function(e) e$message)";
         
-        String SOURCE_HELPER = SOURCE.formatted(Paths.get(CoDaPackConf.rScriptPath, ".cdp_helper_functions.R").toString().replace("\\","/"));
+        String SOURCE_HELPER = String.format(SOURCE, Paths.get(CoDaPackConf.rScriptPath, ".cdp_helper_functions.R").toString().replace("\\","/"));
         System.out.println(SOURCE_HELPER);
         re.eval(SOURCE_HELPER);
         
-        String SOURCE_CODE = SOURCE.formatted(Paths.get(CoDaPackConf.rScriptPath, this.script_file).toString().replace("\\","/"));
+        String SOURCE_CODE = String.format(SOURCE, Paths.get(CoDaPackConf.rScriptPath, this.script_file).toString().replace("\\","/"));
         System.out.println(SOURCE_CODE);
         re.eval(SOURCE_CODE);
 
         String errorMessage[] = re.eval("error").asStringArray();
         if(errorMessage != null){
-            JOptionPane.showMessageDialog(this, "Error when reading R script file: %s".formatted(this.script_file));
+            JOptionPane.showMessageDialog(this, String.format("Error when reading R script file: %s", this.script_file));
             return;
         }
 
@@ -161,17 +161,17 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         }
 
 
-        System.out.println("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
-        System.out.println("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
-        re.eval("PLOT_WIDTH = %d/72".formatted(PLOT_WIDTH));
-        re.eval("PLOT_HEIGTH = %d/72".formatted(PLOT_HEIGHT));
+        System.out.println(String.format("PLOT_WIDTH = %d/72", PLOT_WIDTH));
+        System.out.println(String.format("PLOT_HEIGTH = %d/72", PLOT_HEIGHT));
+        re.eval(String.format("PLOT_WIDTH = %d/72", PLOT_WIDTH));
+        re.eval(String.format("PLOT_HEIGTH = %d/72", PLOT_HEIGHT));
         
         
         re.eval("error = tryCatch(cdp_res <- cdp_analysis(), error = function(e) e$message)");
         errorMessage = re.eval("error").asStringArray();
         if(errorMessage != null){
             
-            JOptionPane.showMessageDialog(this, "Error when running the analysis: %s".formatted(String.join("\n", errorMessage)));
+            JOptionPane.showMessageDialog(this, String.format("Error when running the analysis: %s", String.join("\n", errorMessage)));
             return;
         }
         
@@ -192,12 +192,12 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             vnames[i] = ".cdp_x"+i;
             re.assign(vnames[i], data[i]);
         }
-        re.eval("%s = cbind(%s)".formatted(name, String.join(",", vnames)));
+        re.eval(String.format("%s = cbind(%s)", name, String.join(",", vnames)));
 
         String col_names_ext[] = new String[col_names.length];
         for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
-        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names_ext)));
-        re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
+        re.eval(String.format("colnames(%s) = c(%s)", name , String.join(",", col_names_ext)));
+        re.eval(String.format("%s[is.nan(%s)] = NA_real_", name, name));
     }
     public void addMatrixToR(String data[][], String col_names[], String name){
         String vnames[] = new String[data.length];
@@ -205,12 +205,12 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             vnames[i] = ".cdp_x"+i;
             re.assign(vnames[i], data[i]);
         }
-        re.eval("%s = cbind(%s)".formatted(name, String.join(",", vnames)));
+        re.eval(String.format("%s = cbind(%s)", name, String.join(",", vnames)));
 
         String col_names_ext[] = new String[col_names.length];
         for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
-        re.eval("colnames(%s) = c(%s)".formatted(name , String.join(",", col_names_ext)));
-        re.eval("%s[is.nan(%s)] = NA_real_".formatted(name, name));
+        re.eval(String.format("colnames(%s) = c(%s)", name , String.join(",", col_names_ext)));
+        re.eval(String.format("%s[is.nan(%s)] = NA_real_", name, name));
     }
     void showText(){    
         String outputString[] = re.eval("unlist(cdp_res[['text']])").asStringArray();
@@ -617,7 +617,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
     }
 
     private abstract class CDP_Line extends JPanel{
-        static int MAX_SIZE = 300;
+        int MAX_SIZE = 300;
         public CDP_Line(){            
             setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
             setMaximumSize(new Dimension(MAX_SIZE, 35));
@@ -669,7 +669,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         public boolean addVariableToR() {
             String V = (String) cb.getSelectedItem();
 
-            String EXP = "V%d = '%s'".formatted(++iVar, V);
+            String EXP = String.format("V%d = '%s'", ++iVar, V);
             System.out.println(EXP);
             re.eval(EXP);
             return(true);
@@ -693,7 +693,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         public boolean addVariableToR() {
             String V = Tnum.getText();
 
-            String EXP = "V%d = as.numeric(%s)".formatted(++iVar, V);
+            String EXP = String.format("V%d = as.numeric(%s)", ++iVar, V);
             System.out.println(EXP);
             re.eval(EXP);
             return(true);
@@ -718,7 +718,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         public boolean addVariableToR() {
             String V = Tstr.getText();
 
-            String EXP = "V%d = '%s'".formatted(++iVar, V);
+            String EXP = String.format("V%d = '%s'", ++iVar, V);
             System.out.println(EXP);
             re.eval(EXP);
             return(true);
@@ -739,7 +739,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             String V = "FALSE";
             if(Bbool.isSelected()) V = "TRUE";
 
-            String EXP = "V%d = %s".formatted(++iVar, V);
+            String EXP = String.format("V%d = %s", ++iVar, V);
             System.out.println(EXP);
             re.eval(EXP);
             return(true);
@@ -948,9 +948,9 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         public boolean addVariableToR() {
             String str_basis = basis.getText();
 
-            String EXP1 = "Basis%s = scan(text = '%s', quiet=TRUE)".formatted(selector, str_basis.replace("\n", "").replace("\r", "")); 
-            String EXP2 = "nr = (1+sqrt(1+4*length(Basis%s)))/2".formatted(selector);
-            String EXP3 = "dim(Basis%s) = c(nr,nr-1)".formatted(selector);
+            String EXP1 = String.format("Basis%s = scan(text = '%s', quiet=TRUE)", selector, str_basis.replace("\n", "").replace("\r", "")); 
+            String EXP2 = String.format("nr = (1+sqrt(1+4*length(Basis%s)))/2", selector);
+            String EXP3 = String.format("dim(Basis%s) = c(nr,nr-1)", selector);
             System.out.println(EXP1);
             System.out.println(EXP2);
             System.out.println(EXP3);
@@ -968,13 +968,13 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             int partition[][];
             boolean activeVars[];
         
-            static public String Gr0 = " ";
-            static public String Gr1 = "-";
-            static public String Gr2 = "+";
+            public String Gr0 = " ";
+            public String Gr1 = "-";
+            public String Gr2 = "+";
         
-            static public int VGr0 = 0;
-            static public int VGr1 = 1;
-            static public int VGr2 = 2;
+            public int VGr0 = 0;
+            public int VGr1 = 1;
+            public int VGr2 = 2;
         
             BinaryPartitionTable partitionTable = null;
             BinaryPartitionRowHeaders rowsTable = null;

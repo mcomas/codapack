@@ -116,7 +116,7 @@ public final class HelpMenu extends JFXPanel {
         /* name */
         System.out.println(strMathJaxLib);
 
-        helpText = "<html><head>%s</head><body>".formatted(strMathJaxLib);
+        helpText = String.format("<html><head>%s</head><body>", strMathJaxLib);
         helpText += "<center><h2>" + this.helpTitle + "</h2></center>";
 
         /* description */

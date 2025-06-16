@@ -85,7 +85,7 @@ public class SortDataMenu extends AbstractMenuDialog{
             }
             int[] orderSort;
             try {
-                orderSort = ((IntVector)re.eval("order(%s, decreasing = %s)".formatted(vars, decreasing))).toIntArray();
+                orderSort = ((IntVector)re.eval(String.format("order(%s, decreasing = %s)", vars, decreasing))).toIntArray();
                 DataFrame newDf = new DataFrame();
 
                 // we add the variables ordereds by the orderSort

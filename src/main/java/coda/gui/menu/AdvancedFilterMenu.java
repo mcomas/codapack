@@ -97,7 +97,7 @@ public class AdvancedFilterMenu extends AbstractMenuDialog{
                             String expression = expressionField.getText();
                             try {
                                 if(re.eval(expression) instanceof LogicalVector){
-                                    int[] res = ((IntVector)re.eval("which(!%s)-1L".formatted(expression))).toIntArray();
+                                    int[] res = ((IntVector)re.eval(String.format("which(!%s)-1L", expression))).toIntArray();
                                     DataFrame filtredDataFrame = new DataFrame(df);
                                     filtredDataFrame.subFrame(res);
                                     filtredDataFrame.setName(nameField.getText());

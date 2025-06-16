@@ -121,7 +121,7 @@ public class CoDaPackConf {
     public static String workingDir = System.getenv("CDP_WORKING_DIR"); //System.getProperty("user.dir");
     static{
         if(workingDir == null) workingDir = System.getProperty("user.dir");
-        System.out.println("Working directory at: %s".formatted(workingDir));
+        System.out.println(String.format("Working directory at: %s", workingDir));
     }
 
     public static String configurationFile = Paths.get(workingDir, ".codapack").toString();
@@ -131,7 +131,7 @@ public class CoDaPackConf {
     public static String resourcesDir = System.getenv("CDP_RESOURCES");
     static{
         if(resourcesDir == null) resourcesDir = ".";
-        System.out.println("Resources directory at: %s".formatted(resourcesDir));
+        System.out.println(String.format("Resources directory at: %s", resourcesDir));
     }
 
 
@@ -139,7 +139,7 @@ public class CoDaPackConf {
     public static String rScriptPath = System.getenv("CDP_R_SCRIPTS");
     static{
         if(rScriptPath == null) Paths.get(resourcesDir, "Rscripts").toString();
-        System.out.println("R scripts at: %s".formatted(rScriptPath));
+        System.out.println(String.format("R scripts at: %s", rScriptPath));
     }
 
     public static String helpPath = Paths.get(resourcesDir, "Help").toString();
