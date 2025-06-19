@@ -44,7 +44,7 @@ Source: "Rlibraries\*"; DestDir: "{app}\Rlibraries"; Flags: ignoreversion recurs
 Source: "Rscripts\*"; DestDir: "{app}\Rscripts"; Flags: ignoreversion recursesubdirs
 Source: "Help\*"; DestDir: "{app}\Help"; Flags: ignoreversion recursesubdirs
 Source: "src\*"; DestDir: "{app}\src"; Flags: ignoreversion recursesubdirs
-Source: "target\CoDaPack-2.03.06-jar-with-dependencies.jar"; DestDir: "{app}\target"; Flags: ignoreversion recursesubdirs
+Source: "target\CoDaPack-2.03.07-jar-with-dependencies.jar"; DestDir: "{app}\target"; Flags: ignoreversion recursesubdirs
 Source: "CoDaPack.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "codapack_structure.json"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "target\codapack-{#MyAppVersion}.jar"; DestDir: "{app}"; Flags: ignoreversion
