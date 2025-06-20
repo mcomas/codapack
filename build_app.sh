@@ -27,7 +27,7 @@ cat << EOF > $CONTENTS/info.plist
 <plist version="1.0">
 <dict>
     <key>CFBundleExecutable</key>
-    <string>run.sh</string>
+    <string>CoDaPack</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon.icns</string>
     <key>CFBundleName</key>
@@ -55,14 +55,14 @@ rsync -av $RSCRIPTS_PATH/ $CONTENTS/MacOS/RScripts/
 rsync -av $HELP_PATH/ $CONTENTS/MacOS/Help/
 
 # Create run.sh
-cat << EOF > $CONTENTS/MacOS/run.sh
+cat << EOF > $CONTENTS/MacOS/CoDaPack
 #!/bin/zsh
 EXEDIR="\$(dirname "\$0")"
 cd \$EXEDIR
 
 export JAVA_HOME="../Java/"
 export R_LIBS_USER="../Rlibraries"
-export PATH=\$JAVA_HOME/bin:\$R_LIBS_USER/rJava/jri:\$PATH
+export PATH=\$JAVA_HOME/bin:\$R_LIBS_USER/rJava/jri:/usr/local/bin:\$PATH
 export R_HOME="\$(R RHOME)"
 
 export CDP_WORKING_DIR=\$EXEDIR
@@ -72,7 +72,7 @@ export CDP_R_SCRIPTS=\$CDP_RESOURCES/RScripts/
 exec java -Djava.library.path="\$R_LIBS_USER/rJava/jri" -Xdock:name="CoDaPack" -Xdock:icon="../Resources/AppIcon.icns" -jar "CoDaPack-${VERSION}-jar-with-dependencies.jar"
 EOF
 
-chmod +x $CONTENTS/MacOS/run.sh
+chmod +x $CONTENTS/MacOS/CoDaPack
 
 # Copy resources
 mkdir -p $CONTENTS/Resources
