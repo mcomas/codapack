@@ -3,7 +3,7 @@
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 unset R_HOME
-export JAVA_HOME=$ROOT/jdk-17.0.7.jdk/Contents/Home
+export JAVA_HOME=$ROOT/jdk-17/Contents/Home
 export MAVEN_HOME=$ROOT/apache-maven-3.9.2
 export R_LIBS_USER=$ROOT/Rlibraries
 export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
@@ -13,12 +13,34 @@ command -v R >/dev/null 2>&1 || { echo >&2 "R not found in PATH"; exit 1; }
 
 export R_HOME=$(R RHOME)
 
+# Configura Java a R (important per rJava)
+echo "Running javareconf..."
+R CMD javareconf
+
 cd "$ROOT"
 
 echo "Building Java package..."
 mvn package
 
-echo "Installing R packages..."
-Rscript -e "TYPE='mac.binary'; LIB='$R_LIBS_USER'; source('install_packages.R')"
+#echo "Installing R packages..."
+#Rscript -e "TYPE=NULL; LIB='$R_LIBS_USER'; source('install_packages.R')"
+# Copiar llibreries R existents
+echo "Copying R libraries..."
+LIBS=( abind doParallel iterators magic pdfCluster rJava 
+  cluster flexmix kernlab MASS prabclus rlang 
+  coda.base foreach knitr mclust Rcpp robustbase 
+  DEoptimR fpc linprog modeltools RcppArmadillo tclust 
+  diptest geometry lpSolve mvtnorm RcppProgress zCompositions )
+
+mkdir -p "$R_LIBS_USER"
+
+for lib in $LIBS; do
+    SRC_DIR=$(Rscript -e "cat(find.package('$lib'))")
+    if [ -d "$SRC_DIR" ]; then
+        cp -R "$SRC_DIR" "$R_LIBS_USER/"
+    else
+        echo "Warning: Library $lib not found"
+    fi
+done
 
 echo "Build completed successfully."

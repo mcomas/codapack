@@ -2,7 +2,7 @@
 
 ROOT="$(dirname "$0")"
 unset R_HOME
-export JAVA_HOME=$ROOT/jdk-17.0.7.jdk/Contents/Home
+export JAVA_HOME=$ROOT/jdk-17/Contents/Home
 export R_LIBS_USER=$ROOT/Rlibraries
 export PATH=$JAVA_HOME/bin:$R_LIBS_USER/rJava/jri:$PATH
 export R_HOME=$(R RHOME)

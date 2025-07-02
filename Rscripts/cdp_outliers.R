@@ -6,7 +6,6 @@ cdp_check = function(){
   
 }
 cdp_analysis = function(){
-  save.image("backup.RData")
   threshold <- V1
   H <- coda.base::coordinates(X)
   

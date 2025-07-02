@@ -8,7 +8,10 @@ OUTDIR=cdp-$VERSION
 mkdir -p $OUTDIR $OUTDIR/Rlibraries $OUTDIR/Rscripts $OUTDIR/Help
 
 # Descomprimim els programes externs
-tar xzvf external-programs/jdk-17.0.7_${VERSION}_bin.tar.gz -C $OUTDIR
+# tar xzvf external-programs/jdk-17.0.7_${VERSION}_bin.tar.gz -C $OUTDIR
+tar xzvf external-programs/bellsoft-jdk17.0.15+10-${VERSION}.tar.gz -C $OUTDIR
+mv $OUTDIR/jdk-17.0.15.jdk $OUTDIR/jdk-17
+
 unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
 cp -rf external-programs/create-dmg $OUTDIR
 
