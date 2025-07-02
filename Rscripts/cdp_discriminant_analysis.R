@@ -7,9 +7,10 @@ cdp_check = function(){
 }
 cdp_analysis = function(){
   ################# MAIN #################
-  
-  # save.image('Rscripts/cdp_discriminant_analysis.RData')
-  H = coda.base::coordinates(X)
+  require(coda.base)
+  save.image('cdp_discriminant_analysis.RData')
+  B = ilr_basis(ncol(X))
+  H = coda.base::coordinates(X, B)
   prior = as.vector(prop.table(table(GROUP)))
   if(V1){
     prior = rep(1/length(prior), length(prior))
@@ -17,20 +18,21 @@ cdp_analysis = function(){
   
   lda1 = MASS::lda(x = H, grouping = as.factor(GROUP), prior = prior)
   lda1_coda = lda1
-  lda1_coda$means = coda.base::composition(lda1$means, coda.base::basis(H))
-  lda1_coda$scaling = t(coda.base::composition(t(lda1$scaling), coda.base::basis(H)))
+  lda1_coda$means = coda.base::composition(lda1$means, B)
+  lda1_coda$scaling = t(coda.base::composition(t(lda1$scaling), B))
   
   
   lda_coef = coef(lda1)
   if(NCOL(lda_coef) == 1){
-    lda1.dfunc = sprintf("\nDiscriminant function:\n%s = 0", paste(sprintf("%0.3f ln %s", coda.base::basis(H) %*% lda_coef, colnames(X)), collapse = ' + '))
+    lda1.dfunc = sprintf("\nDiscriminant function:\n%s = 0", 
+                         paste(sprintf("%0.3f ln %s", B %*% lda_coef, colnames(X)), collapse = ' + '))
     lda1.dfunc = gsub("+ -", "- ", lda1.dfunc, fixed = TRUE)
   }else{
     lda1.dfunc = "\nDiscriminant functions:"
     for(j in 1:NCOL(lda_coef)){
       lda1.dfunc = sprintf("%s\n%s = 0", 
                            lda1.dfunc, 
-                           paste(sprintf("%0.3f ln %s", coda.base::basis(H) %*% lda_coef[,j], colnames(X)), collapse = ' + '))
+                           paste(sprintf("%0.3f ln %s", B %*% lda_coef[,j], colnames(X)), collapse = ' + '))
     }
     lda1.dfunc = gsub("+ -", "- ", lda1.dfunc, fixed = TRUE)
   }
@@ -79,7 +81,7 @@ cdp_analysis = function(){
   )
   
   if(exists('X_new')){
-    H_new = coda.base::coordinates(X_new, coda.base::basis(H))
+    H_new = coda.base::coordinates(X_new, B)
     new_data2 = data.frame(predict(lda1, newdata = as.data.frame(H_new))$class)
     names(new_data2) = paste0('group.pred')
     res[['new_data2']] = new_data2

@@ -14,7 +14,8 @@ cdp_analysis = function(){
   library(cluster)
   
   ################# MAIN #################
-  H <- coda.base::coordinates(X)
+  B = coda.base::ilr_basis(ncol(X))
+  H <- coda.base::coordinates(X, B)
   
   i.nona = which(rowSums(is.na(H))==0)
   
@@ -60,7 +61,7 @@ cdp_analysis = function(){
                     'CH index' = v_calinski,
                     'AS index' = v_silhouette)
   
-  dcenters = as.data.frame(coda.base::composition(km_best$centers, coda.base::basis(H)))
+  dcenters = as.data.frame(coda.base::composition(km_best$centers, B))
   names(dcenters) = colnames(X)
   
   dcenters$Size = km_best$size
