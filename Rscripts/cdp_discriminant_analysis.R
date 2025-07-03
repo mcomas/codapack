@@ -8,7 +8,7 @@ cdp_check = function(){
 cdp_analysis = function(){
   ################# MAIN #################
   require(coda.base)
-  save.image('cdp_discriminant_analysis.RData')
+  # save.image('cdp_discriminant_analysis.RData')
   B = ilr_basis(ncol(X))
   H = coda.base::coordinates(X, B)
   prior = as.vector(prop.table(table(GROUP)))
@@ -19,13 +19,15 @@ cdp_analysis = function(){
   lda1 = MASS::lda(x = H, grouping = as.factor(GROUP), prior = prior)
   lda1_coda = lda1
   lda1_coda$means = coda.base::composition(lda1$means, B)
-  lda1_coda$scaling = t(coda.base::composition(t(lda1$scaling), B))
+  lda1_coda$scaling = NULL
   
   
   lda_coef = coef(lda1)
   if(NCOL(lda_coef) == 1){
+    K = -(lda1$prior %*% lda1$means) %*% coef(lda1)
     lda1.dfunc = sprintf("\nDiscriminant function:\n%s = 0", 
-                         paste(sprintf("%0.3f ln %s", B %*% lda_coef, colnames(X)), collapse = ' + '))
+                         paste(c(sprintf("%0.3f ln %s", B %*% lda_coef, colnames(X)),
+                                 sprintf("%0.3f", K)), collapse = ' + '))
     lda1.dfunc = gsub("+ -", "- ", lda1.dfunc, fixed = TRUE)
   }else{
     lda1.dfunc = "\nDiscriminant functions:"
@@ -41,6 +43,8 @@ cdp_analysis = function(){
   lda1cv = MASS::lda(H, GROUP, prior = prior, CV = TRUE)
   
   sortida <- paste(capture.output(lda1_coda))
+  i = which(sortida == "Coefficients of linear discriminants:")
+  sortida = sortida[-c(i,i+1)]
   sortida = c(sortida, lda1.dfunc)
   ct <- table(GROUP, lda1cv$class)
   

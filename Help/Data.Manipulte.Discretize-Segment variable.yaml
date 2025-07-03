@@ -1,4 +1,4 @@
 ---
 name: Data.Manipulte.Discretize/Segment variable Help Menu
-description: "This function implements several basic unsupervised methods to convert a continuous variable into a categorical variable (factor) using different binning strategies. For convenience, a whole data.frame can be discretized (i.e., all numeric columns are discretized). It uses R function $\mathbf{discretize}$ from package $\mathbf{arules}$."
+description: 'This function implements several basic unsupervised methods to convert a continuous variable into a categorical variable (factor) using different binning strategies. For convenience, a whole data.frame can be discretized (i.e., all numeric columns are discretized). It uses R function $\mathbf{discretize}$ from package $\mathbf{arules}$.'
 references: https://www.rdocumentation.org/packages/arules/versions/1.6-3/topics/discretize

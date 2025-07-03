@@ -1,7 +1,7 @@
 ---
-name: "Irregular data.Bayesian-multiplicative zero replacement Help Menu"
-description: "This function implements methods for imputing zeros in compositional count data sets based on a Bayesian-multiplicative replacement. It uses R function $\\textbf{cmultRepl}$ from package $\\textbf{zCompositions}$. Data must be given as counts and not as a closed composition. Detection limits are not needed."
+name: 'Irregular data.Bayesian-multiplicative zero replacement Help Menu'
+description: 'This function implements methods for imputing zeros in compositional count data sets based on a Bayesian-multiplicative replacement. It uses R function $\\textbf{cmultRepl}$ from package $\\textbf{zCompositions}$. Data must be given as counts and not as a closed composition. Detection limits are not needed.'
 options:
-  - method: "Geometric Bayesian multiplicative (GBM, default); square root BM (SQ); BayesLaplace BM (BL); count zero multiplicative (CZM)."
-  - output: "Output format: imputed proportions (prop, default) or pseudo-counts (p-counts)."
-references: "Palarea-Albaladejo J. and Martin-Fernandez JA. zCompositions -- R package for multivariate imputation of left-censored data under a compositional approach. Chemometrics and Intelligence Laboratory Systems 2015. https://www.rdocumentation.org/packages/zCompositions/versions/1.3.2-1/topics/cmultRepl."
+  - method: 'Geometric Bayesian multiplicative (GBM, default); square root BM (SQ); BayesLaplace BM (BL); count zero multiplicative (CZM).'
+  - output: 'Output format: imputed proportions (prop, default) or pseudo-counts (p-counts).'
+references: 'Palarea-Albaladejo J. and Martin-Fernandez JA. zCompositions -- R package for multivariate imputation of left-censored data under a compositional approach. Chemometrics and Intelligence Laboratory Systems 2015. https://www.rdocumentation.org/packages/zCompositions/versions/1.3.2-1/topics/cmultRepl.'

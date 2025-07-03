@@ -90,10 +90,19 @@ public class PerturbateDataMenu extends AbstractMenuDialog{
             String selectedNames[] = ds.getSelectedData();
             dataFrame = mainApplication.getActiveDataFrame();
 
-            String[] v = perturbateWith.getText().split(" ");
+            //String[] v = perturbateWith.getText().split(" ");
+            String[] v = perturbateWith.getText().trim().split("\\s+");
 
             double [] perturbation = new double[v.length];
-            for(int i=0;i<v.length;i++) perturbation[i] = Double.parseDouble(v[i]);
+            for(int i=0;i<v.length;i++){
+                //perturbation[i] = Double.parseDouble(v[i]);
+                try {
+                    perturbation[i] = Double.parseDouble(v[i]);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid number: " + v[i]);
+                    // handle error or rethrow
+                }
+            }
 
             boolean selection[] = dataFrame.getValidCompositionsWithZeros(selectedNames);
             

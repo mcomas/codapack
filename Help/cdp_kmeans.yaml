@@ -1,8 +1,8 @@
 ---
-name: "Statistics.Multivariate Analysis.Cluster.K-Means Help Menu"
-description: "This feature performs a multivariate cluster analysis of selected parts."
+name: 'Statistics.Multivariate Analysis.Cluster.K-Means Help Menu'
+description: 'This feature performs a multivariate cluster analysis of selected parts.'
 options:
-  - Number of clusters: "If checked, the user must indicate a fixed number of clusters."
-  - Find optimal number of clusters: "If checked, the user must indicate the maximum number of clusters."
+  - Number of clusters: 'If checked, the user must indicate a fixed number of clusters.'
+  - Find optimal number of clusters: 'If checked, the user must indicate the maximum number of clusters.'
   - Optimal Method: Logical: "Calinski index (default) / Average silhouette"
-  - Name of column of groups: "\"Group\" by defaul. Be aware that a valid variable name consists of letters, numbers and the dot or underline characters. The variable name must start with a letter or the dot not followed by a number."
+  - Name of column of groups: '\"Group\" by defaul. Be aware that a valid variable name consists of letters, numbers and the dot or underline characters. The variable name must start with a letter or the dot not followed by a number.'

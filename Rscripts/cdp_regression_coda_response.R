@@ -141,16 +141,17 @@ cdp_analysis = function(){
   
   
   #PART NOVA. ARA TE EN COMPTE ELS NOMS DE TOTES LES X I TRANSPOSA COEFICIENTS PER PODER-LOS INVERTIR
-  NDF<-as.data.frame(as.factor(c("intercept",names(X))))
-  names(NDF)<-paste("Coefficients")
-  NDF=cbind.data.frame(NDF,LM$coefficients)
+  NDF = cbind(
+    data.frame("Variable" = row.names(LM$coefficients)), 
+    as.data.frame(LM$coefficients, row.names = FALSE)
+  )
   #FI PART NOVA.
   
   
   # Ooutput
   list(
     'text' = gsub("[‘’]", "'", text_output),
-    'dataframe' = list(), #list('coefficients' = NDF),
+    'dataframe' = list('coefficients' = NDF),
     'graph' = graphnames,
     'new_data' = new_data
   )

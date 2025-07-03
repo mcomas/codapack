@@ -1,6 +1,6 @@
 ---
-name: "Statistics.Additive Logistic Normality Tests Help Menu"
-description: "This function alows the user to perform a test for logistic normality of a $D$-part composition. It includes all marginal, univariate distributions (with a total of $(D-1)$ tests); all bivariate angle distributions (with a total of $D(D-1)/2$ tests); and the $(D-1)$-dimensional radius distribution. For each kind of test the Anderson-Darling, Cramer-von Misses and Watson statistics are computed and their significance is given." 
-references: "Aitchison, J. (1986). The Statistical Analysis of Compositional Data. Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). (Reprinted in 2003 with additional material by The Blackburn Press). 416 p."
+name: 'Statistics.Additive Logistic Normality Tests Help Menu'
+description: 'This function alows the user to perform a test for logistic normality of a $D$-part composition. It includes all marginal, univariate distributions (with a total of $(D-1)$ tests); all bivariate angle distributions (with a total of $D(D-1)/2$ tests); and the $(D-1)$-dimensional radius distribution. For each kind of test the Anderson-Darling, Cramer-von Misses and Watson statistics are computed and their significance is given.' 
+references: 'Aitchison, J. (1986). The Statistical Analysis of Compositional Data. Monographs on Statistics and Applied Probability. Chapman & Hall Ltd., London (UK). (Reprinted in 2003 with additional material by The Blackburn Press). 416 p.'
 
 

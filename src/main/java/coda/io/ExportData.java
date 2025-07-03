@@ -76,8 +76,17 @@ public class ExportData {
                         cell.setCellValue((String)obj.getValue());
                     }else{
                         if( obj instanceof Zero){
-                            Zero d = (Zero)obj;
-                            cell.setCellValue("<" + Double.toString(d.detection));
+                            Zero d = (Zero)obj;                            
+                            if(Double.isNaN(d.detection)){
+                                cell.setCellValue(0);
+                            }else{
+                                if(d.detection <= Double.MAX_VALUE){
+                                    cell.setCellValue(0);
+                                }else {
+                                    cell.setCellValue("<" + Double.toString(d.detection));
+                                }
+                            }
+                            
                         }else{
                             double d = (Double)obj.getValue();
                             if(Double.isNaN(d)){

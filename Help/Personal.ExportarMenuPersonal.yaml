@@ -1,7 +1,7 @@
 ---
 name: Personal.ExportarMenuPersonal Help Menu
-description: "This feature export a menu defined by the user. The user can select what menu wnat to export and where export the menu. On click 'Accept' button, a file.zip will be created at the destination with the necessary files to import it."
+description: 'This feature export a menu defined by the user. The user can select what menu wnat to export and where export the menu. On click 'Accept' button, a file.zip will be created at the destination with the necessary files to import it.'
 options:
-  - Select File to export: "Select Box, where the user can select one of the Personal Menu."
-  - Select Destintation: "Destination directory where the file.zip will be exported."
-references: ""
+  - Select File to export: 'Select Box, where the user can select one of the Personal Menu.'
+  - Select Destintation: 'Destination directory where the file.zip will be exported.'
+references: ''
