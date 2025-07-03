@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+CDP_VERSION=$(grep -m 1 '<version>' pom.xml | sed -E 's/.*<version>([^<]+)<\/version>.*/\1/')
+
 VERSION=windows-x64
 OUTDIR=cdp-$VERSION
 
@@ -23,7 +25,11 @@ cp -f codapack_structure.json $OUTDIR
 cp -f license.txt $OUTDIR
 cp -f pom.xml $OUTDIR
 
-cp -f codapack_installer.iss $OUTDIR
 cp -f codapack_launch4j.xml $OUTDIR
+cp -f codapack_installer.iss $OUTDIR
+
+# Substituir "2.03.vv" per la versió real al fitxer .iss
+sed -i "s/2\.03\.vv/$CDP_VERSION/g" "$OUTDIR/codapack_launch4j.xml"
+sed -i "s/2\.03\.vv/$CDP_VERSION/g" "$OUTDIR/codapack_installer.iss"
 
 (cd $OUTDIR && zip -r ../codapack-$VERSION.zip -r .)

@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>target\CoDaPack-2.03.08-jar-with-dependencies.jar</jar>
+  <jar>target\CoDaPack-2.03.vv-jar-with-dependencies.jar</jar>
   <outfile>CoDaPack.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
