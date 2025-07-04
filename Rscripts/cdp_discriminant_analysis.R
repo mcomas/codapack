@@ -23,8 +23,8 @@ cdp_analysis = function(){
   
   
   lda_coef = coef(lda1)
+  K = -(lda1$prior %*% lda1$means) %*% coef(lda1)
   if(NCOL(lda_coef) == 1){
-    K = -(lda1$prior %*% lda1$means) %*% coef(lda1)
     lda1.dfunc = sprintf("\nDiscriminant function:\n%s = 0", 
                          paste(c(sprintf("%0.3f ln %s", B %*% lda_coef, colnames(X)),
                                  sprintf("%0.3f", K)), collapse = ' + '))
@@ -34,7 +34,8 @@ cdp_analysis = function(){
     for(j in 1:NCOL(lda_coef)){
       lda1.dfunc = sprintf("%s\n%s = 0", 
                            lda1.dfunc, 
-                           paste(sprintf("%0.3f ln %s", B %*% lda_coef[,j], colnames(X)), collapse = ' + '))
+                           paste(c(sprintf("%0.3f ln %s", B %*% lda_coef[,j], colnames(X)), 
+                                   sprintf("%0.3f", K[j])), collapse = ' + '))
     }
     lda1.dfunc = gsub("+ -", "- ", lda1.dfunc, fixed = TRUE)
   }
