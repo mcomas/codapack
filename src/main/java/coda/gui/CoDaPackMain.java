@@ -66,6 +66,7 @@ import coda.gui.menu.AddToPersonalMenu;
 import coda.gui.menu.AdvancedFilterMenu;
 import coda.gui.menu.BalanceDendrogramMenu;
 import coda.gui.menu.CLRBiplotMenu;
+import coda.gui.menu.CLRPlotMenu;
 import coda.gui.menu.CalculateNewVarMenu;
 import coda.gui.menu.Categoric2NumericMenu;
 import coda.gui.menu.CenterConfidenceRegionPlotMenu;
@@ -182,6 +183,7 @@ public final class CoDaPackMain extends JFrame {
     private PredictiveRegionPlotMenu predictiveRegionPlotMenu;
     private CenterConfidenceRegionPlotMenu centerConfidenceRegionPlotMenu;
     private CLRBiplotMenu cLRBiplotMenu;
+    private CLRPlotMenu cLRPlotMenu;
     private ILRCLRBiplotMenu iLRCLRBiplotMenu;
     private BalanceDendrogramMenu balanceDendrogramMenu;
     private ChangeGroupNameMenu changeGroupNameMenu;
@@ -612,6 +614,11 @@ public final class CoDaPackMain extends JFrame {
                 if(cLRBiplotMenu == null) cLRBiplotMenu = new CLRBiplotMenu(this);
                 cLRBiplotMenu.updateMenuDialog();
                 cLRBiplotMenu.setVisible(true);
+                break;
+            case "CLRPlot":
+                if(cLRPlotMenu == null) cLRPlotMenu = new CLRPlotMenu(this);
+                cLRPlotMenu.updateMenuDialog();
+                cLRPlotMenu.setVisible(true);
                 break;
             case "ILRCLRBiplot":
                 if(iLRCLRBiplotMenu == null) iLRCLRBiplotMenu = new ILRCLRBiplotMenu(this);

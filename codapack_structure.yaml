@@ -235,6 +235,8 @@ CoDaPack Menu:
                 - select:
                     name: "Arranged by"
                     values: ["parts", "groups"]
+        - CLR-plot:
+            id: "CLRPlot"
         - CLR-biplot:
             id: "CLRBiplot"
         - ILR/CLR-biplot:
