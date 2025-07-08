@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 //import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -589,7 +590,7 @@ public final class CoDaPackMain extends JFrame {
 
                 TernaryPlot2dWindow frame = new TernaryPlot2dWindow(this.getActiveDataFrame(), display,
                         "Ternary/Quaternary Plot -- Testing version",
-                        CoDaPackConf.helpPath + "Graphs.Ternary-Quaternary Plot-Empty.yaml",
+                        Paths.get(CoDaPackConf.helpPath, "Graphs.Ternary-Quaternary Plot-Empty.yaml").toString(),
                         "Ternary/Quaternary Plot Empty Help Menu");
                 frame.setLocationRelativeTo(this);
                 frame.setCenter(center);

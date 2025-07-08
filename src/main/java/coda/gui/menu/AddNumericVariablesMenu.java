@@ -34,6 +34,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -115,7 +116,7 @@ public class AddNumericVariablesMenu extends CoDaPackDialog{
                 JDialog dialog = new JDialog();
                 HelpMenu menu;
                 try {
-                    menu = new HelpMenu(yamlUrl,helpTitle);
+                    menu = new HelpMenu(Paths.get(CoDaPackConf.helpPath, yamlUrl).toString(),helpTitle);
                     dialog.add(menu);
                     dialog.setSize(650, 500);
                     dialog.setTitle(helpTitle);
