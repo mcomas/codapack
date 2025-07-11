@@ -3,10 +3,19 @@
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 unset R_HOME
-export JAVA_HOME=$ROOT/jdk-17/Contents/Home
+export JAVA_HOME=$ROOT/jdk-17
 export MAVEN_HOME=$ROOT/apache-maven-3.9.2
+export R_HOME=/Applications/CoDaPack.app/Contents/R.framework/Resources/lib/R
+
 export R_LIBS_USER=$ROOT/Rlibraries
-export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
+export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$R_HOME/bin:$PATH
+
+# Establim locale per evitar advertències d'R
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Permetem executar jdk-17
+xattr -dr com.apple.quarantine jdk-17
 
 # Verifiquem que R estigui disponible
 command -v R >/dev/null 2>&1 || { echo >&2 "R not found in PATH"; exit 1; }
@@ -22,25 +31,26 @@ cd "$ROOT"
 echo "Building Java package..."
 mvn package
 
-#echo "Installing R packages..."
-#Rscript -e "TYPE=NULL; LIB='$R_LIBS_USER'; source('install_packages.R')"
+echo "Installing R packages..."
+Rscript -e "TYPE='source'; LIB='$R_LIBS_USER'; source('install_packages.R')"
+
 # Copiar llibreries R existents
-echo "Copying R libraries..."
-LIBS=( abind doParallel iterators magic pdfCluster rJava 
-  cluster flexmix kernlab MASS prabclus rlang 
-  coda.base foreach knitr mclust Rcpp robustbase 
-  DEoptimR fpc linprog modeltools RcppArmadillo tclust 
-  diptest geometry lpSolve mvtnorm RcppProgress zCompositions )
+# echo "Copying R libraries..."
+# LIBS=( abind doParallel iterators magic pdfCluster rJava 
+#   cluster flexmix kernlab MASS prabclus rlang 
+#   coda.base foreach knitr mclust Rcpp robustbase 
+#   DEoptimR fpc linprog modeltools RcppArmadillo tclust 
+#   diptest geometry lpSolve mvtnorm RcppProgress zCompositions )
 
-mkdir -p "$R_LIBS_USER"
+# mkdir -p "$R_LIBS_USER"
 
-for lib in $LIBS; do
-    SRC_DIR=$(Rscript -e "cat(find.package('$lib'))")
-    if [ -d "$SRC_DIR" ]; then
-        cp -R "$SRC_DIR" "$R_LIBS_USER/"
-    else
-        echo "Warning: Library $lib not found"
-    fi
-done
+# for lib in $LIBS; do
+#     SRC_DIR=$(Rscript -e "cat(find.package('$lib'))")
+#     if [ -d "$SRC_DIR" ]; then
+#         cp -R "$SRC_DIR" "$R_LIBS_USER/"
+#     else
+#         echo "Warning: Library $lib not found"
+#     fi
+# done
 
 echo "Build completed successfully."

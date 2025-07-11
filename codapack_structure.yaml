@@ -78,9 +78,9 @@ CoDaPack Menu:
                 - select:
                     name: "Method"
                     values: ["GBM", "SQ", "BL", "CZM"]
-                - boolean: 
-                    label: "Show pseudo-counts"
-                    value: true
+                - select:
+                    name: "Output"
+                    values: ["p-counts", "prop"]
         - Log-Ratio EM Zero Replacement:
             id: "LogRatioEMZeroReplacement"
             code: "r"

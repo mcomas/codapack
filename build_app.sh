@@ -3,14 +3,15 @@
 set -e
 
 # Define version and paths
-VERSION=2.03.07
-JAVA_HOME=jdk-17/Contents/Home/
+VERSION=2.03.09
+JAVA_HOME=jdk-17
 JAR_PATH=target/CoDaPack-${VERSION}-jar-with-dependencies.jar
-JSON_PATH=codapack_structure.json
+YAML_PATH=codapack_structure.yaml
 HELP_PATH=Help
 RSCRIPTS_PATH=RScripts
 ICON_PATH=src/main/resources/icons.icns
 RLIBRARIES_PATH=Rlibraries
+RFRAMEWORK_PATH=/Applications/CoDaPack.app/Contents/R.framework
 
 # Clean previous build
 rm -rf CoDaPack.app
@@ -49,27 +50,41 @@ cp -a $JAVA_HOME/. $CONTENTS/Java/
 # Copy application files
 mkdir -p $CONTENTS/MacOS
 cp $JAR_PATH $CONTENTS/MacOS/
-cp $JSON_PATH $CONTENTS/MacOS/
+cp $YAML_PATH $CONTENTS/MacOS/
 
 rsync -av $RSCRIPTS_PATH/ $CONTENTS/MacOS/RScripts/
 rsync -av $HELP_PATH/ $CONTENTS/MacOS/Help/
 
+# Copy R.framework and R libraries
+rsync -av $RFRAMEWORK_PATH/" "$CONTENTS/R.framework/
+rsync -av $RLIBRARIES_PATH/" "$CONTENTS/Rlibraries/
+
 # Create run.sh
 cat << EOF > $CONTENTS/MacOS/CoDaPack
 #!/bin/zsh
-EXEDIR="\$(dirname "\$0")"
+EXEDIR="\$(cd "\$(dirname "\$0")" && pwd)"
 cd \$EXEDIR
 
-export JAVA_HOME="../Java/"
+export JAVA_HOME=../Java/
+export R_HOME=/Applications/CoDaPack.app/Contents/R.framework/Resources/lib/R
 export R_LIBS_USER="../Rlibraries"
 export PATH=\$JAVA_HOME/bin:\$R_LIBS_USER/rJava/jri:/usr/local/bin:\$PATH
-export R_HOME="\$(R RHOME)"
+export DYLD_FALLBACK_LIBRARY_PATH=\$R_HOME/lib:\$R_LIBS_USER/rJava/jri
 
 export CDP_WORKING_DIR=\$EXEDIR
-export CDP_RESOURCES="."
+export CDP_RESOURCES=.
 export CDP_R_SCRIPTS=\$CDP_RESOURCES/RScripts/
 
-exec java -Djava.library.path="\$R_LIBS_USER/rJava/jri" -Xdock:name="CoDaPack" -Xdock:icon="../Resources/AppIcon.icns" -jar "CoDaPack-${VERSION}-jar-with-dependencies.jar"
+# Check Rscript
+if [ ! -x "\$R_HOME/bin/Rscript" ]; then
+  echo "Rscript not found in \$R_HOME/bin/"
+  exit 1
+fi
+
+exec java -Djava.library.path="\$R_LIBS_USER/rJava/jri" \\
+     -Xdock:name="CoDaPack" \\
+     -Xdock:icon="../Resources/AppIcon.icns" \\
+     -jar "CoDaPack-${VERSION}-jar-with-dependencies.jar"
 EOF
 
 chmod +x $CONTENTS/MacOS/CoDaPack
@@ -78,7 +93,7 @@ chmod +x $CONTENTS/MacOS/CoDaPack
 mkdir -p $CONTENTS/Resources
 cp $ICON_PATH $CONTENTS/Resources/AppIcon.icns
 
-# Copy R libraries
-rsync -av $RLIBRARIES_PATH/ $CONTENTS/Rlibraries/
+# Remove quarantine attributes
+sudo xattr -cr CoDaPack.app
 
 echo "CoDaPack.app structure created successfully."

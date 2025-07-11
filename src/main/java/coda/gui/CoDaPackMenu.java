@@ -26,6 +26,8 @@ package coda.gui;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,6 +37,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -42,6 +45,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.yaml.snakeyaml.Yaml;
 
 import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
@@ -480,13 +484,28 @@ public class CoDaPackMenu extends JMenuBar {
         JSONObject codapack_menu = null;
         try {
             
-            file = new FileReader("codapack_structure.json");
+            /* file = new FileReader("codapack_structure.json");
             BufferedReader br = new BufferedReader(file);
             codapack_menu = new JSONObject(br.readLine());
             file.close();
             //System.out.println("JSON read");
             //System.out.println(codapack_menu.toString(2));
+            JSONArray json_array = codapack_menu.getJSONArray("CoDaPack Menu"); */
+            Yaml yaml = new Yaml();
+            InputStream input = new FileInputStream("codapack_structure.yaml");
+
+            // Carreguem el YAML com un Map
+            Map<String, Object> data = yaml.load(input);
+
+            // Convertim el Map a un JSONObject
+            codapack_menu = new JSONObject(data);
+
+            // Obtenim el JSONArray igual que abans
             JSONArray json_array = codapack_menu.getJSONArray("CoDaPack Menu");
+
+            // (Opcional) Tanquem l'stream
+            input.close();
+
             for(int i = 0; i < json_array.length(); i++){
                 JSONObject json_item = json_array.getJSONObject(i);
                 String name_item = (String)json_item.keys().next();

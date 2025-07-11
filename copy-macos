@@ -48,7 +48,7 @@ chmod +x $OUTDIR/build-dmg
 
 # Altres fitxers de configuració
 cp -f install_packages.R $OUTDIR
-cp -f codapack_structure.json $OUTDIR
+cp -f codapack_structure.yaml $OUTDIR
 cp -f license.txt $OUTDIR
 cp -f pom.xml $OUTDIR
 

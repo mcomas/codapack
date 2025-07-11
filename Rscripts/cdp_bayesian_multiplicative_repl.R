@@ -6,7 +6,8 @@ cdp_check = function(){
   
 }
 cdp_analysis = function(){
-  Ximp = zCompositions::cmultRepl(X,label=0, method=V1, threshold=0.5, output="p-counts")
+  # save.image("Rscripts/cdp_bayesian_multiplicative_repl.RData")
+  Ximp = zCompositions::cmultRepl(X,label=0, method=V1, threshold=0.5, output=V2)
   names(Ximp) = paste0("z.", colnames(X))
   
   # Ooutput
