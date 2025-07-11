@@ -56,8 +56,8 @@ rsync -av $RSCRIPTS_PATH/ $CONTENTS/MacOS/RScripts/
 rsync -av $HELP_PATH/ $CONTENTS/MacOS/Help/
 
 # Copy R.framework and R libraries
-rsync -av $RFRAMEWORK_PATH/" "$CONTENTS/R.framework/
-rsync -av $RLIBRARIES_PATH/" "$CONTENTS/Rlibraries/
+rsync -av $RFRAMEWORK_PATH/ $CONTENTS/R.framework/
+rsync -av $RLIBRARIES_PATH/ $CONTENTS/Rlibraries/
 
 # Create run.sh
 cat << EOF > $CONTENTS/MacOS/CoDaPack
