@@ -11,7 +11,7 @@ HELP_PATH=Help
 RSCRIPTS_PATH=RScripts
 ICON_PATH=src/main/resources/icons.icns
 RLIBRARIES_PATH=Rlibraries
-RFRAMEWORK_PATH=/Applications/CoDaPack.app/Contents/R.framework
+RFRAMEWORK_PATH=/Applications/CoDaPack.app/Contents/R_internal
 
 # Clean previous build
 rm -rf CoDaPack.app
@@ -56,7 +56,7 @@ rsync -av $RSCRIPTS_PATH/ $CONTENTS/MacOS/RScripts/
 rsync -av $HELP_PATH/ $CONTENTS/MacOS/Help/
 
 # Copy R.framework and R libraries
-rsync -av $RFRAMEWORK_PATH/ $CONTENTS/R.framework/
+rsync -av $RFRAMEWORK_PATH/ $CONTENTS/R_internal/
 rsync -av $RLIBRARIES_PATH/ $CONTENTS/Rlibraries/
 
 # Create run.sh
@@ -66,7 +66,7 @@ EXEDIR="\$(cd "\$(dirname "\$0")" && pwd)"
 cd \$EXEDIR
 
 export JAVA_HOME=../Java/
-export R_HOME=/Applications/CoDaPack.app/Contents/R.framework/Resources/lib/R
+export R_HOME=/Applications/CoDaPack.app/Contents/R_internal/lib/R
 export R_LIBS_USER="../Rlibraries"
 export PATH=\$JAVA_HOME/bin:\$R_LIBS_USER/rJava/jri:/usr/local/bin:\$PATH
 export DYLD_FALLBACK_LIBRARY_PATH=\$R_HOME/lib:\$R_LIBS_USER/rJava/jri

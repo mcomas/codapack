@@ -1,11 +1,13 @@
 #!/usr/bin/env zsh
 
+set -e
+
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 unset R_HOME
 export JAVA_HOME=$ROOT/jdk-17
 export MAVEN_HOME=$ROOT/apache-maven-3.9.2
-export R_HOME=/Applications/CoDaPack.app/Contents/R.framework/Resources/lib/R
+export R_HOME=/Applications/CoDaPack.app/Contents/R_internal
 
 export R_LIBS_USER=$ROOT/Rlibraries
 export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$R_HOME/bin:$PATH
@@ -15,7 +17,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # Permetem executar jdk-17
-xattr -dr com.apple.quarantine jdk-17
+sudo xattr -dr com.apple.quarantine jdk-17
 
 # Verifiquem que R estigui disponible
 command -v R >/dev/null 2>&1 || { echo >&2 "R not found in PATH"; exit 1; }
