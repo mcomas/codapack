@@ -95,7 +95,7 @@ public class BalanceDendrogramMenu extends AbstractMenuDialogWithILR{
 
             int m = selectedNames.length-1;
             String[] new_names = new String[m];
-            for(int i=0;i<m;i++) new_names[i] = "ilr." + Integer.toString(i+1);
+            for(int i=0;i<m;i++) new_names[i] = "olr." + Integer.toString(i+1);
             
             //int [] mapping = this.getMappingToValidCompositionData(selectedNames);
             boolean[] selection = getValidComposition(df, selectedNames);
@@ -135,7 +135,7 @@ public class BalanceDendrogramMenu extends AbstractMenuDialogWithILR{
 
             if(statisticsCheck.isSelected()){
                 String [] ilrNames = new String[ilr.length];
-                for(int i=0;i<ilr.length;i++) ilrNames[i] = "ilr " + (i+1);
+                for(int i=0;i<ilr.length;i++) ilrNames[i] = "olr " + (i+1);
 
                 double [] mean = coda.BasicStats.mean(ilr);
                 double [] variance = BasicStats.variance(ilr);

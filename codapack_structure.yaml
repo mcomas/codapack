@@ -5,10 +5,10 @@ CoDaPack Menu:
                 id: "TransformationALR"
             - CLR:
                 id: "TransformationCLR"
-            - Raw-ILR:
-                id: "TransformationRawILR"
-            - ILR-Raw:
-                id: "TransformationILRRaw"
+            - Raw-OLR:
+                id: "TransformationRawOLR"
+            - OLR-Raw:
+                id: "TransformationOLRRaw"
         - Operations:
             - Centering:
                 id: "CenterData"
@@ -242,8 +242,8 @@ CoDaPack Menu:
             id: "CLRPlot"
         - CLR-biplot:
             id: "CLRBiplot"
-        - ILR/CLR-biplot:
-            id: "ILRCLRBiplot"
+        - OLR/CLR-biplot:
+            id: "OLRCLRBiplot"
         - Balance Dendrogram:
             id: "BalanceDendrogram"
         - Separator

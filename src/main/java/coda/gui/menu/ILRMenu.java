@@ -107,7 +107,7 @@ public class ILRMenu extends JDialog{
         getContentPane().setLayout(new BorderLayout());
         setSize(WIDTH,HEIGHT);
         
-        panel.setBorder(javax.swing.BorderFactory.createTitledBorder("ILR Configuration"));
+        panel.setBorder(javax.swing.BorderFactory.createTitledBorder("OLR Configuration"));
         panel.setPreferredSize(new Dimension(300,200));
         
         getContentPane().add(panel);

@@ -44,7 +44,7 @@ public class OutputILRPartition implements OutputElement{
             System.arraycopy(p[i], 0, partition[i], 0, p[i].length);
     }
     public String printHTML(String html) {
-        html += "<b>ILR binary partition:</b><br><table>";
+        html += "<b>Sequential binary partition:</b><br><table>";
         html += "<tr>";
         for(int i=0;i<names.length;i++){
             html += "<th>" + names[i] + "</th>";
@@ -64,7 +64,7 @@ public class OutputILRPartition implements OutputElement{
     }
     public void printText(Writer b) throws IOException{
 
-        b.write("ILR binary partition\n");
+        b.write("Sequential binary partition\n");
         for(int i=0;i<names.length;i++){
             b.write(separator + names[i]);
         }

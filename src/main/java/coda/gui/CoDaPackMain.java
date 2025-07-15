@@ -479,12 +479,12 @@ public final class CoDaPackMain extends JFrame {
                 transformationCLRMenu.updateMenuDialog();
                 transformationCLRMenu.setVisible(true);
                 break;
-            case "TransformationRawILR":
+            case "TransformationRawOLR":
                 if(transformationRawILRMenu == null) transformationRawILRMenu = new TransformationRawILRMenu(this);
                 transformationRawILRMenu.updateMenuDialog();
                 transformationRawILRMenu.setVisible(true);
                 break;
-            case "TransformationILRRaw":
+            case "TransformationOLRRaw":
                 if(transformationILRRawMenu == null) transformationILRRawMenu = new TransformationILRRawMenu(this);
                 transformationILRRawMenu.updateMenuDialog();
                 transformationILRRawMenu.setVisible(true);
@@ -621,7 +621,7 @@ public final class CoDaPackMain extends JFrame {
                 cLRPlotMenu.updateMenuDialog();
                 cLRPlotMenu.setVisible(true);
                 break;
-            case "ILRCLRBiplot":
+            case "OLRCLRBiplot":
                 if(iLRCLRBiplotMenu == null) iLRCLRBiplotMenu = new ILRCLRBiplotMenu(this);
                 iLRCLRBiplotMenu.updateMenuDialog();
                 iLRCLRBiplotMenu.setVisible(true);

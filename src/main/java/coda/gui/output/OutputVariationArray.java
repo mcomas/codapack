@@ -147,7 +147,7 @@ public class OutputVariationArray implements OutputElement{
 
     public void printText(Writer b) throws IOException{
 
-        b.write("ILR binary partition\n");
+        b.write(" binary partition\n");
         for(int i=0;i<names.length;i++){
             b.write(separator + names[i]);
         }

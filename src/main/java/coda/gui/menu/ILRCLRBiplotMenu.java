@@ -48,15 +48,15 @@ import javax.swing.JOptionPane;
 public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
     
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Graphs.ILR-CLR Plot.yaml";
-    private static final String helpTitle = "ILR/CLR Biplot Help Menu";
+    private static final String yamlUrl = "Graphs.OLR-CLR Plot.yaml";
+    private static final String helpTitle = "OLR/CLR Biplot Help Menu";
     
     JCheckBox coordinates;
     DataFrame df;
     ArrayList<String> names;
     
     public ILRCLRBiplotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ILR/CLR Biplot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
+        super(mainApp, "OLR/CLR Biplot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
@@ -151,12 +151,12 @@ public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
             if(coordinates.isSelected()){
                 String unames[] = new String[m-1];
                 for(int i=0;i<m-1;i++)
-                    unames[i] = "ilr." + (i+1);
+                    unames[i] = "olr." + (i+1);
                 df.addData(unames, coda.Utils.recoverData(data,selection));
                 mainApplication.updateDataFrame(df);
             }
             CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("ILR/CLR plot generated", selectedNames));
+                    new OutputPlotHeader("OLR/CLR plot generated", selectedNames));
             
             //CoDaPackMain.outputPanel.addOutput(
             //        new OutputTableTwoEntries("Principal Components", pcheaders, pcnames, pcomp));
@@ -184,7 +184,7 @@ public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
                 Biplot3dDisplay dp = builder.build();
                 dp.decomp = false;
                 biplotWindow =
-                        new RealPlot3dWindow(df, dp, "ILR/CLR plot");
+                        new RealPlot3dWindow(df, dp, "OLR/CLR plot");
                 
                 double view[][] = {
                        {1, 0, 0},
@@ -204,7 +204,7 @@ public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
                 }
                 
                 biplotWindow =
-                        new RealPlot2dWindow(df, builder.build(), "ILR/CLR plot");
+                        new RealPlot2dWindow(df, builder.build(), "OLR/CLR plot");
                                
             }
             biplotWindow.setLocationRelativeTo(mainApplication);

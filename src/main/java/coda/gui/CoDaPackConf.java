@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 public class CoDaPackConf {
     public static String HTTP_ROOT = "http://ima.udg.edu/codapack/versioning/";
 
-    public static String CoDaVersion = "2 03 09 (2025)";
+    public static String CoDaVersion = "2 03 10 (2025)";
 
     public static int[] getVersionNum(String version_str) {
         int num[] = new int[3];

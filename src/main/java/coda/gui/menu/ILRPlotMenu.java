@@ -46,7 +46,7 @@ public class ILRPlotMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
 
     public ILRPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "ILR Plot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
+        super(mainApp, "OLR Plot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
 
         JButton defaultPart = new JButton("Default Partition");
         JButton manuallyPart = new JButton("Define Manually");
@@ -94,13 +94,13 @@ public class ILRPlotMenu extends AbstractMenuDialogWithILR{
         int dimension = selectedNames.length == 4 ? 3 : 2;
 
         String[] names = new String[dimension];
-            for(int i=0;i<dimension;i++) names[i] = "ilr." + Integer.toString(i+1);
+            for(int i=0;i<dimension;i++) names[i] = "olr." + Integer.toString(i+1);
         String groupedBy = ds.getSelectedGroup();
 
         CoDaPlotWindow plotWindow = null;
 
         CoDaPackMain.outputPanel.addOutput(
-                new OutputPlotHeader("ILR plot", selectedNames));
+                new OutputPlotHeader("OLR plot", selectedNames));
 
         CoDaPackMain.outputPanel.addOutput(
                     new OutputILRPartition(selectedNames, partition));
@@ -117,7 +117,7 @@ public class ILRPlotMenu extends AbstractMenuDialogWithILR{
             }
             plotWindow = new RealPlot3dWindow(
                     df, builder.build(),
-                    "ILR Plot 3d");
+                    "OLR Plot 3d");
         }
         if(dimension == 2){
 
@@ -130,7 +130,7 @@ public class ILRPlotMenu extends AbstractMenuDialogWithILR{
             }
             plotWindow = new RealPlot2dWindow(
                     df, builder.build(),
-                    "ILR Plot");                                
+                    "OLR Plot");                                
         }
         plotWindow.setLocationRelativeTo(mainApplication);
         plotWindow.setVisible(true);

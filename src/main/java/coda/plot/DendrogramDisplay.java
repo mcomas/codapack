@@ -330,7 +330,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
 
         Point2D bottom = null;
         bottom = defaultTransform.transform(new Point2D.Double(data.top.getX(), data.left.getY()), bottom);
-        g2.drawString("ilr " + this.auxToSetBalanceNames,(int)bottom.getX()+5,(int)bottom.getY()-5);
+        g2.drawString("olr " + this.auxToSetBalanceNames,(int)bottom.getX()+5,(int)bottom.getY()-5);
         g2.draw(PlotUtils.drawLine(top,  bottom));
 
         Point2D l = null;

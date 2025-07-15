@@ -36,14 +36,14 @@ import javax.swing.*;
  */
 public class TransformationRawILRMenu extends AbstractMenuDialogWithILR{
     public static final long serialVersionUID = 1L;
-    private static final String yamlUrl = "Data.Transformations.Raw-ILR.yaml";
-    private static final String helpTitle = "Raw-ILR Transform Help Menu";
+    private static final String yamlUrl = "Data.Transformations.Raw-OLR.yaml";
+    private static final String helpTitle = "Raw-OLR Transform Help Menu";
     
     DataFrame df;
     ArrayList<String> names;
 
     public TransformationRawILRMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Raw-ILR Transform Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
+        super(mainApp, "Raw-OLR Transform Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         setHelpMenuConfiguration(yamlUrl, helpTitle);
 
         JButton defaultPart = new JButton("Default Partition");
@@ -81,7 +81,7 @@ public class TransformationRawILRMenu extends AbstractMenuDialogWithILR{
             int m = sel_names.length-1;
             String[] new_names = new String[m];
 
-            for(int i=0;i<m;i++) new_names[i] = "ilr." + Integer.toString(i+1);
+            for(int i=0;i<m;i++) new_names[i] = "olr." + Integer.toString(i+1);
             boolean selection[] = df.getValidCompositions(sel_names);
             double data[][] = df.getNumericalData(sel_names);
             double vdata[][] = coda.Utils.reduceData(data, selection);
