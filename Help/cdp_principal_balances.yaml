@@ -1,0 +1,6 @@
+---
+name: 'Statistics.Compositional Data.Principal Balances Help Menu'
+description: 'This feature computes principal balances from the selected compositional parts using different methods.'
+options:
+  - Method: 'Choose the method to compute principal balances. Options include: Exact, Constrained (approximates principal components), and Cluster (uses Ward''s hierarchical clustering).'
+  - Add Balances: 'If checked, the resulting principal balances will be added as new columns to the current dataset.'

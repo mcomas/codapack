@@ -13,7 +13,7 @@ cdp_analysis = function(){
   # save.image("Rscripts/cdp_regression_coda_response.RData")
   
   H = coda.base::coordinates(Y, basis = coda.base::sbp_basis(BasisY))
-  colnames(H) = paste0('ilr.', 1:ncol(H))
+  colnames(H) = paste0('olr.', 1:ncol(H))
   
   text_output = cdp_print_sbp(BasisY, colnames(Y))
   # nccol = pmax(3, nchar(colnames(Y)))

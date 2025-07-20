@@ -26,7 +26,11 @@ import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputILRPartition;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.DataSelector1to1;
+import java.awt.Insets;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -46,22 +50,57 @@ public class TransformationRawILRMenu extends AbstractMenuDialogWithILR{
         super(mainApp, "Raw-OLR Transform Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         setHelpMenuConfiguration(yamlUrl, helpTitle);
 
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 2, 2, 2);  // marges entre botons
+        gbc.anchor = GridBagConstraints.WEST;  // alineació a l'esquerra
+        gbc.fill = GridBagConstraints.NONE;   // no forçar mida
+        gbc.weightx = 0;
+
+        int row = 0;
+
+        gbc.gridx = 0;
+        gbc.gridy = row;
         JButton defaultPart = new JButton("Default Partition");
+        buttonPanel.add(defaultPart, gbc);
+        defaultPart.addActionListener(evt -> {
+            setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
+        });
+
+        gbc.gridx = 1;
         JButton manuallyPart = new JButton("Define Manually");
-        optionsPanel.add(defaultPart);
-        defaultPart.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
-            }
+        buttonPanel.add(manuallyPart, gbc);
+        manuallyPart.addActionListener(evt -> {
+            initiatePartitionMenu();
         });
-        optionsPanel.add(manuallyPart);
-        manuallyPart.addActionListener(new java.awt.event.ActionListener() {
 
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                initiatePartitionMenu();
-            }
-        });
+        gbc.gridx = 0;
+        gbc.gridy = ++row;
+        // JButton princbalPart = new JButton("Principal Balances");
+        // buttonPanel.add(princbalPart, gbc);
+        // princbalPart.addActionListener(evt -> {
+        //     initiatePartitionMenu();
+        // });
+
+
+        optionsPanel.add(buttonPanel);
+
+        // JButton defaultPart = new JButton("Default Partition");
+        // JButton manuallyPart = new JButton("Define Manually");
+        // optionsPanel.add(defaultPart);
+        // defaultPart.addActionListener(new java.awt.event.ActionListener() {
+
+        //     public void actionPerformed(java.awt.event.ActionEvent evt) {
+        //             setPartition(CoDaStats.defaultPartition(ds.getSelectedData().length));
+        //     }
+        // });
+        // optionsPanel.add(manuallyPart);
+        // manuallyPart.addActionListener(new java.awt.event.ActionListener() {
+
+        //     public void actionPerformed(java.awt.event.ActionEvent evt) {
+        //         initiatePartitionMenu();
+        //     }
+        // });
         
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
 

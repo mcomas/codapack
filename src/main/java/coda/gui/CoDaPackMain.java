@@ -22,11 +22,13 @@ package coda.gui;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.GraphicsConfiguration;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -246,6 +248,7 @@ public final class CoDaPackMain extends JFrame {
         outputPanels = new OutputPanel[1];        
         outputPanels[0] = outputPanel;
 
+
         tablePanel = new TablePanel(this);
         dataList = new DataList();
         if(!rcoda_call){
@@ -311,6 +314,9 @@ public final class CoDaPackMain extends JFrame {
 
         tabbedPane.add("Main", outputPanel);
 
+        GraphicsConfiguration gc = outputPanel.getGraphicsConfiguration();
+        System.out.println("GraphicsConfiguration: " + gc);
+        
         jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabbedPane, tablePanel);
         // -------------
         // jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, outputPanel,
@@ -333,6 +339,21 @@ public final class CoDaPackMain extends JFrame {
             }
         });
         pack();
+
+        // gc = outputPanel.getGraphicsConfiguration();
+        // System.out.println("GraphicsConfiguration: " + gc);
+        // double outputPanelScaling = 1.0;
+        // if (gc != null) {
+        //     AffineTransform tx = gc.getDefaultTransform();
+        //     outputPanelScaling = tx.getScaleX();
+        // } 
+        int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
+        double scale = dpi / 96.0; // 96 DPI és l'estàndard "1.0"
+        System.out.println("DPI: " + dpi + " → scale: " + scale);
+
+        System.out.println("Current scaling:" + scale);
+        // outputPanel.browser.setZoom(2);
+
     }
 
     public boolean searchPanel(String name) {

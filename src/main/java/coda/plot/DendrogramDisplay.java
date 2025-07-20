@@ -38,6 +38,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  *
@@ -49,6 +50,8 @@ public class DendrogramDisplay extends CoDa2dDisplay{
     private String names[];
     private double x[][];
     private int partition[][];
+    private int partition_orig[][];
+    private int order[];
     private int groups[];
     private String gnames[];
     private int ngroups = 0;
@@ -74,7 +77,20 @@ public class DendrogramDisplay extends CoDa2dDisplay{
     public DendrogramDisplay(DendrogramBuilder builder){
         names = builder.names;
         x = builder.x;
-        partition = builder.partition;
+        partition_orig = builder.partition;
+        partition = new int[partition_orig.length][];
+        order = new int[partition_orig.length];
+        orderPartition(0, IntStream.range(0, partition_orig.length).toArray(), new int[0]);
+        for(int i=0;i<order.length;i++){
+            partition[i] = partition_orig[order[i]];
+        }
+        //Arrays.stream(indexos).map(i -> original[i]).toArray()
+        // for(int i=0;i<partition.length;i++){
+        //     if(Arrays.stream(partition[i]).allMatch(x -> x == 1 || x == -1)){
+        //         System.out.println("Partition " + i + " is the root.");
+        //     }
+        // }
+        System.out.println("Order: " + Arrays.toString(order));
         groups = builder.groups;
         gnames = builder.gnames;
         for(int i=0;i<gnames.length;i++)
@@ -107,7 +123,26 @@ public class DendrogramDisplay extends CoDa2dDisplay{
 
         T.setRootElement(root);
     }
-    
+    public int orderPartition(int ind, int suport[], int excluded[]){
+        if(suport.length == 1) return ind;
+        for(int i=0;i<partition_orig.length;i++){
+            int []part = partition_orig[i];
+            int []s = Arrays.stream(suport).map(j -> part[j]).toArray();
+            int []o = Arrays.stream(excluded).map(j -> part[j]).toArray();
+            if(Arrays.stream(s).allMatch(x -> x == 1 || x == -1) && 
+               Arrays.stream(o).allMatch(x -> x == 0)){
+                order[ind++] = i;
+                System.out.println("Partition " + i + " is the root.");
+                int[] right = IntStream.range(0, part.length).filter(j -> part[j] == 1).toArray();
+                int[] right_out = IntStream.range(0, part.length).filter(j -> part[j] == 0 || part[j] == -1).toArray();
+                ind = orderPartition(ind, right, right_out);
+                int[] left = IntStream.range(0, part.length).filter(j -> part[j] == -1).toArray();
+                int[] left_out = IntStream.range(0, part.length).filter(j -> part[j] == 0 || part[j] == 1).toArray();
+                ind = orderPartition(ind, left, left_out);
+            }
+        }
+        return ind;
+    }
     private Node<DendroBracket> treeInitialization(int index, boolean active[]){
         //Checking if previous node was a leaf
         int count = 0;
@@ -117,8 +152,8 @@ public class DendrogramDisplay extends CoDa2dDisplay{
         DendroBracket stats = new DendroBracket(ngroups);
         Node<DendroBracket> node = new Node<DendroBracket>(stats);
         stats.balance = INDEX1;
-        stats.t_mean = BasicStats.mean(x[INDEX1]);
-        stats.t_variance = BasicStats.variance(x[INDEX1]);
+        stats.t_mean = BasicStats.mean(x[order[INDEX1]]);
+        stats.t_variance = BasicStats.variance(x[order[INDEX1]]);
         /*
          CoDaPack.percentile(x[INDEX1], p);
         stats.t_minimum = quartiles[0];
@@ -131,7 +166,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
         */
         int p[] = {0, 5, 25, 50, 75, 95, 100};
         for(int gr=0; gr<ngroups;gr++){
-            double [] xdata = coda.Utils.reduceData(x[INDEX1], groups, gr);
+            double [] xdata = coda.Utils.reduceData(x[order[INDEX1]], groups, gr);
             stats.mean[gr] = BasicStats.mean(xdata);
             stats.variance[gr] = BasicStats.variance(xdata);
             double quartiles[] = BasicStats.percentile(xdata, p);
@@ -318,7 +353,6 @@ public class DendrogramDisplay extends CoDa2dDisplay{
 
     private void drawBracket(Node<DendroBracket> node, Graphics2D g2){
 
-        this.auxToSetBalanceNames++;
         double param_size = 0.018;
         DendroBracket data = node.getData();
         float s = 1.5f;
@@ -330,8 +364,10 @@ public class DendrogramDisplay extends CoDa2dDisplay{
 
         Point2D bottom = null;
         bottom = defaultTransform.transform(new Point2D.Double(data.top.getX(), data.left.getY()), bottom);
-        g2.drawString("olr " + this.auxToSetBalanceNames,(int)bottom.getX()+5,(int)bottom.getY()-5);
+        g2.drawString("bal " + (order[this.auxToSetBalanceNames]+1),(int)bottom.getX()+5,(int)bottom.getY()-5);
         g2.draw(PlotUtils.drawLine(top,  bottom));
+
+        this.auxToSetBalanceNames++;
 
         Point2D l = null;
         l = defaultTransform.transform(data.left, l);

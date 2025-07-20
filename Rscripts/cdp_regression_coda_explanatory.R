@@ -16,7 +16,7 @@ cdp_analysis = function(){
   # save.image("Rscripts/cdp_regression_coda_explanatory.RData")
   
   H = coda.base::coordinates(X, basis = coda.base::sbp_basis(BasisX))
-  colnames(H) = paste0('ilr.', 1:ncol(H))
+  colnames(H) = paste0('olr.', 1:ncol(H))
   
   str_y = colnames(Y)
   if(ncol(Y) > 1) str_y = sprintf("cbind(%s)", paste(colnames(Y), collapse=','))

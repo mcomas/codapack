@@ -112,12 +112,29 @@ public final class HelpMenu extends JFXPanel {
         //         + "?config=TeX-MML-AM_CHTML-full\"></script></head>";
 
         
-        String strMathJaxLib = "<script async src=\"https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_CHTML\"></script>";
+        String strMathJaxLib = "<script async src=\"https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML\"></script>";
+        //String strMathJaxLib = "<script async src=\"https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_CHTML\"></script>";
         /* name */
         System.out.println(strMathJaxLib);
 
-        helpText = String.format("<html><head>%s</head><body>", strMathJaxLib);
-        helpText += "<center><h2>" + this.helpTitle + "</h2></center>";
+        //helpText = String.format("<html><head>%s</head><body>", strMathJaxLib);
+        helpText = String.format("""
+            <html>
+            <head>
+            %s
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                tex2jax: {
+                    inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
+                    displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
+                    processEscapes: true
+                }
+                });
+            </script>
+            </head>
+            <body>
+            """, strMathJaxLib);
+        // helpText += "<center><h2>" + this.helpTitle + "</h2></center>";
 
         /* description */
 

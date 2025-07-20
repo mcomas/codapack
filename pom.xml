@@ -19,7 +19,7 @@
                <executable>java</executable>
                <arguments>
                   <argument>-Djava.library.path=Rlibraries/rJava/jri</argument>
-                  <argument>-classpath</argument>
+                  <argument>-classpath</argument>            
                   <classpath />
                   <argument>coda.gui.CoDaPackMain</argument>
                </arguments>

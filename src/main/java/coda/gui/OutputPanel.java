@@ -24,6 +24,9 @@ import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputText;
 import javafx.scene.paint.Color;
+
+import java.awt.GraphicsConfiguration;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,6 +53,7 @@ import java.net.MalformedURLException;
 
 import javax.swing.JProgressBar;
 
+
 public final class OutputPanel extends JFXPanel {
 
     public final long serialVersionUID = 1L;
@@ -68,7 +72,7 @@ public final class OutputPanel extends JFXPanel {
 
     String HTMLName = "";
     // ----------
-
+    Browser browser;
     public OutputPanel() {
 
         try {
@@ -80,11 +84,9 @@ public final class OutputPanel extends JFXPanel {
             System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
             e.printStackTrace();
         }
-        Platform.runLater(new Runnable() {
-            public void run() {
-                iniFx();
-            }
-        });
+
+        // 🔹 Ara pots inicialitzar la part JavaFX amb el scaling correcte
+        Platform.runLater(this::iniFx);
     }
 
     public OutputPanel(String nameScript) {
@@ -97,15 +99,14 @@ public final class OutputPanel extends JFXPanel {
             System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
             e.printStackTrace();
         }
-        Platform.runLater(new Runnable() {
-            public void run() {
-                iniFx();
-            }
-        });
+
+        // 🔹 Ara pots inicialitzar la part JavaFX amb el scaling correcte
+        Platform.runLater(this::iniFx);
     }
 
     public void iniFx() {
-        scene = new Scene(new Browser(HTMLName), 500, 350, Color.web("#666970"));
+        browser = new Browser(HTMLName);
+        scene = new Scene(browser, 500, 350, Color.web("#666970"));
         this.setScene(scene);
     }
 
@@ -212,6 +213,7 @@ class Browser extends Region {
     String HTMLName = "";
 
     public Browser() {
+
         HTMLName = "CoDaPack.html";
         getStyleClass().add("browser");
         try {
@@ -226,6 +228,7 @@ class Browser extends Region {
     }
 
     public Browser(String nameScript) {
+
         HTMLName = nameScript;
         getStyleClass().add("browser");
         try {
@@ -259,6 +262,10 @@ class Browser extends Region {
     @Override
     protected double computePrefHeight(double width) {
         return 350;
+    }
+
+    public void setZoom(double zoom) {
+        Platform.runLater(() -> browser.setZoom(zoom));
     }
 
     public void repaint(String text) {

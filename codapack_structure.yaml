@@ -9,6 +9,17 @@ CoDaPack Menu:
                 id: "TransformationRawOLR"
             - OLR-Raw:
                 id: "TransformationOLRRaw"
+            - Principal Balances:
+                id: "TransformationPrincipalBalances"
+                code: "r"
+                script: "cdp_principal_balances.R"
+                controls:
+                    - select:
+                        name: "Method"
+                        values: ["Exact", "Constrained", "Cluster"]
+                    - boolean: 
+                        label: "Add Balances"
+                        value: true
         - Operations:
             - Centering:
                 id: "CenterData"
