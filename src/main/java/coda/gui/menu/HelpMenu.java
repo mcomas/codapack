@@ -23,7 +23,6 @@ import static coda.gui.CoDaPackConf.CoDaVersion;
 import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputElement;
-import coda.gui.output.OutputText;
 import javafx.scene.paint.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -96,12 +95,12 @@ public final class HelpMenu extends JFXPanel {
             }
         });
 
-        OutputElement oe = generateOutput(map);
+        String oe = generateOutput(map);
 
         this.addOutput(oe);
     }
 
-    private OutputElement generateOutput(Map<String, Object> map) {
+    private String generateOutput(Map<String, Object> map) {
 
         String helpText;
 
@@ -128,6 +127,11 @@ public final class HelpMenu extends JFXPanel {
                     inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
                     displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
                     processEscapes: true
+                },
+                extensions: ["tex2jax.js"],
+                jax: ["input/TeX", "output/HTML-CSS"],
+                TeX: {
+                    extensions: ["AMSmath.js", "AMSsymbols.js"]
                 }
                 });
             </script>
@@ -181,7 +185,7 @@ public final class HelpMenu extends JFXPanel {
 
         helpText += "</body></html>";
 
-        return (new OutputText(helpText));
+        return (helpText);
     }
 
     private void inicialitzateAtributes(Map<String, Object> map) {
@@ -245,12 +249,7 @@ public final class HelpMenu extends JFXPanel {
      * }
      */
 
-    public void addOutput(OutputElement oe) {
-        String windowText = "";
-        windowText = oe.printHTML(windowText) + "";
-
-        final String aux = windowText;
-
+    public void addOutput(String aux) {
         Platform.runLater(new Runnable() {
             public void run() {
                 ((Browser) scene.getRoot()).repaint(aux);
@@ -318,6 +317,7 @@ class Browser extends Region {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        System.out.println("Loading help file: " + CoDaPackConf.tmpFile("Help.html"));
         getChildren().add(browser);
         webEngine
                 .setUserStyleSheetLocation(getClass().getResource(CoDaPackMain.RESOURCE_PATH + "style.css").toString());
@@ -382,7 +382,7 @@ class Browser extends Region {
             System.out.println("Problem occurs when deleting the directory : Help.html");
             e.printStackTrace();
         }
-
+        System.out.println(CoDaPackConf.tmpFile("Help.html"));
         try {
             webEngine.load(Paths.get(CoDaPackConf.temporalDir, "Help.html").toUri().toURL().toString());
         } catch (MalformedURLException e) {
