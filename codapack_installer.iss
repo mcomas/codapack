@@ -46,7 +46,7 @@ Source: "Help\*"; DestDir: "{app}\Help"; Flags: ignoreversion recursesubdirs
 Source: "src\*"; DestDir: "{app}\src"; Flags: ignoreversion recursesubdirs
 Source: "target\CoDaPack-{#MyAppVersion}-jar-with-dependencies.jar"; DestDir: "{app}\target"; Flags: ignoreversion recursesubdirs
 Source: "CoDaPack.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "codapack_structure.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "codapack_structure.yaml"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "target\codapack-{#MyAppVersion}.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "license.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
