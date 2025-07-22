@@ -20,8 +20,8 @@ description: |
   $$
   \psi_{ij} = \left\{
     \begin{array}{ll}
-      \sqrt{\frac{s_i}{r_i(s_i+r_i)}}, & \text{if at step } i \text{ the part } j \text{ is coded in the SBP as } +1; \
-      -\sqrt{\frac{r_i}{s_i(s_i+r_i)}}, & \text{if at step } i \text{ the part } j \text{ is coded in the SBP as } -1; \
+      \sqrt{\frac{s_i}{r_i(s_i+r_i)}}, & \text{if at step } i \text{ the part } j \text{ is coded in the SBP as } +1; \\
+      -\sqrt{\frac{r_i}{s_i(s_i+r_i)}}, & \text{if at step } i \text{ the part } j \text{ is coded in the SBP as } -1; \\
       0, & \text{if at step } i \text{ the part } j \text{ is coded in the SBP as } 0.
     \end{array}
   \right.
@@ -41,7 +41,7 @@ options:
 
       $$
       \begin{array}{ccc}
-      1 & 1 & -1 \
+      1 & 1 & -1 \\
       1 & -1 & 0
       \end{array}
       $$

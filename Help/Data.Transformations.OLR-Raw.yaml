@@ -35,7 +35,7 @@ options:
 
       $$
       \begin{array}{ccc}
-      1 & 1 & -1 \
+      1 & 1 & -1 \\
       1 & -1 & 0
       \end{array}
       $$
