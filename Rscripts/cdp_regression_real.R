@@ -8,7 +8,7 @@ cdp_check = function(){
 }
 cdp_analysis = function(){
   # save.image("Rscripts/cdp_regression_real.RData")
-  LM <- lm(Y~X)
+  LM <- lm(Y~., data = as.data.frame(X))
   
   
   graphname <- sprintf("%s.svg", tempfile())

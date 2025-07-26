@@ -123,36 +123,27 @@ cdp_analysis = function(){
     dev.off()
   }
   names(graphnames) = paste("Response", colnames(H))
-  # # Create graphs
-  # graphnames <- list()
-  # for (n in 1:nparts)
-  # {
-  #   name <- generateFileName(paste(tempdir(),paste("Plots_of_residuals_",names(H[n]),sep=""),sep="\\"))
-  #   svg(name)
-  #   LM.temp <- lm(as.matrix(H[n])~as.matrix(X))
-  #   oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
-  #   title <- paste(names(H[n])," ~ ",names(X))
-  #   plot(LM.temp,sub.caption=title)  # Plot the model information
-  #   par(oldpar)
-  #   dev.off()
-  #   graphnames[n] <- name
-  # }
-  
-  
-  
-  #PART NOVA. ARA TE EN COMPTE ELS NOMS DE TOTES LES X I TRANSPOSA COEFICIENTS PER PODER-LOS INVERTIR
+
   NDF = cbind(
     data.frame("Variable" = row.names(LM$coefficients)), 
     as.data.frame(LM$coefficients, row.names = FALSE)
   )
-  #FI PART NOVA.
-  
+
+  if(exists('X_new')){
+    new_data2 = data.frame(predict(LM, newdata = as.data.frame(X_new)))
+    new_data2_coda = coda.base::composition(new_data2, coda.base::sbp_basis(BasisY))
+    names(new_data2_coda) = paste0(colnames(Y), '.pred')
+  }
   
   # Ooutput
-  list(
+  cdp_out = list(
     'text' = gsub("[‘’]", "'", text_output),
     'dataframe' = list('coefficients' = NDF),
     'graph' = graphnames,
     'new_data' = new_data
   )
+  if(exists('X_new')){
+    cdp_out[['new_data2']] = new_data2_coda
+  }
+  cdp_out
 }

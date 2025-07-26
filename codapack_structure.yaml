@@ -152,6 +152,7 @@ CoDaPack Menu:
                             selector: "Y"
                         - boolean: "Residuals"
                         - boolean: "Fitted values"
+                        - data: "Predict new data"
                 - X composition, Y real:
                     id: "RegressionCoDaExplanaotory"
                     code: "r"
@@ -165,6 +166,7 @@ CoDaPack Menu:
                             selector: "X"
                         - boolean: "Residuals"
                         - boolean: "Fitted values"
+                        - data: "Predict new data"
                 - X real, Y real:
                     id: "RegressionReal"
                     code: "r"

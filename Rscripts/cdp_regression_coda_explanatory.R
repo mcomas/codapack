@@ -42,22 +42,25 @@ cdp_analysis = function(){
   if(V2) new_data[['fitted.values']] = LM$fitted.values
   
   text_output = cdp_print_sbp(BasisX, colnames(X))
-  # nccol = pmax(3, nchar(colnames(X)))
-  # text_output = c("Partition:", capture.output({
-  # cat(sprintf(sprintf("%%%ds", nccol), colnames(X)), "\n")
-  # cat(apply(matrix(sprintf(sprintf("%%%dd", nccol), BasisX), byrow = TRUE, ncol = ncol(X)),
-  #       1,
-  #       paste, collapse=' '), sep='\n')
-  # }))
   text_output = c(text_output, capture.output(summary(LM)))
   text_output = gsub("[‘’]", "'", text_output)
   
+  if(exists('X_new')){
+    H_new = coda.base::coordinates(X_new, coda.base::sbp_basis(BasisX))
+    colnames(H_new) = paste0('olr.', 1:ncol(H_new))
+    new_data2 = data.frame(predict(LM, newdata = as.data.frame(H_new)))
+    names(new_data2) = paste0(colnames(Y), '.pred')
+  }
   # Ooutput
-  list(
+  cdp_out = list(
     'text' = list(text_output),
     'dataframe' = list('coefficients' = LM$coefficients),
     'graph' = graphname,
     'new_data' = new_data
   )
+  if(exists('X_new')){
+    cdp_out[['new_data2']] = new_data2
+  }
+  cdp_out
   
 }

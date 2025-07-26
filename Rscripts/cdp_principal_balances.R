@@ -6,7 +6,7 @@ cdp_check = function(){
   
 }
 cdp_analysis = function(){
-  save.image("Rscripts/cdp_principal_balances.RData")
+  # save.image("Rscripts/cdp_principal_balances.RData")
   method = tolower(V1)
   if(method == "exact" & ncol(X) > 15) {
     stop("CoDaPack supports up to 15 parts. To compute principal balances \nwith more than 15 parts, please use the R package coda.base.")
