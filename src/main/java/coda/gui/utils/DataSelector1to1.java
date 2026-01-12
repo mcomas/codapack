@@ -59,7 +59,8 @@ public final class DataSelector1to1 extends DataSelector {
     public static final long serialVersionUID = 1L;
     int pressIndex = -1;
     int releaseIndex = -1;
-
+    TitledBorder selectTitle = BorderFactory.createTitledBorder("Selected");
+    TitledBorder groupTitle = BorderFactory.createTitledBorder("Group by");
     public DataSelector1to1(String names[]) throws DataFrameException{
         group_by = false;
         initComponents();
@@ -86,6 +87,12 @@ public final class DataSelector1to1 extends DataSelector {
 
         if(dataFrame != null)
             setDataLists(dataFrame);
+    }
+    public void setTextSelector(String title){
+        selectTitle.setTitle(title);
+    }
+    public void setTextGroups(String title){
+        groupTitle.setTitle(title);
     }
     private void reorder() {
         DefaultListModel<String> model = (DefaultListModel<String>) vars_selected.getModel();
@@ -197,7 +204,8 @@ public final class DataSelector1to1 extends DataSelector {
         p_vars_controls.setLayout(new BoxLayout(p_vars_controls, BoxLayout.Y_AXIS));
 
         JPanel p_vars_selected = new JPanel(new BorderLayout());
-        p_vars_selected.setBorder(BorderFactory.createTitledBorder("Selected"));
+        
+        p_vars_selected.setBorder(selectTitle);
         p_vars_selected.setAlignmentX(Component.RIGHT_ALIGNMENT);
         p_vars_selected.setMaximumSize(new Dimension(200, 500));
 
@@ -224,8 +232,8 @@ public final class DataSelector1to1 extends DataSelector {
         p_vars_selected.add(sp_vars_selected, BorderLayout.CENTER);
 
         if(group_by){
-            JPanel groupPanel = new JPanel(new BorderLayout());
-            groupPanel.setBorder(BorderFactory.createTitledBorder("Group by"));
+            JPanel groupPanel = new JPanel(new BorderLayout());            
+            groupPanel.setBorder(groupTitle);
             var_group.setPrototypeDisplayValue("XXXXXXXXXXXX");
             groupPanel.add(var_group);
             p_vars_selected.add(groupPanel, BorderLayout.SOUTH);

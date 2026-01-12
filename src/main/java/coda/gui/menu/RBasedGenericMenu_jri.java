@@ -898,7 +898,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     String sel_names[] = null;
                     if(selector.equals("X")){
-                        sel_names = ((DataSelector1to2)ds).getSelectedDataA();
+                        sel_names = ds.getSelectedData();
                     }
                     if(selector.equals("Y")){
                         sel_names = ((DataSelector1to2)ds).getSelectedDataB();

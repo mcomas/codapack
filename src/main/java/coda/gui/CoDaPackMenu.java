@@ -368,13 +368,16 @@ public class CoDaPackMenu extends JMenuBar {
                                                     json_controls,
                                                     ds12));
                         }else{
+                            DataSelector1to1 ds11 = new DataSelector1to1(mainApplication.getActiveDataFrame(), groups, variable_type);
+                            if(json_obj.has("textA")) ds11.setTextSelector(json_obj.getString("textA"));
+                            if(json_obj.has("textB")) ds11.setTextGroups(json_obj.getString("textB"));
                             mainApplication.dynamicMenus.put(id, 
                                 new RBasedGenericMenu_jri(mainApplication, 
                                                     CoDaPackMain.re, 
                                                     name,
                                                     Rscript,
                                                     json_controls,
-                                                    new DataSelector1to1(mainApplication.getActiveDataFrame(), groups, variable_type)));
+                                                    ds11));
                         }
                         
                     }
@@ -492,7 +495,7 @@ public class CoDaPackMenu extends JMenuBar {
             //System.out.println(codapack_menu.toString(2));
             JSONArray json_array = codapack_menu.getJSONArray("CoDaPack Menu"); */
             Yaml yaml = new Yaml();
-            InputStream input = new FileInputStream("codapack_structure.yaml");
+            InputStream input = new FileInputStream(CoDaPackConf.codapack_menu_yaml);
 
             // Carreguem el YAML com un Map
             Map<String, Object> data = yaml.load(input);

@@ -178,6 +178,31 @@ CoDaPack Menu:
                         - boolean: "Residuals"
                         - boolean: "Fitted values"
                         - data: "Predict new data"
+            - Classification:
+                - X composition, Y category:
+                    id: "ClassificationCoDaExplanatoryCategorical"
+                    code: "r"
+                    script: "cdp_classification_coda_explanatory.R"
+                    options: ["groups"]
+                    textA: "Explanatory variables"
+                    textB: "Response variable"
+                    controls:
+                        - basis: 
+                            name: "Explanatory partition"
+                            selector: "X"
+                        - boolean: "Fitted values"
+                - X composition, Y count matrix:
+                    id: "ClassificationCoDaExplanatoryCounts"
+                    code: "r"
+                    script: "cdp_classification_coda_explanatory.R"
+                    options: ["2selectors"]
+                    textA: "Explanatory variables"
+                    textB: "Response variable"
+                    controls:
+                        - basis: 
+                            name: "Explanatory partition"
+                            selector: "X"
+                        - boolean: "Fitted values"
             - Cluster:
                 - K-means:
                     id: "KMeans"
