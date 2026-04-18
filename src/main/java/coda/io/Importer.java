@@ -31,8 +31,6 @@ import java.awt.Component;
 
 import javax.script.ScriptException;
 
-import org.renjin.nmath.df;
-
 /**
  *
  * @author marc

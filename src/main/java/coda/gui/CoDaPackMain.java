@@ -39,7 +39,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,8 +56,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import org.rosuda.JRI.Rengine;
 
 import coda.DataFrame;
 import coda.DataFrame.DataFrameException;
@@ -112,14 +109,15 @@ import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.CoDaPackImporter;
 import coda.io.ExportData;
 import coda.io.ExportRDA;
-import coda.io.ImportRDA;
-import coda.io.ImportRDA_renjin;
 import coda.io.Importer;
 import coda.io.WorkspaceIO;
 import coda.plot2.TernaryPlot2dDisplay;
 import coda.plot2.objects.Ternary2dGridObject;
 import coda.plot2.objects.Ternary2dObject;
 import coda.plot2.window.TernaryPlot2dWindow;
+import coda.service.RDataFileService;
+import coda.service.RIntegrationService;
+import coda.util.AppLogger;
 import coda.util.RScriptEngine;
 
 /**
@@ -228,8 +226,7 @@ public final class CoDaPackMain extends JFrame {
             try {
                 outputPanel.addWelcome(CoDaPackConf.getVersion());
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                AppLogger.error(CoDaPackMain.class, "Unable to initialize welcome output", e);
             }
 }
         
@@ -315,7 +312,7 @@ public final class CoDaPackMain extends JFrame {
         tabbedPane.add("Main", outputPanel);
 
         GraphicsConfiguration gc = outputPanel.getGraphicsConfiguration();
-        System.out.println("GraphicsConfiguration: " + gc);
+        AppLogger.info(CoDaPackMain.class, "GraphicsConfiguration: " + gc);
         
         jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabbedPane, tablePanel);
         // -------------
@@ -349,9 +346,8 @@ public final class CoDaPackMain extends JFrame {
         // } 
         int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
         double scale = dpi / 96.0; // 96 DPI és l'estàndard "1.0"
-        System.out.println("DPI: " + dpi + " → scale: " + scale);
-
-        System.out.println("Current scaling:" + scale);
+        AppLogger.info(CoDaPackMain.class, "DPI: " + dpi + " -> scale: " + scale);
+        AppLogger.info(CoDaPackMain.class, "Current scaling: " + scale);
         // outputPanel.browser.setZoom(2);
 
     }
@@ -472,9 +468,9 @@ public final class CoDaPackMain extends JFrame {
     public void eventCoDaPack(String title) throws ScriptException {  
         if(jMenuBar.item_key.containsKey(title)){
             String id = jMenuBar.item_key.get(title);
-            System.out.println(title + " with key " + id);
+            AppLogger.info(CoDaPackMain.class, title + " with key " + id);
             if(dynamicMenus.containsKey(id)){
-                System.out.println("Loading dynamicMenu " + id);
+                AppLogger.info(CoDaPackMain.class, "Loading dynamicMenu " + id);
                 dynamicMenus.get(id).reLocate();
                 dynamicMenus.get(id).updateMenuDialog();
                 dynamicMenus.get(id).setVisible(true);
@@ -695,13 +691,11 @@ public final class CoDaPackMain extends JFrame {
                 // dataframes
                 Importer importRDA = null;
                 if(is_R_available()){
-                    importRDA = new ImportRDA(chooseFile.getSelectedFile().getAbsolutePath(), re);
+                    importRDA = RDataFileService.createImporter(chooseFile.getSelectedFile().getAbsolutePath(), re);
                 }else{
-                    importRDA = new ImportRDA_renjin(chooseFile.getSelectedFile().getAbsolutePath());
+                    JOptionPane.showMessageDialog(this, "R is not available");
+                    return;
                 }
-                //ImportRDA impdf = new ImportRDA(chooseFile.getSelectedFile().getAbsolutePath(), re);
-                //ImportRDA_renjin impRDA_Renjin = new ImportRDA_renjin(chooseFile.getSelectedFile().getAbsolutePath());
-                //ImportRDA impRDA = new ImportRDA(chooseFile.getSelectedFile().getAbsolutePath(), re);
                 // Creem una nova instància ImportRDAMenu, serà l'encarregada de gestionar el
                 // menú
                 ImportRDAMenu imprdam;
@@ -709,8 +703,7 @@ public final class CoDaPackMain extends JFrame {
                     imprdam = new ImportRDAMenu(this, importRDA);
                     imprdam.setVisible(true);
                 } catch (DataFrameException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    AppLogger.error(CoDaPackMain.class, "Unable to open R data import dialog", e);
                 }
                 // Fem el menú visible
                 
@@ -1136,58 +1129,25 @@ public final class CoDaPackMain extends JFrame {
 
     static boolean jriAvailable = true;
     static {
-    
-        var path = System.getProperty("java.library.path");
-        
-        try {
-            System.loadLibrary("jri");
-        } catch (UnsatisfiedLinkError e) {
-            System.out.println("JRI not detected");
-            System.out.println("Looking for library at: " + path.toString());
-            
-            jriAvailable = false;
-        }
-        if(!jriAvailable){
-            try {
-            System.load("Rlibraries/rJava/jri/libjri.jnilib");
-            jriAvailable = true;
-        } catch (UnsatisfiedLinkError e) {
-            System.out.println("Error when loading Rlibraries/rJava/jri/libjri.jnilib");
-            
-            jriAvailable = false;
-        }
-        }
-        Properties props = System.getProperties();
-        props.list(System.out);
+        jriAvailable = RIntegrationService.initializeNativeLibrary();
     }
     /**
      * @param args the command line arguments
      */
     static boolean is_R_available(){
-        // System.out.println("R_HOME =" + System.getenv("R_HOME"));
-        if(System.getenv("R_HOME") == null | !jriAvailable) return(false);
-        return(Rengine.versionCheck());
-        // for(String v: System.getenv().keySet()){
-        //     System.out.println(v + " = " + System.getenv(v));
-        // }
-        // return(true);
+        if(!jriAvailable) return(false);
+        return RIntegrationService.isRAvailable();
     }
     public static boolean R_available = false;
     public static void main(String args[]) throws Exception {
         /*
          * Look and Feel: change appearence according to OS
          */
-        System.out.println("Current JVM version - " + System.getProperty("java.version"));
+        AppLogger.info(CoDaPackMain.class, "Current JVM version - " + System.getProperty("java.version"));
         //Runtime.getRuntime().exec("Rscript install_packages.R");
         CoDaPackConf.workingDir = System.getProperty("user.dir");
-        //re.eval("library(coda.base, lib.loc='Rlibraries')");
-        //re.eval("library(zCompositions, lib.loc='Rlibraries')");
         R_available = is_R_available();
-        if(R_available){
-            re = new RScriptEngine(Rargs, false, null);
-            re.eval("options(width=10000)");
-            re.eval("Sys.setlocale('LC_NUMERIC','C')");
-        }
+        re = RIntegrationService.initializeEngine(Rargs);
         
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -1209,7 +1169,7 @@ public final class CoDaPackMain extends JFrame {
          * Congifuration file creation if it not exists. Using static class CoDaPackConf
          */
         File f = new File(CoDaPackConf.configurationFile);
-        System.out.println("Configuration file: " + f.getAbsolutePath());
+        AppLogger.info(CoDaPackMain.class, "Configuration file: " + f.getAbsolutePath());
         if (f.exists()){            
             CoDaPackConf.loadConfiguration();
         // CoDaPackConf.saveConfiguration();
