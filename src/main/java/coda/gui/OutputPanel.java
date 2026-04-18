@@ -23,6 +23,7 @@ import static coda.gui.CoDaPackConf.CoDaVersion;
 import static coda.gui.CoDaPackMain.outputPanel;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputText;
+import coda.util.AppLogger;
 import javafx.scene.paint.Color;
 
 import java.awt.GraphicsConfiguration;
@@ -81,8 +82,7 @@ public final class OutputPanel extends JFXPanel {
             fileWriter = new OutputStreamWriter(new FileOutputStream(CoDaPackConf.tmpFile("CoDaPack.html"), true),
                     StandardCharsets.ISO_8859_1);
         } catch (IOException e) {
-            System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
-            e.printStackTrace();
+            AppLogger.error(OutputPanel.class, "Unable to initialize output panel file writer", e);
         }
 
         // 🔹 Ara pots inicialitzar la part JavaFX amb el scaling correcte
@@ -96,8 +96,7 @@ public final class OutputPanel extends JFXPanel {
                     new FileOutputStream(CoDaPackConf.tmpFile(nameScript + ".html"), true),
                     StandardCharsets.ISO_8859_1);
         } catch (IOException e) {
-            System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
-            e.printStackTrace();
+            AppLogger.error(OutputPanel.class, "Unable to initialize output panel file writer", e);
         }
 
         // 🔹 Ara pots inicialitzar la part JavaFX amb el scaling correcte

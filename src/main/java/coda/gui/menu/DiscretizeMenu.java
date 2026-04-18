@@ -27,13 +27,9 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataSelector1to1;
-import coda.util.RScriptEngine;
-import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -41,9 +37,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.renjin.script.RenjinScriptEngineFactory;
-import org.renjin.sexp.DoubleVector;
-import org.renjin.sexp.StringVector;
+import org.rosuda.JRI.REXP;
+import org.rosuda.JRI.Rengine;
 
 /**
  *
@@ -51,7 +46,6 @@ import org.renjin.sexp.StringVector;
  */
 public class DiscretizeMenu extends AbstractMenuDialog{
     
-    ScriptEngine re;
     JPanel panel;
     
     public static final long serialVersionUID = 1L;
@@ -74,7 +68,6 @@ public class DiscretizeMenu extends AbstractMenuDialog{
         super(mainApp, "Discretize/Segment Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
-        re = (new RenjinScriptEngineFactory()).getScriptEngine();
         optionsPanel.add(methodLabel);
         optionsPanel.add(optionsList);
         optionsPanel.add(breaksLabel);
@@ -97,8 +90,13 @@ public class DiscretizeMenu extends AbstractMenuDialog{
         if(sel_names.length == 1){
             
             this.dispose();
+            Rengine re = CoDaPackMain.re;
+            if(re == null){
+                JOptionPane.showMessageDialog(null, "R is not available");
+                return;
+            }
             
-            re.put("x", df.get(sel_names[0]).getNumericalData());
+            re.assign("x", df.get(sel_names[0]).getNumericalData());
             String EXP = "res <- cut(x, breaks=#BREAKS#, include.lowest = TRUE)";
 
             if(optionsList.getSelectedItem().toString().equals("fixed")){
@@ -151,14 +149,17 @@ public class DiscretizeMenu extends AbstractMenuDialog{
             double[] res = null;
             String[] resString = null;
             String[] resIntervals = null;
-            try {
-                re.eval(EXP.replace("#NINT#", breaksField.getText()));
-                res = ((DoubleVector)re.eval("as.numeric(res)")).toDoubleArray();
+            re.eval(EXP.replace("#NINT#", breaksField.getText()));
+            REXP numericResult = re.eval("as.numeric(res)");
+            REXP stringResult = re.eval("as.character(res)");
+            if(numericResult != null && stringResult != null &&
+                    numericResult.asDoubleArray() != null && stringResult.asStringArray() != null){
+                res = numericResult.asDoubleArray();
                 resString = new String[df.get(sel_names[0]).size()]; /* creem una variable per guardar els noms */
-                resIntervals = ((StringVector)re.eval("as.character(res)")).toArray();
-            } catch (ScriptException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                resIntervals = stringResult.asStringArray();
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid discretization");
+                return;
             }
 
             for(int i=0; i < resIntervals.length;i++) resString[i] = resIntervals[i];

@@ -8,20 +8,13 @@ package coda.gui.menu;
 import coda.DataFrame;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataSelector1to1;
-import coda.gui.CoDaPackConf;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.renjin.script.RenjinScriptEngineFactory;
-import org.renjin.sexp.DoubleVector;
+import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -29,10 +22,6 @@ import org.rosuda.JRI.Rengine;
  * @author Guest2
  */
 public class CalculateNewVarMenu extends AbstractMenuDialog{
-    
-    ScriptEngine re;
-    
-    
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = "Data.Manipulte.Calculate new Variable.yaml";
@@ -42,7 +31,6 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
     //public CalculateNewVarMenu(final ParaProbarMiMenu mainApp, Rengine r){
         super(mainApp, "Calculate new Variable Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false));//----?
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
-        re = (new RenjinScriptEngineFactory()).getScriptEngine();
     }
     
     @Override
@@ -79,28 +67,33 @@ public class CalculateNewVarMenu extends AbstractMenuDialog{
                         }else if(mainApplication.getActiveDataFrame().getNames().contains(nameField.getText())){
                             JOptionPane.showMessageDialog(null, "This name is not available");
                         }else{
+                            Rengine re = CoDaPackMain.re;
+                            if(re == null){
+                                JOptionPane.showMessageDialog(null, "R is not available");
+                                ask_expresion = false;
+                                continue;
+                            }
                             for(int i=0; i < selectedNames.length;i++){                                
                                 if(df.get(selectedNames[i]).isNumeric()){
-                                    re.put("x" + String.valueOf(i+1), df.get(selectedNames[i]).getNumericalData());
+                                    re.assign("x" + String.valueOf(i+1), df.get(selectedNames[i]).getNumericalData());
                                 }
                                 else{ // categorical data
-                                    re.put("x" + String.valueOf(i+1), df.get(selectedNames[i]).getTextData());
+                                    re.assign("x" + String.valueOf(i+1), df.get(selectedNames[i]).getTextData());
                                 }
                             }
                             String expression = expressionField.getText();
-                            try {
-                                if(re.eval(expression) instanceof DoubleVector){
-                                    double[] res = ((DoubleVector)re.eval(expression)).toDoubleArray();
-                                    df.addData(nameField.getText(), res);
-                                    mainApplication.updateDataFrame(df);
-                                    ask_expresion = false;
-                                }else{
-                                    JOptionPane.showMessageDialog(null, "Result should be numeric");
-                                }
-                                
-                            } catch (ScriptException e) {
+                            re.assign(".cdp_expr", expression);
+                            REXP result = re.eval(
+                                    "local({res <- eval(parse(text=.cdp_expr)); if (is.numeric(res)) as.numeric(res) else NULL})");
+                            if(result != null && result.asDoubleArray() != null){
+                                double[] res = result.asDoubleArray();
+                                df.addData(nameField.getText(), res);
+                                mainApplication.updateDataFrame(df);
+                                ask_expresion = false;
+                            }else{
                                 JOptionPane.showMessageDialog(null, "Invalid expression");
                             }
+                            re.eval("rm(.cdp_expr)");
                         }
                     }else{
                         ask_expresion = false;

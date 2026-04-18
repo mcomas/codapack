@@ -61,6 +61,13 @@ import coda.gui.utils.DataSelector1to2;
  */
 public class CoDaPackMenu extends JMenuBar {
 
+    private static final String[] R_DEPENDENT_MENU_IDS = {
+        "Discretize",
+        "CalculateNewVar",
+        "SortData",
+        "AdvancedFilter"
+    };
+
     String nomPersonalDirectory = "menus_personalitzables";
 
     public HashMap<String,String> item_key = new HashMap<>();
@@ -148,7 +155,16 @@ public class CoDaPackMenu extends JMenuBar {
     // public final String ITEM_MODEL_AddtoHTMLJavaScript = "Add to HTML JavaScript";
 
 
- 
+
+
+    private boolean isRDependentMenuId(String id) {
+        for (String rDependentId : R_DEPENDENT_MENU_IDS) {
+            if (rDependentId.equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     private JMenuItem addJMenuItem(JMenu menu, JMenuItem item, String title) {
@@ -323,6 +339,9 @@ public class CoDaPackMenu extends JMenuBar {
                 String id = json_obj.getString("id");
                 item_key.put(name, id);
                 JMenuItem mi = new JMenuItem();
+                if(!CoDaPackMain.R_available && isRDependentMenuId(id)){
+                    mi.setEnabled(false);
+                }
                 boolean groups = false;
                 boolean two_selectors = false;
                 int variable_type = DataSelector.ONLY_NUMERIC;
@@ -368,13 +387,16 @@ public class CoDaPackMenu extends JMenuBar {
                                                     json_controls,
                                                     ds12));
                         }else{
+                            DataSelector1to1 ds11 = new DataSelector1to1(mainApplication.getActiveDataFrame(), groups, variable_type);
+                            if(json_obj.has("textA")) ds11.setTextSelector(json_obj.getString("textA"));
+                            if(json_obj.has("textB")) ds11.setTextGroups(json_obj.getString("textB"));
                             mainApplication.dynamicMenus.put(id, 
                                 new RBasedGenericMenu_jri(mainApplication, 
                                                     CoDaPackMain.re, 
                                                     name,
                                                     Rscript,
                                                     json_controls,
-                                                    new DataSelector1to1(mainApplication.getActiveDataFrame(), groups, variable_type)));
+                                                    ds11));
                         }
                         
                     }
@@ -465,12 +487,14 @@ public class CoDaPackMenu extends JMenuBar {
         addJMenuItem(menuImport, itemImportCSV, ITEM_IMPORT_CSV);
         addJMenuItem(menuImport, itemImportXLS, ITEM_IMPORT_XLS);
         addJMenuItem(menuImport, itemImportRDA, ITEM_IMPORT_RDA);
+        if(!CoDaPackMain.R_available) itemImportRDA.setEnabled(false);
 
         menuExport.setText(ITEM_EXPORT);
         menuFile.add(menuExport);
         addJMenuItem(menuExport, itemExportCSV, ITEM_EXPORT_CSV);
         addJMenuItem(menuExport, itemExportXLS, ITEM_EXPORT_XLS);
         addJMenuItem(menuExport, itemExportR, ITEM_EXPORT_R);
+        if(!CoDaPackMain.R_available) itemExportR.setEnabled(false);
 
         menuFile.addSeparator();
         addJMenuItem(menuFile, itemConfiguration, ITEM_CONF);
@@ -492,7 +516,7 @@ public class CoDaPackMenu extends JMenuBar {
             //System.out.println(codapack_menu.toString(2));
             JSONArray json_array = codapack_menu.getJSONArray("CoDaPack Menu"); */
             Yaml yaml = new Yaml();
-            InputStream input = new FileInputStream("codapack_structure.yaml");
+            InputStream input = new FileInputStream(CoDaPackConf.codapack_menu_yaml);
 
             // Carreguem el YAML com un Map
             Map<String, Object> data = yaml.load(input);

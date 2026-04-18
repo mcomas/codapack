@@ -34,19 +34,13 @@ import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.ExportRDA;
 
 import java.io.FileOutputStream;
-import java.text.Normalizer;
-import java.util.zip.GZIPOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import org.renjin.eval.Context;
-import org.renjin.serialization.RDataWriter;
-import org.renjin.sexp.DoubleArrayVector;
-import org.renjin.sexp.IntArrayVector;
-import org.renjin.sexp.ListVector;
-import org.renjin.sexp.PairList;
-import org.renjin.sexp.StringArrayVector;
+import org.rosuda.JRI.REXP;
+import org.rosuda.JRI.Rengine;
 
 /**
  *
@@ -65,24 +59,6 @@ public class ExportRDataMenu extends AbstractMenuDialog {
         optionsPanel.add(dfname);
     }
 
-    public String cleanName(String name) {
-        name = Normalizer.normalize(name, Normalizer.Form.NFD);
-        name = name.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
-        name = name.replaceAll("\\s", "");
-        name = name.replaceAll("-", "_");
-        name = name.replaceAll("-", "_");
-        name = name.replaceAll("/", "");
-        return name;
-    }
-
-    public String NumToString(double val) {
-        if (Double.isNaN(val)) {
-            return "NA";
-        } else {
-            return Double.toString(val);
-        }
-    }
-
     @Override
     public void acceptButtonActionPerformed() {
         String ruta = CoDaPackConf.workingDir;
@@ -92,42 +68,38 @@ public class ExportRDataMenu extends AbstractMenuDialog {
                 
         if (chooseFile.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
+                Rengine re = CoDaPackMain.re;
+                if (re == null) {
+                    JOptionPane.showMessageDialog(this, "R is not available");
+                    return;
+                }
                 String fname = chooseFile.getSelectedFile().getAbsolutePath();
                 fname = fname.endsWith(".RData") ? fname : fname.concat(".RData");
 
                 DataFrame df = mainApplication.getActiveDataFrame();
-                ListVector.NamedBuilder dataframe = new ListVector.NamedBuilder();
                 String[] sel_names = ds.getSelectedData();
+                re.eval(".cdp_export <- list()");
                 for (int j = 0; j < sel_names.length; j++) {
                     Variable var = df.get(sel_names[j]);
+                    String tmpName = ".cdp_export_col_" + j;
 
                     if (var.isNumeric()) {
-                        dataframe.add(var.getName(), new DoubleArrayVector(var.getNumericalData()));
+                        re.assign(tmpName, var.getNumericalData());
                     }
                     if (var.isText()) {
-                        dataframe.add(var.getName(), new StringArrayVector(var.getTextData()));
+                        re.assign(tmpName, var.getTextData());
                     }
+                    re.eval(String.format(".cdp_export[[%d]] <- %s", j + 1, tmpName));
                 }
-                dataframe.setAttribute("class", new StringArrayVector("data.frame"));
-                int[] ind = new int[df.getMaxVariableLength()];
-                for (int i = 0; i < df.getMaxVariableLength(); ++i)
-                    ind[i] = i + 1;
-
-                dataframe.setAttribute("row.names", new IntArrayVector(ind));
-
-                PairList.Builder list = new PairList.Builder();
-                list.add(dfname.getText(), dataframe.build());
-
-                Context context = Context.newTopLevelContext();
-                FileOutputStream fos = new FileOutputStream(fname);
-                GZIPOutputStream zos = new GZIPOutputStream(fos);
-                RDataWriter writer = new RDataWriter(context, zos);
-                writer.save(list.build());
-                zos.close();
-                fos.close();
+                re.assign(".cdp_export_names", sel_names);
+                re.assign(".cdp_export_df_name", dfname.getText());
+                re.eval("names(.cdp_export) <- .cdp_export_names");
+                re.eval(".cdp_export <- as.data.frame(.cdp_export, stringsAsFactors = FALSE)");
+                re.eval("assign(.cdp_export_df_name, .cdp_export, envir = .GlobalEnv)");
+                re.eval("save(list = .cdp_export_df_name, file = " + REXP.quoteString(fname.replace("\\", "/")) + ")");
+                re.eval("rm(list = c('.cdp_export', '.cdp_export_names', '.cdp_export_df_name', ls(pattern='^\\\\.cdp_export_col_', all.names=TRUE)), envir = .GlobalEnv)");
                 ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
                 CoDaPackConf.workingDir = ruta;
-                writer.close();
 
                 setVisible(false);
             } catch (Exception e) { // Catch exception if any

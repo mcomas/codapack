@@ -20,14 +20,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
-import org.renjin.script.RenjinScriptEngineFactory;
-import org.renjin.sexp.IntVector;
-import org.renjin.sexp.StringVector;
+import org.rosuda.JRI.REXP;
+import org.rosuda.JRI.Rengine;
 
 /**
  *
@@ -35,7 +32,6 @@ import org.renjin.sexp.StringVector;
  */
 public class SortDataMenu extends AbstractMenuDialog{
     
-    ScriptEngine re;
     DataFrame df;
     JCheckBox decSort;
     ArrayList<String> names;
@@ -48,7 +44,6 @@ public class SortDataMenu extends AbstractMenuDialog{
         super(mainApp, "Sort Data Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), false, DataSelector.ALL_VARIABLES));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
-        re = (new RenjinScriptEngineFactory()).getScriptEngine();
         decSort = new JCheckBox("Decreasing sort",false);
         this.optionsPanel.add(decSort);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
@@ -63,6 +58,11 @@ public class SortDataMenu extends AbstractMenuDialog{
         if(selectedNames.length > 0){
             
             df = mainApplication.getActiveDataFrame();
+            Rengine re = CoDaPackMain.re;
+            if(re == null){
+                JOptionPane.showMessageDialog(null, "R is not available");
+                return;
+            }
             
             // create dataframe on r
             
@@ -72,9 +72,9 @@ public class SortDataMenu extends AbstractMenuDialog{
                 String vname = selectedNames[i];
                 vnames[i] = "x" + String.valueOf(auxPos);
                 if(df.get(vname).isNumeric()){
-                    re.put("x" + String.valueOf(auxPos), df.get(vname).getNumericalData());
+                    re.assign("x" + String.valueOf(auxPos), df.get(vname).getNumericalData());
                 }else{
-                    re.put("x" + String.valueOf(auxPos), df.get(vname).getTextData());
+                    re.assign("x" + String.valueOf(auxPos), df.get(vname).getTextData());
                 }
             }
             String vars = String.join(",", vnames);
@@ -84,8 +84,9 @@ public class SortDataMenu extends AbstractMenuDialog{
 
             }
             int[] orderSort;
-            try {
-                orderSort = ((IntVector)re.eval(String.format("order(%s, decreasing = %s)", vars, decreasing))).toIntArray();
+            REXP result = re.eval(String.format("order(%s, decreasing = %s)", vars, decreasing));
+            if(result != null && result.asIntArray() != null){
+                orderSort = result.asIntArray();
                 DataFrame newDf = new DataFrame();
 
                 // we add the variables ordereds by the orderSort
@@ -100,9 +101,8 @@ public class SortDataMenu extends AbstractMenuDialog{
                 newDf.setName(nameDf);
                 mainApplication.addDataFrame(newDf);
 
-            } catch (ScriptException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid sort selection");
             }
             
             this.dispose();

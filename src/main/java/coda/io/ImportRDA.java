@@ -28,23 +28,10 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.DataFrame.DataFrameException;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.swing.JFileChooser;
 
 import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.RList;
-//import org.renjin.sexp.DoubleVector;
-//import org.renjin.sexp.ListVector;
-//import org.renjin.sexp.SEXP;
-//import org.renjin.sexp.StringVector;
 import org.rosuda.JRI.Rengine;
 
 /**
@@ -66,16 +53,18 @@ public class ImportRDA implements Importer{
 
     //El constructor
     public ImportRDA(String fpath, Rengine r){
-        //manager = new ScriptEngineManager(); //Static ?
-        //engine = manager.getEngineByName("Renjin");
         re = r;        
         fname = fpath.replace("\\", "/");        
+    }
+    // Quote every file path and object name before embedding it in R code so
+    // import still works with spaces or special characters.
+    private String quote(String value){
+        return REXP.quoteString(value);
     }
     public String[] getDataFramesNames(String filename){
             
         re.eval("etreball = new.env()");
-        String E1 = "load('#PATH#', envir = etreball)";
-        re.eval(E1.replace("#PATH#", filename));
+        re.eval("load(" + quote(filename) + ", envir = etreball)");
         re.eval("CDP_nms = ls(envir = etreball)");
         re.eval("CDP_x = sapply(lapply(CDP_nms, get, envir = etreball), is.data.frame)");
         String[] sdf = re.eval("CDP_nms[CDP_x==TRUE]").asStringArray();        
@@ -83,9 +72,9 @@ public class ImportRDA implements Importer{
     }
     private void resaveFileVersion2(String fileName,String tempFile){        
 
-        re.eval("load('"+ fileName + "', envir = etreball)");
+        re.eval("load(" + quote(fileName) + ", envir = etreball)");
 
-        re.eval("save(list = ls(envir = etreball), file = '" + tempFile + "', version = 2, envir = etreball)");
+        re.eval("save(list = ls(envir = etreball), file = " + quote(tempFile) + ", version = 2, envir = etreball)");
 
     }
 
@@ -154,10 +143,8 @@ public class ImportRDA implements Importer{
     // }
     @Override
     public String[] getAvailableDataFramesNames() {
-        // TODO Auto-generated method stub
         re.eval("etreball = new.env()");
-        String E1 = "load('#PATH#', envir = etreball)";
-        re.eval(E1.replace("#PATH#", fname));
+        re.eval("load(" + quote(fname) + ", envir = etreball)");
         re.eval("CDP_nms = ls(envir = etreball)");
         re.eval("CDP_x = sapply(lapply(CDP_nms, get, envir = etreball), is.data.frame)");
         String[] sdf = re.eval("CDP_nms[CDP_x==TRUE]").asStringArray();        
@@ -167,51 +154,45 @@ public class ImportRDA implements Importer{
     @Override
     public DataFrame importDataFrame(String df_name) throws DataFrameException {
         DataFrame dataf = new DataFrame();
-        String E1 = "(d <- get('#DFNAME#', envir = etreball))";
-        RList df = re.eval(E1.replace("#DFNAME#", df_name)).asList();                
+        RList df = re.eval("(d <- get(" + quote(df_name) + ", envir = etreball))").asList();
         for(String j: df.keys()){
             REXP var = df.at(j);
-            System.out.println(var.getType());
             int itype = var.getType();
-            // https://www.rforge.net/org/doc/constant-values.html#org.rosuda.JRI.REXP.XT_NULL
             if(itype == REXP.XT_ARRAY_INT ||      // 32
                 itype == REXP.XT_ARRAY_DOUBLE    // 33
                 ){ // numeric
                 String varname = j;
                 double[] vardouble = var.asDoubleArray();
-                System.out.println(vardouble.length);
                 Variable vardf = new Variable(varname,vardouble);
-                Variable vardfin = dataf.add(vardf);
+                dataf.add(vardf);
             }
             if(itype == REXP.XT_ARRAY_BOOL_INT ||  // 37
                 itype == REXP.XT_ARRAY_BOOL){       // 36
                 String varname = j;
                 double[] varinteger = Arrays.stream(var.asIntArray()).asDoubleStream().toArray();
                 Variable vardf = new Variable(varname,varinteger);
-                Variable vardfin = dataf.add(vardf);
+                dataf.add(vardf);
             }
             if(itype == REXP.XT_ARRAY_STR){
                 String varname = j;
-                re.eval(".v = d[['" + varname + "']]");
+                re.eval(".v = d[[" + quote(varname) + "]]");
                 re.eval(".v[is.na(.v)] = 'na'");
                 String[] varstring = re.eval(".v").asStringArray();
-                
-                System.out.println(varstring.length);
                 Variable vardf = new Variable(varname,varstring);
-                Variable vardfin = dataf.add(vardf);
+                dataf.add(vardf);
                 
             }
             if(itype == REXP.XT_FACTOR){
                 String varname = j;
-                re.eval(".v = as.character(d[['" + varname + "']])");
+                re.eval(".v = as.character(d[[" + quote(varname) + "]])");
                 re.eval(".v[is.na(.v)] = 'na'");
                 String[] varstring = re.eval(".v").asStringArray();
-                System.out.println(varstring.length);
                 Variable vardf = new Variable(varname,varstring);
-                Variable vardfin = dataf.add(vardf);
+                dataf.add(vardf);
             }
             
         }
+        re.eval("rm(d, .v)");
         return dataf;
     }
     

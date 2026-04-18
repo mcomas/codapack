@@ -1,16 +1,32 @@
 #!/bin/bash
 
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT"
+
 # source env_variables
 source set_rhome
 
-
-export R_LIBS_USER=Rlibraries
+export R_LIBS_USER="$ROOT/Rlibraries"
 # export CDP_WORKING_DIR=config
-export CDP_R_SCRIPTS=Rscripts
+export CDP_R_SCRIPTS="$ROOT/Rscripts"
 # export CDP_RESOURCES=.
 export CODAPACK_DEBUG=true # Set the debug flag
 
-mvn exec:exec
+JDK_25_HOME="${JDK_25_HOME:-/home/marc/.jdk/jdk-25}"
+MAVEN_4_HOME="${MAVEN_4_HOME:-/home/marc/.maven/apache-maven-4.0.0-rc-5}"
+
+if [ -d "$JDK_25_HOME" ]; then
+    export JAVA_HOME="$JDK_25_HOME"
+    export PATH="$JAVA_HOME/bin:$PATH"
+fi
+
+if [ -d "$MAVEN_4_HOME" ]; then
+    export PATH="$MAVEN_4_HOME/bin:$PATH"
+fi
+
+mvn -q -DskipTests compile exec:exec
 
 
 # marc@PORTCOMAS01:~/Software/codapack_codacourse-2023$ echo $JAVA_HOME
