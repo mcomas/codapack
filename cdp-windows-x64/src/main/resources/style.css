@@ -1,0 +1,46 @@
+td,th {
+	border: 1px solid #98bf21;
+	padding: 3px 7px 2px 7px;
+}
+
+th{
+	text-align: left;
+	padding-top: 5px;
+	padding-bottom: 4px;
+	background-color: #277BCC;
+	color: #ffffff;
+}
+
+.alt{
+	color: #000000;
+	background-color: #FFFADA;
+}
+
+td.h2{
+	background-color: #CC0000;
+}
+
+td.h1{
+	background-color: #FFCCCC;
+}
+
+td.l2{
+	background-color:#2B60DE;
+}
+
+td.l1{
+	background-color:#ADDFFF;
+}
+
+td.normal{
+	background-color: #FFFFFF;
+}
+
+body{
+	font-family: Monospace;
+	font-size: 15px;
+	color: #000000;
+	text-decoration: none;
+	margin: 20px;
+	border-collapse: collapse;
+}

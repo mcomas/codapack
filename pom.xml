@@ -7,14 +7,14 @@
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-      <java.version>17</java.version>
+      <java.version>25</java.version>
    </properties>
    <build>
       <plugins>
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>3.1.0</version>
+            <version>3.4.0</version>
             <configuration>
                <executable>java</executable>
                <arguments>
@@ -29,7 +29,7 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.11.0</version>
+            <version>3.13.0</version>
             <configuration>
                 <source>${java.version}</source>
                 <target>${java.version}</target>
@@ -39,7 +39,7 @@
          
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.6.0</version>
+            <version>3.7.1</version>
             <configuration>
                <archive>
                   <manifest>
