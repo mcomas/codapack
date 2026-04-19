@@ -10,6 +10,9 @@ import coda.gui.CoDaPackConf;
 import coda.gui.CoDaPackMain;
 import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
+import coda.service.RAnalysisScriptService;
+import coda.service.RMatrixTransferService;
+import coda.util.AppLogger;
 import coda.gui.utils.BinaryPartitionRowHeaders;
 import coda.gui.utils.BinaryPartitionSelect;
 import coda.gui.utils.BinaryPartitionTable;
@@ -107,16 +110,16 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         if(sel_names.length > 0){
             if(ds.selection_type == DataSelector.ONLY_NUMERIC){
                 double[][] dataX = df.getNumericalData(sel_names);
-                addMatrixToR(dataX, sel_names, "X");
+                RMatrixTransferService.assignMatrix(re, dataX, sel_names, "X");
             }
             if(ds.selection_type == DataSelector.ONLY_CATEGORIC){
                 String[][] dataX = df.getCategoricalData(sel_names);
-                addMatrixToR(dataX, sel_names, "X");
+                RMatrixTransferService.assignMatrix(re, dataX, sel_names, "X");
             }
             double dlevel[][] = df.getDetectionLevel(sel_names);
 
 
-            addMatrixToR(dlevel, sel_names, "DL");
+            RMatrixTransferService.assignMatrix(re, dlevel, sel_names, "DL");
 
             if(ds.group_by){
                 String sel_group = ds.getSelectedGroup();
@@ -132,46 +135,19 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             String sel_namesY[] = ((DataSelector1to2)ds).getSelectedDataB();
             if(sel_namesY.length > 0){
                 double[][] dataY = df.getNumericalData(sel_namesY);
-                addMatrixToR(dataY, sel_namesY, "Y");
+                RMatrixTransferService.assignMatrix(re, dataY, sel_namesY, "Y");
             }
         }
 
-        
-        String SOURCE = "error = tryCatch(source('%s'), error = function(e) e$message)";
-        
-        String SOURCE_HELPER = String.format(SOURCE, Paths.get(CoDaPackConf.rScriptPath, ".cdp_helper_functions.R").toString().replace("\\","/"));
-        System.out.println(SOURCE_HELPER);
-        re.eval(SOURCE_HELPER);
-        
-        String SOURCE_CODE = String.format(SOURCE, Paths.get(CoDaPackConf.rScriptPath, this.script_file).toString().replace("\\","/"));
-        System.out.println(SOURCE_CODE);
-        re.eval(SOURCE_CODE);
-
-        String errorMessage[] = re.eval("error").asStringArray();
-        if(errorMessage != null){
-            JOptionPane.showMessageDialog(this, String.format("Error when reading R script file: %s", this.script_file));
+        String error = RAnalysisScriptService.prepareAnalysis(re, this.script_file, PLOT_WIDTH, PLOT_HEIGHT);
+        if(error != null){
+            JOptionPane.showMessageDialog(this, error);
             return;
         }
 
-        // re.eval("source('Rscripts/.cdp_helper_functions.R')");
-        String error_in = re.eval("cdp_check()").asString();
-        if(error_in != null){
-            JOptionPane.showMessageDialog(this, error_in);
-            return;
-        }
-
-
-        System.out.println(String.format("PLOT_WIDTH = %d/72", PLOT_WIDTH));
-        System.out.println(String.format("PLOT_HEIGTH = %d/72", PLOT_HEIGHT));
-        re.eval(String.format("PLOT_WIDTH = %d/72", PLOT_WIDTH));
-        re.eval(String.format("PLOT_HEIGTH = %d/72", PLOT_HEIGHT));
-        
-        
-        re.eval("error = tryCatch(cdp_res <- cdp_analysis(), error = function(e) e$message)");
-        errorMessage = re.eval("error").asStringArray();
-        if(errorMessage != null){
-            
-            JOptionPane.showMessageDialog(this, String.format("Error when running the analysis: %s", String.join("\n", errorMessage)));
+        error = RAnalysisScriptService.runAnalysis(re);
+        if(error != null){
+            JOptionPane.showMessageDialog(this, error);
             return;
         }
         
@@ -186,32 +162,6 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         
     }
 
-    public void addMatrixToR(double data[][], String col_names[], String name){
-        String vnames[] = new String[data.length];
-        for(int i=0; i < data.length; i++){
-            vnames[i] = ".cdp_x"+i;
-            re.assign(vnames[i], data[i]);
-        }
-        re.eval(String.format("%s = cbind(%s)", name, String.join(",", vnames)));
-
-        String col_names_ext[] = new String[col_names.length];
-        for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
-        re.eval(String.format("colnames(%s) = c(%s)", name , String.join(",", col_names_ext)));
-        re.eval(String.format("%s[is.nan(%s)] = NA_real_", name, name));
-    }
-    public void addMatrixToR(String data[][], String col_names[], String name){
-        String vnames[] = new String[data.length];
-        for(int i=0; i < data.length; i++){
-            vnames[i] = ".cdp_x"+i;
-            re.assign(vnames[i], data[i]);
-        }
-        re.eval(String.format("%s = cbind(%s)", name, String.join(",", vnames)));
-
-        String col_names_ext[] = new String[col_names.length];
-        for(int i = 0; i < col_names.length; i++) col_names_ext[i] = "'" + col_names[i] + "'";
-        re.eval(String.format("colnames(%s) = c(%s)", name , String.join(",", col_names_ext)));
-        re.eval(String.format("%s[is.nan(%s)] = NA_real_", name, name));
-    }
     void showText(){    
         String outputString[] = re.eval("unlist(cdp_res[['text']])").asStringArray();
         if(outputString.length > 1 | (outputString.length == 1 & outputString[0].compareTo("") != 0) ){
@@ -291,8 +241,8 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         
         String fnames[] = re.eval("cdp_res$graph").asStringArray();
         String pnames[] = re.eval("names(cdp_res$graph)").asStringArray();
-        System.out.println(Arrays.toString(fnames));
-        System.out.println(Arrays.toString(pnames));
+        AppLogger.info(RBasedGenericMenu_jri.class, "Graphs: " + Arrays.toString(fnames));
+        AppLogger.info(RBasedGenericMenu_jri.class, "Graph names: " + Arrays.toString(pnames));
         if(fnames != null){
             RPlotWindow jf = new RPlotWindow(fnames, pnames);
                 jf.setSize(PLOT_WIDTH, PLOT_HEIGHT);
@@ -524,7 +474,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
                 }
                 
                 menuSaveSVG.addActionListener((ActionEvent e) -> {
-                    System.out.println("Button was clicked");
+                    AppLogger.info(RBasedGenericMenu_jri.class, "Export SVG requested");
                     JFileChooser jf = new JFileChooser();
                     jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
                     FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -646,7 +596,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
 
         @Override
         public boolean addVariableToR(){
-            System.out.println("# Nothing to include");
+            AppLogger.info(RBasedGenericMenu_jri.class, "# Nothing to include");
             return(true);
         }
     }
@@ -670,7 +620,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             String V = (String) cb.getSelectedItem();
 
             String EXP = String.format("V%d = '%s'", ++iVar, V);
-            System.out.println(EXP);
+            AppLogger.info(RBasedGenericMenu_jri.class, EXP);
             re.eval(EXP);
             return(true);
         }
@@ -694,7 +644,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             String V = Tnum.getText();
 
             String EXP = String.format("V%d = as.numeric(%s)", ++iVar, V);
-            System.out.println(EXP);
+            AppLogger.info(RBasedGenericMenu_jri.class, EXP);
             re.eval(EXP);
             return(true);
         }
@@ -719,7 +669,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             String V = Tstr.getText();
 
             String EXP = String.format("V%d = '%s'", ++iVar, V);
-            System.out.println(EXP);
+            AppLogger.info(RBasedGenericMenu_jri.class, EXP);
             re.eval(EXP);
             return(true);
         }
@@ -740,7 +690,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             if(Bbool.isSelected()) V = "TRUE";
 
             String EXP = String.format("V%d = %s", ++iVar, V);
-            System.out.println(EXP);
+            AppLogger.info(RBasedGenericMenu_jri.class, EXP);
             re.eval(EXP);
             return(true);
         }
@@ -851,7 +801,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             if(new_df != null){
                 String vnum_names[] = new_df.getNumericalVariablesName();
                 double[][] dataX = new_df.getNumericalData(vnum_names);
-                addMatrixToR(dataX, vnum_names, "X_new");
+                RMatrixTransferService.assignMatrix(re, dataX, vnum_names, "X_new");
             }
             return(true);
             // TODO Auto-generated method stub
@@ -928,7 +878,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
                     if(selector.equals("Y")){
                         sel_names = ((DataSelector1to2)ds).getSelectedDataB();
                     }
-                    System.out.println(Arrays.toString(sel_names));
+                    AppLogger.info(RBasedGenericMenu_jri.class, Arrays.toString(sel_names));
                     BuildSBP binaryMenu = new BuildSBP(mainClass, sel_names);
                     binaryMenu.setVisible(true);    
                 }
@@ -951,9 +901,9 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             String EXP1 = String.format("Basis%s = scan(text = '%s', quiet=TRUE)", selector, str_basis.replace("\n", "").replace("\r", "")); 
             String EXP2 = String.format("nr = (1+sqrt(1+4*length(Basis%s)))/2", selector);
             String EXP3 = String.format("dim(Basis%s) = c(nr,nr-1)", selector);
-            System.out.println(EXP1);
-            System.out.println(EXP2);
-            System.out.println(EXP3);
+            AppLogger.info(RBasedGenericMenu_jri.class, EXP1);
+            AppLogger.info(RBasedGenericMenu_jri.class, EXP2);
+            AppLogger.info(RBasedGenericMenu_jri.class, EXP3);
             re.eval(EXP1);
             re.eval(EXP2);
             re.eval(EXP3);
