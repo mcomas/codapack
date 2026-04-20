@@ -29,21 +29,20 @@ import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import coda.gui.CoDaPackMain;
+import coda.util.AppLogger;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author marc
  */
 public class WorkspaceIO {
-    public static void saveWorkspace(String fname, CoDaPackMain application) throws JSONException{
+    public static void saveWorkspace(String fname, CoDaPackMain application) throws IOException, JSONException{
         JSONObject configuration = new JSONObject();
         JSONArray dataFrames = new JSONArray();
        
@@ -52,14 +51,9 @@ public class WorkspaceIO {
             dataFrames.put(df.get(i).toJSON());
         }
         configuration.put("dataframes",dataFrames);
-        try {
-            PrintWriter printer = new PrintWriter(fname);
-
-            configuration.write(printer);
-            printer.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("Error writting");
-        }
+        PrintWriter printer = new PrintWriter(fname);
+        configuration.write(printer);
+        printer.close();
     }
     public static void openWorkspace(String fname, CoDaPackMain application){
         FileReader file = null;
@@ -75,9 +69,9 @@ public class WorkspaceIO {
                 application.addDataFrame(
                         DataFrame.createFromJSON(dataFrames.getJSONObject(i)));
         } catch (IOException ex) {
-            Logger.getLogger(WorkspaceIO.class.getName()).log(Level.SEVERE, null, ex);
+            AppLogger.error(WorkspaceIO.class, "Unable to open workspace " + fname, ex);
         } catch (JSONException ex) {
-            Logger.getLogger(WorkspaceIO.class.getName()).log(Level.SEVERE, null, ex);
+            AppLogger.error(WorkspaceIO.class, "Unable to parse workspace " + fname, ex);
         }
     }
 }

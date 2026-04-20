@@ -15,6 +15,7 @@ import coda.gui.output.OutputForR;
 import coda.gui.output.OutputText;
 import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
+import coda.util.AppLogger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,27 +65,22 @@ public class SortDataMenu extends AbstractMenuDialog{
                 return;
             }
             
-            // create dataframe on r
-            
             int auxPos = 1;
-            String vnames[] = new String[selectedNames.length];
+            String[] tempNames = new String[selectedNames.length];
             for(int i = 0; i < selectedNames.length; i++, auxPos++){
                 String vname = selectedNames[i];
-                vnames[i] = "x" + String.valueOf(auxPos);
+                tempNames[i] = ".cdp_sort_col_" + auxPos;
                 if(df.get(vname).isNumeric()){
-                    re.assign("x" + String.valueOf(auxPos), df.get(vname).getNumericalData());
+                    re.assign(tempNames[i], df.get(vname).getNumericalData());
                 }else{
-                    re.assign("x" + String.valueOf(auxPos), df.get(vname).getTextData());
+                    re.assign(tempNames[i], df.get(vname).getTextData());
                 }
             }
-            String vars = String.join(",", vnames);
-            String decreasing = "FALSE";
-            if(decSort.isSelected()){
-                decreasing = "TRUE";
-
-            }
             int[] orderSort;
-            REXP result = re.eval(String.format("order(%s, decreasing = %s)", vars, decreasing));
+            re.assign(".cdp_sort_names", tempNames);
+            re.eval(".cdp_sort_args <- mget(.cdp_sort_names, envir = .GlobalEnv)");
+            re.eval(".cdp_sort_args$decreasing <- " + (decSort.isSelected() ? "TRUE" : "FALSE"));
+            REXP result = re.eval("do.call(order, .cdp_sort_args)");
             if(result != null && result.asIntArray() != null){
                 orderSort = result.asIntArray();
                 DataFrame newDf = new DataFrame();
@@ -104,6 +100,7 @@ public class SortDataMenu extends AbstractMenuDialog{
             } else {
                 JOptionPane.showMessageDialog(null, "Invalid sort selection");
             }
+            re.eval("rm(list = c('.cdp_sort_names', '.cdp_sort_args', ls(pattern='^\\\\.cdp_sort_col_', all.names=TRUE)), envir = .GlobalEnv)");
             
             this.dispose();
         }

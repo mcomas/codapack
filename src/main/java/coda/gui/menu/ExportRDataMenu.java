@@ -32,6 +32,7 @@ import coda.gui.utils.DataSelector;
 import coda.gui.utils.DataSelector1to1;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.ExportRDA;
+import coda.util.AppLogger;
 
 import java.io.FileOutputStream;
 import javax.swing.JFileChooser;
@@ -103,7 +104,11 @@ public class ExportRDataMenu extends AbstractMenuDialog {
 
                 setVisible(false);
             } catch (Exception e) { // Catch exception if any
-                System.err.println("Error: " + e.getMessage());
+                AppLogger.errorAndShow(
+                        ExportRDataMenu.class,
+                        this,
+                        "Unable to export the selected data to an RData file.",
+                        e);
             }
         }
     }

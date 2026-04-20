@@ -39,8 +39,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.script.ScriptException;
 import javax.swing.JComboBox;
@@ -62,7 +60,6 @@ import coda.DataFrame.DataFrameException;
 import coda.ext.json.JSONException;
 import coda.gui.CoDaPackMenu.CoDaPackMenuListener;
 import coda.gui.menu.AddNumericVariablesMenu;
-import coda.gui.menu.AddToPersonalMenu;
 import coda.gui.menu.AdvancedFilterMenu;
 import coda.gui.menu.BalanceDendrogramMenu;
 import coda.gui.menu.CLRBiplotMenu;
@@ -76,11 +73,9 @@ import coda.gui.menu.ClasStatsSummaryMenu;
 import coda.gui.menu.ClosureDataMenu;
 import coda.gui.menu.CompStatsSummaryMenu;
 import coda.gui.menu.ConfigurationMenu;
-import coda.gui.menu.CrearMenuPersonal;
 import coda.gui.menu.CreateNewTableMenu;
 import coda.gui.menu.DeleteVariablesMenu;
 import coda.gui.menu.DiscretizeMenu;
-import coda.gui.menu.ExportPersonalMenu;
 import coda.gui.menu.ExportRDataMenu;
 import coda.gui.menu.FilterMenu;
 import coda.gui.menu.ILRCLRBiplotMenu;
@@ -95,7 +90,6 @@ import coda.gui.menu.PredictiveRegionPlotMenu;
 import coda.gui.menu.RBasedGenericMenu_jri;
 import coda.gui.menu.SetDetectionLimitMenu;
 import coda.gui.menu.SortDataMenu;
-import coda.gui.menu.T1;
 import coda.gui.menu.TernaryQuaternaryPCPlotMenu;
 import coda.gui.menu.TernaryQuaternaryPlotMenu;
 import coda.gui.menu.TransformationALRMenu;
@@ -257,7 +251,7 @@ public final class CoDaPackMain extends JFrame {
                     try {
                         eventCoDaPack(v);
                     } catch (ScriptException ex) {
-                        Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+                        AppLogger.error(CoDaPackMain.class, "Menu action failed: " + v, ex);
                     }
                 }
             });
@@ -687,7 +681,7 @@ public final class CoDaPackMain extends JFrame {
                 balanceDendrogramMenu.setVisible(true);
                 break;
             default:
-                System.out.println("key: " + key + " does not match");
+                AppLogger.warning(CoDaPackMain.class, "No menu handler found for key: " + key);
         }
     }
     public void eventCoDaPackDefault(String title) throws ScriptException{
@@ -699,13 +693,6 @@ public final class CoDaPackMain extends JFrame {
         }
         if (GeneralUiActionController.handleAction(title, this, jMenuBar)) {
             return;
-        }
-
-        for (int i = 0; i < jMenuBar.NomsMenuItems.size(); i++) {
-            if (title.equals(jMenuBar.NomsMenuItems.get(i))) {
-                ArchiuSeleccionat = jMenuBar.NomsMenuItems.get(i);
-                new T1(this, re).setVisible(true);
-            }
         }
     }
 
@@ -745,18 +732,9 @@ public final class CoDaPackMain extends JFrame {
         
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CoDaPackMain.class.getName())
-                    .log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(CoDaPackMain.class.getName())
-                    .log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(CoDaPackMain.class.getName())
-                    .log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(CoDaPackMain.class.getName())
-                    .log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                | UnsupportedLookAndFeelException ex) {
+            AppLogger.error(CoDaPackMain.class, "Unable to set system look and feel", ex);
         }
 
         /*
@@ -835,10 +813,8 @@ public final class CoDaPackMain extends JFrame {
             if (n == JOptionPane.YES_OPTION) {
                 try {
                     Desktop.getDesktop().browse(new URI("http://mcomas.net/codapack"));
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (URISyntaxException | IOException ex) {
+                    AppLogger.error(CoDaPackMain.class, "Unable to open browser for updater", ex);
                 }
                 main.closeApplication();
             }

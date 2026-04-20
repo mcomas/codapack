@@ -27,6 +27,7 @@ import coda.DataFrame;
 import coda.Variable;
 import coda.gui.CoDaPackMain;
 import coda.gui.utils.DataSelector1to1;
+import coda.util.AppLogger;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
@@ -97,7 +98,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
             }
             
             re.assign("x", df.get(sel_names[0]).getNumericalData());
-            String EXP = "res <- cut(x, breaks=#BREAKS#, include.lowest = TRUE)";
+            String expression = "res <- cut(x, breaks=#BREAKS#, include.lowest = TRUE)";
 
             if(optionsList.getSelectedItem().toString().equals("fixed")){
                 panel = new JPanel();
@@ -111,7 +112,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
                     panel.add(breaksFieldPanel[i]);
                 }
                 
-                String[] breaksValues = new String[Integer.valueOf(breaksField.getText())-1];
+                double[] breaksValues = new double[Integer.valueOf(breaksField.getText())-1];
                 
                 if(Integer.valueOf(breaksField.getText()) > 1){
 
@@ -125,31 +126,44 @@ public class DiscretizeMenu extends AbstractMenuDialog{
 
                         if(answer == JOptionPane.OK_OPTION){
                             for(int i = 0; i < Integer.valueOf(breaksField.getText())-1 && exit;i++){
-                                breaksValues[i] = breaksFieldPanel[i].getText();
-                                if(breaksFieldPanel[i].getText().length() == 0) exit = false;
+                                if(breaksFieldPanel[i].getText().length() == 0) {
+                                    exit = false;
+                                } else {
+                                    try {
+                                        breaksValues[i] = Double.parseDouble(breaksFieldPanel[i].getText());
+                                    } catch (NumberFormatException ex) {
+                                        exit = false;
+                                        JOptionPane.showMessageDialog(null,"Break values must be numeric");
+                                    }
+                                }
                             }
                             if(!exit) JOptionPane.showMessageDialog(null,"Some field is empty");
                         }
                     }
                 }
-                EXP = EXP.replace("#BREAKS#", "sort(unique(c(min(x)," + String.join(",", breaksValues) + ", max(x))))");
+                re.assign(".cdp_breaks", breaksValues);
+                expression = expression.replace("#BREAKS#", "sort(unique(c(min(x), .cdp_breaks, max(x))))");
             }                
             if(optionsList.getSelectedItem().toString().equals("interval")){
-                EXP = EXP.replace("#BREAKS#", "seq(min(x), max(x), length = 1 + #NINT#)");
+                expression = expression.replace("#BREAKS#", "seq(min(x), max(x), length = 1 + #NINT#)");
             }
             if(optionsList.getSelectedItem().toString().equals("frequency")){
-                EXP = EXP.replace("#BREAKS#", "quantile(x, seq(0,1,length=1 + #NINT#))");
+                expression = expression.replace("#BREAKS#", "quantile(x, seq(0,1,length=1 + #NINT#))");
             }
             if(optionsList.getSelectedItem().toString().equals("cluster")){
-                EXP = EXP.replace("#BREAKS#", "{cl = sort(kmeans(x,#NINT#,nstart=100)$centers[,]); c(min(x), cl[-1] - diff(cl)/2, max(x))}");
+                expression = expression.replace("#BREAKS#", "{cl = sort(kmeans(x,#NINT#,nstart=100)$centers[,]); c(min(x), cl[-1] - diff(cl)/2, max(x))}");
             }
-            System.out.println(EXP.replace("#NINT#", breaksField.getText()));
-            
 
             double[] res = null;
             String[] resString = null;
             String[] resIntervals = null;
-            re.eval(EXP.replace("#NINT#", breaksField.getText()));
+            try {
+                re.eval(expression.replace("#NINT#", breaksField.getText()));
+            } catch (RuntimeException ex) {
+                AppLogger.error(DiscretizeMenu.class, "Unable to evaluate discretization expression", ex);
+                JOptionPane.showMessageDialog(null, "Invalid discretization");
+                return;
+            }
             REXP numericResult = re.eval("as.numeric(res)");
             REXP stringResult = re.eval("as.character(res)");
             if(numericResult != null && stringResult != null &&
@@ -161,6 +175,7 @@ public class DiscretizeMenu extends AbstractMenuDialog{
                 JOptionPane.showMessageDialog(null, "Invalid discretization");
                 return;
             }
+            re.eval("rm(list = c('res', ls(pattern='^\\\\.cdp_breaks$', all.names=TRUE)), envir = .GlobalEnv)");
 
             for(int i=0; i < resIntervals.length;i++) resString[i] = resIntervals[i];
             

@@ -1,9 +1,6 @@
 package coda.gui;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -11,6 +8,7 @@ import javax.swing.JSplitPane;
 
 import coda.DataFrame;
 import coda.DataFrame.DataFrameException;
+import coda.Variable;
 import coda.gui.menu.ExportRDataMenu;
 import coda.gui.menu.ImportCSVMenu;
 import coda.gui.menu.ImportRDAMenu;
@@ -21,6 +19,8 @@ import coda.io.ExportRDA;
 import coda.io.Importer;
 import coda.service.RDataFileService;
 import coda.util.AppLogger;
+import org.rosuda.JRI.REXP;
+import org.rosuda.JRI.Rengine;
 
 final class FileImportExportController {
 
@@ -89,7 +89,11 @@ final class FileImportExportController {
                     ImportRDAMenu imprdam = new ImportRDAMenu(mainApp, importRDA);
                     imprdam.setVisible(true);
                 } catch (DataFrameException | javax.script.ScriptException error) {
-                    AppLogger.error(FileImportExportController.class, "Unable to open R data import dialog", error);
+                    AppLogger.errorAndShow(
+                            FileImportExportController.class,
+                            mainApp,
+                            "Unable to open the selected R data file.",
+                            error);
                 }
             } else {
                 JOptionPane.showMessageDialog(mainApp, "R is not available");
@@ -136,38 +140,19 @@ final class FileImportExportController {
         chooseFile.setFileFilter(new FileNameExtensionFilter("Text file", "txt"));
         chooseFile.setFileFilter(new FileNameExtensionFilter("CSV file", "csv"));
 
-        for (int i = 0; i < df.size(); i++) {
-            CoDaPackMain.re.eval(df.get(i).getName() + " <- NULL");
-
-            if (df.get(i).isNumeric()) {
-                for (double value : df.get(i).getNumericalData()) {
-                    CoDaPackMain.re.eval(df.get(i).getName() + " <- c(" + df.get(i).getName() + "," + value + ")");
-                }
-            } else {
-                for (String value : df.get(i).getTextData()) {
-                    CoDaPackMain.re.eval(df.get(i).getName() + " <- c(" + df.get(i).getName() + ",'" + value + "')");
-                }
-            }
-        }
-
-        StringBuilder dataFrameString = new StringBuilder("mydf <- data.frame(");
-        for (int i = 0; i < df.size(); i++) {
-            dataFrameString.append(df.get(i).getName());
-            if (i != df.size() - 1) {
-                dataFrameString.append(",");
-            }
-        }
-        dataFrameString.append(")");
-        CoDaPackMain.re.eval(dataFrameString.toString());
-
         if (chooseFile.showOpenDialog(splitPane) == JFileChooser.APPROVE_OPTION) {
             String ruta = chooseFile.getCurrentDirectory().getAbsolutePath();
-            if (chooseFile.getFileFilter().getDescription().equals("CSV file")) {
-                CoDaPackMain.re.eval("utils::write.csv(mydf, \"" + ruta.replaceAll("\\\\", "/") + "/"
-                        + chooseFile.getSelectedFile().getName() + ".csv\", row.names = FALSE)");
-            } else {
-                CoDaPackMain.re.eval("utils::write.table(mydf, \"" + ruta.replaceAll("\\\\", "/") + "/"
-                        + chooseFile.getSelectedFile().getName() + ".txt\", row.names = FALSE)");
+            try {
+                String extension = chooseFile.getFileFilter().getDescription().equals("CSV file") ? ".csv" : ".txt";
+                String targetPath = chooseFile.getSelectedFile().getAbsolutePath() + extension;
+                exportDataFrameToDelimitedFile(CoDaPackMain.re, df, targetPath, ".csv".equals(extension));
+            } catch (RuntimeException ex) {
+                AppLogger.errorAndShow(
+                        FileImportExportController.class,
+                        mainApp,
+                        "Unable to export the current table.",
+                        ex);
+                return;
             }
             CoDaPackConf.workingDir = ruta;
         }
@@ -179,12 +164,44 @@ final class FileImportExportController {
         if (chooseFile.showSaveDialog(splitPane) == JFileChooser.APPROVE_OPTION) {
             try {
                 ExportData.exportXLS(chooseFile.getSelectedFile().getAbsolutePath(), mainApp.getActiveDataFrame());
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+                AppLogger.errorAndShow(
+                        FileImportExportController.class,
+                        mainApp,
+                        "Unable to export the current table to Excel.",
+                        ex);
             }
         }
         CoDaPackConf.workingDir = chooseFile.getCurrentDirectory().getAbsolutePath();
+    }
+
+    private static void exportDataFrameToDelimitedFile(Rengine re, DataFrame df, String targetPath, boolean csvOutput) {
+        re.eval(".cdp_export <- list()");
+        String[] columnNames = new String[df.size()];
+
+        for (int i = 0; i < df.size(); i++) {
+            Variable variable = df.get(i);
+            String tempName = ".cdp_export_col_" + i;
+            columnNames[i] = variable.getName();
+
+            if (variable.isNumeric()) {
+                re.assign(tempName, variable.getNumericalData());
+            } else {
+                re.assign(tempName, variable.getTextData());
+            }
+            re.eval(String.format(".cdp_export[[%d]] <- %s", i + 1, tempName));
+        }
+
+        re.assign(".cdp_export_names", columnNames);
+        re.eval("names(.cdp_export) <- .cdp_export_names");
+        re.eval(".cdp_export <- as.data.frame(.cdp_export, stringsAsFactors = FALSE)");
+
+        String quotedPath = REXP.quoteString(targetPath.replace("\\", "/"));
+        if (csvOutput) {
+            re.eval("utils::write.csv(.cdp_export, " + quotedPath + ", row.names = FALSE)");
+        } else {
+            re.eval("utils::write.table(.cdp_export, " + quotedPath + ", row.names = FALSE)");
+        }
+        re.eval("rm(list = c('.cdp_export', '.cdp_export_names', ls(pattern='^\\\\.cdp_export_col_', all.names=TRUE)), envir = .GlobalEnv)");
     }
 }

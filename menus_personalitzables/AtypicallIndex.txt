@@ -1,6 +1,0 @@
-exec:
-Atipicality_index.R
-
-Name of Variables:
-Text:
-Level of Confidence td:0.975

@@ -1,9 +1,7 @@
 package coda.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -13,6 +11,7 @@ import coda.ext.json.JSONException;
 import coda.gui.utils.FileNameExtensionFilter;
 import coda.io.CoDaPackImporter;
 import coda.io.WorkspaceIO;
+import coda.util.AppLogger;
 
 final class WorkspaceActionController {
 
@@ -101,8 +100,12 @@ final class WorkspaceActionController {
                 WorkspaceIO.saveWorkspace(fn + fileNameExt, mainApp);
                 menuBar.saveRecentFile(fn + fileNameExt);
                 mainApp.markAllDataFramesSaved();
-            } catch (JSONException ex) {
-                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException | JSONException ex) {
+                AppLogger.errorAndShow(
+                        WorkspaceActionController.class,
+                        mainApp,
+                        "Unable to save the current workspace.",
+                        ex);
             }
             return;
         }
@@ -115,8 +118,12 @@ final class WorkspaceActionController {
                 WorkspaceIO.saveWorkspace(filename.endsWith(".cdp") ? filename : filename + ".cdp", mainApp);
                 menuBar.saveRecentFile(filename + ".cdp");
                 mainApp.markAllDataFramesSaved();
-            } catch (JSONException ex) {
-                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException | JSONException ex) {
+                AppLogger.errorAndShow(
+                        WorkspaceActionController.class,
+                        mainApp,
+                        "Unable to save the current workspace.",
+                        ex);
             }
         }
         CoDaPackConf.workingDir = chooseFile.getCurrentDirectory().getAbsolutePath();
@@ -131,8 +138,12 @@ final class WorkspaceActionController {
                 WorkspaceIO.saveWorkspace(filename.endsWith(".cdp") ? filename : filename + ".cdp", mainApp);
                 menuBar.saveRecentFile(filename + ".cdp");
                 mainApp.markAllDataFramesSaved();
-            } catch (JSONException ex) {
-                Logger.getLogger(CoDaPackMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException | JSONException ex) {
+                AppLogger.errorAndShow(
+                        WorkspaceActionController.class,
+                        mainApp,
+                        "Unable to save the current workspace.",
+                        ex);
             }
         }
         CoDaPackConf.workingDir = chooseFile.getCurrentDirectory().getAbsolutePath();

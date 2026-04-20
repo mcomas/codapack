@@ -31,6 +31,7 @@ import coda.ext.json.JSONArray;
 import coda.ext.json.JSONException;
 import coda.ext.json.JSONObject;
 import coda.gui.CoDaPackConf;
+import coda.util.AppLogger;
 import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
@@ -39,8 +40,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -89,7 +88,7 @@ public class CoDaPackImporter {
 
             }
         } catch (JSONException ex) {
-            Logger.getLogger(Variable.class.getName()).log(Level.SEVERE, null, ex);
+            AppLogger.error(CoDaPackImporter.class, "Unable to read variable from workspace file", ex);
         }
         return variable;
     }
@@ -106,9 +105,9 @@ public class CoDaPackImporter {
 
             }
         } catch (JSONException ex) {
-            Logger.getLogger(DataFrame.class.getName()).log(Level.SEVERE, null, ex);
+            AppLogger.error(CoDaPackImporter.class, "Unable to read data frame from workspace file", ex);
         } catch (DataFrameException ex) {
-            Logger.getLogger(CoDaPackImporter.class.getName()).log(Level.SEVERE, null, ex);
+            AppLogger.error(CoDaPackImporter.class, "Unable to rebuild data frame from workspace file", ex);
         }
         return dataFrame;
     }
@@ -127,8 +126,9 @@ public class CoDaPackImporter {
             JSONArray dataFrames = configuration.getJSONArray("dataframes");
             df = readDataFrame(dataFrames.getJSONObject(i));
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "The file is not available");
+            AppLogger.errorAndShow(CoDaPackImporter.class, null, "The selected workspace file is not available.", ex);
         } catch (JSONException ex) {
+            AppLogger.errorAndShow(CoDaPackImporter.class, null, "The selected workspace file could not be read.", ex);
         }
         return df;
     }
@@ -146,8 +146,9 @@ public class CoDaPackImporter {
             for (int i = 0; i < dataFrames.length(); i++)
                 dfs.add(readDataFrame(dataFrames.getJSONObject(i)));
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "The file is not available");
+            AppLogger.errorAndShow(CoDaPackImporter.class, null, "The selected workspace file is not available.", ex);
         } catch (JSONException ex) {
+            AppLogger.errorAndShow(CoDaPackImporter.class, null, "The selected workspace file could not be read.", ex);
         }
         return dfs;
     }

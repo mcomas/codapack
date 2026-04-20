@@ -3,11 +3,7 @@ package coda.gui;
 import javax.swing.JOptionPane;
 
 import coda.DataFrame;
-import coda.gui.menu.AddToPersonalMenu;
 import coda.gui.menu.ConfigurationMenu;
-import coda.gui.menu.CrearMenuPersonal;
-import coda.gui.menu.ExportPersonalMenu;
-import coda.gui.menu.T1;
 import coda.gui.output.OutputElement;
 import coda.gui.output.OutputForR;
 
@@ -44,30 +40,6 @@ final class GeneralUiActionController {
         if (title.equals(menuBar.R_TEST)) {
             handleRTest(mainApp);
             return true;
-        }
-        if (title.equals(menuBar.ITEM_MODEL_CPM)) {
-            new CrearMenuPersonal(mainApp, CoDaPackMain.re).setVisible(true);
-            return true;
-        }
-        if (title.equals(menuBar.ITEM_MODEL_PM)) {
-            new T1(mainApp, CoDaPackMain.re).setVisible(true);
-            return true;
-        }
-        if (title.equals(menuBar.ITEM_MODEL_IPM)) {
-            new AddToPersonalMenu(mainApp, CoDaPackMain.re).setVisible(true);
-            return true;
-        }
-        if (title.equals(menuBar.ITEM_MODEL_EPM)) {
-            new ExportPersonalMenu(mainApp, CoDaPackMain.re).setVisible(true);
-            return true;
-        }
-
-        for (int i = 0; i < menuBar.NomsMenuItems.size(); i++) {
-            if (title.equals(menuBar.NomsMenuItems.get(i))) {
-                mainApp.ArchiuSeleccionat = menuBar.NomsMenuItems.get(i);
-                new T1(mainApp, CoDaPackMain.re).setVisible(true);
-                return true;
-            }
         }
 
         return false;

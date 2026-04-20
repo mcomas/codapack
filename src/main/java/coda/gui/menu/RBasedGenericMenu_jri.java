@@ -520,8 +520,11 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
                         try {
                             Files.copy(f.toPath(), f2.toPath(), StandardCopyOption.REPLACE_EXISTING);
                         } catch (IOException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
+                            AppLogger.errorAndShow(
+                                    RBasedGenericMenu_jri.class,
+                                    this,
+                                    "Unable to save the selected SVG file.",
+                                    e1);
                         }
                         CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
                     }

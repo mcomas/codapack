@@ -195,8 +195,7 @@ public final class OutputPanel extends JFXPanel {
             htmlFile.delete();
 
         } catch (IOException ex) {
-            System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
-            ex.printStackTrace();
+            AppLogger.error(OutputPanel.class, "Unable to delete temporary output file " + HTMLName, ex);
         }
     }
 
@@ -218,8 +217,7 @@ class Browser extends Region {
         try {
             webEngine.load(Paths.get(CoDaPackConf.temporalDir, "CoDaPack.html").toUri().toURL().toString());
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AppLogger.error(Browser.class, "Unable to load output page " + HTMLName, e);
         }
         getChildren().add(browser);
         webEngine
@@ -233,8 +231,7 @@ class Browser extends Region {
         try {
             webEngine.load(Paths.get(CoDaPackConf.temporalDir, HTMLName).toUri().toURL().toString());
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AppLogger.error(Browser.class, "Unable to load output page " + HTMLName, e);
         }
         getChildren().add(browser);
         webEngine
@@ -274,15 +271,13 @@ class Browser extends Region {
                 StandardCharsets.ISO_8859_1)) {
             fileWriter.write(text);
         } catch (IOException e) {
-            System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
-            e.printStackTrace();
+            AppLogger.error(Browser.class, "Unable to append output to " + HTMLName, e);
         }
 
         try {
             webEngine.load(Paths.get(CoDaPackConf.temporalDir, HTMLName).toUri().toURL().toString());
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AppLogger.error(Browser.class, "Unable to reload output page " + HTMLName, e);
         }
         webEngine.getLoadWorker().stateProperty().addListener((obs, oldValue, newValue) -> {
             webEngine.executeScript(
@@ -297,15 +292,13 @@ class Browser extends Region {
                 StandardCharsets.ISO_8859_1)) {
             fileWriter.write(text);
         } catch (IOException e) {
-            System.out.println("Problem occurs when deleting the directory : CoDaPack.html");
-            e.printStackTrace();
+            AppLogger.error(Browser.class, "Unable to rewrite output page " + HTMLName, e);
         }
 
         try {
             webEngine.load(Paths.get(CoDaPackConf.temporalDir, HTMLName).toUri().toURL().toString());
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            AppLogger.error(Browser.class, "Unable to reload output page " + HTMLName, e);
         }
         webEngine.getLoadWorker().stateProperty().addListener((obs, oldValue, newValue) -> {
             webEngine.executeScript(
