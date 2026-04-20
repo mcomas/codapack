@@ -3,14 +3,24 @@
 set -e
 
 OUTDIR=cdp-$VERSION
+JDK_DIRNAME="${JDK_DIRNAME:-jdk}"
 
 # Creem els directoris
 mkdir -p $OUTDIR $OUTDIR/Rlibraries $OUTDIR/Rscripts $OUTDIR/Help
 
 # Descomprimim els programes externs
-# tar xzvf external-programs/jdk-17.0.7_${VERSION}_bin.tar.gz -C $OUTDIR
-tar xzvf external-programs/bellsoft-jdk17.0.15+10-${VERSION}.tar.gz -C $OUTDIR
-mv $OUTDIR/jdk-17.0.15.jdk $OUTDIR/jdk-17
+JDK_ARCHIVE=$(find external-programs -maxdepth 1 -type f \( -iname "*jdk*${VERSION}*.tar.gz" -o -iname "*jdk*${VERSION}*.tgz" \) | sort | tail -n 1)
+if [ -z "$JDK_ARCHIVE" ]; then
+    echo "No macOS JDK archive found in external-programs for $VERSION" >&2
+    exit 1
+fi
+tar xzvf "$JDK_ARCHIVE" -C $OUTDIR
+EXTRACTED_JDK_DIR=$(find "$OUTDIR" -maxdepth 1 -mindepth 1 -type d \( -iname "jdk*" -o -iname "*.jdk" \) | sort | tail -n 1)
+if [ -z "$EXTRACTED_JDK_DIR" ]; then
+    echo "Unable to locate extracted JDK directory in $OUTDIR" >&2
+    exit 1
+fi
+mv "$EXTRACTED_JDK_DIR" "$OUTDIR/$JDK_DIRNAME"
 
 unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
 cp -rf external-programs/create-dmg $OUTDIR

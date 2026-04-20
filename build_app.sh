@@ -4,7 +4,7 @@ set -e
 
 # Define version and paths
 VERSION=2.03.10
-JAVA_HOME=jdk-17
+JAVA_HOME="${JAVA_HOME:-jdk}"
 JAR_PATH=target/CoDaPack-${VERSION}-jar-with-dependencies.jar
 YAML_PATH=codapack_structure.yaml
 HELP_PATH=Help

@@ -38,7 +38,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "jdk-17.0.7\*"; DestDir: "{app}\jdk-17.0.7"; Flags: ignoreversion recursesubdirs
+Source: "jdk\*"; DestDir: "{app}\jdk"; Flags: ignoreversion recursesubdirs
 Source: "R-4.3.1\*"; DestDir: "{app}\R-4.3.1"; Flags: ignoreversion recursesubdirs
 Source: "Rlibraries\*"; DestDir: "{app}\Rlibraries"; Flags: ignoreversion recursesubdirs
 Source: "Rscripts\*"; DestDir: "{app}\Rscripts"; Flags: ignoreversion recursesubdirs

@@ -4,13 +4,25 @@ CDP_VERSION=$(grep -m 1 '<version>' pom.xml | sed -E 's/.*<version>([^<]+)<\/ver
 
 VERSION=windows-x64
 OUTDIR=cdp-$VERSION
+JDK_DIRNAME=jdk
 
 mkdir $OUTDIR -p
 mkdir $OUTDIR/Rlibraries -p
 mkdir $OUTDIR/Rscripts -p
 mkdir $OUTDIR/Help -p
 
-unzip -n external-programs/jdk-17.0.7_windows-x64_bin.zip -d $OUTDIR
+JDK_ARCHIVE=$(find external-programs -maxdepth 1 -type f \( -iname "*jdk*windows*x64*.zip" -o -iname "*jdk*win*x64*.zip" \) | sort | tail -n 1)
+if [ -z "$JDK_ARCHIVE" ]; then
+    echo "No Windows JDK archive found in external-programs" >&2
+    exit 1
+fi
+unzip -n "$JDK_ARCHIVE" -d $OUTDIR
+EXTRACTED_JDK_DIR=$(find "$OUTDIR" -maxdepth 1 -mindepth 1 -type d -iname "jdk*" | sort | tail -n 1)
+if [ -z "$EXTRACTED_JDK_DIR" ]; then
+    echo "Unable to locate extracted JDK directory in $OUTDIR" >&2
+    exit 1
+fi
+mv "$EXTRACTED_JDK_DIR" "$OUTDIR/$JDK_DIRNAME"
 unzip -n external-programs/R-4.3.1.zip -d $OUTDIR
 unzip -n external-programs/apache-maven-3.9.2.zip -d $OUTDIR
 

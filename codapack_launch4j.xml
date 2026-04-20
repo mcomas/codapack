@@ -15,7 +15,7 @@
   <manifest></manifest>
   <icon>src\main\resources\icon.ico</icon>
   <var>PATH=%PATH%;%EXEDIR%\R-4.3.1\bin\x64;%EXEDIR%\Rlibraries\rJava\jri\x64</var>
-  <var>JAVA_HOME=%EXEDIR%\jdk-17.0.7</var>
+  <var>JAVA_HOME=%EXEDIR%\jdk</var>
   <var>R_HOME=%EXEDIR%\R-4.3.1</var>
   <var>R_LIBS=%EXEDIR%\R-4.3.1\library</var>
   <var>CDP_WORKING_DIR=%EXEDIR%</var>
@@ -23,7 +23,7 @@
   <var>R_LIBS_USER=%EXEDIR%\Rlibraries</var>
   <var>CDP_R_SCRIPTS=%EXEDIR%\Rscripts</var>
   <jre>
-    <path>%EXEDIR%\jdk-17.0.7</path>
+    <path>%EXEDIR%\jdk</path>
     <requiresJdk>true</requiresJdk>
     <requires64Bit>true</requires64Bit>
     <minVersion>17.0.7</minVersion>
