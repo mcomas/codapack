@@ -26,10 +26,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,6 +41,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -60,6 +69,11 @@ import javax.swing.JTextField;
 import javax.swing.table.TableModel;
 
 import org.apache.batik.swing.JSVGCanvas;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfWriter;
 
 
 public class RBasedGenericMenu_jri extends AbstractMenuDialog{
@@ -438,130 +452,192 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
     private class RPlotWindow extends javax.swing.JFrame{
         JMenuBar menuBar = new JMenuBar();
         JMenu menuFile = new JMenu("File");
-        JMenuItem menuSaveSVG = new JMenuItem("Export SVG");
-        
-        
-        //JMenuItem menuItem = new JMenuItem("Open");
-            // framesScatterplotMenu.add(new JFrame());
-            // JPanel panel = new JPanel();
-            // menu.add(menuItem);
-            // menuItem = new JMenuItem("Export");
-            // JMenu submenuExport = new JMenu("Export");
-            // menuItem = new JMenuItem("Export As SVG");
-            // menuItem.addActionListener(new ScatterplotMenu.FileChooserAction(position));
-            // submenuExport.add(menuItem);
-            // menuItem = new JMenuItem("Export As JPEG");
-            // //submenuExport.add(menuItem);
-            // menuItem = new JMenuItem("Export As PDF");
-            // //submenuExport.add(menuItem);
-            // menuItem = new JMenuItem("Export As WMF");
-            // //submenuExport.add(menuItem);
-            // menuItem = new JMenuItem("Export As Postscripts");
-            // //submenuExport.add(menuItem);
-            // menuItem = new JMenuItem("Quit");
+        JMenuItem menuSaveAs = new JMenuItem("Save as...");
+        JMenuItem menuQuit = new JMenuItem("Quit Plot Window");
+        private final String[] fnames;
+        private final String[] pnames;
+        private final ArrayList<JSVGCanvas> canvases = new ArrayList<JSVGCanvas>();
+        private JTabbedPane tabbedPane;
 
         public RPlotWindow(String[] fnames, String[] pnames){
+            this.fnames = fnames;
+            this.pnames = pnames;
             if(fnames.length == 1){
-                String fname = fnames[0];
-                JSVGCanvas c = new JSVGCanvas();
-                String uri = new File(fname).toURI().toString();
-                c.setURI(uri);
+                JSVGCanvas c = buildCanvas(fnames[0]);
+                canvases.add(c);
                 getContentPane().add(c);
-                if(pnames != null){
+                if(pnames != null && pnames.length > 0){
                     this.setTitle(pnames[0]);
                 }else{
                     this.setTitle(analysisTitle);
                 }
-                
-                menuSaveSVG.addActionListener((ActionEvent e) -> {
-                    AppLogger.info(RBasedGenericMenu_jri.class, "Export SVG requested");
-                    JFileChooser jf = new JFileChooser();
-                    jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
-                    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                        "SVG graphic", "svg");
-                    jf.setFileFilter(filter);
-                    int returnVal = jf.showSaveDialog(this);
-                    if(returnVal == JFileChooser.APPROVE_OPTION){
-                        File f = new File(fname);
-                        String path = jf.getSelectedFile().getAbsolutePath();
-                        File f2 = new File(path);
-                        f.renameTo(f2);
-                        CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
-                    }
-                });
             }else{
-                JTabbedPane tabbedPane = new JTabbedPane();                
+                tabbedPane = new JTabbedPane();
                 for(int i=0;i<fnames.length;i++){
                     String pname = "plot " + i+1;
-                    if(pnames.length == fnames.length){
+                    if(pnames != null && pnames.length == fnames.length){
                         pname = pnames[i];
                     }
-                    String fname = fnames[i];
-                    JSVGCanvas c = new JSVGCanvas();
-                    String uri = new File(fname).toURI().toString();
-                    c.setURI(uri);
-                    getContentPane().add(c);
+                    JSVGCanvas c = buildCanvas(fnames[i]);
+                    canvases.add(c);
                     tabbedPane.addTab(pname, null, c);
-                    getContentPane().add(tabbedPane);
                 }
-                menuSaveSVG.addActionListener((ActionEvent e) -> {
-                    JFileChooser jf = new JFileChooser();
-                    jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
-                    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                        "SVG graphic", "svg");
-                    jf.setFileFilter(filter);
-                    int returnVal = jf.showSaveDialog(this);
-                    if(returnVal == JFileChooser.APPROVE_OPTION){
-                        int sel_ind = tabbedPane.getSelectedIndex();
-                        File f = new File(fnames[sel_ind]);
-                        String path = jf.getSelectedFile().getAbsolutePath();
-                        File f2 = new File(path);
-                        // f.renameTo(f2);
-                        try {
-                            Files.copy(f.toPath(), f2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        } catch (IOException e1) {
-                            AppLogger.errorAndShow(
-                                    RBasedGenericMenu_jri.class,
-                                    this,
-                                    "Unable to save the selected SVG file.",
-                                    e1);
-                        }
-                        CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
-                    }
-                });
-            }            
-            menuFile.add(menuSaveSVG);
+                getContentPane().add(tabbedPane);
+                if(pnames != null && pnames.length == fnames.length){
+                    this.setTitle(pnames[0]);
+                }else{
+                    this.setTitle(analysisTitle);
+                }
+            }
+
+            menuSaveAs.addActionListener((ActionEvent e) -> saveCurrentPlot());
+            menuQuit.addActionListener((ActionEvent e) -> {
+                setVisible(false);
+                dispose();
+            });
+            menuFile.add(menuSaveAs);
+            menuFile.add(menuQuit);
             menuBar.add(menuFile);
             setJMenuBar(menuBar);
         }
-        // public RPlotWindow(String[] fnames){
-        //     JSVGCanvas c = new JSVGCanvas();
-        //     for(fname in fnames)
-        //     String uri = new File(fname).toURI().toString();
-        //     c.setURI(uri);
-        //     getContentPane().add(c);
 
-        //     //
-        //     menuSaveSVG.addActionListener((ActionEvent e) -> {
-        //         System.out.println("Button was clicked");
-        //         JFileChooser jf = new JFileChooser();
-        //         jf.setCurrentDirectory(new File(CoDaPackConf.workingDir));
-        //         FileNameExtensionFilter filter = new FileNameExtensionFilter(
-        //             "SVG graphic", "svg");
-        //         jf.setFileFilter(filter);
-        //         int returnVal = jf.showSaveDialog(this);
-        //         if(returnVal == JFileChooser.APPROVE_OPTION){
-        //             File f = new File(fname);
-        //             String path = jf.getSelectedFile().getAbsolutePath();
-        //             File f2 = new File(path);
-        //             f.renameTo(f2);
-        //             CoDaPackConf.workingDir = jf.getCurrentDirectory().getAbsolutePath();
-        //         }
-        //     });
-        //     menuFile.add(menuSaveSVG);
-        //     menuBar.add(menuFile);
-        //     setJMenuBar(menuBar);
-        // }
+        private JSVGCanvas buildCanvas(String fname){
+            JSVGCanvas canvas = new JSVGCanvas();
+            String uri = new File(fname).toURI().toString();
+            canvas.setURI(uri);
+            return canvas;
+        }
+
+        private int getSelectedPlotIndex(){
+            if(tabbedPane == null){
+                return 0;
+            }
+            int selectedIndex = tabbedPane.getSelectedIndex();
+            return selectedIndex >= 0 ? selectedIndex : 0;
+        }
+
+        private JSVGCanvas getSelectedCanvas(){
+            return canvases.get(getSelectedPlotIndex());
+        }
+
+        private String getSelectedFileName(){
+            return fnames[getSelectedPlotIndex()];
+        }
+
+        private JFileChooser createSaveChooser(){
+            JFileChooser chooser = new JFileChooser();
+            chooser.setCurrentDirectory(new File(CoDaPackConf.workingDir));
+            chooser.addChoosableFileFilter(new FileNameExtensionFilter("SVG graphic", "svg"));
+            chooser.addChoosableFileFilter(new FileNameExtensionFilter("PDF file", "pdf"));
+            chooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG file", "png"));
+            chooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG file", "jpg", "jpeg"));
+            chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
+            chooser.setFileFilter(chooser.getChoosableFileFilters()[0]);
+            return chooser;
+        }
+
+        private void saveCurrentPlot(){
+            JFileChooser chooser = createSaveChooser();
+            int returnVal = chooser.showSaveDialog(this);
+            if(returnVal != JFileChooser.APPROVE_OPTION){
+                return;
+            }
+
+            FileNameExtensionFilter filter = (FileNameExtensionFilter)chooser.getFileFilter();
+            String extension = filter.getExtensions()[0];
+            File targetFile = appendExtensionIfMissing(chooser.getSelectedFile(), extension);
+
+            try {
+                exportSelectedPlot(targetFile, extension);
+                CoDaPackConf.workingDir = chooser.getCurrentDirectory().getAbsolutePath();
+            } catch (Exception ex) {
+                AppLogger.errorAndShow(
+                        RBasedGenericMenu_jri.class,
+                        this,
+                        "Unable to save the selected plot as " + extension.toUpperCase() + ".",
+                        ex);
+            }
+        }
+
+        private File appendExtensionIfMissing(File file, String extension){
+            String fileName = file.getAbsolutePath();
+            if(!fileName.toLowerCase().endsWith("." + extension.toLowerCase())){
+                return new File(fileName + "." + extension);
+            }
+            return file;
+        }
+
+        private void exportSelectedPlot(File targetFile, String extension) throws Exception{
+            if(extension.equalsIgnoreCase("svg")){
+                Files.copy(
+                        new File(getSelectedFileName()).toPath(),
+                        targetFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING);
+            }else if(extension.equalsIgnoreCase("pdf")){
+                exportPdf(targetFile);
+            }else if(extension.equalsIgnoreCase("jpg")){
+                exportJpeg(targetFile);
+            }else if(extension.equalsIgnoreCase("png")){
+                exportPng(targetFile);
+            }
+        }
+
+        private BufferedImage renderSelectedCanvasToImage(){
+            JSVGCanvas canvas = getSelectedCanvas();
+            int width = Math.max(canvas.getWidth(), PLOT_WIDTH);
+            int height = Math.max(canvas.getHeight(), PLOT_HEIGHT);
+            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics = image.createGraphics();
+            graphics.setColor(Color.WHITE);
+            graphics.fillRect(0, 0, width, height);
+            canvas.setSize(width, height);
+            canvas.doLayout();
+            canvas.printAll(graphics);
+            graphics.dispose();
+            return image;
+        }
+
+        private void exportPng(File targetFile) throws IOException{
+            BufferedImage image = renderSelectedCanvasToImage();
+            ImageIO.write(image, "png", targetFile);
+            image.flush();
+        }
+
+        private void exportJpeg(File targetFile) throws IOException{
+            BufferedImage image = renderSelectedCanvasToImage();
+            JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
+            jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            jpegParams.setCompressionQuality(1f);
+
+            final ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+            FileImageOutputStream output = new FileImageOutputStream(targetFile);
+            try {
+                writer.setOutput(output);
+                writer.write(null, new IIOImage(image, null, null), jpegParams);
+            } finally {
+                writer.dispose();
+                output.close();
+                image.flush();
+            }
+        }
+
+        private void exportPdf(File targetFile) throws Exception{
+            BufferedImage image = renderSelectedCanvasToImage();
+            int width = image.getWidth();
+            int height = image.getHeight();
+            Document document = new Document(new Rectangle(width, height));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(targetFile));
+            try {
+                document.open();
+                Image pdfImage = Image.getInstance(image, null);
+                pdfImage.setAbsolutePosition(0, 0);
+                pdfImage.scaleAbsolute(width, height);
+                document.add(pdfImage);
+            } finally {
+                document.close();
+                image.flush();
+            }
+        }
 
     }
 

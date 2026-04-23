@@ -66,6 +66,7 @@ public final class HelpMenu extends JFXPanel {
     private String name;
     private String description;
     private ArrayList<Map<String, Object>> options;
+    private String notes;
     private String references;
     public ArrayList<Map<String, Object>> links;
 
@@ -157,6 +158,13 @@ public final class HelpMenu extends JFXPanel {
             }
         }
 
+        /* notes */
+
+        if (this.notes != null) {
+
+            helpText += "<h2>Notes:</h2>" + this.notes;
+        }
+
         /* references */
 
         if (this.references != null) {
@@ -210,6 +218,13 @@ public final class HelpMenu extends JFXPanel {
             this.options = (ArrayList<Map<String, Object>>) map.get("options");
         else
             this.options = null;
+
+        /* notes */
+
+        if (map.containsKey("notes"))
+            this.notes = (String) map.get("notes");
+        else
+            this.notes = null;
 
         /* references */
 

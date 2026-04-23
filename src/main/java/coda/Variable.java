@@ -291,6 +291,38 @@ public class Variable extends ArrayList<Element>{
         if(dtype == VAR_TEXT ) return true;
         return false;
     }
+    public boolean hasZerosWithoutDetectionLimit(){
+        if(!isNumeric()){
+            return false;
+        }
+        for(int i = 0; i < size(); i++){
+            Element el = get(i);
+            if(el instanceof Zero){
+                Zero zero = (Zero)el;
+                if(Double.isNaN(zero.detection)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean setDetectionLimitForZerosWithoutDL(double detectionLimit){
+        if(!isNumeric()){
+            return false;
+        }
+        boolean updated = false;
+        for(int i = 0; i < size(); i++){
+            Element el = get(i);
+            if(el instanceof Zero){
+                Zero zero = (Zero)el;
+                if(Double.isNaN(zero.detection)){
+                    set(i, new Zero(detectionLimit));
+                    updated = true;
+                }
+            }
+        }
+        return updated;
+    }
     public JSONObject toJSON(){
         JSONObject variable = new JSONObject();
         JSONArray values = new JSONArray();

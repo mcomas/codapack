@@ -27,6 +27,7 @@ import coda.DataFrame.DataFrameListener;
 import coda.Element;
 import coda.Text;
 import coda.Variable;
+import coda.Zero;
 import coda.gui.CoDaPackMain;
 import coda.gui.DataList;
 import coda.gui.table.ExcelAdapter;
@@ -244,6 +245,94 @@ public final class TablePanel extends JPanel{
         
         return item;
     }
+    JMenuItem menuSetDetectionLimitVariable(final DataFrame df, final Variable var){
+        JMenuItem item = new JMenuItem();
+        item.setText("Set detection limit for " + var.getName() + ".");
+        item.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showDetectionLimitDialog(df, var);
+            }
+        });
+        return item;
+    }
+    private void showDetectionLimitDialog(final DataFrame df, final Variable var){
+        Object[] options = new Object[]{"Manual value", "Column minimum", "Cancel"};
+        int answer = JOptionPane.showOptionDialog(
+                this,
+                "How do you want to define the detection limit for zeros without one?",
+                "Set Detection Limit",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if(answer == 2 || answer == JOptionPane.CLOSED_OPTION){
+            return;
+        }
+
+        double detectionLimit;
+        if(answer == 1){
+            detectionLimit = getColumnMinimum(var);
+            if(Double.isNaN(detectionLimit) || detectionLimit <= 0){
+                JOptionPane.showMessageDialog(
+                        this,
+                        "The column does not contain any positive numeric value to use as detection limit.",
+                        "Set Detection Limit",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }else{
+            String value = JOptionPane.showInputDialog(
+                    this,
+                    "Detection limit",
+                    "0.01");
+            if(value == null){
+                return;
+            }
+            try {
+                detectionLimit = Double.parseDouble(value);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Detection limit must be a positive numeric value.",
+                        "Set Detection Limit",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if(detectionLimit <= 0){
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Detection limit must be greater than zero.",
+                        "Set Detection Limit",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
+        if(var.setDetectionLimitForZerosWithoutDL(detectionLimit)){
+            df.alertModification(var);
+            main.updateDataFrame(df);
+        }
+    }
+    private double getColumnMinimum(Variable var){
+        double minValue = Double.NaN;
+        for(int i = 0; i < var.size(); i++){
+            Element el = var.get(i);
+            if(el instanceof Zero){
+                continue;
+            }
+            if(el instanceof coda.Numeric){
+                double value = ((coda.Numeric)el).getValue();
+                if(!Double.isNaN(value) && value > 0){
+                    if(Double.isNaN(minValue) || value < minValue){
+                        minValue = value;
+                    }
+                }
+            }
+        }
+        return minValue;
+    }
     class VariableRename implements ActionListener{
         String vname;
         JPanel panel;
@@ -284,9 +373,13 @@ public final class TablePanel extends JPanel{
             // if we've clicked on a row in the second col
             if (col >= 0) {
                 DataFrame dfloc = ((DataTableModel)table.getModel()).dataFrame;
+                Variable var = dfloc.get(col);
                 pm = new JPopupMenu();
-                pm.add(menuRenameVariable(dfloc, dfloc.get(col)));
-                pm.add(menuFactorizeVariable(dfloc, dfloc.get(col)));
+                pm.add(menuRenameVariable(dfloc, var));
+                pm.add(menuFactorizeVariable(dfloc, var));
+                if(var.hasZerosWithoutDetectionLimit()){
+                    pm.add(menuSetDetectionLimitVariable(dfloc, var));
+                }
                 pm.show(table, p.x, p.y);
             }
         }

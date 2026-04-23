@@ -65,6 +65,15 @@ cat << EOF > $CONTENTS/MacOS/CoDaPack
 EXEDIR="\$(cd "\$(dirname "\$0")" && pwd)"
 cd \$EXEDIR
 
+EXPECTED_APP_DIR="/Applications/CoDaPack.app"
+APP_DIR="\$(cd "\$EXEDIR/../.." && pwd)"
+
+if [ "\$APP_DIR" != "\$EXPECTED_APP_DIR" ]; then
+  osascript -e 'display dialog "CoDaPack must be installed at /Applications/CoDaPack.app for the embedded R/JRI runtime to work." buttons {"OK"} default button "OK" with icon stop' >/dev/null 2>&1 || \\
+    echo "CoDaPack must be installed at /Applications/CoDaPack.app for the embedded R/JRI runtime to work." >&2
+  exit 1
+fi
+
 export JAVA_HOME=../Java/
 export R_HOME=/Applications/CoDaPack.app/Contents/R_internal/lib/R
 export R_LIBS_USER="../Rlibraries"
