@@ -1,9 +1,0 @@
----
-name: 'Irregular data.Set Detection Limit Help Menu'
-description: 'This feature assigns to all zeroes the value of detection limit that will be used when performig zero replacement routines.'
-options:
-  - Detection Limit: 'Assigns this value to all zeros of the data set.'
-  - Take minimum of each column: 'Assigns the minimum of each column to the zeroes of this column of the data set.'
-  - Global minimum of selected columns: 'Assigns the global minimum of selected columns to the zeroes of the data set.'
-notes: 'From the data table, right-clicking a numeric column that contains zeros without detection limit also shows the option "Set detection limit for <column>". This contextual action only updates zeros without detection limit in that column, and lets you choose either a manual value or the minimum positive value of the same column. It is especially useful when different columns require different detection limits.'
-references: "Martín-Fernández, J. A., C. Barceló-Vidal, and V. Pawlowsky-Glahn (2000). Zero replacement in compositional data sets. In H. Kiers, J. Rasson, P. Groenen, and M. Shader (Eds.), Studies in Classifcation, Data Analysis, and Knowledge Organization (Proceedings of the 7th Conference of the International Federation of Classifcation Societies (IFCS'2000), University of Namur, Namur, 11-14 July, pp. 155-160. Springer-Verlag, Berlin(D), 428 p. https://www.rdocumentation.org/packages/zCompositions/versions/1.3.2-1/topics/multRepl."

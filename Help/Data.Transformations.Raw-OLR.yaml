@@ -1,12 +1,12 @@
 ---
 name: 'Data.Transformations.Raw-OLR Help Menu'
 description: |
-  With this feature the data is transformed from the simplex (raw data) to real space ($ilr$ coordinates) with the isometric logratio transformation ($ilr$) defined by a sequential binary partition.
+  With this feature the data is transformed from the simplex (raw data) to real space (OLR coordinates) with the orthogonal logratio transformation (OLR) defined by a sequential binary partition.
 
-  The $ilr$ transformation consists on:
+  The OLR transformation consists on:
 
   $$
-  \mathbf{y} = ilr(\mathbf{x}) = \left(y_1, y_2, \ldots, y_{D-1} \right) \in \mathbb{R}^{D-1}
+  \mathbf{y} = olr(\mathbf{x}) = \left(y_1, y_2, \ldots, y_{D-1} \right) \in \mathbb{R}^{D-1}
   $$
 
   where

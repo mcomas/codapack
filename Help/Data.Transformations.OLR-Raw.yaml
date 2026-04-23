@@ -1,12 +1,12 @@
 ---
-name: 'Data.Transformations.Raw-OLR Help Menu'
+name: 'Data.Transformations.OLR-Raw Help Menu'
 description: |
-  With this feature the data is transformed from real space to the simplex applying the inverse isometric logratio transformation \(ilr^{-1}\), by the sequential binary partition that has been used to perform the ILR transformation.
+  With this feature the data is transformed from real space to the simplex applying the inverse orthogonal logratio transformation \(olr^{-1}\), by the sequential binary partition that has been used to perform the OLR transformation.
 
-  The $ilr^{-1}$ transformation consists of:
+  The $olr^{-1}$ transformation consists of:
 
   $$
-  \mathbf{x} = ilr^{-1}(\mathbf{y}) = \left(x_1, x_2, \ldots, x_D \right) \in \mathcal{S}^D
+  \mathbf{x} = olr^{-1}(\mathbf{y}) = \left(x_1, x_2, \ldots, x_D \right) \in \mathcal{S}^D
   $$
 
   where
