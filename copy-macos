@@ -9,7 +9,7 @@ JDK_DIRNAME="${JDK_DIRNAME:-jdk}"
 mkdir -p $OUTDIR $OUTDIR/Rlibraries $OUTDIR/Rscripts $OUTDIR/Help
 
 # Descomprimim els programes externs
-JDK_ARCHIVE=$(find external-programs -maxdepth 1 -type f \( -iname "*jdk*${VERSION}*.tar.gz" -o -iname "*jdk*${VERSION}*.tgz" \) | sort | tail -n 1)
+JDK_ARCHIVE=$(find -L external-programs -maxdepth 1 -type f \( -iname "*jdk*${VERSION}*.tar.gz" -o -iname "*jdk*${VERSION}*.tgz" \) | sort | tail -n 1)
 if [ -z "$JDK_ARCHIVE" ]; then
     echo "No macOS JDK archive found in external-programs for $VERSION" >&2
     exit 1

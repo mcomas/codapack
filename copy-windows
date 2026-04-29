@@ -11,7 +11,7 @@ mkdir $OUTDIR/Rlibraries -p
 mkdir $OUTDIR/Rscripts -p
 mkdir $OUTDIR/Help -p
 
-JDK_ARCHIVE=$(find external-programs -maxdepth 1 -type f \( -iname "*jdk*windows*x64*.zip" -o -iname "*jdk*win*x64*.zip" \) | sort | tail -n 1)
+JDK_ARCHIVE=$(find -L external-programs -maxdepth 1 -type f \( -iname "*jdk*windows*x64*.zip" -o -iname "*jdk*win*x64*.zip" \) | sort | tail -n 1)
 if [ -z "$JDK_ARCHIVE" ]; then
     echo "No Windows JDK archive found in external-programs" >&2
     exit 1
