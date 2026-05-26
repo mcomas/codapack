@@ -276,6 +276,7 @@ CoDaPack Menu:
                 - select:
                     name: "Arranged by"
                     values: ["parts", "groups"]
+                - boolean: "CLR comparison scale"
         - CLR Plot:
             id: "CLRPlot"
         - CLR Biplot:

@@ -8,19 +8,27 @@ cdp_check = function(){
 cdp_analysis = function(){
   # save.image(file = 'cdp_geometric_mean_barplot.RData')
   Y = as.factor(GROUP)
-  LX = log(X / rowSums(X))
-
-  M = apply(LX, 2, function(lx) tapply(lx, Y, mean) - mean(lx))
+  
+  if(V2){
+    CLR = coda.base::clr_c(X)
+    colnames(CLR) = colnames(X)
+    M = apply(CLR, 2, function(lx) tapply(lx, Y, mean) - mean(lx))
+    YLAB = "clr(group gmean) - clr(overall gmean)"
+  }else{
+    LX = log(X / rowSums(X))
+    M = apply(LX, 2, function(lx) tapply(lx, Y, mean) - mean(lx))
+    YLAB = "log(group gmean) - log(overall gmean)"
+  }
 
   
   graphname = sprintf("%s.pdf", tempfile())
   svg(graphname, width = PLOT_WIDTH, height = PLOT_HEIGTH)
   if(V1 == 'parts'){
-    barplot(M, beside=TRUE, col=1:nlevels(Y), ylim = range(M) * c(1.2,1.35))
+    barplot(M, beside=TRUE, col=1:nlevels(Y), ylim = range(M) * c(1.2,1.35), ylab = YLAB)
     legend('top', levels(Y), horiz = TRUE, bty = 'n', fill = 1:nlevels(Y))
     abline(h = 0, lty = 1)
   }else{
-    barplot(t(M), beside=TRUE, col=1:ncol(X), ylim = range(M) * c(1.2,1.35))
+    barplot(t(M), beside=TRUE, col=1:ncol(X), ylim = range(M) * c(1.2,1.35), ylab = YLAB)
     legend('top', colnames(X), horiz = TRUE, bty = 'n', fill = 1:ncol(X))
     abline(h = 0, lty = 1)
   }
