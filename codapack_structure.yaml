@@ -276,11 +276,11 @@ CoDaPack Menu:
                 - select:
                     name: "Arranged by"
                     values: ["parts", "groups"]
-        - CLR-plot:
+        - CLR Plot:
             id: "CLRPlot"
-        - CLR-biplot:
+        - CLR Biplot:
             id: "CLRBiplot"
-        - OLR/CLR-biplot:
+        - OLR/CLR Biplot:
             id: "OLRCLRBiplot"
         - Balance Dendrogram:
             id: "BalanceDendrogram"

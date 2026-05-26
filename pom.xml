@@ -15,15 +15,23 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
             <version>3.4.0</version>
-            <configuration>
-               <executable>java</executable>
-               <arguments>
-                  <argument>-Djava.library.path=Rlibraries/rJava/jri</argument>
-                  <argument>-classpath</argument>            
-                  <classpath />
-                  <argument>coda.gui.CoDaPackMain</argument>
-               </arguments>
-            </configuration>
+            <executions>
+               <execution>
+                  <id>run-codapack</id>
+                  <goals>
+                     <goal>exec</goal>
+                  </goals>
+                  <configuration>
+                     <executable>java</executable>
+                     <arguments>
+                        <argument>-Djava.library.path=Rlibraries/rJava/jri</argument>
+                        <argument>-classpath</argument>
+                        <classpath />
+                        <argument>coda.gui.CoDaPackMain</argument>
+                     </arguments>
+                  </configuration>
+               </execution>
+            </executions>
          </plugin>
 
          <plugin>

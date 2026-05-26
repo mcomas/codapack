@@ -56,14 +56,14 @@ public class PredictiveRegionPlotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = "Graphs.Predictive Region.yaml";
-    private static final String helpTitle = "Predictive Region Help Menu";
+    private static final String helpTitle = "Ternary Predictive Region Help Menu";
     JTextField predLevel;
     JLabel text1 = new JLabel("Predictive level");
     DataFrame df;
     ArrayList<String> names;
     
     public PredictiveRegionPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Predictive Region Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));//, false, true, false);
+        super(mainApp, "Ternary Predictive Region Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));//, false, true, false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         predLevel =  new JTextField("0.90 0.95 0.99", 14);
@@ -92,7 +92,7 @@ public class PredictiveRegionPlotMenu extends AbstractMenuDialog{
             String groupedBy = ds.getSelectedGroup();
 
             CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("Predictive region", selectedNames));
+                    new OutputPlotHeader("Ternary Predictive Region", selectedNames));
 
             if(selectedNames.length == 3){
                 TernaryPlot2dDisplay display = new TernaryPlot2dDisplay(selectedNames);
@@ -112,7 +112,7 @@ public class PredictiveRegionPlotMenu extends AbstractMenuDialog{
                     display.addCoDaObject(curveObject);
                 }
 
-                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Predictive Region", this.yamlFile, this.helpTitle);
+                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Ternary Predictive Region", this.yamlFile, this.helpTitle);
                 plot.setLocationRelativeTo(mainApplication);
                 plot.setCenter(CoDaStats.center(data));
                 plot.setVisible(true);
@@ -149,7 +149,7 @@ public class PredictiveRegionPlotMenu extends AbstractMenuDialog{
                             df.getCategoricalData(groupedBy),selection));
                 }
                 TernaryPlot3dDisplay display = builder.build();
-                plot = new TernaryPlot3dWindow(display, "Ternary Plot 3d");
+                plot = new TernaryPlot3dWindow(display, "Ternary Predictive Region 3d");
                 plot.setLocationRelativeTo(mainApplication);
                  * */
                 

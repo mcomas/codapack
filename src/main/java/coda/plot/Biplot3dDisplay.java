@@ -105,6 +105,12 @@ public class Biplot3dDisplay extends RealPlot3dDisplay{
         
         scaledData();
     }
+    public void setAxisLabels(String label1, String label2, String label3){
+        textLabel[0] = label1;
+        textLabel[1] = label2;
+        textLabel[2] = label3;
+        repaint();
+    }
     public void setAlpha(double alpha){
         try{
             CoDaPackConf.getDecimalTableFormat().format(alpha);

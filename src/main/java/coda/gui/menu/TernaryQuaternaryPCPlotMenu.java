@@ -49,13 +49,13 @@ public class TernaryQuaternaryPCPlotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = "Graphs. Ternary-Quaternary Principal Components.yaml";
-    private static final String helpTitle = "Principal Component Help Menu";
+    private static final String helpTitle = "Ternary/Quaternary PC Plot Help Menu";
     
     DataFrame df;
     ArrayList<String> names;
 
     public TernaryQuaternaryPCPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Principal Component Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
+        super(mainApp, "Ternary/Quaternary PC Plot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         this.names = new ArrayList<String>(mainApplication.getActiveDataFrame().getNames());
     }
@@ -81,7 +81,7 @@ public class TernaryQuaternaryPCPlotMenu extends AbstractMenuDialog{
             String groupedBy = ds.getSelectedGroup();
 
             CoDaPackMain.outputPanel.addOutput(
-                        new OutputPlotHeader("Principal components", selectedNames));
+                        new OutputPlotHeader("Ternary/Quaternary PC Plot", selectedNames));
 
             double cpExp[] = coda.BasicStats.cumulativeProportionExplained(svd.getSingularValues());
 
@@ -118,8 +118,9 @@ public class TernaryQuaternaryPCPlotMenu extends AbstractMenuDialog{
                             df.getCategoricalData(groupedBy),selection));
                 }
 
-                window = new TernaryPlot2dWindow(df, builder.build(), "Principal Component Plot");
+                window = new TernaryPlot2dWindow(df, builder.build(), "Ternary/Quaternary PC Plot");
 
+                window.setLocationRelativeTo(mainApplication);
                 window.setVisible(true);
                 setVisible(false);                
                                 
@@ -138,7 +139,8 @@ public class TernaryQuaternaryPCPlotMenu extends AbstractMenuDialog{
                 }
 
                 window = new TernaryPlot3dWindow(df, builder.build(),
-                        "Principal Component Plot 3d");
+                        "Ternary/Quaternary PC Plot 3d");
+                window.setLocationRelativeTo(mainApplication);
                 window.setVisible(true);
                 setVisible(false);
             }

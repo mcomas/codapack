@@ -70,7 +70,7 @@ public class TernaryQuaternaryPlotMenu extends AbstractMenuDialog{
             String groupedBy = ds.getSelectedGroup();
 
             CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("Ternary plot", selectedNames));
+                    new OutputPlotHeader("Ternary/Quaternary Plot", selectedNames));
 
             if(selectedNames.length == 3){
                 TernaryPlot2dBuilder builder = new TernaryPlot2dBuilder(selectedNames, data);
@@ -83,7 +83,7 @@ public class TernaryQuaternaryPlotMenu extends AbstractMenuDialog{
                             df.getCategoricalData(groupedBy),selection));
                 }
                 TernaryPlot2dDisplay display = builder.build();
-                plot = new TernaryPlot2dWindow(df, display, "Ternary Plot");
+                plot = new TernaryPlot2dWindow(df, display, "Ternary/Quaternary Plot");
    
             }else{// selectedNames.length == 4
                 TernaryPlot3dBuilder builder = new TernaryPlot3dBuilder(selectedNames, data);
@@ -96,7 +96,7 @@ public class TernaryQuaternaryPlotMenu extends AbstractMenuDialog{
                             df.getCategoricalData(groupedBy),selection));
                 }
                 TernaryPlot3dDisplay display = builder.build();
-                plot = new TernaryPlot3dWindow(df, display, "Ternary Plot 3d");
+                plot = new TernaryPlot3dWindow(df, display, "Ternary/Quaternary Plot 3d");
             }
             plot.setLocationRelativeTo(mainApplication);
             plot.setVisible(true);

@@ -56,7 +56,7 @@ public class CenterConfidenceRegionPlotMenu extends AbstractMenuDialog{
     
     public static final long serialVersionUID = 1L;
     private static final String yamlUrl = "Graphs.Center Confidence Region.yaml";
-    private static final String helpTitle = "Center Confidence Region Help Menu";
+    private static final String helpTitle = "Ternary Center Confidence Region Help Menu";
     
     JTextField predLevel;
     JLabel text1 = new JLabel("Confidence level");
@@ -64,7 +64,7 @@ public class CenterConfidenceRegionPlotMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public CenterConfidenceRegionPlotMenu(final CoDaPackMain mainApp){
-        super(mainApp, "Center Confidence Region Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));//, false, true, false);
+        super(mainApp, "Ternary Center Confidence Region Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));//, false, true, false);
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         predLevel =  new JTextField("0.90 0.95 0.99", 14);
@@ -96,7 +96,7 @@ public class CenterConfidenceRegionPlotMenu extends AbstractMenuDialog{
 
 
             CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("Confidence region", selectedNames));
+                    new OutputPlotHeader("Ternary Center Confidence Region", selectedNames));
 
             if(groupedBy != null){
                 /*
@@ -134,8 +134,9 @@ public class CenterConfidenceRegionPlotMenu extends AbstractMenuDialog{
                         display.addCoDaObject(curveObject);
                     }
                 }
-                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Center Confidence Region", this.yamlFile, this.helpTitle);
+                TernaryPlot2dWindow plot = new TernaryPlot2dWindow(df, display, "Ternary Center Confidence Region", this.yamlFile, this.helpTitle);
                 plot.setCenter(CoDaStats.center(data));
+                plot.setLocationRelativeTo(mainApplication);
                 plot.setVisible(true);
             }else{// selectedNames.length == 4
                 TernaryPlot3dDisplay display = new TernaryPlot3dDisplay(selectedNames);
@@ -171,7 +172,8 @@ public class CenterConfidenceRegionPlotMenu extends AbstractMenuDialog{
                             df.getCategoricalData(groupedBy),selection));
                 }
                 TernaryPlot3dDisplay display = builder.build();
-                plot = new TernaryPlot3dWindow(display, "Ternary Plot 3d");
+                plot = new TernaryPlot3dWindow(display, "Ternary Center Confidence Region 3d");
+                plot.setLocationRelativeTo(mainApplication);
                  * */
 
             }

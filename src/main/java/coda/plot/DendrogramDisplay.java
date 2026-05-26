@@ -80,7 +80,7 @@ public class DendrogramDisplay extends CoDa2dDisplay{
         partition_orig = builder.partition;
         partition = new int[partition_orig.length][];
         order = new int[partition_orig.length];
-        orderPartition(0, IntStream.range(0, partition_orig.length).toArray(), new int[0]);
+        orderPartition(0, IntStream.range(0, partition_orig[0].length).toArray(), new int[0]);
         for(int i=0;i<order.length;i++){
             partition[i] = partition_orig[order[i]];
         }
@@ -90,7 +90,6 @@ public class DendrogramDisplay extends CoDa2dDisplay{
         //         System.out.println("Partition " + i + " is the root.");
         //     }
         // }
-        System.out.println("Order: " + Arrays.toString(order));
         groups = builder.groups;
         gnames = builder.gnames;
         for(int i=0;i<gnames.length;i++)
@@ -132,7 +131,6 @@ public class DendrogramDisplay extends CoDa2dDisplay{
             if(Arrays.stream(s).allMatch(x -> x == 1 || x == -1) && 
                Arrays.stream(o).allMatch(x -> x == 0)){
                 order[ind++] = i;
-                System.out.println("Partition " + i + " is the root.");
                 int[] right = IntStream.range(0, part.length).filter(j -> part[j] == 1).toArray();
                 int[] right_out = IntStream.range(0, part.length).filter(j -> part[j] == 0 || part[j] == -1).toArray();
                 ind = orderPartition(ind, right, right_out);

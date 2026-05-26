@@ -56,7 +56,7 @@ public class CLRBiplotMenu extends AbstractMenuDialog{
     ArrayList<String> names;
     
     public CLRBiplotMenu(final CoDaPackMain mainApp){
-        super(mainApp, " CLR Biplot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
+        super(mainApp, "CLR Biplot Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
         super.setHelpMenuConfiguration(yamlUrl, helpTitle);
         
         coordinates = new JCheckBox("Add coordinates", false);
@@ -119,7 +119,7 @@ public class CLRBiplotMenu extends AbstractMenuDialog{
                 mainApplication.updateDataFrame(df);
             }
             CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("Biplot generated", selectedNames));
+                    new OutputPlotHeader("CLR Biplot generated", selectedNames));
             
             CoDaPackMain.outputPanel.addOutput(
                     new OutputTableTwoEntries("Principal Components", pcheaders, pcnames, pcomp));
@@ -144,7 +144,7 @@ public class CLRBiplotMenu extends AbstractMenuDialog{
                             df.getCategoricalData(groupedBy),selection));
                 }
                 biplotWindow =
-                        new Biplot3dWindow(df, builder.build(), "Biplot3d", svd);
+                        new Biplot3dWindow(df, builder.build(), "CLR Biplot 3d", svd);
 
                 double view[][] = {
                        {1, 0, 0},
@@ -164,7 +164,7 @@ public class CLRBiplotMenu extends AbstractMenuDialog{
                 }
 
                 biplotWindow =
-                        new Biplot2dWindow(df, builder.build(), "Biplot", svd);
+                        new Biplot2dWindow(df, builder.build(), "CLR Biplot", svd);
                                
             }
             biplotWindow.setLocationRelativeTo(mainApplication);

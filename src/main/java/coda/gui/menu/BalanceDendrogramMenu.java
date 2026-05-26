@@ -53,7 +53,7 @@ public class BalanceDendrogramMenu extends AbstractMenuDialogWithILR{
     DataFrame df;
     ArrayList<String> names;
     private static final String yamlUrl = "Graphs.Balance Dendrogram.yaml";
-    private static final String helpTitle = "Balance Dendogram Help Menu";
+    private static final String helpTitle = "Balance Dendrogram Help Menu";
     
     public BalanceDendrogramMenu(final CoDaPackMain mainApp){
         super(mainApp, "Balance Dendrogram Menu", new DataSelector1to1(mainApp.getActiveDataFrame(), true));
@@ -122,13 +122,13 @@ public class BalanceDendrogramMenu extends AbstractMenuDialogWithILR{
             
             DendrogramWindow plotWindow = new DendrogramWindow(
                     null, builder.build(),
-                    "Dendrogram plot");
+                    "Balance Dendrogram");
             plotWindow.setLocationRelativeTo(mainApplication);
             plotWindow.setVisible(true);
 
             
             CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("Balance dendrogram", selectedNames));
+                    new OutputPlotHeader("Balance Dendrogram", selectedNames));
 
             CoDaPackMain.outputPanel.addOutput(
                         new OutputILRPartition(selectedNames, partition));

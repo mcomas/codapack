@@ -260,6 +260,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         if(fnames != null){
             RPlotWindow jf = new RPlotWindow(fnames, pnames);
                 jf.setSize(PLOT_WIDTH, PLOT_HEIGHT);
+                jf.setLocationRelativeTo(mainApplication);
                 jf.setVisible(true);
         }
         /*

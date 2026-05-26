@@ -156,7 +156,7 @@ public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
                 mainApplication.updateDataFrame(df);
             }
             CoDaPackMain.outputPanel.addOutput(
-                    new OutputPlotHeader("OLR/CLR plot generated", selectedNames));
+                    new OutputPlotHeader("OLR/CLR Biplot generated", selectedNames));
             
             //CoDaPackMain.outputPanel.addOutput(
             //        new OutputTableTwoEntries("Principal Components", pcheaders, pcnames, pcomp));
@@ -183,8 +183,9 @@ public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
                 }
                 Biplot3dDisplay dp = builder.build();
                 dp.decomp = false;
+                dp.setAxisLabels("OLR1", "OLR2", "OLR3");
                 biplotWindow =
-                        new RealPlot3dWindow(df, dp, "OLR/CLR plot");
+                        new RealPlot3dWindow(df, dp, "OLR/CLR Biplot");
                 
                 double view[][] = {
                        {1, 0, 0},
@@ -203,8 +204,10 @@ public class ILRCLRBiplotMenu extends AbstractMenuDialogWithILR{
                             df.getCategoricalData(groupedBy),selection));
                 }
                 
+                Biplot2dDisplay dp = builder.build();
+                dp.setAxisLabels("OLR1", "OLR2");
                 biplotWindow =
-                        new RealPlot2dWindow(df, builder.build(), "OLR/CLR plot");
+                        new RealPlot2dWindow(df, dp, "OLR/CLR Biplot");
                                
             }
             biplotWindow.setLocationRelativeTo(mainApplication);

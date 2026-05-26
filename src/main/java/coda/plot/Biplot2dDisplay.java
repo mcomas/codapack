@@ -108,6 +108,11 @@ public class Biplot2dDisplay extends RealPlot2dDisplay{
         
         scaledData();
     }
+    public void setAxisLabels(String label1, String label2){
+        textLabel[0] = label1;
+        textLabel[1] = label2;
+        repaint();
+    }
     private void scaledData(){
         double max_g = 0, max_h = 0, temp;
 
