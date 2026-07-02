@@ -222,6 +222,17 @@ CoDaPack Menu:
                         - string: 
                             name: "Cluster name"
                             value: "Cluster"
+            - Regularization:
+                id: "RegularizationLasso"
+                code: "r"
+                script: "cdp_lasso_regularization.R"
+                options: ["2selectors", "all_variables"]
+                textA: "Explanatory variables"
+                textB: "Response variable"
+                controls:
+                    - basis: 
+                        name: "Explanatory partition"
+                        selector: "X"
             - Manova:
                 id: "Manova"
                 code: "r"

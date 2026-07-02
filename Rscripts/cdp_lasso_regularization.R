@@ -18,7 +18,7 @@ cdp_check = function(){
   
 }
 cdp_analysis = function(){
-  # save.image("Rscripts/cdp_lasso_regularization.RData")
+  save.image("Rscripts/cdp_lasso_regularization.RData")
   # load("Rscripts/cdp_lasso_regularization.RData")
   W = NULL
   Y = GROUP
