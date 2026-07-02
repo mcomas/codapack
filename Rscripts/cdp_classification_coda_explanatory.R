@@ -5,6 +5,12 @@ cdp_check = function(){
   if(exists('GROUP')){
     if(length(unique(GROUP)) == 1) return("Response must have at least two categories")
     if(length(unique(GROUP)) > 2) return("More than two group no implemented yet")
+  }else{
+    if(NCOL(Y) != 2) return("Response must be a count matrix with two columns")
+    if(!is.numeric(as.matrix(Y))) return("Response must be numeric counts")
+    if(any(!is.finite(as.matrix(Y)))) return("Response must contain finite counts")
+    if(any(as.matrix(Y) < 0)) return("Response counts must be non-negative")
+    if(any(rowSums(as.matrix(Y)) == 0)) return("Response counts must have positive row totals")
   }
   
   cond1 = cdp_check_compositional(X)
@@ -22,20 +28,37 @@ cdp_analysis = function(){
   # load("Rscripts/cdp_classification_coda_explanatory.RData")
   H = coda.base::coordinates(X, basis = coda.base::sbp_basis(BasisX))
   colnames(H) = paste0('olr.', 1:ncol(H))
-  K = length(unique(GROUP))
-  if(K == 2){
+  response_from_group = exists('GROUP')
+  if(response_from_group){
+    K = length(unique(GROUP))
+    # TODO: implement multinomial logistic regression for K > 2.
+    if(K > 2) return(list(
+      'text' = list("More than two group no implemented yet"),
+      'dataframe' = list(),
+      'graph' = list(),
+      'new_data' = list()
+    ))
+    
     LABEL = unique(GROUP)[2]
+    response_names = unique(GROUP)
     
     str_y = "y"
     str_x = paste(colnames(H), collapse='+')
     str_frm = sprintf("%s ~ %s", str_y, str_x)
     FAMILY = 'binomial'
     
-    Y = cbind(y = GROUP == LABEL)
+    Y_GLM = cbind(y = GROUP == LABEL)
+    . = as.data.frame(cbind(Y_GLM,H))
+    GLM = eval(parse(text = sprintf("glm(%s, ., family = '%s')", str_frm, FAMILY)))
+  }else{
+    response_names = colnames(Y)
+    str_y = sprintf("cbind(%s)", paste(colnames(Y), collapse=','))
+    str_x = paste(colnames(H), collapse='+')
+    str_frm = sprintf("%s ~ %s", str_y, str_x)
+    FAMILY = 'binomial'
+    
     . = as.data.frame(cbind(Y,H))
     GLM = eval(parse(text = sprintf("glm(%s, ., family = '%s')", str_frm, FAMILY)))
-  }else{ K > 2
-    
   }
   # m1 = nnet::multinom(GROUP~., data = .[,-1],
   #                     maxit  = 10000,      # més iteracions
@@ -69,12 +92,14 @@ cdp_analysis = function(){
   
   new_data  <-  list()
   if(V1){ # fitted values
-    if(K == 2){
-      probs = predict(GLM, type = 'response')
+    probs = predict(GLM, type = 'response')
+    if(response_from_group){
       dpred = data.frame(1-probs,probs)
-      names(dpred) = sprintf("%s.p", unique(GROUP))
-      new_data = dpred
+    }else{
+      dpred = data.frame(probs,1-probs)
     }
+    names(dpred) = sprintf("%s.p", response_names)
+    new_data = dpred
   }
   
   text_output = cdp_print_sbp(BasisX, colnames(X))
