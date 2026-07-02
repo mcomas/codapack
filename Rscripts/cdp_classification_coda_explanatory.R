@@ -4,9 +4,10 @@ cdp_check = function(){
   
   if(exists('GROUP')){
     if(length(unique(GROUP)) == 1) return("Response must have at least two categories")
-    if(length(unique(GROUP)) > 2) return("More than two group no implemented yet")
+    if(length(unique(GROUP)) > 2 & !requireNamespace("nnet", quietly = TRUE)) return("Package nnet is required for multinomial logistic regression")
   }else{
-    if(NCOL(Y) != 2) return("Response must be a count matrix with two columns")
+    if(NCOL(Y) < 2) return("Response must be a count matrix with at least two columns")
+    if(NCOL(Y) > 2 & !requireNamespace("nnet", quietly = TRUE)) return("Package nnet is required for multinomial logistic regression")
     if(!is.numeric(as.matrix(Y))) return("Response must be numeric counts")
     if(any(!is.finite(as.matrix(Y)))) return("Response must contain finite counts")
     if(any(as.matrix(Y) < 0)) return("Response counts must be non-negative")
@@ -31,40 +32,46 @@ cdp_analysis = function(){
   response_from_group = exists('GROUP')
   if(response_from_group){
     K = length(unique(GROUP))
-    # TODO: implement multinomial logistic regression for K > 2.
-    if(K > 2) return(list(
-      'text' = list("More than two group no implemented yet"),
-      'dataframe' = list(),
-      'graph' = list(),
-      'new_data' = list()
-    ))
-    
-    LABEL = unique(GROUP)[2]
     response_names = unique(GROUP)
-    
-    str_y = "y"
     str_x = paste(colnames(H), collapse='+')
-    str_frm = sprintf("%s ~ %s", str_y, str_x)
-    FAMILY = 'binomial'
     
-    Y_GLM = cbind(y = GROUP == LABEL)
-    . = as.data.frame(cbind(Y_GLM,H))
-    GLM = eval(parse(text = sprintf("glm(%s, ., family = '%s')", str_frm, FAMILY)))
+    if(K == 2){
+      LABEL = unique(GROUP)[2]
+      
+      str_y = "y"
+      str_frm = sprintf("%s ~ %s", str_y, str_x)
+      FAMILY = 'binomial'
+      model_type = 'binomial_group'
+      
+      Y_GLM = cbind(y = GROUP == LABEL)
+      . = as.data.frame(cbind(Y_GLM,H))
+      MOD = eval(parse(text = sprintf("glm(%s, ., family = '%s')", str_frm, FAMILY)))
+    }else{
+      str_y = "GROUP"
+      str_frm = sprintf("%s ~ %s", str_y, str_x)
+      model_type = 'multinomial_group'
+      
+      . = as.data.frame(H)
+      .$GROUP = factor(GROUP, levels = response_names)
+      MOD = eval(parse(text = sprintf("nnet::multinom(%s, data = ., trace = FALSE)", str_frm)))
+      response_names = MOD$lev
+    }
   }else{
     response_names = colnames(Y)
     str_y = sprintf("cbind(%s)", paste(colnames(Y), collapse=','))
     str_x = paste(colnames(H), collapse='+')
     str_frm = sprintf("%s ~ %s", str_y, str_x)
-    FAMILY = 'binomial'
     
     . = as.data.frame(cbind(Y,H))
-    GLM = eval(parse(text = sprintf("glm(%s, ., family = '%s')", str_frm, FAMILY)))
+    if(NCOL(Y) == 2){
+      FAMILY = 'binomial'
+      model_type = 'binomial_counts'
+      MOD = eval(parse(text = sprintf("glm(%s, ., family = '%s')", str_frm, FAMILY)))
+    }else{
+      model_type = 'multinomial_counts'
+      MOD = eval(parse(text = sprintf("nnet::multinom(%s, data = ., trace = FALSE)", str_frm)))
+    }
   }
-  # m1 = nnet::multinom(GROUP~., data = .[,-1],
-  #                     maxit  = 10000,      # més iteracions
-  #                     abstol = 1e-20,    # tolerància absoluta
-  #                     reltol = 1e-20,    # tolerància relativa
-  #                     trace  = FALSE)
   # m2 = glm((y=='North')~., data = dat, family = 'binomial',
   #          control = glm.control(
   #            epsilon = 1e-12,  # criteri de convergència (default = 1e-8)
@@ -84,18 +91,32 @@ cdp_analysis = function(){
   
   graphname <- sprintf("%s.svg", tempfile())
   svg(graphname, width = PLOT_WIDTH, height = PLOT_HEIGTH)
-  oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
-  plot(GLM,sub.caption=deparse(as.formula(GLM)))  # Plot the model information
-  par(oldpar)
+  if(model_type %in% c('multinomial_group', 'multinomial_counts')){
+    probs = predict(MOD, type = 'probs')
+    matplot(probs, type = 'l', lty = 1, lwd = 1,
+            xlab = 'Observation', ylab = 'Fitted probability',
+            ylim = c(0,1))
+    legend('topright', legend = colnames(probs), col = seq_len(ncol(probs)),
+           lty = 1, lwd = 1, bty = 'n')
+  }else{
+    oldpar <- par(oma=c(0,0,3,0), mfrow=c(2,2))
+    plot(MOD,sub.caption=deparse(as.formula(MOD)))  # Plot the model information
+    par(oldpar)
+  }
   dev.off()
   
   
   new_data  <-  list()
   if(V1){ # fitted values
-    probs = predict(GLM, type = 'response')
-    if(response_from_group){
-      dpred = data.frame(1-probs,probs)
+    if(model_type %in% c('multinomial_group', 'multinomial_counts')){
+      dpred = data.frame(predict(MOD, type = 'probs'))
     }else{
+      probs = predict(MOD, type = 'response')
+    }
+    if(model_type == 'binomial_group'){
+      dpred = data.frame(1-probs,probs)
+    }
+    if(model_type == 'binomial_counts'){
       dpred = data.frame(probs,1-probs)
     }
     names(dpred) = sprintf("%s.p", response_names)
@@ -103,8 +124,17 @@ cdp_analysis = function(){
   }
   
   text_output = cdp_print_sbp(BasisX, colnames(X))
-  text_output = c(text_output, capture.output(summary(GLM)))
+  text_output = c(text_output, capture.output(summary(MOD)))
   text_output = gsub("[‘’]", "'", text_output)
+  
+  if(model_type %in% c('multinomial_group', 'multinomial_counts')){
+    COEFS = cbind(
+      data.frame("Response" = row.names(coef(MOD))),
+      as.data.frame(coef(MOD), row.names = FALSE)
+    )
+  }else{
+    COEFS = MOD$coefficients
+  }
   
   # if(exists('X_new')){
   #   H_new = coda.base::coordinates(X_new, coda.base::sbp_basis(BasisX))
@@ -115,7 +145,7 @@ cdp_analysis = function(){
   # Ooutput
   cdp_out = list(
     'text' = list(text_output),
-    'dataframe' = list('coefficients' = GLM$coefficients),
+    'dataframe' = list('coefficients' = COEFS),
     'graph' = graphname,
     'new_data' = new_data
   )
