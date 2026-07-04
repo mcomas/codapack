@@ -1,11 +1,16 @@
 cdp_check = function(){
-  if(!exists('X')) return("No data has been selected")
-  if( (!exists('Y') & !exists('GROUP')) ) return("No response has been selected")
-  
-  if(exists('GROUP')){
-    if(length(unique(GROUP)) == 1) return("Response must have at least two categories")
-    if(length(unique(GROUP)) > 2) return("More than two group no implemented yet")
+  if(V1 == 'Numeric'){ # Checks for numeric response
+    if(!exists('Y')) return("Response must be numeric")
+    if(!is.numeric(Y)) return("Response must be numeric")
+    if(ncol(Y) > 1) return("Response must be a single numeric variable")
   }
+  if(!exists('X')) return("No data has been selected")
+  # if( (!exists('Y') & !exists('GROUP')) ) return("No response has been selected")
+  
+  #if(exists('GROUP')){
+  #  if(length(unique(GROUP)) == 1) return("Response must have at least two categories")
+  #  if(length(unique(GROUP)) > 2) return("More than two group no implemented yet")
+  #}
   
   cond1 = cdp_check_compositional(X)
   if(!is.null(cond1)) return(cond1)
@@ -20,46 +25,68 @@ cdp_check = function(){
 cdp_analysis = function(){
   save.image("Rscripts/cdp_lasso_regularization.RData")
   # load("Rscripts/cdp_lasso_regularization.RData")
-  W = NULL
-  Y = GROUP
-  PF = rep(1, ncol(X))
-  if(exists("GROUP")){
-    K = length(unique(GROUP))
-    Y = as.numeric(factor(GROUP)) - 1
-  }else{ 
-    K = ncol(Y)
+  if(V1 == 'Numeric'){
+    Y = as.numeric(Y)
   }
-  if(V1 == 'L1-coda'){
-    Z = coda.base::coordinates(X, 'clr')
-    
+  
+  if(V2 == 'L1-coda'){
+    W = NULL
+    lX = log(X)
     H = cbind(lX, m_ = rowSums(lX))
     PF = c(rep(1, ncol(X)), 0)
-  }
-  if(V1 == 'L1-clr'){
-    H = coda.base::coordinates(X, basis = 'clr')
-  }
-  if(V1 == 'L1-plr'){
-    Y = rbind(0, Y)
-    H = rbind(1, log(X))
-    W = c(1000, rep(1, nrow(X)))
-  }
-  if(K == 1){
-    GLMNET = glmnet::glmnet(H, Y, intercept = FALSE, weights = W, penalty.factor = PF)
-  }else{
-    if(K == 2){
-      GLMNET = glmnet::glmnet(H, Y, family = 'binomial', weights = W, penalty.factor = PF)
-    }else{
-      GLMNET = glmnet::glmnet(H, Y, intercept = FALSE, family = 'multinomial', weights = W, penalty.factor = PF)
-    }
-  }
 
-  if(V1 == 'L1-coda'){
+    GLMNET = glmnet::glmnet(H, Y, intercept = FALSE, weights = W, penalty.factor = PF)
+
     BETAS = t(as.matrix(GLMNET$beta))
     BETAS = BETAS[,-ncol(BETAS)]
     BETAS = BETAS - rowMeans(BETAS)
     LAMBDA = data.frame(lambda = GLMNET$lambda)
     COEFS = cbind(LAMBDA, as.data.frame(BETAS))
+
+
   }
+  if(V2 == 'L1-clr'){
+    W = NULL
+    H = coda.base::coordinates(X, basis = 'clr')
+    PF = rep(1, ncol(X))
+
+    GLMNET = glmnet::glmnet(H, Y, intercept = FALSE, weights = W, penalty.factor = PF)
+
+    BETAS = t(as.matrix(GLMNET$beta))
+    BETAS = BETAS[,-ncol(BETAS)]
+    BETAS = BETAS - rowMeans(BETAS)
+    LAMBDA = data.frame(lambda = GLMNET$lambda)
+    COEFS = cbind(LAMBDA, as.data.frame(BETAS))
+    
+  }
+  # if(V1 == 'L1-plr'){
+  #   Y = rbind(0, Y)
+  #   H = rbind(1, log(X))
+  #   W = c(1000, rep(1, nrow(X)))
+  # }
+
+  # PF = rep(1, ncol(X))
+  # if(exists("GROUP")){
+  #   K = length(unique(GROUP))
+  #   Y = as.numeric(factor(GROUP)) - 1
+  # }else{ 
+  #   K = ncol(Y)
+  # }
+  
+
+  # if(K == 1){
+    
+  # }else{
+  #   if(K == 2){
+  #     GLMNET = glmnet::glmnet(H, Y, family = 'binomial', weights = W, penalty.factor = PF)
+  #   }else{
+  #     GLMNET = glmnet::glmnet(H, Y, intercept = FALSE, family = 'multinomial', weights = W, penalty.factor = PF)
+  #   }
+  # }
+
+  # if(V1 == 'L1-coda'){
+    
+  # }
   
 
   

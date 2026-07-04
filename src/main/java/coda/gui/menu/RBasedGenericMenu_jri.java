@@ -122,24 +122,19 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
         String sel_names[] = super.ds.getSelectedData();
         
         if(sel_names.length > 0){
-            if(ds.selection_type == DataSelector.ONLY_NUMERIC){
-                double[][] dataX = df.getNumericalData(sel_names);
-                RMatrixTransferService.assignMatrix(re, dataX, sel_names, "X");
+            assignSelectedDataToR(sel_names, "X");
+            String numericNames[] = getSelectedNamesByType(sel_names, false);
+            if(numericNames.length > 0){
+                double dlevel[][] = df.getDetectionLevel(numericNames);
+                RMatrixTransferService.assignMatrix(re, dlevel, numericNames, "DL");
             }
-            if(ds.selection_type == DataSelector.ONLY_CATEGORIC){
-                String[][] dataX = df.getCategoricalData(sel_names);
-                RMatrixTransferService.assignMatrix(re, dataX, sel_names, "X");
-            }
-            double dlevel[][] = df.getDetectionLevel(sel_names);
-
-
-            RMatrixTransferService.assignMatrix(re, dlevel, sel_names, "DL");
 
             if(ds.group_by){
                 String sel_group = ds.getSelectedGroup();
                 if(sel_group != null){
                     String group[] = df.getCategoricalData(sel_group);
                     re.assign("GROUP", group);
+                    re.assign("GROUP_NAME", sel_group);
                 }
             }
 
@@ -148,8 +143,7 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
             
             String sel_namesY[] = ((DataSelector1to2)ds).getSelectedDataB();
             if(sel_namesY.length > 0){
-                double[][] dataY = df.getNumericalData(sel_namesY);
-                RMatrixTransferService.assignMatrix(re, dataY, sel_namesY, "Y");
+                assignSelectedDataToR(sel_namesY, "Y");
             }
         }
 
@@ -174,6 +168,39 @@ public class RBasedGenericMenu_jri extends AbstractMenuDialog{
 
         setVisible(false);
         
+    }
+
+    private void assignSelectedDataToR(String selectedNames[], String rName){
+        String numericNames[] = getSelectedNamesByType(selectedNames, false);
+        String categoricNames[] = getSelectedNamesByType(selectedNames, true);
+        
+        if(numericNames.length > 0){
+            double[][] data = df.getNumericalData(numericNames);
+            RMatrixTransferService.assignMatrix(re, data, numericNames, rName + "_numeric");
+        }
+        if(categoricNames.length > 0){
+            String[][] data = df.getCategoricalData(categoricNames);
+            RMatrixTransferService.assignMatrix(re, data, categoricNames, rName + "_categoric");
+        }
+        if(numericNames.length == selectedNames.length){
+            double[][] data = df.getNumericalData(selectedNames);
+            RMatrixTransferService.assignMatrix(re, data, selectedNames, rName);
+        }
+        if(categoricNames.length == selectedNames.length){
+            String[][] data = df.getCategoricalData(selectedNames);
+            RMatrixTransferService.assignMatrix(re, data, selectedNames, rName);
+        }
+    }
+
+    private String[] getSelectedNamesByType(String selectedNames[], boolean categoric){
+        ArrayList<String> names = new ArrayList<String>();
+        for(String name: selectedNames){
+            Variable variable = df.get(name);
+            if(variable.isText() == categoric){
+                names.add(name);
+            }
+        }
+        return names.toArray(new String[names.size()]);
     }
 
     void showText(){    

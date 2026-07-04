@@ -230,9 +230,25 @@ CoDaPack Menu:
                 textA: "Explanatory variables"
                 textB: "Response variable"
                 controls:
-                    - basis: 
-                        name: "Explanatory partition"
-                        selector: "X"
+                    - label: "Response type" 
+                    - select:
+                        name: "" 
+                        values: ["Numeric"]
+                    - label: "Regularization method"
+                    - select: 
+                        name: ""
+                        values: ["L1-coda", "L1-clr"]
+            - Paired Perturbation Test:
+                id: "PairedPerturbation"
+                code: "r"
+                script: "cdp_paired_perturbation.R"
+                options: ["2selectors"]
+                textA: "First composition"
+                textB: "Second composition"
+                controls:
+                    - boolean:
+                        label: "Add perturbation differences"
+                        value: false
             - Manova:
                 id: "Manova"
                 code: "r"
@@ -245,6 +261,12 @@ CoDaPack Menu:
                         name: "Test"
                         values: ["Pillai", "Wilks", "Hotelling-Lawley", "Roy", "Spherical"]
                     - boolean: "Sum-Squares"
+            - Homogeneity Test:
+                id: "HomogeneityTest"
+                code: "r"
+                script: "cdp_homogeneity_test.R"
+                options: ["groups"]
+                controls: []
             - Discriminant Analysis:
                 id: "DiscriminantAnalysis"
                 code: "r"
