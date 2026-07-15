@@ -261,12 +261,6 @@ CoDaPack Menu:
                         name: "Test"
                         values: ["Pillai", "Wilks", "Hotelling-Lawley", "Roy", "Spherical"]
                     - boolean: "Sum-Squares"
-            - Homogeneity Test:
-                id: "HomogeneityTest"
-                code: "r"
-                script: "cdp_homogeneity_test.R"
-                options: ["groups"]
-                controls: []
             - Discriminant Analysis:
                 id: "DiscriminantAnalysis"
                 code: "r"
@@ -288,6 +282,21 @@ CoDaPack Menu:
                 - select:
                     name: "Method"
                     values: ["Shapiro-Wilk", "Kolmogorov-Smirnov"]
+        - Log-Ratio Homogeneity Test:
+            id: "LogRatioHomogeneityTest"
+            code: "r"
+            script: "cdp_homogeneity_test.R"
+            options: ["groups"]
+            controls: []
+        - Univariate Homogeneity Test:
+            id: "UnivariateHomogeneityTest"
+            code: "r"
+            script: "cdp_univariate_homogeneity_test.R"
+            options: ["groups"]
+            controls:
+                - select:
+                    name: "Test"
+                    values: ["Bartlett", "Levene"]
     - Graphs:
         - Ternary/Quaternary Plot:
             id: "TernaryQuaternaryPlot"
